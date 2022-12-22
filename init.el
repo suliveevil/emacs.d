@@ -25,6 +25,142 @@
 (keymap-set minibuffer-local-map "C-<tab>" #'dabbrev-expand)
 ;; }}}
 
+(global-auto-revert-mode 1) ;; 使 Emacs 自动加载外部修改过的文件
+
+(add-hook 'after-init-hook 'auto-save-visited-mode) ;; save file when buffer/focus change 自动保存
+
+;; backup file: 备份
+;; {{{
+;; https://stackoverflow.com/questions/151945/how-do-i-control-how-emacs-makes-backup-files
+;;
+;; (defvar --backup-directory (concat user-emacs-directory "backups"))
+;; (if (not (file-exists-p --backup-directory))
+;;         (make-directory --backup-directory t))
+;; (setq backup-directory-alist `(("." . ,--backup-directory)))
+;; (setq backup-directory-alist `((".*" . ,(expand-file-name "backup" user-emacs-directory))))
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq make-backup-files t         ; backup of a file the first time it is saved.
+      backup-by-copying t         ; don't clobber symlinks
+      version-control t           ; version numbers for backup files
+      delete-old-versions t       ; delete excess backup files silently
+      delete-by-moving-to-trash t
+      dired-kept-versions 2
+      kept-old-versions 6 ; oldest versions to keep when a new numbered backup is made (default: 2)
+      kept-new-versions 9 ; newest versions to keep when a new numbered backup is made (default: 2)
+      auto-save-default t ; auto-save every buffer that visits a file
+      auto-save-timeout 20 ; number of seconds idle time before auto-save (default: 30)
+      auto-save-interval 200 ; number of keystrokes between auto-saves (default: 300)
+      )
+;; auto-save: 定期预存，防止停电、系统崩溃等原因造成的数据损失
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
+
+;; lockfile: 不同进程修改同一文件
+;; {{{
+(setq create-lockfiles t)
+(setq lock-file-name-transforms
+      '(("\\`/.*/\\([^/]+\\)\\'" "/var/tmp/\\1" t)))
+;; }}}
+
+;; move file to trash when delete
+;; {{{
+;;; macOS
+(when (eq system-type 'darwin)
+  (setq trash-directory "~/.Trash/")
+  (setq delete-by-moving-to-trash t))
+;; }}}
+
+;; symlink
+;; {{{
+(defun read-only-if-symlink ()
+  (if (file-symlink-p buffer-file-name)
+      (progn
+        (setq buffer-read-only t)
+        (message "File is a symlink"))))
+(add-hook 'find-file-hooks 'read-only-if-symlink)
+;; }}}
+
+;; 快速打开文件
+;; {{{
+(defun open-init-file()	;; Emacs init
+  (interactive)
+  (find-file "~/.config/emacs/init.el"))
+;; (keymap-global-set "<f2>" #'open-init-file)
+;;
+(defun open-early-init-file() ;; Emacs early-init
+  (interactive)
+  (find-file "~/.config/emacs/early-init.el"))
+;; (keymap-global-set "<f2>" #'open-early-init-file)
+;;
+;; (defun open-goku-file()      ;; Emacs early-init
+;;   (interactive)
+;;   (find-file "~/.config/karabiner.edn")
+;;   (find-file "~/.config/goku/karabiner.edn")
+;; )
+;; }}}
+
+;; file name/file extension/file path
+;; {{{
+;; https://github.com/chyla/kill-file-path
+;; [如何在文件夹层次结构中找到所有不同的文件扩展名？ |](https://qa.1r1g.com/sf/ask/128957811/#)
+;;
+;; file name
+;; file name only
+(defun my/copy-file-name ()
+  "Copy the current buffer file name to the clipboard."
+  (interactive)
+  (let ((filename (if (equal major-mode 'dired-mode)
+                      default-directory
+                    (buffer-name))))
+    (when filename
+      (kill-new filename))
+    (message filename)))
+;; file name with file path
+(defun my/copy-file-name-full ()
+  "Copy the current buffer file name (with full path) to the clipboard."
+  (interactive)
+  (let ((filename (if (equal major-mode 'dired-mode)
+                      default-directory
+                    (buffer-file-name))))
+    (when filename
+      (kill-new filename)
+      (message "Copied buffer file name '%s' to the clipboard." filename))))
+;;
+;; file path
+(defun my/copy-file-path (&optional DirPathOnlyQ)
+  "Copy current buffer file path or dired path.
+Result is full path.
+If `universal-argument' is called first, copy only the dir path.
+
+If in dired, copy the current or marked files.
+
+If a buffer is not file and not dired, copy value of `default-directory'.
+
+URL `http://xahlee.info/emacs/emacs/emacs_copy_file_path.html'
+Version 2018-06-18 2021-09-30"
+  (interactive "P")
+  (let (($fpath
+         (if (string-equal major-mode 'dired-mode)
+             (progn
+               (let (($result (mapconcat 'identity (dired-get-marked-files) "\n")))
+                 (if (equal (length $result) 0)
+                     (progn default-directory )
+                   (progn $result))))
+           (if (buffer-file-name)
+               (buffer-file-name)
+             (expand-file-name default-directory)))))
+    (kill-new
+     (if DirPathOnlyQ
+         (progn
+           (message "Directory copied: %s" (file-name-directory $fpath))
+           (file-name-directory $fpath))
+       (progn
+         (message "File path copied: %s" $fpath)
+         $fpath )))))
+;; }}}
+
+
 ;; ido
 ;; {{{
 ;; (ido-mode 1)
@@ -83,6 +219,34 @@
                                    ("jcs-elpa"                   . 7)
                                    ))
 (package-initialize) ;; pair with (setq package-enable-at-startup nil) ;; early-init
+;; }}}
+
+;; package dependency graph (Graphviz)
+;; {{{
+;; https://emacs-china.org/t/package/22775/2?u=suliveevil
+;; https://www.gnu.org/software/emacs/manual/html_mono/cl.html#Loop-Facility
+;; (defun get-pkg-reqs-alist ()
+(defun my/emacs-package-dependency ()
+  (interactive)
+  (cl-loop for pkg-and-desc in package-alist
+           for pkg = (car pkg-and-desc)
+           for desc = (cadr pkg-and-desc)
+           for req-names = (cl-loop for it in (package-desc-reqs desc) collect (car it))
+           collect (cons pkg req-names)))
+;; (setq info (get-pkg-reqs-alist))
+
+(setq info (my/emacs-package-dependency))
+
+;; (with-temp-file "/tmp/g.dot"
+(with-temp-file "~/.config/emacs/assets/emacs-package-dependency.dot"
+  (insert "digraph G {")
+  (insert (mapconcat #'identity
+                     (cl-loop for pkg-reqs in info
+                              for pkg = (car pkg-reqs)
+                              for reqs = (cdr pkg-reqs)
+                              nconcing (cl-loop for req in reqs
+                                                collect (format "\"%s\" -> \"%s\";\n" pkg req)))))
+  (insert "}"))
 ;; }}}
 
 ;; profile: benchmark-init
