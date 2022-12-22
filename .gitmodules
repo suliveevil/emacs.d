@@ -1,0 +1,3 @@
+[submodule "lib/keyfreq"]
+	path = lib/keyfreq
+	url = git@github.com:suliveevil/keyfreq.git
