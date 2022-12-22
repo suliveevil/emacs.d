@@ -1,0 +1,1351 @@
+<?xml version="1.0" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="3312pt" height="692pt" viewBox="0.00 0.00 3311.86 692">
+<g id="graph0" class="graph" transform="translate(-3233.306516368717,202.92969889790788) scale(1.73370825279264)" data-name="G">
+
+<polygon fill="white" stroke="none" points="-4,4 -4,-688 3307.86,-688 3307.86,4 -4,4"/>
+<!-- daviderestivo/emacs&#45;head/emacs&#45;head@30 -->
+<g id="node18" class="node" pointer-events="visible" data-name="daviderestivo/emacs-head/emacs-head@30">
+
+<ellipse fill="none" stroke="black" cx="2341" cy="-666" rx="178.25" ry="18"/>
+<text text-anchor="middle" x="2341" y="-661.8" font-family="Times,serif" font-size="14.00">daviderestivo/emacs-head/emacs-head@30</text>
+</g>
+<!-- giflib -->
+<g id="node19" class="node" pointer-events="visible" data-name="giflib">
+
+<ellipse fill="none" stroke="black" cx="254" cy="-162" rx="31.92" ry="18"/>
+<text text-anchor="middle" x="254" y="-157.8" font-family="Times,serif" font-size="14.00">giflib</text>
+</g>
+<!-- daviderestivo/emacs&#45;head/emacs&#45;head@30&#45;&gt;giflib -->
+<g id="edge13" class="edge" data-name="daviderestivo/emacs-head/emacs-head@30-&gt;giflib">
+
+<path fill="none" stroke="black" d="M2164.59,-663.32C1625.77,-657.02 38,-629.44 38,-523 38,-523 38,-523 38,-305 38,-258.03 57.93,-244.85 95,-216 99.93,-212.16 169.96,-189.57 215.42,-175.15"/>
+<polygon fill="black" stroke="black" points="216.47,-178.49 224.95,-172.13 214.36,-171.81 216.47,-178.49"/>
+</g>
+<!-- gnutls -->
+<g id="node20" class="node" pointer-events="visible" data-name="gnutls">
+
+<ellipse fill="none" stroke="black" cx="2119" cy="-594" rx="34.79" ry="18"/>
+<text text-anchor="middle" x="2119" y="-589.8" font-family="Times,serif" font-size="14.00">gnutls</text>
+</g>
+<!-- daviderestivo/emacs&#45;head/emacs&#45;head@30&#45;&gt;gnutls -->
+<g id="edge14" class="edge" data-name="daviderestivo/emacs-head/emacs-head@30-&gt;gnutls">
+
+<path fill="none" stroke="black" d="M2288.39,-648.41C2248.65,-635.88 2194.95,-618.95 2158.76,-607.54"/>
+<polygon fill="black" stroke="black" points="2160.15,-604.31 2149.56,-604.64 2158.05,-610.98 2160.15,-604.31"/>
+</g>
+<!-- jansson -->
+<g id="node22" class="node" pointer-events="visible" data-name="jansson">
+
+<ellipse fill="none" stroke="black" cx="2409" cy="-594" rx="40.01" ry="18"/>
+<text text-anchor="middle" x="2409" y="-589.8" font-family="Times,serif" font-size="14.00">jansson</text>
+</g>
+<!-- daviderestivo/emacs&#45;head/emacs&#45;head@30&#45;&gt;jansson -->
+<g id="edge16" class="edge" data-name="daviderestivo/emacs-head/emacs-head@30-&gt;jansson">
+
+<path fill="none" stroke="black" d="M2357.81,-647.7C2366.24,-639.02 2376.59,-628.37 2385.76,-618.92"/>
+<polygon fill="black" stroke="black" points="2388.26,-621.37 2392.72,-611.76 2383.24,-616.49 2388.26,-621.37"/>
+</g>
+<!-- librsvg -->
+<g id="node23" class="node" pointer-events="visible" data-name="librsvg">
+
+<ellipse fill="none" stroke="black" cx="2643" cy="-594" rx="37.72" ry="18"/>
+<text text-anchor="middle" x="2643" y="-589.8" font-family="Times,serif" font-size="14.00">librsvg</text>
+</g>
+<!-- daviderestivo/emacs&#45;head/emacs&#45;head@30&#45;&gt;librsvg -->
+<g id="edge17" class="edge" data-name="daviderestivo/emacs-head/emacs-head@30-&gt;librsvg">
+
+<path fill="none" stroke="black" d="M2409.91,-649.03C2467.89,-635.59 2549.07,-616.77 2598.73,-605.26"/>
+<polygon fill="black" stroke="black" points="2599.31,-608.72 2608.26,-603.05 2597.73,-601.9 2599.31,-608.72"/>
+</g>
+<!-- libxml2 -->
+<g id="node24" class="node" pointer-events="visible" data-name="libxml2">
+
+<ellipse fill="none" stroke="black" cx="2497" cy="-522" rx="41.17" ry="18"/>
+<text text-anchor="middle" x="2497" y="-517.8" font-family="Times,serif" font-size="14.00">libxml2</text>
+</g>
+<!-- daviderestivo/emacs&#45;head/emacs&#45;head@30&#45;&gt;libxml2 -->
+<g id="edge18" class="edge" data-name="daviderestivo/emacs-head/emacs-head@30-&gt;libxml2">
+
+<path fill="none" stroke="black" d="M2398.52,-648.58C2419.34,-640.34 2441.7,-628.5 2458,-612 2474.49,-595.3 2484.58,-570.47 2490.35,-551.27"/>
+<polygon fill="black" stroke="black" points="2493.72,-552.2 2493,-541.63 2486.97,-550.34 2493.72,-552.2"/>
+</g>
+<!-- imagemagick@7 -->
+<g id="node21" class="node" pointer-events="visible" data-name="imagemagick@7">
+
+<ellipse fill="none" stroke="black" cx="2274" cy="-594" rx="76.56" ry="18"/>
+<text text-anchor="middle" x="2274" y="-589.8" font-family="Times,serif" font-size="14.00">imagemagick@7</text>
+</g>
+<!-- daviderestivo/emacs&#45;head/emacs&#45;head@30&#45;&gt;imagemagick@7 -->
+<g id="edge15" class="edge" data-name="daviderestivo/emacs-head/emacs-head@30-&gt;imagemagick@7">
+
+<path fill="none" stroke="black" d="M2324.44,-647.7C2316.37,-639.27 2306.52,-628.97 2297.67,-619.73"/>
+<polygon fill="black" stroke="black" points="2300.4,-617.52 2290.96,-612.72 2295.34,-622.36 2300.4,-617.52"/>
+</g>
+<!-- ca&#45;certificates -->
+<g id="node6" class="node" pointer-events="visible" data-name="ca-certificates">
+
+<ellipse fill="none" stroke="black" cx="1843" cy="-306" rx="65.36" ry="18"/>
+<text text-anchor="middle" x="1843" y="-301.8" font-family="Times,serif" font-size="14.00">ca-certificates</text>
+</g>
+<!-- gnutls&#45;&gt;ca&#45;certificates -->
+<g id="edge37" class="edge" data-name="gnutls-&gt;ca-certificates">
+
+<path fill="none" stroke="black" d="M2085.15,-589.09C2046.02,-583.33 1980.88,-569.82 1933,-540 1896.41,-517.21 1886.53,-506.93 1868,-468 1847.54,-425.01 1843.18,-368.94 1842.59,-335.59"/>
+<polygon fill="black" stroke="black" points="1846.09,-335.88 1842.53,-325.91 1839.09,-335.93 1846.09,-335.88"/>
+</g>
+<!-- gmp -->
+<g id="node38" class="node" pointer-events="visible" data-name="gmp">
+
+<ellipse fill="none" stroke="black" cx="2273" cy="-450" rx="28.41" ry="18"/>
+<text text-anchor="middle" x="2273" y="-445.8" font-family="Times,serif" font-size="14.00">gmp</text>
+</g>
+<!-- gnutls&#45;&gt;gmp -->
+<g id="edge38" class="edge" data-name="gnutls-&gt;gmp">
+
+<path fill="none" stroke="black" d="M2137.23,-578.27C2149.98,-567.83 2167.29,-553.35 2182,-540 2206.13,-518.11 2232.64,-491.92 2250.8,-473.64"/>
+<polygon fill="black" stroke="black" points="2252.9,-476.48 2257.45,-466.91 2247.93,-471.56 2252.9,-476.48"/>
+</g>
+<!-- guile -->
+<g id="node40" class="node" pointer-events="visible" data-name="guile">
+
+<ellipse fill="none" stroke="black" cx="2359" cy="-522" rx="30.19" ry="18"/>
+<text text-anchor="middle" x="2359" y="-517.8" font-family="Times,serif" font-size="14.00">guile</text>
+</g>
+<!-- gnutls&#45;&gt;guile -->
+<g id="edge39" class="edge" data-name="gnutls-&gt;guile">
+
+<path fill="none" stroke="black" d="M2150.14,-585.33C2198.1,-573.41 2287.74,-550.72 2319,-540 2320.95,-539.33 2322.94,-538.61 2324.94,-537.86"/>
+<polygon fill="black" stroke="black" points="2326.13,-541.15 2334.12,-534.2 2323.54,-534.65 2326.13,-541.15"/>
+</g>
+<!-- libunistring -->
+<g id="node43" class="node" pointer-events="visible" data-name="libunistring">
+
+<ellipse fill="none" stroke="black" cx="2031" cy="-450" rx="55.64" ry="18"/>
+<text text-anchor="middle" x="2031" y="-445.8" font-family="Times,serif" font-size="14.00">libunistring</text>
+</g>
+<!-- gnutls&#45;&gt;libunistring -->
+<g id="edge42" class="edge" data-name="gnutls-&gt;libunistring">
+
+<path fill="none" stroke="black" d="M2100.47,-578.39C2088.99,-568.56 2074.64,-554.73 2065,-540 2052.75,-521.3 2043.96,-497.53 2038.39,-479.26"/>
+<polygon fill="black" stroke="black" points="2041.81,-478.52 2035.68,-469.88 2035.09,-480.46 2041.81,-478.52"/>
+</g>
+<!-- libidn2 -->
+<g id="node41" class="node" pointer-events="visible" data-name="libidn2">
+
+<ellipse fill="none" stroke="black" cx="1980" cy="-522" rx="38.3" ry="18"/>
+<text text-anchor="middle" x="1980" y="-517.8" font-family="Times,serif" font-size="14.00">libidn2</text>
+</g>
+<!-- gnutls&#45;&gt;libidn2 -->
+<g id="edge40" class="edge" data-name="gnutls-&gt;libidn2">
+
+<path fill="none" stroke="black" d="M2094.79,-580.81C2072.87,-569.77 2040.32,-553.38 2015.47,-540.86"/>
+<polygon fill="black" stroke="black" points="2017.2,-537.82 2006.7,-536.44 2014.05,-544.07 2017.2,-537.82"/>
+</g>
+<!-- libtasn1 -->
+<g id="node42" class="node" pointer-events="visible" data-name="libtasn1">
+
+<ellipse fill="none" stroke="black" cx="2185" cy="-450" rx="41.73" ry="18"/>
+<text text-anchor="middle" x="2185" y="-445.8" font-family="Times,serif" font-size="14.00">libtasn1</text>
+</g>
+<!-- gnutls&#45;&gt;libtasn1 -->
+<g id="edge41" class="edge" data-name="gnutls-&gt;libtasn1">
+
+<path fill="none" stroke="black" d="M2134.11,-577.48C2143.08,-567.5 2154.03,-553.84 2161,-540 2170.64,-520.87 2176.76,-497.4 2180.41,-479.37"/>
+<polygon fill="black" stroke="black" points="2183.83,-480.1 2182.23,-469.63 2176.95,-478.82 2183.83,-480.1"/>
+</g>
+<!-- nettle -->
+<g id="node44" class="node" pointer-events="visible" data-name="nettle">
+
+<ellipse fill="none" stroke="black" cx="2278" cy="-522" rx="32.47" ry="18"/>
+<text text-anchor="middle" x="2278" y="-517.8" font-family="Times,serif" font-size="14.00">nettle</text>
+</g>
+<!-- gnutls&#45;&gt;nettle -->
+<g id="edge43" class="edge" data-name="gnutls-&gt;nettle">
+
+<path fill="none" stroke="black" d="M2144.9,-581.6C2171.55,-569.87 2213.23,-551.51 2242.84,-538.48"/>
+<polygon fill="black" stroke="black" points="2244.03,-541.78 2251.77,-534.55 2241.21,-535.37 2244.03,-541.78"/>
+</g>
+<!-- p11&#45;kit -->
+<g id="node45" class="node" pointer-events="visible" data-name="p11-kit">
+
+<ellipse fill="none" stroke="black" cx="2113" cy="-522" rx="38.86" ry="18"/>
+<text text-anchor="middle" x="2113" y="-517.8" font-family="Times,serif" font-size="14.00">p11-kit</text>
+</g>
+<!-- gnutls&#45;&gt;p11&#45;kit -->
+<g id="edge44" class="edge" data-name="gnutls-&gt;p11-kit">
+
+<path fill="none" stroke="black" d="M2117.52,-575.7C2116.89,-568.41 2116.15,-559.73 2115.45,-551.54"/>
+<polygon fill="black" stroke="black" points="2118.94,-551.28 2114.6,-541.61 2111.96,-551.87 2118.94,-551.28"/>
+</g>
+<!-- unbound -->
+<g id="node46" class="node" pointer-events="visible" data-name="unbound">
+
+<ellipse fill="none" stroke="black" cx="1684" cy="-522" rx="44.67" ry="18"/>
+<text text-anchor="middle" x="1684" y="-517.8" font-family="Times,serif" font-size="14.00">unbound</text>
+</g>
+<!-- gnutls&#45;&gt;unbound -->
+<g id="edge45" class="edge" data-name="gnutls-&gt;unbound">
+
+<path fill="none" stroke="black" d="M2085.95,-587.68C2010.84,-575.6 1826.86,-545.99 1736.21,-531.4"/>
+<polygon fill="black" stroke="black" points="1737.03,-527.99 1726.6,-529.86 1735.92,-534.9 1737.03,-527.99"/>
+</g>
+<!-- guile&#45;&gt;gmp -->
+<g id="edge47" class="edge" data-name="guile-&gt;gmp">
+
+<path fill="none" stroke="black" d="M2341.6,-506.83C2329.28,-496.81 2312.55,-483.19 2298.7,-471.92"/>
+<polygon fill="black" stroke="black" points="2301.22,-469.46 2291.26,-465.86 2296.8,-474.89 2301.22,-469.46"/>
+</g>
+<!-- bdw&#45;gc -->
+<g id="node4" class="node" pointer-events="visible" data-name="bdw-gc">
+
+<ellipse fill="none" stroke="black" cx="2359" cy="-450" rx="40" ry="18"/>
+<text text-anchor="middle" x="2359" y="-445.8" font-family="Times,serif" font-size="14.00">bdw-gc</text>
+</g>
+<!-- guile&#45;&gt;bdw&#45;gc -->
+<g id="edge46" class="edge" data-name="guile-&gt;bdw-gc">
+
+<path fill="none" stroke="black" d="M2359,-503.7C2359,-496.41 2359,-487.73 2359,-479.54"/>
+<polygon fill="black" stroke="black" points="2362.5,-479.62 2359,-469.62 2355.5,-479.62 2362.5,-479.62"/>
+</g>
+<!-- libtool -->
+<g id="node48" class="node" pointer-events="visible" data-name="libtool">
+
+<ellipse fill="none" stroke="black" cx="1921" cy="-450" rx="36.01" ry="18"/>
+<text text-anchor="middle" x="1921" y="-445.8" font-family="Times,serif" font-size="14.00">libtool</text>
+</g>
+<!-- guile&#45;&gt;libtool -->
+<g id="edge48" class="edge" data-name="guile-&gt;libtool">
+
+<path fill="none" stroke="black" d="M2336.14,-509.9C2330.64,-507.62 2324.7,-505.47 2319,-504 2166.27,-464.72 2119.5,-504.17 1966,-468 1963.56,-467.42 1961.07,-466.75 1958.57,-466.01"/>
+<polygon fill="black" stroke="black" points="1959.8,-462.73 1949.21,-462.89 1957.59,-469.37 1959.8,-462.73"/>
+</g>
+<!-- guile&#45;&gt;libunistring -->
+<g id="edge49" class="edge" data-name="guile-&gt;libunistring">
+
+<path fill="none" stroke="black" d="M2335.63,-510.05C2330.25,-507.82 2324.49,-505.65 2319,-504 2297.48,-497.53 2168.31,-474.72 2090.45,-461.22"/>
+<polygon fill="black" stroke="black" points="2091.3,-457.82 2080.85,-459.56 2090.11,-464.71 2091.3,-457.82"/>
+</g>
+<!-- pkg&#45;config -->
+<g id="node49" class="node" pointer-events="visible" data-name="pkg-config">
+
+<ellipse fill="none" stroke="black" cx="2527" cy="-18" rx="53.32" ry="18"/>
+<text text-anchor="middle" x="2527" y="-13.8" font-family="Times,serif" font-size="14.00">pkg-config</text>
+</g>
+<!-- guile&#45;&gt;pkg&#45;config -->
+<g id="edge50" class="edge" data-name="guile-&gt;pkg-config">
+
+<path fill="none" stroke="black" d="M2377.11,-507.44C2388.35,-497.84 2401.79,-483.87 2408,-468 2413.83,-453.1 2408.64,-447.99 2408,-432 2405.78,-376.31 2398,-362.73 2398,-307 2398,-307 2398,-307 2398,-161 2398,-106.27 2451.15,-63.3 2489.21,-39.54"/>
+<polygon fill="black" stroke="black" points="2490.96,-42.57 2497.71,-34.41 2487.34,-36.58 2490.96,-42.57"/>
+</g>
+<!-- readline -->
+<g id="node50" class="node" pointer-events="visible" data-name="readline">
+
+<ellipse fill="none" stroke="black" cx="2497" cy="-450" rx="42.27" ry="18"/>
+<text text-anchor="middle" x="2497" y="-445.8" font-family="Times,serif" font-size="14.00">readline</text>
+</g>
+<!-- guile&#45;&gt;readline -->
+<g id="edge51" class="edge" data-name="guile-&gt;readline">
+
+<path fill="none" stroke="black" d="M2381.48,-509.6C2402.86,-498.75 2435.41,-482.24 2460.51,-469.51"/>
+<polygon fill="black" stroke="black" points="2462.07,-472.64 2469.41,-465 2458.91,-466.4 2462.07,-472.64"/>
+</g>
+<!-- m4 -->
+<g id="node73" class="node" pointer-events="visible" data-name="m4">
+
+<ellipse fill="none" stroke="black" cx="1921" cy="-378" rx="27" ry="18"/>
+<text text-anchor="middle" x="1921" y="-373.8" font-family="Times,serif" font-size="14.00">m4</text>
+</g>
+<!-- libtool&#45;&gt;m4 -->
+<g id="edge102" class="edge" data-name="libtool-&gt;m4">
+
+<path fill="none" stroke="black" d="M1921,-431.7C1921,-424.41 1921,-415.73 1921,-407.54"/>
+<polygon fill="black" stroke="black" points="1924.5,-407.62 1921,-397.62 1917.5,-407.62 1924.5,-407.62"/>
+</g>
+<!-- libidn2&#45;&gt;libunistring -->
+<g id="edge89" class="edge" data-name="libidn2-&gt;libunistring">
+
+<path fill="none" stroke="black" d="M1991.83,-504.76C1997.86,-496.49 2005.33,-486.23 2012.13,-476.9"/>
+<polygon fill="black" stroke="black" points="2014.93,-479 2017.99,-468.86 2009.27,-474.88 2014.93,-479"/>
+</g>
+<!-- gettext -->
+<g id="node31" class="node" pointer-events="visible" data-name="gettext">
+
+<ellipse fill="none" stroke="black" cx="1936" cy="-234" rx="37.13" ry="18"/>
+<text text-anchor="middle" x="1936" y="-229.8" font-family="Times,serif" font-size="14.00">gettext</text>
+</g>
+<!-- libidn2&#45;&gt;gettext -->
+<g id="edge88" class="edge" data-name="libidn2-&gt;gettext">
+
+<path fill="none" stroke="black" d="M1945.7,-513.5C1921.6,-506.26 1891.09,-492.62 1876,-468 1865.57,-450.97 1877.95,-375.55 1885,-360 1893.84,-340.5 1907.33,-343.1 1917,-324 1926.55,-305.13 1931.31,-281.65 1933.67,-263.55"/>
+<polygon fill="black" stroke="black" points="1937.14,-264.09 1934.77,-253.77 1930.18,-263.32 1937.14,-264.09"/>
+</g>
+<!-- nettle&#45;&gt;gmp -->
+<g id="edge118" class="edge" data-name="nettle-&gt;gmp">
+
+<path fill="none" stroke="black" d="M2276.76,-503.7C2276.24,-496.41 2275.62,-487.73 2275.04,-479.54"/>
+<polygon fill="black" stroke="black" points="2278.53,-479.34 2274.33,-469.61 2271.55,-479.84 2278.53,-479.34"/>
+</g>
+<!-- p11&#45;kit&#45;&gt;ca&#45;certificates -->
+<g id="edge124" class="edge" data-name="p11-kit-&gt;ca-certificates">
+
+<path fill="none" stroke="black" d="M2113.96,-503.84C2114.15,-484.52 2111.71,-453.06 2096,-432 2049.64,-369.83 1963.87,-336.75 1905.16,-320.56"/>
+<polygon fill="black" stroke="black" points="1906.19,-317.21 1895.63,-318.02 1904.4,-323.98 1906.19,-317.21"/>
+</g>
+<!-- p11&#45;kit&#45;&gt;libtasn1 -->
+<g id="edge125" class="edge" data-name="p11-kit-&gt;libtasn1">
+
+<path fill="none" stroke="black" d="M2128.98,-505.46C2138.26,-496.44 2150.15,-484.88 2160.59,-474.73"/>
+<polygon fill="black" stroke="black" points="2162.75,-477.51 2167.48,-468.03 2157.87,-472.49 2162.75,-477.51"/>
+</g>
+<!-- libevent -->
+<g id="node65" class="node" pointer-events="visible" data-name="libevent">
+
+<ellipse fill="none" stroke="black" cx="1629" cy="-450" rx="42.29" ry="18"/>
+<text text-anchor="middle" x="1629" y="-445.8" font-family="Times,serif" font-size="14.00">libevent</text>
+</g>
+<!-- unbound&#45;&gt;libevent -->
+<g id="edge135" class="edge" data-name="unbound-&gt;libevent">
+
+<path fill="none" stroke="black" d="M1670.97,-504.41C1664.39,-496.04 1656.27,-485.71 1648.93,-476.37"/>
+<polygon fill="black" stroke="black" points="1651.81,-474.36 1642.88,-468.66 1646.3,-478.69 1651.81,-474.36"/>
+</g>
+<!-- openssl@1.1 -->
+<g id="node66" class="node" pointer-events="visible" data-name="openssl@1.1">
+
+<ellipse fill="none" stroke="black" cx="1654" cy="-378" rx="60.94" ry="18"/>
+<text text-anchor="middle" x="1654" y="-373.8" font-family="Times,serif" font-size="14.00">openssl@1.1</text>
+</g>
+<!-- unbound&#45;&gt;openssl@1.1 -->
+<g id="edge137" class="edge" data-name="unbound-&gt;openssl@1.1">
+
+<path fill="none" stroke="black" d="M1645.4,-512.59C1621.49,-505.17 1592.66,-491.72 1578,-468 1569.59,-454.39 1570.6,-446.19 1578,-432 1585.18,-418.25 1597.73,-407.34 1610.59,-399.08"/>
+<polygon fill="black" stroke="black" points="1612.27,-402.15 1619.09,-394.05 1608.71,-396.12 1612.27,-402.15"/>
+</g>
+<!-- libnghttp2 -->
+<g id="node69" class="node" pointer-events="visible" data-name="libnghttp2">
+
+<ellipse fill="none" stroke="black" cx="1740" cy="-450" rx="50.98" ry="18"/>
+<text text-anchor="middle" x="1740" y="-445.8" font-family="Times,serif" font-size="14.00">libnghttp2</text>
+</g>
+<!-- unbound&#45;&gt;libnghttp2 -->
+<g id="edge136" class="edge" data-name="unbound-&gt;libnghttp2">
+
+<path fill="none" stroke="black" d="M1697.27,-504.41C1703.97,-496.04 1712.23,-485.71 1719.7,-476.37"/>
+<polygon fill="black" stroke="black" points="1722.36,-478.65 1725.88,-468.65 1716.9,-474.27 1722.36,-478.65"/>
+</g>
+<!-- libevent&#45;&gt;openssl@1.1 -->
+<g id="edge81" class="edge" data-name="libevent-&gt;openssl@1.1">
+
+<path fill="none" stroke="black" d="M1635.18,-431.7C1637.87,-424.15 1641.1,-415.12 1644.11,-406.68"/>
+<polygon fill="black" stroke="black" points="1647.31,-408.12 1647.38,-397.53 1640.72,-405.77 1647.31,-408.12"/>
+</g>
+<!-- openssl@1.1&#45;&gt;ca&#45;certificates -->
+<g id="edge123" class="edge" data-name="openssl@1.1-&gt;ca-certificates">
+
+<path fill="none" stroke="black" d="M1690.89,-363.34C1720.52,-352.36 1762.37,-336.86 1794.67,-324.9"/>
+<polygon fill="black" stroke="black" points="1795.65,-328.27 1803.81,-321.51 1793.22,-321.7 1795.65,-328.27"/>
+</g>
+<!-- imagemagick -->
+<g id="node54" class="node" pointer-events="visible" data-name="imagemagick">
+
+<ellipse fill="none" stroke="black" cx="1106" cy="-522" rx="63.11" ry="18"/>
+<text text-anchor="middle" x="1106" y="-517.8" font-family="Times,serif" font-size="14.00">imagemagick</text>
+</g>
+<!-- imagemagick&#45;&gt;libtool -->
+<g id="edge66" class="edge" data-name="imagemagick-&gt;libtool">
+
+<path fill="none" stroke="black" d="M1167.39,-517.62C1288.56,-510.67 1566.94,-493.25 1800,-468 1825.05,-465.29 1852.91,-461.43 1875.57,-458.08"/>
+<polygon fill="black" stroke="black" points="1876.04,-461.55 1885.41,-456.6 1875,-454.62 1876.04,-461.55"/>
+</g>
+<!-- freetype -->
+<g id="node9" class="node" pointer-events="visible" data-name="freetype">
+
+<ellipse fill="none" stroke="black" cx="2627" cy="-234" rx="42.83" ry="18"/>
+<text text-anchor="middle" x="2627" y="-229.8" font-family="Times,serif" font-size="14.00">freetype</text>
+</g>
+<!-- imagemagick&#45;&gt;freetype -->
+<g id="edge57" class="edge" data-name="imagemagick-&gt;freetype">
+
+<path fill="none" stroke="black" d="M1168.57,-518.96C1257.66,-514.85 1415.18,-502.75 1459,-468 1499.48,-435.9 1461.69,-392.31 1502,-360 1580.68,-296.94 1634.27,-365.87 1726,-324 1748.67,-313.65 1745.77,-297.03 1769,-288 1936.1,-223.03 2398.62,-284.15 2575,-252 2578.2,-251.42 2581.47,-250.69 2584.74,-249.86"/>
+<polygon fill="black" stroke="black" points="2585.61,-253.25 2594.27,-247.15 2583.7,-246.51 2585.61,-253.25"/>
+</g>
+<!-- libpng -->
+<g id="node11" class="node" pointer-events="visible" data-name="libpng">
+
+<ellipse fill="none" stroke="black" cx="1380" cy="-162" rx="35.93" ry="18"/>
+<text text-anchor="middle" x="1380" y="-157.8" font-family="Times,serif" font-size="14.00">libpng</text>
+</g>
+<!-- imagemagick&#45;&gt;libpng -->
+<g id="edge63" class="edge" data-name="imagemagick-&gt;libpng">
+
+<path fill="none" stroke="black" d="M1108.6,-503.73C1117.25,-452.36 1149.68,-298.94 1239,-216 1265.51,-191.38 1304.54,-177.9 1334.82,-170.7"/>
+<polygon fill="black" stroke="black" points="1335.46,-174.14 1344.47,-168.56 1333.95,-167.3 1335.46,-174.14"/>
+</g>
+<!-- ghostscript -->
+<g id="node32" class="node" pointer-events="visible" data-name="ghostscript">
+
+<ellipse fill="none" stroke="black" cx="1326" cy="-378" rx="53.34" ry="18"/>
+<text text-anchor="middle" x="1326" y="-373.8" font-family="Times,serif" font-size="14.00">ghostscript</text>
+</g>
+<!-- imagemagick&#45;&gt;ghostscript -->
+<g id="edge58" class="edge" data-name="imagemagick-&gt;ghostscript">
+
+<path fill="none" stroke="black" d="M1147.73,-508.21C1173.75,-499.17 1207.25,-485.55 1234,-468 1261.11,-450.21 1287.2,-423.79 1304.63,-404.36"/>
+<polygon fill="black" stroke="black" points="1307.25,-406.67 1311.23,-396.85 1302,-402.05 1307.25,-406.67"/>
+</g>
+<!-- jpeg&#45;turbo -->
+<g id="node29" class="node" pointer-events="visible" data-name="jpeg-turbo">
+
+<ellipse fill="none" stroke="black" cx="981" cy="-90" rx="51.03" ry="18"/>
+<text text-anchor="middle" x="981" y="-85.8" font-family="Times,serif" font-size="14.00">jpeg-turbo</text>
+</g>
+<!-- imagemagick&#45;&gt;jpeg&#45;turbo -->
+<g id="edge59" class="edge" data-name="imagemagick-&gt;jpeg-turbo">
+
+<path fill="none" stroke="black" d="M1043.2,-519.31C879.99,-514.52 445.39,-499.16 305,-468 198.4,-444.34 76,-488.19 76,-379 76,-379 76,-379 76,-233 76,-189.63 80.33,-168.66 116,-144 181.54,-98.7 730.8,-92.08 918.45,-91.14"/>
+<polygon fill="black" stroke="black" points="918.25,-94.64 928.24,-91.1 918.22,-87.64 918.25,-94.64"/>
+</g>
+<!-- libtiff -->
+<g id="node30" class="node" pointer-events="visible" data-name="libtiff">
+
+<ellipse fill="none" stroke="black" cx="1491" cy="-162" rx="33.06" ry="18"/>
+<text text-anchor="middle" x="1491" y="-157.8" font-family="Times,serif" font-size="14.00">libtiff</text>
+</g>
+<!-- imagemagick&#45;&gt;libtiff -->
+<g id="edge65" class="edge" data-name="imagemagick-&gt;libtiff">
+
+<path fill="none" stroke="black" d="M1160.87,-512.71C1204.72,-504.81 1267.06,-490.71 1318,-468 1327.8,-463.63 1468.16,-364.26 1478,-360 1544.5,-331.24 1591.78,-380.61 1637,-324 1660.44,-294.66 1611.62,-220.78 1607,-216 1586.65,-194.95 1556.37,-181.5 1531.85,-173.42"/>
+<polygon fill="black" stroke="black" points="1533.08,-170.14 1522.49,-170.53 1531.01,-176.83 1533.08,-170.14"/>
+</g>
+<!-- xz -->
+<g id="node61" class="node" pointer-events="visible" data-name="xz">
+
+<ellipse fill="none" stroke="black" cx="728" cy="-18" rx="27" ry="18"/>
+<text text-anchor="middle" x="728" y="-13.8" font-family="Times,serif" font-size="14.00">xz</text>
+</g>
+<!-- imagemagick&#45;&gt;xz -->
+<g id="edge71" class="edge" data-name="imagemagick-&gt;xz">
+
+<path fill="none" stroke="black" d="M1042.99,-520.27C835.04,-517.5 178.88,-505.81 92,-468 39.84,-445.3 0,-435.89 0,-379 0,-379 0,-379 0,-161 0,-90.01 540.23,-35.95 689.94,-22.33"/>
+<polygon fill="black" stroke="black" points="690.07,-25.84 699.72,-21.45 689.45,-18.86 690.07,-25.84"/>
+</g>
+<!-- little&#45;cms2 -->
+<g id="node35" class="node" pointer-events="visible" data-name="little-cms2">
+
+<ellipse fill="none" stroke="black" cx="1300" cy="-234" rx="52.18" ry="18"/>
+<text text-anchor="middle" x="1300" y="-229.8" font-family="Times,serif" font-size="14.00">little-cms2</text>
+</g>
+<!-- imagemagick&#45;&gt;little&#45;cms2 -->
+<g id="edge67" class="edge" data-name="imagemagick-&gt;little-cms2">
+
+<path fill="none" stroke="black" d="M1117.55,-503.97C1150.17,-455.88 1243.12,-318.85 1282.27,-261.13"/>
+<polygon fill="black" stroke="black" points="1284.94,-263.44 1287.66,-253.2 1279.15,-259.51 1284.94,-263.44"/>
+</g>
+<!-- openjpeg -->
+<g id="node36" class="node" pointer-events="visible" data-name="openjpeg">
+
+<ellipse fill="none" stroke="black" cx="1562" cy="-306" rx="46.37" ry="18"/>
+<text text-anchor="middle" x="1562" y="-301.8" font-family="Times,serif" font-size="14.00">openjpeg</text>
+</g>
+<!-- imagemagick&#45;&gt;openjpeg -->
+<g id="edge69" class="edge" data-name="imagemagick-&gt;openjpeg">
+
+<path fill="none" stroke="black" d="M1151.98,-509.27C1185.47,-499.99 1231.52,-485.66 1270,-468 1325.84,-442.38 1338.09,-431.82 1388,-396 1408.25,-381.47 1409.63,-372.83 1431,-360 1457.59,-344.03 1489.87,-330.91 1515.74,-321.71"/>
+<polygon fill="black" stroke="black" points="1516.66,-325.1 1524.96,-318.51 1514.37,-318.49 1516.66,-325.1"/>
+</g>
+<!-- libheif -->
+<g id="node55" class="node" pointer-events="visible" data-name="libheif">
+
+<ellipse fill="none" stroke="black" cx="518" cy="-450" rx="36.49" ry="18"/>
+<text text-anchor="middle" x="518" y="-445.8" font-family="Times,serif" font-size="14.00">libheif</text>
+</g>
+<!-- imagemagick&#45;&gt;libheif -->
+<g id="edge60" class="edge" data-name="imagemagick-&gt;libheif">
+
+<path fill="none" stroke="black" d="M1048.55,-514.16C932.26,-500.32 671.03,-469.22 564.53,-456.54"/>
+<polygon fill="black" stroke="black" points="565.07,-453.08 554.72,-455.37 564.24,-460.03 565.07,-453.08"/>
+</g>
+<!-- openexr -->
+<g id="node59" class="node" pointer-events="visible" data-name="openexr">
+
+<ellipse fill="none" stroke="black" cx="146" cy="-234" rx="42.28" ry="18"/>
+<text text-anchor="middle" x="146" y="-229.8" font-family="Times,serif" font-size="14.00">openexr</text>
+</g>
+<!-- imagemagick&#45;&gt;openexr -->
+<g id="edge68" class="edge" data-name="imagemagick-&gt;openexr">
+
+<path fill="none" stroke="black" d="M1042.91,-519.95C864.9,-515.78 363.59,-495.27 239,-396 194.92,-360.88 167.71,-298.77 154.86,-262.83"/>
+<polygon fill="black" stroke="black" points="158.24,-261.9 151.68,-253.58 151.62,-264.17 158.24,-261.9"/>
+</g>
+<!-- webp -->
+<g id="node60" class="node" pointer-events="visible" data-name="webp">
+
+<ellipse fill="none" stroke="black" cx="790" cy="-234" rx="31.91" ry="18"/>
+<text text-anchor="middle" x="790" y="-229.8" font-family="Times,serif" font-size="14.00">webp</text>
+</g>
+<!-- imagemagick&#45;&gt;webp -->
+<g id="edge70" class="edge" data-name="imagemagick-&gt;webp">
+
+<path fill="none" stroke="black" d="M1043.95,-517.98C999.77,-512.97 941.18,-500.17 900,-468 833.24,-415.85 805.05,-313.34 794.91,-263.53"/>
+<polygon fill="black" stroke="black" points="798.37,-262.98 793.04,-253.82 791.49,-264.3 798.37,-262.98"/>
+</g>
+<!-- liblqr -->
+<g id="node56" class="node" pointer-events="visible" data-name="liblqr">
+
+<ellipse fill="none" stroke="black" cx="1543" cy="-378" rx="31.92" ry="18"/>
+<text text-anchor="middle" x="1543" y="-373.8" font-family="Times,serif" font-size="14.00">liblqr</text>
+</g>
+<!-- imagemagick&#45;&gt;liblqr -->
+<g id="edge61" class="edge" data-name="imagemagick-&gt;liblqr">
+
+<path fill="none" stroke="black" d="M1168.77,-519.42C1265.55,-515.84 1445.43,-504.37 1497,-468 1517.41,-453.6 1529.4,-427.35 1535.99,-407.07"/>
+<polygon fill="black" stroke="black" points="1539.28,-408.28 1538.76,-397.7 1532.57,-406.3 1539.28,-408.28"/>
+</g>
+<!-- libomp -->
+<g id="node57" class="node" pointer-events="visible" data-name="libomp">
+
+<ellipse fill="none" stroke="black" cx="1116" cy="-234" rx="38.3" ry="18"/>
+<text text-anchor="middle" x="1116" y="-229.8" font-family="Times,serif" font-size="14.00">libomp</text>
+</g>
+<!-- imagemagick&#45;&gt;libomp -->
+<g id="edge62" class="edge" data-name="imagemagick-&gt;libomp">
+
+<path fill="none" stroke="black" d="M1100.32,-504.04C1097.18,-493.74 1093.59,-480.27 1092,-468 1081.7,-388.67 1075.12,-366.2 1092,-288 1093.93,-279.08 1097.48,-269.85 1101.28,-261.64"/>
+<polygon fill="black" stroke="black" points="1104.31,-263.42 1105.62,-252.91 1098.04,-260.3 1104.31,-263.42"/>
+</g>
+<!-- libraw -->
+<g id="node58" class="node" pointer-events="visible" data-name="libraw">
+
+<ellipse fill="none" stroke="black" cx="1004" cy="-306" rx="35.92" ry="18"/>
+<text text-anchor="middle" x="1004" y="-301.8" font-family="Times,serif" font-size="14.00">libraw</text>
+</g>
+<!-- imagemagick&#45;&gt;libraw -->
+<g id="edge64" class="edge" data-name="imagemagick-&gt;libraw">
+
+<path fill="none" stroke="black" d="M1056.46,-510.57C1000.22,-495.78 911.1,-462.75 871,-396 862.76,-382.28 862.02,-373.24 871,-360 890.23,-331.63 927.33,-318.45 957.47,-312.32"/>
+<polygon fill="black" stroke="black" points="957.92,-315.79 967.14,-310.57 956.68,-308.91 957.92,-315.79"/>
+</g>
+<!-- freetype&#45;&gt;libpng -->
+<g id="edge21" class="edge" data-name="freetype-&gt;libpng">
+
+<path fill="none" stroke="black" d="M2595.74,-221.2C2588.99,-219.1 2581.83,-217.2 2575,-216 2081.86,-129.33 1945.02,-248.26 1449,-180 1439.98,-178.76 1430.42,-176.82 1421.39,-174.69"/>
+<polygon fill="black" stroke="black" points="1422.32,-171.31 1411.77,-172.29 1420.63,-178.11 1422.32,-171.31"/>
+</g>
+<!-- ghostscript&#45;&gt;freetype -->
+<g id="edge27" class="edge" data-name="ghostscript-&gt;freetype">
+
+<path fill="none" stroke="black" d="M1374.93,-370.43C1452.29,-359.8 1599.25,-338.55 1650,-324 1689.83,-312.58 1695.56,-297.03 1736,-288 2100.26,-206.67 2207.76,-318.61 2575,-252 2578.2,-251.42 2581.47,-250.69 2584.74,-249.86"/>
+<polygon fill="black" stroke="black" points="2585.61,-253.25 2594.28,-247.16 2583.7,-246.52 2585.61,-253.25"/>
+</g>
+<!-- ghostscript&#45;&gt;libpng -->
+<g id="edge31" class="edge" data-name="ghostscript-&gt;libpng">
+
+<path fill="none" stroke="black" d="M1318.55,-360.01C1311.57,-341.39 1303.75,-311.09 1315,-288 1326.37,-264.66 1347.24,-274.02 1361,-252 1372.33,-233.86 1376.99,-210.03 1378.87,-191.59"/>
+<polygon fill="black" stroke="black" points="1382.34,-192.11 1379.62,-181.87 1375.36,-191.57 1382.34,-192.11"/>
+</g>
+<!-- fontconfig -->
+<g id="node8" class="node" pointer-events="visible" data-name="fontconfig">
+
+<ellipse fill="none" stroke="black" cx="2679" cy="-306" rx="51.03" ry="18"/>
+<text text-anchor="middle" x="2679" y="-301.8" font-family="Times,serif" font-size="14.00">fontconfig</text>
+</g>
+<!-- ghostscript&#45;&gt;fontconfig -->
+<g id="edge26" class="edge" data-name="ghostscript-&gt;fontconfig">
+
+<path fill="none" stroke="black" d="M1376,-371.33C1411.19,-367.55 1459.42,-362.77 1502,-360 1975.93,-329.15 2097.17,-368.68 2570,-324 2587.44,-322.35 2606.33,-319.71 2623.41,-317"/>
+<polygon fill="black" stroke="black" points="2623.54,-320.52 2632.85,-315.46 2622.41,-313.62 2623.54,-320.52"/>
+</g>
+<!-- jbig2dec -->
+<g id="node33" class="node" pointer-events="visible" data-name="jbig2dec">
+
+<ellipse fill="none" stroke="black" cx="1368" cy="-306" rx="44.08" ry="18"/>
+<text text-anchor="middle" x="1368" y="-301.8" font-family="Times,serif" font-size="14.00">jbig2dec</text>
+</g>
+<!-- ghostscript&#45;&gt;jbig2dec -->
+<g id="edge28" class="edge" data-name="ghostscript-&gt;jbig2dec">
+
+<path fill="none" stroke="black" d="M1336.17,-360.05C1340.96,-352.06 1346.8,-342.33 1352.16,-333.4"/>
+<polygon fill="black" stroke="black" points="1355,-335.46 1357.15,-325.09 1349,-331.86 1355,-335.46"/>
+</g>
+<!-- ghostscript&#45;&gt;jpeg&#45;turbo -->
+<g id="edge29" class="edge" data-name="ghostscript-&gt;jpeg-turbo">
+
+<path fill="none" stroke="black" d="M1309.89,-360.36C1275.08,-324.51 1193.51,-241.21 1163,-216 1114.31,-175.77 1052.9,-135.54 1015.31,-111.98"/>
+<polygon fill="black" stroke="black" points="1017.46,-109.19 1007.12,-106.88 1013.76,-115.13 1017.46,-109.19"/>
+</g>
+<!-- libidn -->
+<g id="node34" class="node" pointer-events="visible" data-name="libidn">
+
+<ellipse fill="none" stroke="black" cx="1464" cy="-306" rx="33.64" ry="18"/>
+<text text-anchor="middle" x="1464" y="-301.8" font-family="Times,serif" font-size="14.00">libidn</text>
+</g>
+<!-- ghostscript&#45;&gt;libidn -->
+<g id="edge30" class="edge" data-name="ghostscript-&gt;libidn">
+
+<path fill="none" stroke="black" d="M1354.59,-362.5C1376.5,-351.38 1406.8,-336.01 1429.96,-324.27"/>
+<polygon fill="black" stroke="black" points="1431.36,-327.48 1438.69,-319.84 1428.19,-321.24 1431.36,-327.48"/>
+</g>
+<!-- ghostscript&#45;&gt;libtiff -->
+<g id="edge32" class="edge" data-name="ghostscript-&gt;libtiff">
+
+<path fill="none" stroke="black" d="M1373.27,-369.18C1454.69,-355.61 1613.09,-328.68 1617,-324 1659.33,-273.26 1573.45,-211.17 1523.46,-181.08"/>
+<polygon fill="black" stroke="black" points="1525.39,-178.15 1514.99,-176.09 1521.83,-184.18 1525.39,-178.15"/>
+</g>
+<!-- ghostscript&#45;&gt;little&#45;cms2 -->
+<g id="edge33" class="edge" data-name="ghostscript-&gt;little-cms2">
+
+<path fill="none" stroke="black" d="M1307.44,-360.84C1297.86,-351.23 1287.12,-338.17 1282,-324 1274.81,-304.08 1280.12,-280.56 1286.8,-262.7"/>
+<polygon fill="black" stroke="black" points="1290,-264.11 1290.57,-253.53 1283.53,-261.45 1290,-264.11"/>
+</g>
+<!-- ghostscript&#45;&gt;openjpeg -->
+<g id="edge34" class="edge" data-name="ghostscript-&gt;openjpeg">
+
+<path fill="none" stroke="black" d="M1365.6,-365.59C1402.3,-354.97 1458.4,-338.63 1507,-324 1509.86,-323.14 1512.81,-322.25 1515.77,-321.34"/>
+<polygon fill="black" stroke="black" points="1516.54,-324.77 1525.07,-318.49 1514.49,-318.08 1516.54,-324.77"/>
+</g>
+<!-- fontconfig&#45;&gt;freetype -->
+<g id="edge20" class="edge" data-name="fontconfig-&gt;freetype">
+
+<path fill="none" stroke="black" d="M2666.68,-288.41C2660.52,-280.13 2652.94,-269.92 2646.06,-260.66"/>
+<polygon fill="black" stroke="black" points="2648.91,-258.63 2640.14,-252.68 2643.29,-262.8 2648.91,-258.63"/>
+</g>
+<!-- libtiff&#45;&gt;jpeg&#45;turbo -->
+<g id="edge100" class="edge" data-name="libtiff-&gt;jpeg-turbo">
+
+<path fill="none" stroke="black" d="M1462.27,-152.71C1450.76,-149.62 1437.33,-146.31 1425,-144 1289.32,-118.55 1127.9,-102.88 1041.97,-95.69"/>
+<polygon fill="black" stroke="black" points="1042.37,-92.21 1032.11,-94.87 1041.79,-99.18 1042.37,-92.21"/>
+</g>
+<!-- zstd -->
+<g id="node72" class="node" pointer-events="visible" data-name="zstd">
+
+<ellipse fill="none" stroke="black" cx="1287" cy="-90" rx="27" ry="18"/>
+<text text-anchor="middle" x="1287" y="-85.8" font-family="Times,serif" font-size="14.00">zstd</text>
+</g>
+<!-- libtiff&#45;&gt;zstd -->
+<g id="edge101" class="edge" data-name="libtiff-&gt;zstd">
+
+<path fill="none" stroke="black" d="M1463.49,-151.56C1426.69,-138.93 1361.44,-116.54 1321.42,-102.81"/>
+<polygon fill="black" stroke="black" points="1322.63,-99.53 1312.03,-99.59 1320.36,-106.15 1322.63,-99.53"/>
+</g>
+<!-- lz4 -->
+<g id="node77" class="node" pointer-events="visible" data-name="lz4">
+
+<ellipse fill="none" stroke="black" cx="1287" cy="-18" rx="27" ry="18"/>
+<text text-anchor="middle" x="1287" y="-13.8" font-family="Times,serif" font-size="14.00">lz4</text>
+</g>
+<!-- zstd&#45;&gt;lz4 -->
+<g id="edge145" class="edge" data-name="zstd-&gt;lz4">
+
+<path fill="none" stroke="black" d="M1287,-71.7C1287,-64.41 1287,-55.73 1287,-47.54"/>
+<polygon fill="black" stroke="black" points="1290.5,-47.62 1287,-37.62 1283.5,-47.62 1290.5,-47.62"/>
+</g>
+<!-- zstd&#45;&gt;xz -->
+<g id="edge146" class="edge" data-name="zstd-&gt;xz">
+
+<path fill="none" stroke="black" d="M1260.41,-85.67C1169.64,-74.3 871.71,-37 765.79,-23.73"/>
+<polygon fill="black" stroke="black" points="766.28,-20.27 755.92,-22.5 765.41,-27.21 766.28,-20.27"/>
+</g>
+<!-- little&#45;cms2&#45;&gt;jpeg&#45;turbo -->
+<g id="edge116" class="edge" data-name="little-cms2-&gt;jpeg-turbo">
+
+<path fill="none" stroke="black" d="M1285.5,-216.58C1266.8,-196.44 1232.35,-162.69 1196,-144 1146.77,-118.7 1084.92,-105.09 1040.21,-98.03"/>
+<polygon fill="black" stroke="black" points="1040.85,-94.59 1030.44,-96.56 1039.8,-101.51 1040.85,-94.59"/>
+</g>
+<!-- little&#45;cms2&#45;&gt;libtiff -->
+<g id="edge117" class="edge" data-name="little-cms2-&gt;libtiff">
+
+<path fill="none" stroke="black" d="M1334.59,-220.32C1368.15,-208.02 1418.94,-189.41 1453.47,-176.75"/>
+<polygon fill="black" stroke="black" points="1454.46,-180.12 1462.65,-173.39 1452.05,-173.55 1454.46,-180.12"/>
+</g>
+<!-- openjpeg&#45;&gt;libpng -->
+<g id="edge120" class="edge" data-name="openjpeg-&gt;libpng">
+
+<path fill="none" stroke="black" d="M1542.18,-289.53C1509.56,-264.09 1444.52,-213.34 1407.48,-184.44"/>
+<polygon fill="black" stroke="black" points="1409.94,-181.92 1399.9,-178.53 1405.63,-187.44 1409.94,-181.92"/>
+</g>
+<!-- openjpeg&#45;&gt;libtiff -->
+<g id="edge121" class="edge" data-name="openjpeg-&gt;libtiff">
+
+<path fill="none" stroke="black" d="M1553.44,-287.87C1541.27,-263.54 1518.86,-218.73 1504.46,-189.93"/>
+<polygon fill="black" stroke="black" points="1507.65,-188.48 1500.05,-181.1 1501.39,-191.61 1507.65,-188.48"/>
+</g>
+<!-- openjpeg&#45;&gt;little&#45;cms2 -->
+<g id="edge122" class="edge" data-name="openjpeg-&gt;little-cms2">
+
+<path fill="none" stroke="black" d="M1526.87,-293.86C1520.28,-291.85 1513.44,-289.82 1507,-288 1454.84,-273.27 1394.79,-258.09 1352.85,-247.77"/>
+<polygon fill="black" stroke="black" points="1353.81,-244.4 1343.26,-245.42 1352.14,-251.2 1353.81,-244.4"/>
+</g>
+<!-- libheif&#45;&gt;libpng -->
+<g id="edge85" class="edge" data-name="libheif-&gt;libpng">
+
+<path fill="none" stroke="black" d="M543.96,-437.07C637.92,-394.06 960.46,-247.73 1069,-216 1160.86,-189.14 1272.21,-174.26 1333.65,-167.51"/>
+<polygon fill="black" stroke="black" points="1333.82,-171.02 1343.39,-166.47 1333.07,-164.05 1333.82,-171.02"/>
+</g>
+<!-- libheif&#45;&gt;jpeg&#45;turbo -->
+<g id="edge83" class="edge" data-name="libheif-&gt;jpeg-turbo">
+
+<path fill="none" stroke="black" d="M518,-431.51C518,-404.71 518,-351.87 518,-307 518,-307 518,-307 518,-233 518,-174.82 561.5,-169.07 614,-144 666.8,-118.79 829.67,-102.66 919.66,-95.42"/>
+<polygon fill="black" stroke="black" points="919.86,-98.92 929.55,-94.64 919.31,-91.94 919.86,-98.92"/>
+</g>
+<!-- aom -->
+<g id="node1" class="node" pointer-events="visible" data-name="aom">
+
+<ellipse fill="none" stroke="black" cx="276" cy="-378" rx="27.83" ry="18"/>
+<text text-anchor="middle" x="276" y="-373.8" font-family="Times,serif" font-size="14.00">aom</text>
+</g>
+<!-- libheif&#45;&gt;aom -->
+<g id="edge82" class="edge" data-name="libheif-&gt;aom">
+
+<path fill="none" stroke="black" d="M484.43,-442.24C443.38,-433.54 372.05,-417.01 313,-396 311.42,-395.44 309.81,-394.83 308.2,-394.2"/>
+<polygon fill="black" stroke="black" points="309.61,-391 299.04,-390.31 306.88,-397.44 309.61,-391"/>
+</g>
+<!-- libde265 -->
+<g id="node64" class="node" pointer-events="visible" data-name="libde265">
+
+<ellipse fill="none" stroke="black" cx="445" cy="-378" rx="44.66" ry="18"/>
+<text text-anchor="middle" x="445" y="-373.8" font-family="Times,serif" font-size="14.00">libde265</text>
+</g>
+<!-- libheif&#45;&gt;libde265 -->
+<g id="edge84" class="edge" data-name="libheif-&gt;libde265">
+
+<path fill="none" stroke="black" d="M501.8,-433.46C492.39,-424.44 480.33,-412.88 469.75,-402.73"/>
+<polygon fill="black" stroke="black" points="472.39,-400.42 462.75,-396.02 467.55,-405.47 472.39,-400.42"/>
+</g>
+<!-- shared&#45;mime&#45;info -->
+<g id="node67" class="node" pointer-events="visible" data-name="shared-mime-info">
+
+<ellipse fill="none" stroke="black" cx="960" cy="-378" rx="80.44" ry="18"/>
+<text text-anchor="middle" x="960" y="-373.8" font-family="Times,serif" font-size="14.00">shared-mime-info</text>
+</g>
+<!-- libheif&#45;&gt;shared&#45;mime&#45;info -->
+<g id="edge86" class="edge" data-name="libheif-&gt;shared-mime-info">
+
+<path fill="none" stroke="black" d="M552.32,-443.57C623.24,-432.33 787.43,-406.33 884.42,-390.97"/>
+<polygon fill="black" stroke="black" points="884.79,-394.45 894.12,-389.43 883.7,-387.54 884.79,-394.45"/>
+</g>
+<!-- x265 -->
+<g id="node68" class="node" pointer-events="visible" data-name="x265">
+
+<ellipse fill="none" stroke="black" cx="352" cy="-378" rx="30.2" ry="18"/>
+<text text-anchor="middle" x="352" y="-373.8" font-family="Times,serif" font-size="14.00">x265</text>
+</g>
+<!-- libheif&#45;&gt;x265 -->
+<g id="edge87" class="edge" data-name="libheif-&gt;x265">
+
+<path fill="none" stroke="black" d="M490.7,-437.75C464.94,-427.11 425.28,-410.62 391,-396 389.47,-395.35 387.91,-394.68 386.33,-394"/>
+<polygon fill="black" stroke="black" points="387.86,-390.85 377.29,-390.09 385.08,-397.27 387.86,-390.85"/>
+</g>
+<!-- jpeg&#45;xl -->
+<g id="node2" class="node" pointer-events="visible" data-name="jpeg-xl">
+
+<ellipse fill="none" stroke="black" cx="349" cy="-306" rx="38.28" ry="18"/>
+<text text-anchor="middle" x="349" y="-301.8" font-family="Times,serif" font-size="14.00">jpeg-xl</text>
+</g>
+<!-- aom&#45;&gt;jpeg&#45;xl -->
+<g id="edge1" class="edge" data-name="aom-&gt;jpeg-xl">
+
+<path fill="none" stroke="black" d="M291.13,-362.5C300.78,-353.24 313.51,-341.04 324.57,-330.43"/>
+<polygon fill="black" stroke="black" points="326.74,-333.2 331.53,-323.75 321.89,-328.15 326.74,-333.2"/>
+</g>
+<!-- libvmaf -->
+<g id="node3" class="node" pointer-events="visible" data-name="libvmaf">
+
+<ellipse fill="none" stroke="black" cx="252" cy="-306" rx="41.15" ry="18"/>
+<text text-anchor="middle" x="252" y="-301.8" font-family="Times,serif" font-size="14.00">libvmaf</text>
+</g>
+<!-- aom&#45;&gt;libvmaf -->
+<g id="edge2" class="edge" data-name="aom-&gt;libvmaf">
+
+<path fill="none" stroke="black" d="M270.19,-360.05C267.61,-352.52 264.49,-343.44 261.58,-334.94"/>
+<polygon fill="black" stroke="black" points="264.97,-334.03 258.41,-325.71 258.35,-336.3 264.97,-334.03"/>
+</g>
+<!-- jpeg&#45;xl&#45;&gt;giflib -->
+<g id="edge74" class="edge" data-name="jpeg-xl-&gt;giflib">
+
+<path fill="none" stroke="black" d="M322.16,-292.8C305.49,-283.84 285.01,-270.09 273,-252 261.1,-234.08 256.48,-210.04 254.77,-191.46"/>
+<polygon fill="black" stroke="black" points="258.27,-191.42 254.12,-181.67 251.29,-191.89 258.27,-191.42"/>
+</g>
+<!-- jpeg&#45;xl&#45;&gt;libpng -->
+<g id="edge78" class="edge" data-name="jpeg-xl-&gt;libpng">
+
+<path fill="none" stroke="black" d="M386.71,-302.27C447.96,-297.09 572.33,-283.39 673,-252 708.68,-240.87 712.91,-225.72 749,-216 859.27,-186.3 1206.17,-169.9 1332.98,-164.77"/>
+<polygon fill="black" stroke="black" points="1332.83,-168.28 1342.69,-164.39 1332.56,-161.29 1332.83,-168.28"/>
+</g>
+<!-- jpeg&#45;xl&#45;&gt;jpeg&#45;turbo -->
+<g id="edge77" class="edge" data-name="jpeg-xl-&gt;jpeg-turbo">
+
+<path fill="none" stroke="black" d="M382.12,-296.49C406.78,-288.63 439.72,-274.66 461,-252 496.36,-214.33 462.91,-175.32 504,-144 567.59,-95.53 803.9,-89.95 918.23,-90.19"/>
+<polygon fill="black" stroke="black" points="918.04,-93.69 928.06,-90.23 918.07,-86.69 918.04,-93.69"/>
+</g>
+<!-- brotli -->
+<g id="node5" class="node" pointer-events="visible" data-name="brotli">
+
+<ellipse fill="none" stroke="black" cx="420" cy="-234" rx="31.92" ry="18"/>
+<text text-anchor="middle" x="420" y="-229.8" font-family="Times,serif" font-size="14.00">brotli</text>
+</g>
+<!-- jpeg&#45;xl&#45;&gt;brotli -->
+<g id="edge73" class="edge" data-name="jpeg-xl-&gt;brotli">
+
+<path fill="none" stroke="black" d="M364.76,-289.46C374.17,-280.18 386.3,-268.23 396.79,-257.88"/>
+<polygon fill="black" stroke="black" points="399.03,-260.59 403.7,-251.07 394.12,-255.6 399.03,-260.59"/>
+</g>
+<!-- highway -->
+<g id="node53" class="node" pointer-events="visible" data-name="highway">
+
+<ellipse fill="none" stroke="black" cx="326" cy="-234" rx="44.09" ry="18"/>
+<text text-anchor="middle" x="326" y="-229.8" font-family="Times,serif" font-size="14.00">highway</text>
+</g>
+<!-- jpeg&#45;xl&#45;&gt;highway -->
+<g id="edge75" class="edge" data-name="jpeg-xl-&gt;highway">
+
+<path fill="none" stroke="black" d="M343.43,-288.05C340.95,-280.52 337.97,-271.44 335.18,-262.94"/>
+<polygon fill="black" stroke="black" points="338.6,-262.12 332.15,-253.71 331.95,-264.31 338.6,-262.12"/>
+</g>
+<!-- imath -->
+<g id="node62" class="node" pointer-events="visible" data-name="imath">
+
+<ellipse fill="none" stroke="black" cx="158" cy="-162" rx="33.06" ry="18"/>
+<text text-anchor="middle" x="158" y="-157.8" font-family="Times,serif" font-size="14.00">imath</text>
+</g>
+<!-- jpeg&#45;xl&#45;&gt;imath -->
+<g id="edge76" class="edge" data-name="jpeg-xl-&gt;imath">
+
+<path fill="none" stroke="black" d="M323.21,-292.26C304.01,-282.31 277.51,-267.61 256,-252 228.41,-231.99 199.9,-205.3 180.8,-186.38"/>
+<polygon fill="black" stroke="black" points="183.33,-183.96 173.79,-179.36 178.38,-188.91 183.33,-183.96"/>
+</g>
+<!-- jpeg&#45;xl&#45;&gt;openexr -->
+<g id="edge79" class="edge" data-name="jpeg-xl-&gt;openexr">
+
+<path fill="none" stroke="black" d="M319.45,-294.21C313.67,-292.13 307.65,-289.98 302,-288 263.97,-274.66 220.55,-259.95 189.19,-249.42"/>
+<polygon fill="black" stroke="black" points="190.66,-246.22 180.07,-246.36 188.43,-252.86 190.66,-246.22"/>
+</g>
+<!-- jpeg&#45;xl&#45;&gt;webp -->
+<g id="edge80" class="edge" data-name="jpeg-xl-&gt;webp">
+
+<path fill="none" stroke="black" d="M385.59,-300.21C450.36,-291.59 589.35,-272.45 706,-252 720.2,-249.51 735.68,-246.47 749.44,-243.65"/>
+<polygon fill="black" stroke="black" points="749.96,-247.12 759.04,-241.66 748.54,-240.27 749.96,-247.12"/>
+</g>
+<!-- openexr&#45;&gt;imath -->
+<g id="edge119" class="edge" data-name="openexr-&gt;imath">
+
+<path fill="none" stroke="black" d="M148.97,-215.7C150.23,-208.32 151.74,-199.52 153.16,-191.25"/>
+<polygon fill="black" stroke="black" points="156.57,-192.04 154.81,-181.6 149.67,-190.86 156.57,-192.04"/>
+</g>
+<!-- webp&#45;&gt;giflib -->
+<g id="edge138" class="edge" data-name="webp-&gt;giflib">
+
+<path fill="none" stroke="black" d="M759.23,-228.37C735.65,-224.86 702.29,-219.98 673,-216 535.59,-197.33 372.52,-177.32 296.7,-168.14"/>
+<polygon fill="black" stroke="black" points="297.15,-164.67 286.8,-166.94 296.31,-171.62 297.15,-164.67"/>
+</g>
+<!-- webp&#45;&gt;libpng -->
+<g id="edge140" class="edge" data-name="webp-&gt;libpng">
+
+<path fill="none" stroke="black" d="M813.88,-221.71C819.4,-219.49 825.32,-217.42 831,-216 1012.27,-170.75 1236.13,-163.69 1332.37,-162.89"/>
+<polygon fill="black" stroke="black" points="1332.24,-166.39 1342.22,-162.83 1332.19,-159.39 1332.24,-166.39"/>
+</g>
+<!-- webp&#45;&gt;jpeg&#45;turbo -->
+<g id="edge139" class="edge" data-name="webp-&gt;jpeg-turbo">
+
+<path fill="none" stroke="black" d="M808.12,-218.96C831.01,-201.29 871.68,-170.07 907,-144 920.91,-133.73 936.45,-122.55 949.69,-113.12"/>
+<polygon fill="black" stroke="black" points="951.5,-116.13 957.63,-107.48 947.45,-110.42 951.5,-116.13"/>
+</g>
+<!-- webp&#45;&gt;libtiff -->
+<g id="edge141" class="edge" data-name="webp-&gt;libtiff">
+
+<path fill="none" stroke="black" d="M813.84,-221.56C819.36,-219.35 825.29,-217.32 831,-216 1088.71,-156.53 1163.74,-221.17 1425,-180 1433.7,-178.63 1442.91,-176.62 1451.61,-174.46"/>
+<polygon fill="black" stroke="black" points="1452.41,-177.87 1461.2,-171.95 1450.64,-171.1 1452.41,-177.87"/>
+</g>
+<!-- shared&#45;mime&#45;info&#45;&gt;gettext -->
+<g id="edge132" class="edge" data-name="shared-mime-info-&gt;gettext">
+
+<path fill="none" stroke="black" d="M1006.3,-362.85C1073.59,-342.88 1202.66,-306.75 1315,-288 1526.19,-252.75 1781.91,-240.33 1887.16,-236.5"/>
+<polygon fill="black" stroke="black" points="1887.26,-240 1897.13,-236.15 1887.01,-233.01 1887.26,-240"/>
+</g>
+<!-- glib -->
+<g id="node10" class="node" pointer-events="visible" data-name="glib">
+
+<ellipse fill="none" stroke="black" cx="2534" cy="-306" rx="27" ry="18"/>
+<text text-anchor="middle" x="2534" y="-301.8" font-family="Times,serif" font-size="14.00">glib</text>
+</g>
+<!-- shared&#45;mime&#45;info&#45;&gt;glib -->
+<g id="edge133" class="edge" data-name="shared-mime-info-&gt;glib">
+
+<path fill="none" stroke="black" d="M1036.82,-372.4C1098.27,-368.8 1186.65,-363.78 1264,-360 1750.03,-336.27 2341.02,-314.1 2495.56,-308.41"/>
+<polygon fill="black" stroke="black" points="2495.36,-311.92 2505.22,-308.05 2495.1,-304.92 2495.36,-311.92"/>
+</g>
+<!-- xmlto -->
+<g id="node78" class="node" pointer-events="visible" data-name="xmlto">
+
+<ellipse fill="none" stroke="black" cx="741" cy="-306" rx="33.64" ry="18"/>
+<text text-anchor="middle" x="741" y="-301.8" font-family="Times,serif" font-size="14.00">xmlto</text>
+</g>
+<!-- shared&#45;mime&#45;info&#45;&gt;xmlto -->
+<g id="edge134" class="edge" data-name="shared-mime-info-&gt;xmlto">
+
+<path fill="none" stroke="black" d="M915.15,-362.67C875.4,-349.96 817.94,-331.59 780.05,-319.48"/>
+<polygon fill="black" stroke="black" points="781.47,-316.26 770.88,-316.55 779.34,-322.93 781.47,-316.26"/>
+</g>
+<!-- glib&#45;&gt;gettext -->
+<g id="edge35" class="edge" data-name="glib-&gt;gettext">
+
+<path fill="none" stroke="black" d="M2507.53,-301.9C2414.67,-291.03 2102.87,-254.53 1983.26,-240.53"/>
+<polygon fill="black" stroke="black" points="1983.81,-237.07 1973.47,-239.39 1982.99,-244.02 1983.81,-237.07"/>
+</g>
+<!-- pcre2 -->
+<g id="node37" class="node" pointer-events="visible" data-name="pcre2">
+
+<ellipse fill="none" stroke="black" cx="2534" cy="-234" rx="32.46" ry="18"/>
+<text text-anchor="middle" x="2534" y="-229.8" font-family="Times,serif" font-size="14.00">pcre2</text>
+</g>
+<!-- glib&#45;&gt;pcre2 -->
+<g id="edge36" class="edge" data-name="glib-&gt;pcre2">
+
+<path fill="none" stroke="black" d="M2534,-287.7C2534,-280.41 2534,-271.73 2534,-263.54"/>
+<polygon fill="black" stroke="black" points="2537.5,-263.62 2534,-253.62 2530.5,-263.62 2537.5,-263.62"/>
+</g>
+<!-- docbook -->
+<g id="node26" class="node" pointer-events="visible" data-name="docbook">
+
+<ellipse fill="none" stroke="black" cx="667" cy="-162" rx="44.09" ry="18"/>
+<text text-anchor="middle" x="667" y="-157.8" font-family="Times,serif" font-size="14.00">docbook</text>
+</g>
+<!-- xmlto&#45;&gt;docbook -->
+<g id="edge143" class="edge" data-name="xmlto-&gt;docbook">
+
+<path fill="none" stroke="black" d="M732.22,-288.15C719.54,-263.81 695.96,-218.57 680.9,-189.67"/>
+<polygon fill="black" stroke="black" points="684.19,-188.42 676.47,-181.17 677.99,-191.65 684.19,-188.42"/>
+</g>
+<!-- docbook&#45;xsl -->
+<g id="node25" class="node" pointer-events="visible" data-name="docbook-xsl">
+
+<ellipse fill="none" stroke="black" cx="605" cy="-234" rx="58.56" ry="18"/>
+<text text-anchor="middle" x="605" y="-229.8" font-family="Times,serif" font-size="14.00">docbook-xsl</text>
+</g>
+<!-- xmlto&#45;&gt;docbook&#45;xsl -->
+<g id="edge142" class="edge" data-name="xmlto-&gt;docbook-xsl">
+
+<path fill="none" stroke="black" d="M717.31,-292.81C697.16,-282.43 667.81,-267.33 644.16,-255.16"/>
+<polygon fill="black" stroke="black" points="645.93,-252.13 635.44,-250.67 642.73,-258.35 645.93,-252.13"/>
+</g>
+<!-- gnu&#45;getopt -->
+<g id="node39" class="node" pointer-events="visible" data-name="gnu-getopt">
+
+<ellipse fill="none" stroke="black" cx="893" cy="-234" rx="52.75" ry="18"/>
+<text text-anchor="middle" x="893" y="-229.8" font-family="Times,serif" font-size="14.00">gnu-getopt</text>
+</g>
+<!-- xmlto&#45;&gt;gnu&#45;getopt -->
+<g id="edge144" class="edge" data-name="xmlto-&gt;gnu-getopt">
+
+<path fill="none" stroke="black" d="M765.76,-293.6C789.18,-282.81 824.76,-266.43 852.34,-253.72"/>
+<polygon fill="black" stroke="black" points="853.49,-257.05 861.11,-249.69 850.56,-250.69 853.49,-257.05"/>
+</g>
+<!-- docbook&#45;xsl&#45;&gt;docbook -->
+<g id="edge19" class="edge" data-name="docbook-xsl-&gt;docbook">
+
+<path fill="none" stroke="black" d="M619.69,-216.41C627.18,-207.95 636.45,-197.49 644.79,-188.08"/>
+<polygon fill="black" stroke="black" points="647.4,-190.41 651.41,-180.6 642.16,-185.77 647.4,-190.41"/>
+</g>
+<!-- liblqr&#45;&gt;glib -->
+<g id="edge90" class="edge" data-name="liblqr-&gt;glib">
+
+<path fill="none" stroke="black" d="M1566.84,-365.54C1572.36,-363.33 1578.29,-361.3 1584,-360 1761.95,-319.39 2340.61,-309.4 2495.55,-307.42"/>
+<polygon fill="black" stroke="black" points="2495.31,-310.93 2505.27,-307.3 2495.22,-303.93 2495.31,-310.93"/>
+</g>
+<!-- libraw&#45;&gt;jpeg&#45;turbo -->
+<g id="edge93" class="edge" data-name="libraw-&gt;jpeg-turbo">
+
+<path fill="none" stroke="black" d="M1003.69,-287.51C1002.96,-257.85 1000.59,-195.84 993,-144 991.81,-135.85 990.03,-127.09 988.21,-119.08"/>
+<polygon fill="black" stroke="black" points="991.65,-118.44 985.92,-109.53 984.85,-120.07 991.65,-118.44"/>
+</g>
+<!-- libraw&#45;&gt;little&#45;cms2 -->
+<g id="edge95" class="edge" data-name="libraw-&gt;little-cms2">
+
+<path fill="none" stroke="black" d="M1035.96,-297.44C1086.48,-285.49 1185.35,-262.11 1246.73,-247.6"/>
+<polygon fill="black" stroke="black" points="1247.33,-251.05 1256.26,-245.34 1245.72,-244.24 1247.33,-251.05"/>
+</g>
+<!-- libraw&#45;&gt;libomp -->
+<g id="edge94" class="edge" data-name="libraw-&gt;libomp">
+
+<path fill="none" stroke="black" d="M1025.86,-291.34C1042.48,-280.95 1065.59,-266.51 1084.25,-254.85"/>
+<polygon fill="black" stroke="black" points="1085.9,-257.94 1092.53,-249.67 1082.19,-252 1085.9,-257.94"/>
+</g>
+<!-- jasper -->
+<g id="node63" class="node" pointer-events="visible" data-name="jasper">
+
+<ellipse fill="none" stroke="black" cx="950" cy="-162" rx="34.19" ry="18"/>
+<text text-anchor="middle" x="950" y="-157.8" font-family="Times,serif" font-size="14.00">jasper</text>
+</g>
+<!-- libraw&#45;&gt;jasper -->
+<g id="edge92" class="edge" data-name="libraw-&gt;jasper">
+
+<path fill="none" stroke="black" d="M997.49,-287.87C988.27,-263.65 971.34,-219.12 960.39,-190.31"/>
+<polygon fill="black" stroke="black" points="963.73,-189.27 956.91,-181.16 957.19,-191.75 963.73,-189.27"/>
+</g>
+<!-- jasper&#45;&gt;jpeg&#45;turbo -->
+<g id="edge72" class="edge" data-name="jasper-&gt;jpeg-turbo">
+
+<path fill="none" stroke="black" d="M957.5,-144.05C960.88,-136.43 964.95,-127.23 968.75,-118.65"/>
+<polygon fill="black" stroke="black" points="971.89,-120.22 972.74,-109.66 965.49,-117.39 971.89,-120.22"/>
+</g>
+<!-- librsvg&#45;&gt;glib -->
+<g id="edge98" class="edge" data-name="librsvg-&gt;glib">
+
+<path fill="none" stroke="black" d="M2639.92,-575.67C2636.46,-557.53 2630.23,-528.36 2622,-504 2600.71,-441.02 2566.65,-370.68 2547.75,-333.45"/>
+<polygon fill="black" stroke="black" points="2550.99,-332.09 2543.31,-324.79 2544.75,-335.28 2550.99,-332.09"/>
+</g>
+<!-- cairo -->
+<g id="node7" class="node" pointer-events="visible" data-name="cairo">
+
+<ellipse fill="none" stroke="black" cx="3009" cy="-378" rx="30.17" ry="18"/>
+<text text-anchor="middle" x="3009" y="-373.8" font-family="Times,serif" font-size="14.00">cairo</text>
+</g>
+<!-- librsvg&#45;&gt;cairo -->
+<g id="edge96" class="edge" data-name="librsvg-&gt;cairo">
+
+<path fill="none" stroke="black" d="M2680.87,-591.98C2754.44,-587.76 2916.22,-567.06 2993,-468 3006.24,-450.92 3009.87,-426.48 3010.39,-407.53"/>
+<polygon fill="black" stroke="black" points="3013.89,-407.78 3010.37,-397.79 3006.89,-407.8 3013.89,-407.78"/>
+</g>
+<!-- gdk&#45;pixbuf -->
+<g id="node28" class="node" pointer-events="visible" data-name="gdk-pixbuf">
+
+<ellipse fill="none" stroke="black" cx="2480" cy="-378" rx="53.9" ry="18"/>
+<text text-anchor="middle" x="2480" y="-373.8" font-family="Times,serif" font-size="14.00">gdk-pixbuf</text>
+</g>
+<!-- librsvg&#45;&gt;gdk&#45;pixbuf -->
+<g id="edge97" class="edge" data-name="librsvg-&gt;gdk-pixbuf">
+
+<path fill="none" stroke="black" d="M2635.65,-576.14C2621.66,-545.27 2588.92,-478.57 2548,-432 2537.94,-420.55 2525.13,-409.83 2513.35,-401.07"/>
+<polygon fill="black" stroke="black" points="2515.58,-398.36 2505.42,-395.36 2511.5,-404.04 2515.58,-398.36"/>
+</g>
+<!-- pango -->
+<g id="node71" class="node" pointer-events="visible" data-name="pango">
+
+<ellipse fill="none" stroke="black" cx="2792" cy="-522" rx="34.77" ry="18"/>
+<text text-anchor="middle" x="2792" y="-517.8" font-family="Times,serif" font-size="14.00">pango</text>
+</g>
+<!-- librsvg&#45;&gt;pango -->
+<g id="edge99" class="edge" data-name="librsvg-&gt;pango">
+
+<path fill="none" stroke="black" d="M2669.3,-580.65C2693.63,-569.21 2730,-552.13 2756.83,-539.52"/>
+<polygon fill="black" stroke="black" points="2758.03,-542.83 2765.59,-535.41 2755.05,-536.49 2758.03,-542.83"/>
+</g>
+<!-- cairo&#45;&gt;freetype -->
+<g id="edge4" class="edge" data-name="cairo-&gt;freetype">
+
+<path fill="none" stroke="black" d="M2984.53,-366.92C2978.22,-364.49 2971.4,-362.02 2965,-360 2901.68,-340 2879.98,-352.49 2820,-324 2795.91,-312.56 2795.44,-300.71 2772,-288 2740.45,-270.89 2702.24,-257.18 2672.96,-247.99"/>
+<polygon fill="black" stroke="black" points="2674.25,-244.73 2663.66,-245.14 2672.2,-251.42 2674.25,-244.73"/>
+</g>
+<!-- cairo&#45;&gt;libpng -->
+<g id="edge6" class="edge" data-name="cairo-&gt;libpng">
+
+<path fill="none" stroke="black" d="M2980.93,-370.8C2948.66,-362.93 2894.76,-347.48 2853,-324 2831.27,-311.78 2830.57,-302.07 2810,-288 2755.16,-250.5 2743.1,-233.46 2679,-216 2415.16,-144.14 1719.95,-216.92 1449,-180 1439.97,-178.77 1430.42,-176.84 1421.38,-174.71"/>
+<polygon fill="black" stroke="black" points="1422.32,-171.33 1411.77,-172.31 1420.63,-178.12 1422.32,-171.33"/>
+</g>
+<!-- cairo&#45;&gt;fontconfig -->
+<g id="edge3" class="edge" data-name="cairo-&gt;fontconfig">
+
+<path fill="none" stroke="black" d="M2985.07,-366.83C2978.63,-364.35 2971.62,-361.87 2965,-360 2922.89,-348.07 2806.67,-328 2736.01,-316.28"/>
+<polygon fill="black" stroke="black" points="2736.59,-312.82 2726.15,-314.65 2735.45,-319.73 2736.59,-312.82"/>
+</g>
+<!-- cairo&#45;&gt;glib -->
+<g id="edge5" class="edge" data-name="cairo-&gt;glib">
+
+<path fill="none" stroke="black" d="M2985.16,-366.47C2978.72,-363.99 2971.69,-361.61 2965,-360 2814.68,-323.82 2771.86,-347.19 2619,-324 2602.99,-321.57 2585.43,-318.18 2570.44,-315.07"/>
+<polygon fill="black" stroke="black" points="2571.54,-311.72 2561.04,-313.08 2570.09,-318.57 2571.54,-311.72"/>
+</g>
+<!-- libx11 -->
+<g id="node12" class="node" pointer-events="visible" data-name="libx11">
+
+<ellipse fill="none" stroke="black" cx="2992" cy="-234" rx="35.93" ry="18"/>
+<text text-anchor="middle" x="2992" y="-229.8" font-family="Times,serif" font-size="14.00">libx11</text>
+</g>
+<!-- cairo&#45;&gt;libx11 -->
+<g id="edge7" class="edge" data-name="cairo-&gt;libx11">
+
+<path fill="none" stroke="black" d="M3006.92,-359.59C3004.05,-335.61 2998.84,-292.14 2995.4,-263.42"/>
+<polygon fill="black" stroke="black" points="2998.89,-263.13 2994.23,-253.61 2991.94,-263.96 2998.89,-263.13"/>
+</g>
+<!-- libxcb -->
+<g id="node13" class="node" pointer-events="visible" data-name="libxcb">
+
+<ellipse fill="none" stroke="black" cx="3041" cy="-162" rx="35.35" ry="18"/>
+<text text-anchor="middle" x="3041" y="-157.8" font-family="Times,serif" font-size="14.00">libxcb</text>
+</g>
+<!-- cairo&#45;&gt;libxcb -->
+<g id="edge8" class="edge" data-name="cairo-&gt;libxcb">
+
+<path fill="none" stroke="black" d="M3039.66,-377.66C3079.68,-376.65 3148.43,-368.12 3181,-324 3221.84,-268.68 3129.85,-208.94 3076.18,-180.27"/>
+<polygon fill="black" stroke="black" points="3077.84,-177.19 3067.35,-175.66 3074.6,-183.39 3077.84,-177.19"/>
+</g>
+<!-- libxext -->
+<g id="node14" class="node" pointer-events="visible" data-name="libxext">
+
+<ellipse fill="none" stroke="black" cx="3266" cy="-306" rx="37.71" ry="18"/>
+<text text-anchor="middle" x="3266" y="-301.8" font-family="Times,serif" font-size="14.00">libxext</text>
+</g>
+<!-- cairo&#45;&gt;libxext -->
+<g id="edge9" class="edge" data-name="cairo-&gt;libxext">
+
+<path fill="none" stroke="black" d="M3036.67,-370.43C3076.2,-360.92 3151.02,-342.42 3214,-324 3217.56,-322.96 3221.23,-321.84 3224.92,-320.7"/>
+<polygon fill="black" stroke="black" points="3225.95,-324.04 3234.41,-317.67 3223.82,-317.37 3225.95,-324.04"/>
+</g>
+<!-- libxrender -->
+<g id="node15" class="node" pointer-events="visible" data-name="libxrender">
+
+<ellipse fill="none" stroke="black" cx="2913" cy="-306" rx="50.94" ry="18"/>
+<text text-anchor="middle" x="2913" y="-301.8" font-family="Times,serif" font-size="14.00">libxrender</text>
+</g>
+<!-- cairo&#45;&gt;libxrender -->
+<g id="edge10" class="edge" data-name="cairo-&gt;libxrender">
+
+<path fill="none" stroke="black" d="M2990.49,-363.5C2977.22,-353.83 2959.05,-340.58 2943.64,-329.34"/>
+<polygon fill="black" stroke="black" points="2945.83,-326.61 2935.69,-323.55 2941.71,-332.27 2945.83,-326.61"/>
+</g>
+<!-- lzo -->
+<g id="node16" class="node" pointer-events="visible" data-name="lzo">
+
+<ellipse fill="none" stroke="black" cx="3047" cy="-306" rx="27" ry="18"/>
+<text text-anchor="middle" x="3047" y="-301.8" font-family="Times,serif" font-size="14.00">lzo</text>
+</g>
+<!-- cairo&#45;&gt;lzo -->
+<g id="edge11" class="edge" data-name="cairo-&gt;lzo">
+
+<path fill="none" stroke="black" d="M3018.01,-360.41C3022.36,-352.39 3027.69,-342.57 3032.59,-333.54"/>
+<polygon fill="black" stroke="black" points="3035.64,-335.26 3037.34,-324.8 3029.49,-331.92 3035.64,-335.26"/>
+</g>
+<!-- pixman -->
+<g id="node17" class="node" pointer-events="visible" data-name="pixman">
+
+<ellipse fill="none" stroke="black" cx="3132" cy="-306" rx="40.01" ry="18"/>
+<text text-anchor="middle" x="3132" y="-301.8" font-family="Times,serif" font-size="14.00">pixman</text>
+</g>
+<!-- cairo&#45;&gt;pixman -->
+<g id="edge12" class="edge" data-name="cairo-&gt;pixman">
+
+<path fill="none" stroke="black" d="M3030.42,-364.81C3049.08,-354.19 3076.46,-338.61 3098.09,-326.3"/>
+<polygon fill="black" stroke="black" points="3099.6,-329.47 3106.56,-321.48 3096.14,-323.38 3099.6,-329.47"/>
+</g>
+<!-- libx11&#45;&gt;libxcb -->
+<g id="edge103" class="edge" data-name="libx11-&gt;libxcb">
+
+<path fill="none" stroke="black" d="M3003.36,-216.76C3009.24,-208.37 3016.55,-197.93 3023.15,-188.5"/>
+<polygon fill="black" stroke="black" points="3025.96,-190.59 3028.83,-180.39 3020.23,-186.57 3025.96,-190.59"/>
+</g>
+<!-- xorgproto -->
+<g id="node74" class="node" pointer-events="visible" data-name="xorgproto">
+
+<ellipse fill="none" stroke="black" cx="3041" cy="-18" rx="49.24" ry="18"/>
+<text text-anchor="middle" x="3041" y="-13.8" font-family="Times,serif" font-size="14.00">xorgproto</text>
+</g>
+<!-- libx11&#45;&gt;xorgproto -->
+<g id="edge104" class="edge" data-name="libx11-&gt;xorgproto">
+
+<path fill="none" stroke="black" d="M2989,-215.85C2984.48,-185.63 2978.28,-121.43 2997,-72 3000.98,-61.49 3007.97,-51.55 3015.22,-43.18"/>
+<polygon fill="black" stroke="black" points="3017.78,-45.57 3022.03,-35.87 3012.66,-40.8 3017.78,-45.57"/>
+</g>
+<!-- libpthread&#45;stubs -->
+<g id="node70" class="node" pointer-events="visible" data-name="libpthread-stubs">
+
+<ellipse fill="none" stroke="black" cx="2663" cy="-90" rx="73.02" ry="18"/>
+<text text-anchor="middle" x="2663" y="-85.8" font-family="Times,serif" font-size="14.00">libpthread-stubs</text>
+</g>
+<!-- libxcb&#45;&gt;libpthread&#45;stubs -->
+<g id="edge106" class="edge" data-name="libxcb-&gt;libpthread-stubs">
+
+<path fill="none" stroke="black" d="M3008.12,-154.91C2946.62,-143.52 2813.03,-118.78 2731.28,-103.64"/>
+<polygon fill="black" stroke="black" points="2732.05,-100.23 2721.58,-101.85 2730.78,-107.11 2732.05,-100.23"/>
+</g>
+<!-- libxau -->
+<g id="node75" class="node" pointer-events="visible" data-name="libxau">
+
+<ellipse fill="none" stroke="black" cx="3041" cy="-90" rx="35.35" ry="18"/>
+<text text-anchor="middle" x="3041" y="-85.8" font-family="Times,serif" font-size="14.00">libxau</text>
+</g>
+<!-- libxcb&#45;&gt;libxau -->
+<g id="edge107" class="edge" data-name="libxcb-&gt;libxau">
+
+<path fill="none" stroke="black" d="M3041,-143.7C3041,-136.41 3041,-127.73 3041,-119.54"/>
+<polygon fill="black" stroke="black" points="3044.5,-119.62 3041,-109.62 3037.5,-119.62 3044.5,-119.62"/>
+</g>
+<!-- libxdmcp -->
+<g id="node76" class="node" pointer-events="visible" data-name="libxdmcp">
+
+<ellipse fill="none" stroke="black" cx="3142" cy="-90" rx="47.53" ry="18"/>
+<text text-anchor="middle" x="3142" y="-85.8" font-family="Times,serif" font-size="14.00">libxdmcp</text>
+</g>
+<!-- libxcb&#45;&gt;libxdmcp -->
+<g id="edge108" class="edge" data-name="libxcb-&gt;libxdmcp">
+
+<path fill="none" stroke="black" d="M3061.44,-146.83C3075.61,-137.02 3094.73,-123.76 3110.8,-112.63"/>
+<polygon fill="black" stroke="black" points="3112.37,-115.79 3118.6,-107.22 3108.38,-110.04 3112.37,-115.79"/>
+</g>
+<!-- libpthread&#45;stubs&#45;&gt;pkg&#45;config -->
+<g id="edge91" class="edge" data-name="libpthread-stubs-&gt;pkg-config">
+
+<path fill="none" stroke="black" d="M2632.48,-73.29C2612.56,-63.04 2586.4,-49.57 2565.11,-38.62"/>
+<polygon fill="black" stroke="black" points="2566.94,-35.62 2556.45,-34.16 2563.74,-41.85 2566.94,-35.62"/>
+</g>
+<!-- libxau&#45;&gt;xorgproto -->
+<g id="edge105" class="edge" data-name="libxau-&gt;xorgproto">
+
+<path fill="none" stroke="black" d="M3041,-71.7C3041,-64.41 3041,-55.73 3041,-47.54"/>
+<polygon fill="black" stroke="black" points="3044.5,-47.62 3041,-37.62 3037.5,-47.62 3044.5,-47.62"/>
+</g>
+<!-- libxdmcp&#45;&gt;xorgproto -->
+<g id="edge109" class="edge" data-name="libxdmcp-&gt;xorgproto">
+
+<path fill="none" stroke="black" d="M3120.08,-73.81C3106.15,-64.15 3087.89,-51.5 3072.43,-40.78"/>
+<polygon fill="black" stroke="black" points="3074.68,-38.08 3064.47,-35.26 3070.69,-43.84 3074.68,-38.08"/>
+</g>
+<!-- libxext&#45;&gt;libx11 -->
+<g id="edge110" class="edge" data-name="libxext-&gt;libx11">
+
+<path fill="none" stroke="black" d="M3233.22,-296.63C3183.62,-283.95 3089.49,-259.91 3034.63,-245.89"/>
+<polygon fill="black" stroke="black" points="3035.57,-242.52 3025.01,-243.43 3033.84,-249.3 3035.57,-242.52"/>
+</g>
+<!-- libxext&#45;&gt;xorgproto -->
+<g id="edge111" class="edge" data-name="libxext-&gt;xorgproto">
+
+<path fill="none" stroke="black" d="M3266.18,-287.74C3265.67,-245.16 3258.38,-134.03 3199,-72 3173.03,-44.87 3132.76,-31.62 3099.38,-25.16"/>
+<polygon fill="black" stroke="black" points="3100.3,-21.77 3089.85,-23.48 3099.09,-28.66 3100.3,-21.77"/>
+</g>
+<!-- libxrender&#45;&gt;libx11 -->
+<g id="edge114" class="edge" data-name="libxrender-&gt;libx11">
+
+<path fill="none" stroke="black" d="M2931.32,-288.76C2941.78,-279.5 2955.06,-267.73 2966.52,-257.58"/>
+<polygon fill="black" stroke="black" points="2968.56,-260.44 2973.73,-251.19 2963.92,-255.21 2968.56,-260.44"/>
+</g>
+<!-- libxrender&#45;&gt;xorgproto -->
+<g id="edge115" class="edge" data-name="libxrender-&gt;xorgproto">
+
+<path fill="none" stroke="black" d="M2915.14,-287.64C2920.78,-247.12 2938.83,-144.25 2984,-72 2991.02,-60.77 3001.02,-50.37 3010.69,-41.81"/>
+<polygon fill="black" stroke="black" points="3012.82,-44.59 3018.22,-35.48 3008.31,-39.24 3012.82,-44.59"/>
+</g>
+<!-- gdk&#45;pixbuf&#45;&gt;libpng -->
+<g id="edge24" class="edge" data-name="gdk-pixbuf-&gt;libpng">
+
+<path fill="none" stroke="black" d="M2444.18,-364.15C2346.21,-329.21 2074.91,-233.87 1982,-216 1748.85,-171.14 1683.6,-216.54 1449,-180 1440.09,-178.61 1430.63,-176.63 1421.68,-174.51"/>
+<polygon fill="black" stroke="black" points="1422.7,-171.15 1412.15,-172.14 1421.01,-177.95 1422.7,-171.15"/>
+</g>
+<!-- gdk&#45;pixbuf&#45;&gt;jpeg&#45;turbo -->
+<g id="edge23" class="edge" data-name="gdk-pixbuf-&gt;jpeg-turbo">
+
+<path fill="none" stroke="black" d="M2465.66,-360.33C2448.57,-341.16 2418.47,-309.58 2388,-288 2329.61,-246.64 2312.72,-235.93 2244,-216 2127.59,-182.24 1278.23,-114.17 1041.89,-95.71"/>
+<polygon fill="black" stroke="black" points="1042.2,-92.22 1031.95,-94.93 1041.65,-99.2 1042.2,-92.22"/>
+</g>
+<!-- gdk&#45;pixbuf&#45;&gt;libtiff -->
+<g id="edge25" class="edge" data-name="gdk-pixbuf-&gt;libtiff">
+
+<path fill="none" stroke="black" d="M2458.68,-361.26C2411.73,-327.58 2294.67,-248.91 2183,-216 2060.85,-180 1668.66,-167.32 1535.62,-163.99"/>
+<polygon fill="black" stroke="black" points="1535.9,-160.49 1525.81,-163.75 1535.73,-167.49 1535.9,-160.49"/>
+</g>
+<!-- gdk&#45;pixbuf&#45;&gt;glib -->
+<g id="edge22" class="edge" data-name="gdk-pixbuf-&gt;glib">
+
+<path fill="none" stroke="black" d="M2493.07,-360.05C2499.72,-351.44 2507.92,-340.81 2515.23,-331.33"/>
+<polygon fill="black" stroke="black" points="2517.89,-333.61 2521.23,-323.55 2512.35,-329.33 2517.89,-333.61"/>
+</g>
+<!-- pango&#45;&gt;freetype -->
+<g id="edge128" class="edge" data-name="pango-&gt;freetype">
+
+<path fill="none" stroke="black" d="M2764.25,-510.67C2723.55,-493.8 2649.23,-456.08 2619,-396 2597.62,-353.51 2608.16,-296.47 2617.65,-262.93"/>
+<polygon fill="black" stroke="black" points="2620.94,-264.15 2620.48,-253.56 2614.24,-262.13 2620.94,-264.15"/>
+</g>
+<!-- pango&#45;&gt;fontconfig -->
+<g id="edge127" class="edge" data-name="pango-&gt;fontconfig">
+
+<path fill="none" stroke="black" d="M2773.29,-506.51C2761.74,-496.71 2747.39,-482.89 2738,-468 2710.95,-425.08 2718.96,-407.45 2701,-360 2697.85,-351.67 2694.22,-342.7 2690.82,-334.55"/>
+<polygon fill="black" stroke="black" points="2694.11,-333.33 2687,-325.47 2687.66,-336.04 2694.11,-333.33"/>
+</g>
+<!-- pango&#45;&gt;glib -->
+<g id="edge130" class="edge" data-name="pango-&gt;glib">
+
+<path fill="none" stroke="black" d="M2826.49,-518.86C2860.22,-514.72 2909.92,-502.69 2934,-468 2954.03,-439.14 2910.5,-362 2908,-360 2857.44,-319.6 2682.89,-334.35 2619,-324 2603.02,-321.41 2585.46,-317.99 2570.47,-314.91"/>
+<polygon fill="black" stroke="black" points="2571.56,-311.56 2561.06,-312.94 2570.13,-318.41 2571.56,-311.56"/>
+</g>
+<!-- pango&#45;&gt;cairo -->
+<g id="edge126" class="edge" data-name="pango-&gt;cairo">
+
+<path fill="none" stroke="black" d="M2826.54,-518.76C2864.99,-514.56 2926.98,-502.53 2967,-468 2985.19,-452.3 2996.07,-427 3002.18,-407.38"/>
+<polygon fill="black" stroke="black" points="3005.54,-408.35 3004.91,-397.77 2998.81,-406.43 3005.54,-408.35"/>
+</g>
+<!-- fribidi -->
+<g id="node27" class="node" pointer-events="visible" data-name="fribidi">
+
+<ellipse fill="none" stroke="black" cx="2890" cy="-450" rx="35.35" ry="18"/>
+<text text-anchor="middle" x="2890" y="-445.8" font-family="Times,serif" font-size="14.00">fribidi</text>
+</g>
+<!-- pango&#45;&gt;fribidi -->
+<g id="edge129" class="edge" data-name="pango-&gt;fribidi">
+
+<path fill="none" stroke="black" d="M2811.83,-506.83C2825.91,-496.78 2845.04,-483.11 2860.86,-471.82"/>
+<polygon fill="black" stroke="black" points="2862.86,-474.68 2868.97,-466.02 2858.79,-468.99 2862.86,-474.68"/>
+</g>
+<!-- harfbuzz -->
+<g id="node51" class="node" pointer-events="visible" data-name="harfbuzz">
+
+<ellipse fill="none" stroke="black" cx="2792" cy="-450" rx="44.63" ry="18"/>
+<text text-anchor="middle" x="2792" y="-445.8" font-family="Times,serif" font-size="14.00">harfbuzz</text>
+</g>
+<!-- pango&#45;&gt;harfbuzz -->
+<g id="edge131" class="edge" data-name="pango-&gt;harfbuzz">
+
+<path fill="none" stroke="black" d="M2792,-503.7C2792,-496.41 2792,-487.73 2792,-479.54"/>
+<polygon fill="black" stroke="black" points="2795.5,-479.62 2792,-469.62 2788.5,-479.62 2795.5,-479.62"/>
+</g>
+<!-- harfbuzz&#45;&gt;freetype -->
+<g id="edge53" class="edge" data-name="harfbuzz-&gt;freetype">
+
+<path fill="none" stroke="black" d="M2787.15,-431.73C2776.01,-392.48 2748.81,-299.11 2739,-288 2721.93,-268.67 2696.29,-255.82 2673.84,-247.62"/>
+<polygon fill="black" stroke="black" points="2675.16,-244.37 2664.56,-244.45 2672.9,-251 2675.16,-244.37"/>
+</g>
+<!-- harfbuzz&#45;&gt;glib -->
+<g id="edge54" class="edge" data-name="harfbuzz-&gt;glib">
+
+<path fill="none" stroke="black" d="M2822.95,-436.6C2849.03,-425.44 2883.29,-408.88 2891,-396 2899.22,-382.27 2901.55,-372.03 2891,-360 2850.81,-314.15 2679.15,-333.98 2619,-324 2603.03,-321.35 2585.47,-317.92 2570.48,-314.84"/>
+<polygon fill="black" stroke="black" points="2571.57,-311.5 2561.07,-312.88 2570.14,-318.35 2571.57,-311.5"/>
+</g>
+<!-- harfbuzz&#45;&gt;cairo -->
+<g id="edge52" class="edge" data-name="harfbuzz-&gt;cairo">
+
+<path fill="none" stroke="black" d="M2825.91,-438.06C2865.57,-425.27 2931,-404.16 2971.96,-390.95"/>
+<polygon fill="black" stroke="black" points="2972.94,-394.31 2981.38,-387.91 2970.79,-387.65 2972.94,-394.31"/>
+</g>
+<!-- graphite2 -->
+<g id="node47" class="node" pointer-events="visible" data-name="graphite2">
+
+<ellipse fill="none" stroke="black" cx="2834" cy="-378" rx="47.51" ry="18"/>
+<text text-anchor="middle" x="2834" y="-373.8" font-family="Times,serif" font-size="14.00">graphite2</text>
+</g>
+<!-- harfbuzz&#45;&gt;graphite2 -->
+<g id="edge55" class="edge" data-name="harfbuzz-&gt;graphite2">
+
+<path fill="none" stroke="black" d="M2802.17,-432.05C2806.96,-424.06 2812.8,-414.33 2818.16,-405.4"/>
+<polygon fill="black" stroke="black" points="2821,-407.46 2823.15,-397.09 2815,-403.86 2821,-407.46"/>
+</g>
+<!-- icu4c -->
+<g id="node52" class="node" pointer-events="visible" data-name="icu4c">
+
+<ellipse fill="none" stroke="black" cx="2660" cy="-378" rx="31.9" ry="18"/>
+<text text-anchor="middle" x="2660" y="-373.8" font-family="Times,serif" font-size="14.00">icu4c</text>
+</g>
+<!-- harfbuzz&#45;&gt;icu4c -->
+<g id="edge56" class="edge" data-name="harfbuzz-&gt;icu4c">
+
+<path fill="none" stroke="black" d="M2765.61,-435C2744.69,-423.91 2715.36,-408.36 2692.91,-396.45"/>
+<polygon fill="black" stroke="black" points="2694.64,-393.41 2684.16,-391.81 2691.36,-399.59 2694.64,-393.41"/>
+</g>
+<!-- libxml2&#45;&gt;readline -->
+<g id="edge113" class="edge" data-name="libxml2-&gt;readline">
+
+<path fill="none" stroke="black" d="M2497,-503.7C2497,-496.41 2497,-487.73 2497,-479.54"/>
+<polygon fill="black" stroke="black" points="2500.5,-479.62 2497,-469.62 2493.5,-479.62 2500.5,-479.62"/>
+</g>
+<!-- libxml2&#45;&gt;icu4c -->
+<g id="edge112" class="edge" data-name="libxml2-&gt;icu4c">
+
+<path fill="none" stroke="black" d="M2514.75,-505.53C2543.84,-480.19 2601.72,-429.77 2634.96,-400.81"/>
+<polygon fill="black" stroke="black" points="2636.86,-403.8 2642.1,-394.59 2632.27,-398.52 2636.86,-403.8"/>
+</g>
+</g>
+</svg>

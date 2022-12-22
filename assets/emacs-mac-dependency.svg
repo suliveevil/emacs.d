@@ -1,0 +1,385 @@
+<?xml version="1.0" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1345pt" height="404pt" viewBox="0.00 0.00 1345.36 404.00">
+<g id="graph0" class="graph" transform="translate(4,400) scale(1)" data-name="G">
+
+<polygon fill="white" stroke="none" points="-4,4 -4,-400 1341.36,-400 1341.36,4 -4,4" style=""/>
+<!-- autoconf -->
+<g id="node1" class="node" pointer-events="visible" data-name="autoconf">
+
+<ellipse fill="none" stroke="black" cx="995.97" cy="-234" rx="44.64" ry="18" style=""/>
+<text text-anchor="middle" x="995.97" y="-229.8" font-family="Times,serif" font-size="14.00" style="">autoconf</text>
+</g>
+<!-- m4 -->
+<g id="node2" class="node" pointer-events="visible" data-name="m4">
+
+<ellipse fill="none" stroke="black" cx="943.97" cy="-90" rx="27" ry="18" style=""/>
+<text text-anchor="middle" x="943.97" y="-85.8" font-family="Times,serif" font-size="14.00" style="">m4</text>
+</g>
+<!-- autoconf&#45;&gt;m4 -->
+<g id="edge1" class="edge" data-name="autoconf-&gt;m4">
+
+<path fill="none" stroke="black" d="M1037.85,-227.13C1066.27,-220.74 1101.85,-207.45 1119.97,-180 1128.79,-166.65 1129.52,-156.84 1119.97,-144 1088.46,-101.6 1024.1,-91.87 982.56,-90.29" style=""/>
+<polygon fill="black" stroke="black" points="982.82,-86.8 972.75,-90.08 982.67,-93.8 982.82,-86.8" style=""/>
+</g>
+<!-- automake -->
+<g id="node3" class="node" pointer-events="visible" data-name="automake">
+
+<ellipse fill="none" stroke="black" cx="995.97" cy="-306" rx="48.65" ry="18" style=""/>
+<text text-anchor="middle" x="995.97" y="-301.8" font-family="Times,serif" font-size="14.00" style="">automake</text>
+</g>
+<!-- automake&#45;&gt;autoconf -->
+<g id="edge2" class="edge" data-name="automake-&gt;autoconf">
+
+<path fill="none" stroke="black" d="M995.97,-287.7C995.97,-280.41 995.97,-271.73 995.97,-263.54" style=""/>
+<polygon fill="black" stroke="black" points="999.47,-263.62 995.97,-253.62 992.47,-263.62 999.47,-263.62" style=""/>
+</g>
+<!-- bdw&#45;gc -->
+<g id="node4" class="node" pointer-events="visible" data-name="bdw-gc">
+
+<ellipse fill="none" stroke="black" cx="843.97" cy="-162" rx="40" ry="18" style=""/>
+<text text-anchor="middle" x="843.97" y="-157.8" font-family="Times,serif" font-size="14.00" style="">bdw-gc</text>
+</g>
+<!-- ca&#45;certificates -->
+<g id="node5" class="node" pointer-events="visible" data-name="ca-certificates">
+
+<ellipse fill="none" stroke="black" cx="351.97" cy="-18" rx="65.36" ry="18" style=""/>
+<text text-anchor="middle" x="351.97" y="-13.8" font-family="Times,serif" font-size="14.00" style="">ca-certificates</text>
+</g>
+<!-- gettext -->
+<g id="node6" class="node" pointer-events="visible" data-name="gettext">
+
+<ellipse fill="none" stroke="black" cx="454.97" cy="-162" rx="37.13" ry="18" style=""/>
+<text text-anchor="middle" x="454.97" y="-157.8" font-family="Times,serif" font-size="14.00" style="">gettext</text>
+</g>
+<!-- gmp -->
+<g id="node7" class="node" pointer-events="visible" data-name="gmp">
+
+<ellipse fill="none" stroke="black" cx="667.97" cy="-162" rx="28.41" ry="18" style=""/>
+<text text-anchor="middle" x="667.97" y="-157.8" font-family="Times,serif" font-size="14.00" style="">gmp</text>
+</g>
+<!-- gnutls -->
+<g id="node8" class="node" pointer-events="visible" data-name="gnutls">
+
+<ellipse fill="none" stroke="black" cx="532.97" cy="-306" rx="34.79" ry="18" style=""/>
+<text text-anchor="middle" x="532.97" y="-301.8" font-family="Times,serif" font-size="14.00" style="">gnutls</text>
+</g>
+<!-- gnutls&#45;&gt;ca&#45;certificates -->
+<g id="edge3" class="edge" data-name="gnutls-&gt;ca-certificates">
+
+<path fill="none" stroke="black" d="M508.91,-292.76C491.89,-283.27 469.28,-268.91 452.97,-252 395.57,-192.46 368.06,-95.06 357.45,-47.26" style=""/>
+<polygon fill="black" stroke="black" points="360.93,-46.77 355.43,-37.71 354.08,-48.22 360.93,-46.77" style=""/>
+</g>
+<!-- gnutls&#45;&gt;gmp -->
+<g id="edge4" class="edge" data-name="gnutls-&gt;gmp">
+
+<path fill="none" stroke="black" d="M547.93,-289.26C571.7,-264.26 618.21,-215.35 645.84,-186.28" style=""/>
+<polygon fill="black" stroke="black" points="648.36,-188.71 652.71,-179.05 643.29,-183.88 648.36,-188.71" style=""/>
+</g>
+<!-- guile -->
+<g id="node9" class="node" pointer-events="visible" data-name="guile">
+
+<ellipse fill="none" stroke="black" cx="749.97" cy="-234" rx="30.19" ry="18" style=""/>
+<text text-anchor="middle" x="749.97" y="-229.8" font-family="Times,serif" font-size="14.00" style="">guile</text>
+</g>
+<!-- gnutls&#45;&gt;guile -->
+<g id="edge5" class="edge" data-name="gnutls-&gt;guile">
+
+<path fill="none" stroke="black" d="M563.08,-296.63C597.96,-286.75 657.04,-269.44 706.97,-252 709.53,-251.11 712.16,-250.15 714.8,-249.17" style=""/>
+<polygon fill="black" stroke="black" points="716.04,-252.44 724.13,-245.6 713.54,-245.91 716.04,-252.44" style=""/>
+</g>
+<!-- libidn2 -->
+<g id="node10" class="node" pointer-events="visible" data-name="libidn2">
+
+<ellipse fill="none" stroke="black" cx="499.97" cy="-234" rx="38.3" ry="18" style=""/>
+<text text-anchor="middle" x="499.97" y="-229.8" font-family="Times,serif" font-size="14.00" style="">libidn2</text>
+</g>
+<!-- gnutls&#45;&gt;libidn2 -->
+<g id="edge6" class="edge" data-name="gnutls-&gt;libidn2">
+
+<path fill="none" stroke="black" d="M524.98,-288.05C521.29,-280.23 516.82,-270.75 512.69,-261.98" style=""/>
+<polygon fill="black" stroke="black" points="515.96,-260.71 508.53,-253.16 509.63,-263.7 515.96,-260.71" style=""/>
+</g>
+<!-- libtasn1 -->
+<g id="node11" class="node" pointer-events="visible" data-name="libtasn1">
+
+<ellipse fill="none" stroke="black" cx="281.97" cy="-162" rx="41.73" ry="18" style=""/>
+<text text-anchor="middle" x="281.97" y="-157.8" font-family="Times,serif" font-size="14.00" style="">libtasn1</text>
+</g>
+<!-- gnutls&#45;&gt;libtasn1 -->
+<g id="edge7" class="edge" data-name="gnutls-&gt;libtasn1">
+
+<path fill="none" stroke="black" d="M498.38,-302.53C437.51,-297.4 315.07,-283.37 287.97,-252 273.89,-235.7 273.34,-210.83 275.77,-191.52" style=""/>
+<polygon fill="black" stroke="black" points="279.2,-192.27 277.34,-181.83 272.29,-191.15 279.2,-192.27" style=""/>
+</g>
+<!-- libunistring -->
+<g id="node12" class="node" pointer-events="visible" data-name="libunistring">
+
+<ellipse fill="none" stroke="black" cx="565.97" cy="-162" rx="55.64" ry="18" style=""/>
+<text text-anchor="middle" x="565.97" y="-157.8" font-family="Times,serif" font-size="14.00" style="">libunistring</text>
+</g>
+<!-- gnutls&#45;&gt;libunistring -->
+<g id="edge8" class="edge" data-name="gnutls-&gt;libunistring">
+
+<path fill="none" stroke="black" d="M537.72,-287.87C540.53,-277.51 544.1,-264.03 546.97,-252 551.77,-231.9 556.63,-209.1 560.23,-191.61" style=""/>
+<polygon fill="black" stroke="black" points="563.63,-192.43 562.2,-181.93 556.77,-191.03 563.63,-192.43" style=""/>
+</g>
+<!-- nettle -->
+<g id="node13" class="node" pointer-events="visible" data-name="nettle">
+
+<ellipse fill="none" stroke="black" cx="665.97" cy="-234" rx="32.47" ry="18" style=""/>
+<text text-anchor="middle" x="665.97" y="-229.8" font-family="Times,serif" font-size="14.00" style="">nettle</text>
+</g>
+<!-- gnutls&#45;&gt;nettle -->
+<g id="edge9" class="edge" data-name="gnutls-&gt;nettle">
+
+<path fill="none" stroke="black" d="M556.75,-292.49C577.97,-281.32 609.25,-264.85 632.9,-252.4" style=""/>
+<polygon fill="black" stroke="black" points="634.29,-255.63 641.51,-247.88 631.03,-249.44 634.29,-255.63" style=""/>
+</g>
+<!-- p11&#45;kit -->
+<g id="node14" class="node" pointer-events="visible" data-name="p11-kit">
+
+<ellipse fill="none" stroke="black" cx="335.97" cy="-234" rx="38.86" ry="18" style=""/>
+<text text-anchor="middle" x="335.97" y="-229.8" font-family="Times,serif" font-size="14.00" style="">p11-kit</text>
+</g>
+<!-- gnutls&#45;&gt;p11&#45;kit -->
+<g id="edge10" class="edge" data-name="gnutls-&gt;p11-kit">
+
+<path fill="none" stroke="black" d="M504.75,-294.97C471.24,-283.07 415.1,-263.12 376.85,-249.53" style=""/>
+<polygon fill="black" stroke="black" points="378.1,-246.26 367.51,-246.21 375.76,-252.85 378.1,-246.26" style=""/>
+</g>
+<!-- unbound -->
+<g id="node15" class="node" pointer-events="visible" data-name="unbound">
+
+<ellipse fill="none" stroke="black" cx="116.97" cy="-234" rx="44.67" ry="18" style=""/>
+<text text-anchor="middle" x="116.97" y="-229.8" font-family="Times,serif" font-size="14.00" style="">unbound</text>
+</g>
+<!-- gnutls&#45;&gt;unbound -->
+<g id="edge11" class="edge" data-name="gnutls-&gt;unbound">
+
+<path fill="none" stroke="black" d="M499.98,-299.45C427.89,-287.32 255.81,-258.36 168.98,-243.75" style=""/>
+<polygon fill="black" stroke="black" points="169.75,-240.33 159.31,-242.12 168.59,-247.23 169.75,-240.33" style=""/>
+</g>
+<!-- guile&#45;&gt;bdw&#45;gc -->
+<g id="edge12" class="edge" data-name="guile-&gt;bdw-gc">
+
+<path fill="none" stroke="black" d="M768.1,-219.5C781.35,-209.63 799.61,-196.04 814.89,-184.66" style=""/>
+<polygon fill="black" stroke="black" points="816.81,-187.59 822.74,-178.81 812.63,-181.98 816.81,-187.59" style=""/>
+</g>
+<!-- guile&#45;&gt;gmp -->
+<g id="edge13" class="edge" data-name="guile-&gt;gmp">
+
+<path fill="none" stroke="black" d="M733.38,-218.83C721.82,-208.97 706.19,-195.63 693.11,-184.46" style=""/>
+<polygon fill="black" stroke="black" points="695.57,-181.96 685.69,-178.13 691.03,-187.28 695.57,-181.96" style=""/>
+</g>
+<!-- guile&#45;&gt;libunistring -->
+<g id="edge15" class="edge" data-name="guile-&gt;libunistring">
+
+<path fill="none" stroke="black" d="M725.44,-223.22C719.41,-220.84 712.96,-218.31 706.97,-216 675.41,-203.83 639.76,-190.43 612.19,-180.15" style=""/>
+<polygon fill="black" stroke="black" points="613.68,-176.97 603.09,-176.76 611.24,-183.53 613.68,-176.97" style=""/>
+</g>
+<!-- libtool -->
+<g id="node16" class="node" pointer-events="visible" data-name="libtool">
+
+<ellipse fill="none" stroke="black" cx="749.97" cy="-162" rx="36.01" ry="18" style=""/>
+<text text-anchor="middle" x="749.97" y="-157.8" font-family="Times,serif" font-size="14.00" style="">libtool</text>
+</g>
+<!-- guile&#45;&gt;libtool -->
+<g id="edge14" class="edge" data-name="guile-&gt;libtool">
+
+<path fill="none" stroke="black" d="M749.97,-215.7C749.97,-208.41 749.97,-199.73 749.97,-191.54" style=""/>
+<polygon fill="black" stroke="black" points="753.47,-191.62 749.97,-181.62 746.47,-191.62 753.47,-191.62" style=""/>
+</g>
+<!-- pkg&#45;config -->
+<g id="node17" class="node" pointer-events="visible" data-name="pkg-config">
+
+<ellipse fill="none" stroke="black" cx="954.97" cy="-162" rx="53.32" ry="18" style=""/>
+<text text-anchor="middle" x="954.97" y="-157.8" font-family="Times,serif" font-size="14.00" style="">pkg-config</text>
+</g>
+<!-- guile&#45;&gt;pkg&#45;config -->
+<g id="edge16" class="edge" data-name="guile-&gt;pkg-config">
+
+<path fill="none" stroke="black" d="M775.52,-224.28C808.46,-213.03 866.37,-193.25 907.5,-179.21" style=""/>
+<polygon fill="black" stroke="black" points="908.59,-182.54 916.92,-175.99 906.33,-175.91 908.59,-182.54" style=""/>
+</g>
+<!-- readline -->
+<g id="node18" class="node" pointer-events="visible" data-name="readline">
+
+<ellipse fill="none" stroke="black" cx="1068.97" cy="-162" rx="42.27" ry="18" style=""/>
+<text text-anchor="middle" x="1068.97" y="-157.8" font-family="Times,serif" font-size="14.00" style="">readline</text>
+</g>
+<!-- guile&#45;&gt;readline -->
+<g id="edge17" class="edge" data-name="guile-&gt;readline">
+
+<path fill="none" stroke="black" d="M779.07,-228.4C828.42,-220.34 931.48,-202.37 1016.97,-180 1019.93,-179.23 1022.96,-178.38 1026.01,-177.49" style=""/>
+<polygon fill="black" stroke="black" points="1026.99,-180.85 1035.53,-174.57 1024.94,-174.15 1026.99,-180.85" style=""/>
+</g>
+<!-- libidn2&#45;&gt;gettext -->
+<g id="edge19" class="edge" data-name="libidn2-&gt;gettext">
+
+<path fill="none" stroke="black" d="M489.31,-216.41C484.04,-208.22 477.56,-198.14 471.66,-188.95" style=""/>
+<polygon fill="black" stroke="black" points="474.73,-187.26 466.38,-180.74 468.84,-191.05 474.73,-187.26" style=""/>
+</g>
+<!-- libidn2&#45;&gt;libunistring -->
+<g id="edge20" class="edge" data-name="libidn2-&gt;libunistring">
+
+<path fill="none" stroke="black" d="M514.95,-217.12C523.18,-208.38 533.58,-197.35 542.84,-187.54" style=""/>
+<polygon fill="black" stroke="black" points="545.24,-190.09 549.56,-180.41 540.15,-185.28 545.24,-190.09" style=""/>
+</g>
+<!-- nettle&#45;&gt;gmp -->
+<g id="edge24" class="edge" data-name="nettle-&gt;gmp">
+
+<path fill="none" stroke="black" d="M666.47,-215.7C666.67,-208.41 666.92,-199.73 667.16,-191.54" style=""/>
+<polygon fill="black" stroke="black" points="670.65,-191.71 667.44,-181.62 663.66,-191.51 670.65,-191.71" style=""/>
+</g>
+<!-- p11&#45;kit&#45;&gt;ca&#45;certificates -->
+<g id="edge26" class="edge" data-name="p11-kit-&gt;ca-certificates">
+
+<path fill="none" stroke="black" d="M337.25,-215.85C340,-179.14 346.46,-92.66 349.84,-47.53" style=""/>
+<polygon fill="black" stroke="black" points="353.31,-47.97 350.57,-37.74 346.33,-47.45 353.31,-47.97" style=""/>
+</g>
+<!-- p11&#45;kit&#45;&gt;libtasn1 -->
+<g id="edge27" class="edge" data-name="p11-kit-&gt;libtasn1">
+
+<path fill="none" stroke="black" d="M323.45,-216.76C316.9,-208.28 308.75,-197.71 301.41,-188.2" style=""/>
+<polygon fill="black" stroke="black" points="304.23,-186.13 295.35,-180.35 298.69,-190.4 304.23,-186.13" style=""/>
+</g>
+<!-- libevent -->
+<g id="node21" class="node" pointer-events="visible" data-name="libevent">
+
+<ellipse fill="none" stroke="black" cx="60.97" cy="-162" rx="42.29" ry="18" style=""/>
+<text text-anchor="middle" x="60.97" y="-157.8" font-family="Times,serif" font-size="14.00" style="">libevent</text>
+</g>
+<!-- unbound&#45;&gt;libevent -->
+<g id="edge35" class="edge" data-name="unbound-&gt;libevent">
+
+<path fill="none" stroke="black" d="M103.7,-216.41C97.01,-208.04 88.74,-197.71 81.27,-188.37" style=""/>
+<polygon fill="black" stroke="black" points="84.07,-186.27 75.09,-180.65 78.61,-190.65 84.07,-186.27" style=""/>
+</g>
+<!-- openssl@1.1 -->
+<g id="node22" class="node" pointer-events="visible" data-name="openssl@1.1">
+
+<ellipse fill="none" stroke="black" cx="60.97" cy="-90" rx="60.94" ry="18" style=""/>
+<text text-anchor="middle" x="60.97" y="-85.8" font-family="Times,serif" font-size="14.00" style="">openssl@1.1</text>
+</g>
+<!-- unbound&#45;&gt;openssl@1.1 -->
+<g id="edge37" class="edge" data-name="unbound-&gt;openssl@1.1">
+
+<path fill="none" stroke="black" d="M78.01,-224.69C53.89,-217.32 24.78,-203.87 9.97,-180 1.53,-166.41 3.99,-158.84 9.97,-144 14.41,-132.99 22.35,-122.98 30.67,-114.7" style=""/>
+<polygon fill="black" stroke="black" points="32.9,-117.4 37.88,-108.05 28.16,-112.26 32.9,-117.4" style=""/>
+</g>
+<!-- libnghttp2 -->
+<g id="node23" class="node" pointer-events="visible" data-name="libnghttp2">
+
+<ellipse fill="none" stroke="black" cx="171.97" cy="-162" rx="50.98" ry="18" style=""/>
+<text text-anchor="middle" x="171.97" y="-157.8" font-family="Times,serif" font-size="14.00" style="">libnghttp2</text>
+</g>
+<!-- unbound&#45;&gt;libnghttp2 -->
+<g id="edge36" class="edge" data-name="unbound-&gt;libnghttp2">
+
+<path fill="none" stroke="black" d="M130.01,-216.41C136.58,-208.04 144.7,-197.71 152.04,-188.37" style=""/>
+<polygon fill="black" stroke="black" points="154.67,-190.69 158.1,-180.66 149.17,-186.36 154.67,-190.69" style=""/>
+</g>
+<!-- libtool&#45;&gt;m4 -->
+<g id="edge21" class="edge" data-name="libtool-&gt;m4">
+
+<path fill="none" stroke="black" d="M778.03,-150.31C783.63,-148.2 789.48,-146.01 794.97,-144 834.17,-129.63 879.38,-113.63 909.62,-103.01" style=""/>
+<polygon fill="black" stroke="black" points="910.73,-106.33 919.01,-99.71 908.41,-99.72 910.73,-106.33" style=""/>
+</g>
+<!-- icu4c -->
+<g id="node19" class="node" pointer-events="visible" data-name="icu4c">
+
+<ellipse fill="none" stroke="black" cx="1141.97" cy="-234" rx="31.9" ry="18" style=""/>
+<text text-anchor="middle" x="1141.97" y="-229.8" font-family="Times,serif" font-size="14.00" style="">icu4c</text>
+</g>
+<!-- jansson -->
+<g id="node20" class="node" pointer-events="visible" data-name="jansson">
+
+<ellipse fill="none" stroke="black" cx="1102.97" cy="-306" rx="40.01" ry="18" style=""/>
+<text text-anchor="middle" x="1102.97" y="-301.8" font-family="Times,serif" font-size="14.00" style="">jansson</text>
+</g>
+<!-- libevent&#45;&gt;openssl@1.1 -->
+<g id="edge18" class="edge" data-name="libevent-&gt;openssl@1.1">
+
+<path fill="none" stroke="black" d="M60.97,-143.7C60.97,-136.41 60.97,-127.73 60.97,-119.54" style=""/>
+<polygon fill="black" stroke="black" points="64.47,-119.62 60.97,-109.62 57.47,-119.62 64.47,-119.62" style=""/>
+</g>
+<!-- openssl@1.1&#45;&gt;ca&#45;certificates -->
+<g id="edge25" class="edge" data-name="openssl@1.1-&gt;ca-certificates">
+
+<path fill="none" stroke="black" d="M107.08,-77.91C157.46,-65.79 238.29,-46.35 293.18,-33.14" style=""/>
+<polygon fill="black" stroke="black" points="293.77,-36.6 302.67,-30.86 292.13,-29.8 293.77,-36.6" style=""/>
+</g>
+<!-- libxml2 -->
+<g id="node24" class="node" pointer-events="visible" data-name="libxml2">
+
+<ellipse fill="none" stroke="black" cx="1201.97" cy="-306" rx="41.17" ry="18" style=""/>
+<text text-anchor="middle" x="1201.97" y="-301.8" font-family="Times,serif" font-size="14.00" style="">libxml2</text>
+</g>
+<!-- libxml2&#45;&gt;readline -->
+<g id="edge23" class="edge" data-name="libxml2-&gt;readline">
+
+<path fill="none" stroke="black" d="M1202.64,-287.69C1202.49,-268.22 1199.42,-236.63 1182.97,-216 1166.53,-195.37 1140.2,-182.41 1116.99,-174.47" style=""/>
+<polygon fill="black" stroke="black" points="1118.28,-171.21 1107.69,-171.52 1116.17,-177.88 1118.28,-171.21" style=""/>
+</g>
+<!-- libxml2&#45;&gt;icu4c -->
+<g id="edge22" class="edge" data-name="libxml2-&gt;icu4c">
+
+<path fill="none" stroke="black" d="M1188.06,-288.76C1180.53,-279.98 1171.08,-268.96 1162.71,-259.19" style=""/>
+<polygon fill="black" stroke="black" points="1165.55,-257.13 1156.38,-251.81 1160.23,-261.69 1165.55,-257.13" style=""/>
+</g>
+<!-- railwaycat/emacsmacport/emacs&#45;mac -->
+<g id="node25" class="node" pointer-events="visible" data-name="railwaycat/emacsmacport/emacs-mac">
+
+<ellipse fill="none" stroke="black" cx="995.97" cy="-378" rx="155.62" ry="18" style=""/>
+<text text-anchor="middle" x="995.97" y="-373.8" font-family="Times,serif" font-size="14.00" style="">railwaycat/emacsmacport/emacs-mac</text>
+</g>
+<!-- railwaycat/emacsmacport/emacs&#45;mac&#45;&gt;autoconf -->
+<g id="edge28" class="edge" data-name="railwaycat/emacsmacport/emacs-mac-&gt;autoconf">
+
+<path fill="none" stroke="black" d="M968.94,-360.01C957.08,-350.93 944.41,-338.6 937.97,-324 931.52,-309.36 931.52,-302.64 937.97,-288 943.42,-275.64 953.33,-264.92 963.43,-256.41" style=""/>
+<polygon fill="black" stroke="black" points="965.33,-259.36 971.06,-250.45 961.03,-253.85 965.33,-259.36" style=""/>
+</g>
+<!-- railwaycat/emacsmacport/emacs&#45;mac&#45;&gt;automake -->
+<g id="edge29" class="edge" data-name="railwaycat/emacsmacport/emacs-mac-&gt;automake">
+
+<path fill="none" stroke="black" d="M995.97,-359.7C995.97,-352.41 995.97,-343.73 995.97,-335.54" style=""/>
+<polygon fill="black" stroke="black" points="999.47,-335.62 995.97,-325.62 992.47,-335.62 999.47,-335.62" style=""/>
+</g>
+<!-- railwaycat/emacsmacport/emacs&#45;mac&#45;&gt;gnutls -->
+<g id="edge30" class="edge" data-name="railwaycat/emacsmacport/emacs-mac-&gt;gnutls">
+
+<path fill="none" stroke="black" d="M903.94,-363.09C805.19,-348.16 652.45,-325.06 577.52,-313.73" style=""/>
+<polygon fill="black" stroke="black" points="578.09,-310.28 567.68,-312.25 577.04,-317.2 578.09,-310.28" style=""/>
+</g>
+<!-- railwaycat/emacsmacport/emacs&#45;mac&#45;&gt;pkg&#45;config -->
+<g id="edge33" class="edge" data-name="railwaycat/emacsmacport/emacs-mac-&gt;pkg-config">
+
+<path fill="none" stroke="black" d="M963.44,-359.98C950.18,-351.18 936.27,-339.09 928.97,-324 907.92,-280.5 926.5,-223.42 941.22,-190.22" style=""/>
+<polygon fill="black" stroke="black" points="944.33,-191.85 945.37,-181.3 937.98,-188.9 944.33,-191.85" style=""/>
+</g>
+<!-- railwaycat/emacsmacport/emacs&#45;mac&#45;&gt;jansson -->
+<g id="edge31" class="edge" data-name="railwaycat/emacsmacport/emacs-mac-&gt;jansson">
+
+<path fill="none" stroke="black" d="M1022.15,-359.88C1037.11,-350.09 1055.97,-337.75 1071.7,-327.46" style=""/>
+<polygon fill="black" stroke="black" points="1073.32,-330.58 1079.77,-322.18 1069.48,-324.73 1073.32,-330.58" style=""/>
+</g>
+<!-- railwaycat/emacsmacport/emacs&#45;mac&#45;&gt;libxml2 -->
+<g id="edge32" class="edge" data-name="railwaycat/emacsmacport/emacs-mac-&gt;libxml2">
+
+<path fill="none" stroke="black" d="M1044.53,-360.5C1079.37,-348.66 1125.87,-332.86 1159.29,-321.5" style=""/>
+<polygon fill="black" stroke="black" points="1160.31,-324.85 1168.65,-318.32 1158.06,-318.23 1160.31,-324.85" style=""/>
+</g>
+<!-- texinfo -->
+<g id="node26" class="node" pointer-events="visible" data-name="texinfo">
+
+<ellipse fill="none" stroke="black" cx="1298.97" cy="-306" rx="38.28" ry="18" style=""/>
+<text text-anchor="middle" x="1298.97" y="-301.8" font-family="Times,serif" font-size="14.00" style="">texinfo</text>
+</g>
+<!-- railwaycat/emacsmacport/emacs&#45;mac&#45;&gt;texinfo -->
+<g id="edge34" class="edge" data-name="railwaycat/emacsmacport/emacs-mac-&gt;texinfo">
+
+<path fill="none" stroke="black" d="M1081.17,-362.52C1131.32,-353.21 1195.74,-339.9 1251.97,-324 1254.38,-323.32 1256.84,-322.58 1259.32,-321.79" style=""/>
+<polygon fill="black" stroke="black" points="1260.3,-325.16 1268.66,-318.66 1258.07,-318.52 1260.3,-325.16" style=""/>
+</g>
+</g>
+</svg>

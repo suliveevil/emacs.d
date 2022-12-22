@@ -1,0 +1,768 @@
+Major Mode Hierarchies (243):
+
+• comint-mode                          Major mode for interacting with an inferior interpreter.
+  - elpl-mode[P]                       Major mode for interactively evaluating Emacs Lisp expressions.
+  - gud-mode                           Major mode for interacting with an inferior debugger process.
+  - inferior-octave-mode               Major mode for interacting with an inferior Octave process.
+  - inferior-python-mode               Major mode for Python inferior process.
+  - inferior-tcl-mode                  Major mode for interacting with Tcl interpreter.
+  - prolog-inferior-mode               Major mode for interacting with an inferior Prolog process.
+  - ps-run-mode                        Major mode in interactive PostScript window.
+  - sql-interactive-mode               Major mode to use a SQL interpreter interactively.
+• compilation-mode                     Major mode for compilation log buffers.
+  - checkdoc-output-mode               Set up the major mode for the buffer containing the list of errors.
+  - emacs-lisp-compilation-mode        The variant of ‘compilation-mode’ used for emacs-lisp compilation buffers.
+  - grep-mode                          Sets ‘grep-last-buffer’ and ‘compilation-window-height’.
+• conf-mode                            Mode for Unix and Windows Conf files and Java properties.
+  - conf-javaprop-mode                 Conf Mode starter for Java properties files.
+  - conf-toml-mode                     Conf Mode starter for TOML files.
+  - conf-unix-mode                     Conf Mode starter for Unix style Conf files.
+    • conf-colon-mode                  Conf Mode starter for Colon files.
+      - conf-ppd-mode                  Conf Mode starter for Adobe/CUPS PPD files.
+      - conf-xdefaults-mode            Conf Mode starter for Xdefaults files.
+    • conf-desktop-mode                Conf Mode started for freedesktop.org Desktop files.
+    • conf-space-mode                  Conf Mode starter for space separated conf files.
+    • gitconfig-mode[P]                A major mode for editing .gitconfig files.
+    • gitignore-mode[P]                A major mode for editing .gitignore files.
+  - conf-windows-mode                  Conf Mode starter for Windows style Conf files.
+• prog-mode                            Major mode for editing programming language source code.
+  - antlr-mode                         Major mode for editing ANTLR grammar files.
+  - asm-mode                           Major mode for editing typical assembler code.
+  - autoconf-mode                      Major mode for editing Autoconf configure.ac files.
+  - awk-mode                           Major mode for editing AWK code.
+  - bat-mode                           Major mode for editing DOS/Windows batch files.
+  - c++-mode                           Major mode for editing C++ code.
+  - c-mode                             Major mode for editing C code.
+  - c-ts-base-mode                     Major mode for editing C, powered by tree-sitter.
+    • c++-ts-mode                      Major mode for editing C++, powered by tree-sitter.
+    • c-ts-mode                        Major mode for editing C, powered by tree-sitter.
+  - cfengine2-mode                     Major mode for editing CFEngine2 input.
+  - cfengine3-mode (cfengine-mode)     Major mode for editing CFEngine3 input.
+  - cperl-mode                         Major mode for editing Perl code.
+  - csharp-mode                        Major mode for editing Csharp code.
+  - csharp-ts-mode                     Major mode for editing C# code.
+  - css-base-mode                      Generic mode to edit Cascading Style Sheets (CSS).
+    • css-mode                         Major mode to edit Cascading Style Sheets (CSS).
+      - less-css-mode                  Major mode for editing Less files (http://lesscss.org/).
+      - scss-mode                      Major mode to edit "Sassy CSS" files.
+    • css-ts-mode                      Major mode to edit Cascading Style Sheets (CSS).
+  - d2-mode[O]                         Major mode derived from ‘prog-mode’ by ‘define-derived-mode’.
+  - dcl-mode                           Major mode for editing DCL-files.
+  - erts-mode                          Major mode for editing erts (Emacs testing) files.
+  - f90-mode                           Major mode for editing Fortran 90,95 code in free format.
+  - fortran-mode                       Major mode for editing Fortran code in fixed format.
+  - gdb-script-mode                    Major mode for editing GDB scripts.
+  - graphviz-dot-mode[P]               Major mode for the dot language
+  - icon-mode                          Major mode for editing Icon code.
+  - idl-mode                           Major mode for editing CORBA’s IDL, PSDL and CIDL code.
+  - idlwave-mode                       Major mode for editing IDL source files (version 6.1_em22).
+  - java-mode                          Major mode for editing Java code.
+  - java-ts-mode                       Major mode for editing Java, powered by tree-sitter.
+  - js-base-mode                       Generic major mode for editing JavaScript.
+    • js-mode (javascript-mode)        Major mode for editing JavaScript.
+      - js-json-mode                   Major mode derived from ‘js-mode’ by ‘define-derived-mode’.
+      - js-jsx-mode                    Major mode for editing JavaScript+JSX.
+    • js-ts-mode                       Major mode for editing JavaScript.
+  - json-ts-mode                       Major mode for editing JSON, powered by tree-sitter.
+  - ld-script-mode                     A major mode to edit GNU ld script files.
+  - lisp-data-mode                     Major mode for buffers holding data written in Lisp syntax.
+    • emacs-lisp-mode                  Major mode for editing Lisp code to run in Emacs.
+      - elisp-byte-code-mode           Major mode for *.elc files.
+      - gnus-score-mode                Mode for editing Gnus score files.
+      - lisp-interaction-mode          Major mode for typing and evaluating Lisp forms.
+        • edebug-eval-mode             Mode for evaluation list buffer while in Edebug.
+      - plstore-mode                   Major mode for editing PLSTORE files.
+      - reb-lisp-mode                  Major mode for interactively building symbolic Regular Expressions.
+      - rxt-help-mode[P]               Major mode derived from ‘emacs-lisp-mode’ by ‘define-derived-mode’.
+    • lisp-mode (common-lisp-mode)     Major mode for editing programs in Common Lisp and other similar Lisps.
+  - m2-mode (modula-2-mode)            This is a mode intended to support program development in Modula-2.
+  - m4-mode                            A major mode to edit m4 macro files.
+  - makefile-mode                      Major mode for editing standard Makefiles.
+    • makefile-automake-mode           An adapted ‘makefile-mode’ that knows about automake.
+    • makefile-bsdmake-mode            An adapted ‘makefile-mode’ that knows about BSD make.
+    • makefile-gmake-mode              An adapted ‘makefile-mode’ that knows about gmake.
+    • makefile-imake-mode              An adapted ‘makefile-mode’ that knows about imake.
+    • makefile-makepp-mode             An adapted ‘makefile-mode’ that knows about makepp.
+  - meta-common-mode                   Common initialization for Metafont or MetaPost mode.
+    • metafont-mode                    Major mode for editing Metafont sources.
+    • metapost-mode                    Major mode for editing MetaPost sources.
+  - mixal-mode                         Major mode for the mixal asm language.
+  - objc-mode                          Major mode for editing Objective C code.
+  - octave-mode                        Major mode for editing Octave code.
+  - opascal-mode (delphi-mode)         Major mode for editing OPascal code.
+  - pascal-mode                        Major mode for editing Pascal code.
+  - perl-mode                          Major mode for editing Perl code.
+  - pike-mode                          Major mode for editing Pike code.
+  - prolog-mode                        Major mode for editing Prolog code.
+    • mercury-mode                     Major mode for editing Mercury programs.
+  - ps-mode                            Major mode for editing PostScript with GNU Emacs.
+  - python-base-mode                   Generic major mode for editing Python files.
+    • python-mode                      Major mode for editing Python files.
+    • python-ts-mode                   Major mode for editing Python files, using tree-sitter library.
+  - ruby-mode                          Major mode for editing Ruby code.
+  - scheme-mode                        Major mode for editing Scheme code.
+    • dsssl-mode                       Major mode for editing DSSSL code.
+  - sh-base-mode                       Generic major mode for editing shell scripts.
+    • bash-ts-mode                     Major mode for editing Bash shell scripts.
+    • sh-mode (shell-script-mode)      Major mode for editing shell scripts.
+  - sieve-mode                         Major mode for editing Sieve code.
+  - simula-mode                        Major mode for editing SIMULA code.
+  - snippet-mode[P]                    A mode for editing yasnippets
+  - sql-mode                           Major mode to edit SQL.
+  - tcl-mode                           Major mode for editing Tcl code.
+  - typescript-ts-base-mode            Major mode for editing TypeScript.
+    • tsx-ts-mode                      Major mode for editing TypeScript.
+    • typescript-ts-mode               Major mode for editing TypeScript.
+  - vera-mode                          Major mode for editing Vera code.
+  - verilog-mode                       Major mode for editing Verilog code.
+  - vhdl-mode                          Major mode for editing VHDL code.
+• special-mode                         Parent major mode from which special major modes should inherit.
+  - backtrace-mode                     Generic major mode for examining an Elisp stack backtrace.
+    • debugger-mode                    Mode for debugging Emacs Lisp using a backtrace.
+  - diary-fancy-display-mode           Major mode used while displaying diary entries using Fancy Display.
+  - dig-mode                           Major mode for displaying dig output.
+  - ebrowse-electric-position-mode     Mode for electric position buffers.
+  - ebrowse-member-mode                Major mode for Ebrowse member buffers.
+  - ebrowse-tree-mode                  Major mode for Ebrowse class tree buffers.
+  - emacs-authors-mode (etc-authors-mode) Major mode for viewing "etc/AUTHORS" from the Emacs distribution.
+  - emacs-news-view-mode               Major mode for viewing the Emacs NEWS file.
+  - epa-info-mode                      Major mode for ‘epa-info-buffer’.
+  - epa-key-list-mode                  Major mode for ‘epa-list-keys’.
+  - epa-key-mode                       Major mode for a key description.
+  - ert-simple-view-mode               Major mode for viewing auxiliary information in ERT.
+  - free-keys-mode[P]                  Free keys mode.
+  - git-rebase-mode[P]                 Major mode for editing of a Git rebase file.
+  - gnus-mode                          Base mode from which all other gnus modes derive.
+    • gnus-article-mode                Major mode for displaying an article.
+      - gnus-sticky-article-mode       Mode for sticky articles.
+    • gnus-browse-mode                 Major mode for browsing a foreign server.
+    • gnus-category-mode               Major mode for listing and editing agent categories.
+    • gnus-group-mode                  Major mode for reading news.
+    • gnus-server-mode                 Major mode for listing and editing servers.
+    • gnus-tree-mode                   Major mode for displaying thread trees.
+  - help-mode                          Major mode for viewing help text and navigating references in it.
+    • octave-help-mode                 Major mode for displaying Octave documentation.
+  - ibuffer-mode                       A major mode for viewing a list of buffers.
+  - idlwave-help-mode                  Major mode for displaying IDL Help.
+  - Info-mode                          Info mode provides commands for browsing through the Info documentation tree.
+  - log-view-mode                      Major mode for browsing CVS log output.
+    • vc-cvs-log-view-mode             Major mode derived from ‘log-view-mode’ by ‘define-derived-mode’.
+    • vc-git-log-view-mode             Major mode derived from ‘log-view-mode’ by ‘define-derived-mode’.
+      - vc-git-region-history-mode     Major mode to browse Git’s "log -p" output.
+    • vc-rcs-log-view-mode             Major mode derived from ‘log-view-mode’ by ‘define-derived-mode’.
+    • vc-svn-log-view-mode             Major mode derived from ‘log-view-mode’ by ‘define-derived-mode’.
+  - magit-section-mode[P]              Parent major mode from which major modes with Magit-like sections inherit.
+    • magit-mode[P]                    Parent major mode from which Magit major modes inherit.
+      - magit-cherry-mode[P]           Mode for looking at commits not merged upstream.
+      - magit-diff-mode[P]             Mode for looking at a Git diff.
+        • magit-merge-preview-mode[P]  Mode for previewing a merge.
+        • magit-revision-mode[P]       Mode for looking at a Git commit.
+        • magit-stash-mode[P]          Mode for looking at individual stashes.
+      - magit-log-mode[P]              Mode for looking at Git log.
+        • magit-log-select-mode[P]     Mode for selecting a commit from history.
+      - magit-process-mode[P]          Mode for looking at Git process output.
+      - magit-reflog-mode[P]           Mode for looking at Git reflog.
+        • magit-stashes-mode[P]        Mode for looking at lists of stashes.
+      - magit-refs-mode[P]             Mode which lists and compares references.
+      - magit-status-mode[P]           Mode for looking at Git status.
+    • org-roam-mode[P]                 Major mode for displaying relevant information about Org-roam nodes.
+  - messages-buffer-mode               Major mode used in the "*Messages*" buffer.
+  - nov-mode[P]                        Major mode for reading EPUB documents
+  - occur-mode                         Major mode for output from M-s o.
+    • occur-edit-mode                  Major mode for editing *Occur* buffers.
+  - reftex-index-mode                  Major mode for managing Index buffers for LaTeX files.
+  - reftex-select-bib-mode             Major mode for selecting a citation key in a LaTeX document.
+  - reftex-select-label-mode           Major mode for selecting a label in a LaTeX document.
+  - rfc-mode[P]                        Major mode to browse and read RFC documents.
+  - rst-toc-mode                       Major mode for output from M-x rst-toc, the table-of-contents for the document.
+  - select-tags-table-mode             Major mode for choosing a current tags table among those already loaded.
+  - tabulated-list-mode                Generic major mode for browsing a list of items.
+    • achievements-list-mode[P]        Mode for display the list of achievements.
+    • bookmark-bmenu-mode              Major mode for editing a list of bookmarks.
+    • flymake-diagnostics-buffer-mode  A mode for listing Flymake diagnostics.
+    • flymake-project-diagnostics-mode A mode for listing Flymake diagnostics.
+    • magit-repolist-mode[P]           Major mode for browsing a list of Git repositories.
+    • magit-submodule-list-mode[P]     Major mode for browsing a list of Git submodules.
+    • org-export-stack-mode            Mode for displaying asynchronous export stack.
+    • process-menu-mode                Major mode for listing the processes called by Emacs.
+    • use-package-statistics-mode[P]   Show current statistics gathered about ‘use-package’ declarations.
+  - tags-table-mode                    Major mode for tags table file buffers.
+  - tar-mode                           Major mode for viewing a tar file as a dired-like listing of its contents.
+  - todo-archive-mode                  Major mode for archived todo categories.
+  - todo-categories-mode               Major mode for displaying and editing todo categories.
+  - todo-filtered-items-mode           Mode for displaying and reprioritizing top priority Todo.
+  - todo-mode                          Major mode for displaying, navigating and editing todo lists.
+  - treesit--explorer-tree-mode        Mode for displaying syntax trees for ‘treesit-explore-mode’.
+  - url-cookie-mode                    Mode for listing cookies.
+  - vc-dir-mode                        Major mode for VC directory buffers.
+  - widget-browse-mode                 Major mode for widget browser buffers.
+  - xref--xref-buffer-mode             Mode for displaying cross-references.
+    • denote-backlinks-mode[P]         Major mode for backlinks buffers.
+    • xref--transient-buffer-mode      Major mode derived from ‘xref--xref-buffer-mode’ by ‘define-derived-mode’.
+• text-mode (indented-text-mode)       Major mode for editing text written for humans to read.
+  - blink-search-mode[O]               Major mode derived from ‘text-mode’ by ‘define-derived-mode’.
+  - bookmark-edit-annotation-mode      Mode for editing the annotation of bookmarks.
+  - change-log-mode                    Major mode for editing change logs; like Indented Text mode.
+  - color-rg-mode[O]                   Major mode derived from ‘text-mode’ by ‘define-derived-mode’.
+  - dns-mode (zone-mode)               Major mode for viewing and editing DNS master files.
+  - doc-view--text-view-mode           View mode used in DocView’s text buffers.
+  - emacs-news-mode                    Major mode for editing the Emacs NEWS file.
+  - git-commit-elisp-text-mode[P]      Major mode for editing commit messages of elisp projects.
+  - gitattributes-mode[P]              A major mode for editing .gitattributes files.
+  - log-edit-mode                      Major mode for editing version-control (VC) commit log messages.
+    • vc-git-log-edit-mode             Major mode for editing Git log messages.
+  - lsp-bridge-call-hierarchy-mode[O]  Major mode derived from ‘text-mode’ by ‘define-derived-mode’.
+  - lsp-bridge-ref-mode[O]             Major mode derived from ‘text-mode’ by ‘define-derived-mode’.
+  - mail-mode                          Major mode for editing mail to be sent.
+  - markdown-mode[P]                   Major mode for editing Markdown files.
+    • gfm-mode[P]                      Major mode for editing GitHub Flavored Markdown files.
+      - gfm-view-mode[P]               Major mode for viewing GitHub Flavored Markdown content.
+    • markdown-view-mode[P]            Major mode for viewing Markdown content.
+  - message-mode                       Major mode for editing mail and news to be sent.
+    • gnus-article-edit-mode           Major mode for editing articles.
+  - mh-show-mode                       Major mode for showing messages in MH-E.
+  - nroff-mode                         Major mode for editing text intended for nroff to format.
+  - nxml-mode (xml-mode)               Major mode for editing XML.
+    • nxml-web-mode[P]                 Major mode derived from ‘nxml-mode’ by ‘define-derived-mode’.
+  - outline-mode                       Set major mode for editing outlines with selective display.
+    • org-mode                         Outline-based notes management and organizer, alias
+  - paragraph-indent-text-mode         Major mode for editing text, with leading spaces starting a paragraph.
+  - rst-mode                           Major mode for editing reStructuredText documents.
+  - sgml-mode                          Major mode for editing SGML documents.
+    • html-mode                        Major mode based on SGML mode for editing HTML documents.
+      - html-erb-mode[P]               Major mode derived from ‘html-mode’ by ‘define-derived-mode’.
+      - mhtml-mode                     Major mode based on ‘html-mode’, but works with embedded JS and CSS.
+  - subed-mode[P]                      Major mode for editing subtitles.
+    • subed-ass-mode[P]                Major mode for editing Advanced SubStation Alpha subtitle files.
+    • subed-srt-mode[P]                Major mode for editing SubRip subtitle files.
+    • subed-vtt-mode[P]                Major mode for editing WebVTT subtitle files.
+  - tex-mode (TeX-mode)                Major mode for editing files of input for TeX, LaTeX, or SliTeX.
+    • latex-mode (LaTeX-mode)          Major mode for editing files of input for LaTeX.
+      - doctex-mode                    Major mode to edit DocTeX files.
+      - slitex-mode                    Major mode for editing files of input for SliTeX.
+    • plain-tex-mode (plain-TeX-mode)  Major mode for editing files of input for plain TeX.
+  - texinfo-mode                       Major mode for editing Texinfo files.
+  - todo-edit-mode                     Major mode for editing multiline todo items.
+
+Standalone Modes (144):
+
+• *table--cell-describe-mode           Table cell version of ‘describe-mode’.
+• amread-mode                          I’m reading mode.
+• applescript-mode[P]                  Major mode for editing AppleScript files.
+• array-mode                           Major mode for editing arrays.
+• authinfo-mode                        Mode for editing .authinfo/.netrc files.
+• auto-lower-mode                      Toggle whether or not the selected frame should auto-lower.
+• auto-raise-mode                      Toggle whether or not selected frames should auto-raise.
+• bibtex-mode                          Major mode for editing BibTeX files.
+• bibtex-style-mode                    Major mode for editing BibTeX style files.
+• binary-overwrite-mode                Toggle Binary Overwrite mode.
+• bovine-grammar-mode                  Major mode for editing Bovine grammars.
+• c-or-c++-mode                        Analyze buffer and enable either C or C++ mode.
+• calendar-mode                        A major mode for the calendar window.
+• cfengine-auto-mode                   Choose ‘cfengine2-mode’ or ‘cfengine3-mode’ by buffer contents.
+• clean-mode                           A mode that removes all overlays and text properties.
+• color-rg-switch-to-edit-mode[O]     
+• color-rg-switch-to-view-mode[O]     
+• completion-list-mode                 Major mode for buffers showing lists of possible completions.
+• completion-mode                      Toggle whether or not to add new words to the completion database.
+• cua-selection-mode                   Enable CUA selection mode without the C-z/C-x/C-c/C-v bindings.
+• Custom-mode                          Major mode for editing customization buffers.
+• customize-mode                       Customize options related to a major or minor mode.
+• cvs-mode                             Mode used for PCL-CVS, a frontend to CVS.
+• cvs-status-mode                      Mode used for cvs status output.
+• dcl-save-mode                        Save the current mode for this buffer.
+• decipher-mode                        Major mode for decrypting monoalphabetic substitution ciphers.
+• decipher-stats-mode                  Major mode for displaying ciphertext statistics.
+• describe-mode                        Display documentation of current major mode and minor modes.
+• describe-mode-local-bindings-in-mode Display mode local bindings active in MODE hierarchy.
+• diary-mode                           Major mode for editing the diary file.
+• dictionary-switch-tooltip-mode       Turn off or on support for the dictionary tooltip mode.
+• diff-mode                            Major mode for viewing/editing context diffs.
+• dired-virtual-mode                   Put current buffer into Virtual Dired mode (see ‘dired-virtual’).
+• doc-view-mode                        Major mode in DocView buffers.
+• ebrowse-electric-list-mode           Mode for electric tree list mode.
+• edebug-Continue-fast-mode            Trace with no wait at each step.
+• edebug-continue-mode                 Begin continue mode.
+• edebug-go-mode                       Go, evaluating until break.
+• edebug-Go-nonstop-mode               Go, evaluating without debugging.
+• edebug-next-mode                     Proceed to next ‘after’ stop point.
+• edebug-set-initial-mode              Set the initial execution mode of Edebug.
+• edebug-step-mode (edebug-step-through-mode) Proceed to next stop point.
+• edebug-Trace-fast-mode               Trace with no wait at each step.
+• edebug-trace-mode                    Begin trace mode.
+• edmacro-mode                         Keyboard Macro Editing mode
+• eieio-custom-mode                    Major mode for customizing EIEIO objects.
+• electric-indent-local-mode           Toggle ‘electric-indent-mode’ only in this buffer.
+• electric-layout-local-mode           Toggle ‘electric-layout-mode’ only in this buffer.
+• electric-pair-local-mode             Toggle ‘electric-pair-mode’ only in this buffer.
+• electric-quote-local-mode            Toggle ‘electric-quote-mode’ only in this buffer.
+• eshell-mode                          Emacs shell interactive mode.
+• flyspell-prog-mode                   Turn on ‘flyspell-mode’ for comments and strings.
+• forms-mode                           Major mode to visit files in a field-structured manner using a form.
+• fringe-mode                          Set the default appearance of fringes on all frames.
+• fundamental-mode                     Major mode not specialized for anything in particular.
+• generic-mode                         Enter generic mode MODE.
+• global-auto-composition-mode         Toggle Auto Composition mode in all buffers.
+• global-dictionary-tooltip-mode       Enable/disable ‘dictionary-tooltip-mode’ for all buffers.
+• global-lsp-bridge-mode[O]           
+• global-semantic-decoration-mode      Toggle global use of option ‘semantic-decoration-mode’.
+• global-semantic-idle-completions-mode Toggle global use of ‘semantic-idle-completions-mode’.
+• global-semantic-idle-local-symbol-highlight-mode Highlight the tag and symbol references of the symbol under point.
+• global-semantic-idle-scheduler-mode  Toggle global use of option ‘semantic-idle-scheduler-mode’.
+• global-semantic-idle-summary-mode    Toggle global use of ‘semantic-idle-summary-mode’.
+• global-semantic-mru-bookmark-mode    Toggle global use of option ‘semantic-mru-bookmark-mode’.
+• gmm-customize-mode                   Customize customization group for MODE.
+• gnus-group-enter-server-mode         Jump to the server buffer.
+• hexl-mode                            A mode for editing binary files in hex dump format.
+• ibuffer-do-sort-by-major-mode        Sort the buffers by major modes.
+• ibuffer-filter-by-derived-mode       Limit current view to buffers with major mode(s) specified by QUALIFIER.
+• ibuffer-filter-by-mode               Limit current view to buffers with major mode(s) specified by QUALIFIER.
+• ibuffer-filter-by-used-mode          Limit current view to buffers with major mode(s) specified by QUALIFIER.
+• ibuffer-interactive-filter-by-mode   Enable or disable filtering by the major mode at point.
+• ibuffer-mark-by-mode                 Mark all buffers whose major mode equals MODE.
+• ibuffer-mouse-filter-by-mode         Enable or disable filtering by the major mode chosen via mouse.
+• ibuffer-set-filter-groups-by-mode    Set the current filter groups to filter by mode.
+• ibuffer-toggle-sorting-mode          Toggle the current sorting mode.
+• ido-mode                             Toggle Ido mode on or off.
+• image-mode                           Major mode for image files.
+• indent-according-to-mode             Indent line in proper way for current major mode.
+• isearch-describe-mode                Display documentation of Isearch mode.
+• lsp-bridge-ref-switch-to-edit-mode[O]
+• lsp-bridge-ref-switch-to-view-mode[O]
+• mh-folder-mode                       Major MH-E mode for "editing" an MH folder scan listing.
+• mh-letter-mode                       Mode for composing letters in MH-E.
+• minibuffer-inactive-mode             Major mode to use in the minibuffer when it is not active.
+• mouse-avoidance-mode                 Set Mouse Avoidance mode to MODE.
+• normal-erase-is-backspace-mode       Toggle the Erase and Delete mode of the Backspace and Delete keys.
+• normal-mode                          Choose the major mode for this buffer automatically.
+• org-agenda-archives-mode             Toggle inclusion of items in trees marked with :ARCHIVE:.
+• org-agenda-clockreport-mode          Toggle clocktable mode in an agenda buffer.
+• org-agenda-entry-text-mode           Toggle entry text mode in an agenda buffer.
+• org-agenda-follow-mode               Toggle follow mode in an agenda buffer.
+• org-agenda-log-mode                  Toggle log mode in an agenda buffer.
+• org-agenda-mode                      Mode for time-sorted view on action items in Org files.
+• osx-dictionary-mode[P]               Major mode to look up word through dictionary.
+• picture-mode                         Switch to Picture mode, in which a quarter-plane screen model is used.
+• pr-toggle-mode                       Toggle auto mode.
+• pr-txt-mode                          Print major mode using text printer.
+• pyim-probe-program-mode[P]           激活这个 pyim 探针函数后，只能在字符串和 comment 中输入中文。
+• quickrun--mode[P]                    Major mode for Quickrun execution process.
+• rcirc-cmd-mode                       Set NICK-OR-CHAN mode to MODE.
+• read-only-mode                       Change whether the current buffer is read-only.
+• reb-enter-subexp-mode                Enter the subexpression mode in the RE Builder.
+• reb-mode                             Major mode for interactively building Regular Expressions.
+• reb-quit-subexp-mode                 Quit the subexpression mode in the RE Builder.
+• reftex-index-phrases-mode            Major mode for managing the Index phrases of a LaTeX document.
+• reftex-reset-mode                    Reset RefTeX Mode.
+• rmail-mode                           Rmail Mode is used by M-x rmail for editing Rmail files.
+• rxt--toggle-i-mode[P]                Toggle emulated PCRE case-insensitive (i) flag.
+• rxt--toggle-s-mode[P]                Toggle emulated PCRE single-line (s) flag.
+• rxt--toggle-x-mode[P]                Toggle emulated PCRE extended (x) flag.
+• save-place-local-mode                Toggle whether to save your place in this file between sessions.
+• scroll-bar-mode                      Toggle vertical scroll bars on all frames (Scroll Bar mode).
+• semantic-idle-completions-mode       Display a list of possible completions in a tooltip.
+• semantic-idle-scheduler-mode         Minor mode to auto parse buffer following a change.
+• semantic-idle-summary-mode           Display a tag summary of the lexical token under the cursor.
+• ses-mode                             Major mode for Simple Emacs Spreadsheet.
+• sgml-name-8bit-mode                  Toggle whether to insert named entities instead of non-ASCII characters.
+• show-paren-local-mode                Toggle ‘show-paren-mode’ only in this buffer.
+• smime-mode                           Major mode for browsing, viewing and fetching certificates.
+• snmp-mode                            Major mode for editing SNMP MIBs.
+• snmpv2-mode                          Major mode for editing SNMPv2 MIBs.
+• so-long-mode                         This major mode is the default ‘so-long-action’ option.
+• speedbar-frame-mode                  Enable or disable speedbar
+• speedbar-mode                        Major mode for managing a display of directories and tags.
+• srecode-template-mode (srt-mode)     Major-mode for writing SRecode macros.
+• tab-switcher-mode                    Major mode for selecting a window configuration.
+• tcl-auto-fill-mode                   Like ‘auto-fill-mode’, but sets ‘comment-auto-fill-only-comments’.
+• toggle-rot13-mode                    Toggle the use of ROT13 encoding for the current window.
+• toggle-viper-mode                    Toggle Viper on/off.
+• turn-off-ace-pinyin-mode[P]          Turn off ‘ace-pinyin-mode’.
+• turn-off-iimage-mode                 Unconditionally turn off iimage mode.
+• turn-on-ace-pinyin-mode[P]           Turn on ‘ace-pinyin-mode’.
+• turn-on-gnus-dired-mode              Convenience method to turn on ‘gnus-dired-mode’.
+• turn-on-rxt-mode[P]                  Turn on ‘rxt-mode’ in the current buffer.
+• variable-pitch-mode                  Variable-pitch default-face mode.
+• vhdl-doc-mode                        Display VHDL Mode documentation in *Help* buffer.
+• viper-mode                           Turn on Viper emulation of Vi in Emacs
+• wdired-change-to-wdired-mode         Put a Dired buffer in Writable Dired (WDired) mode.
+• wdired-mode                          Writable Dired (WDired) mode.
+• wisent-grammar-mode                  Major mode for editing Wisent grammars.
+• yas-activate-extra-mode[P]           Activates the snippets for the given ‘mode’ in the buffer.
+• yas-deactivate-extra-mode[P]         Deactivates the snippets for the given ‘mode’ in the buffer.
+
+Minor Modes (373):
+
+• abbrev-mode                          Toggle Abbrev mode in the current buffer.
+• abridge-diff-mode[P]                 Toggle abridged diff mode.
+• ace-pinyin-global-mode[P]            Toggle Ace-Pinyin mode in all buffers.
+• ace-pinyin-mode[P]                   Toggle ‘ace-pinyin-mode’.
+• achievements-mode[P]                 Turns on automatic earning of achievements when idle.
+• acm-mode[O]                          LSP Bridge mode.
+• allout-mode (allout-minor-mode)      Toggle Allout outline mode.
+• allout-widgets-mode                  Toggle Allout Widgets mode.
+• annotate-mode[P]                     Toggle Annotate mode.
+• artist-mode                          Toggle Artist mode.
+• async-bytecomp-package-mode[P]       Byte compile asynchronously packages installed with package.el.
+• auto-composition-mode                Toggle Auto Composition mode.
+• auto-compression-mode                Toggle Auto Compression mode.
+• auto-encryption-mode                 Toggle automatic file encryption/decryption (Auto Encryption mode).
+• auto-fill-mode (idlwave-auto-fill-mode, fortran-auto-fill-mode) Toggle automatic line breaking (Auto Fill mode).
+• auto-image-file-mode                 Toggle visiting of image files as images (Auto Image File mode).
+• auto-insert-mode                     Toggle Auto-insert mode, a global minor mode.
+• auto-revert-mode                     Toggle reverting buffer when the file changes (Auto-Revert Mode).
+• auto-revert-tail-mode                Toggle reverting tail of buffer when the file grows.
+• auto-save-mode                       Toggle auto-saving in the current buffer (Auto Save mode).
+• auto-save-visited-mode               Toggle automatic saving of file-visiting buffers to their files.
+• avy-linum-mode[P]                    Minor mode that uses avy hints for ‘linum-mode’.
+• beacon-mode[P]                       Toggle Beacon mode on or off.
+• blink-cursor-mode                    Toggle cursor blinking (Blink Cursor mode).
+• bln-mode[P]                          Toggle binary line navigation mode.
+• buffer-face-mode                     Minor mode for a buffer-specific default face.
+• bug-reference-mode                   Toggle hyperlinking bug references in the buffer (Bug Reference mode).
+• bug-reference-prog-mode              Like ‘bug-reference-mode’, but only buttonize in comments and strings.
+• button-mode                          A minor mode for navigating to buttons with the TAB key.
+• centered-cursor-mode[P]              Makes the cursor stay vertically in a defined
+• checkdoc-minor-mode                  Toggle automatic docstring checking (Checkdoc minor mode).
+• citre-mode[P]                        Enable ‘completion-at-point’, xref and imenu integration.
+• citre-peek--mode[P]                  Mode for ‘citre-peek’.
+• cl-font-lock-built-in-mode           Highlight built-in functions, variables, and types in ‘lisp-mode’.
+• cl-old-struct-compat-mode            Enable backward compatibility with old-style structs.
+• column-number-mode                   Toggle column number display in the mode line (Column Number mode).
+• comint-fontify-input-mode            Enable input fontification in the current comint buffer.
+• company-box-mode[P]                  Company-box minor mode.
+• company-mode[P]                      "complete anything"; is an in-buffer completion framework.
+• company-quickhelp-local-mode[P]      Provides documentation popups for ‘company-mode’ using ‘pos-tip’.
+• company-quickhelp-mode[P]            Toggle Company-Quickhelp-Local mode in all buffers.
+• company-search-mode[P]               Search mode for completion candidates.
+• company-tng-mode[P]                  This minor mode enables ‘company-tng-frontend’.
+• compilation-minor-mode               Toggle Compilation minor mode.
+• compilation-shell-minor-mode         Toggle Compilation Shell minor mode.
+• completion-in-region-mode            Transient minor mode used during ‘completion-in-region’.
+• context-menu-mode                    Toggle Context Menu mode.
+• corfu-echo-mode[P]                   Show candidate documentation in echo area.
+• corfu-history-mode[P]                Update Corfu history and sort completions by history.
+• corfu-indexed-mode[P]                Prefix candidates with indices.
+• corfu-mode[P]                        Completion Overlay Region FUnction.
+• corfu-popupinfo-mode[P]              Corfu info popup minor mode.
+• cua-mode                             Toggle Common User Access style editing (CUA mode).
+• cua-rectangle-mark-mode              Toggle the region as rectangular.
+• cursor-face-highlight-mode           When enabled, highlight text that has ‘cursor-face’ property near point.
+• cursor-intangible-mode               Keep cursor outside of any ‘cursor-intangible’ text property.
+• cursor-sensor-mode                   Handle the ‘cursor-sensor-functions’ text property.
+• cvs-minor-mode                       This mode is used for buffers related to a main *cvs* buffer.
+• cwarn-mode                           Minor mode that highlights suspicious C and C++ constructions.
+• dash-fontify-mode[P]                 Toggle fontification of Dash special variables.
+• delete-selection-mode (pending-delete-mode) Toggle Delete Selection mode.
+• denote-dired-mode[P]                 Fontify all Denote-style file names.
+• denote-modules-global-mode[P]        Enable Denote integration modules globally.
+• denote-modules-mode[P]               Enable Denote integration modules locally.
+• describe-minor-mode                  Display documentation of a minor mode given as MINOR-MODE.
+• desktop-save-mode                    Toggle desktop saving (Desktop Save mode).
+• dictionary-tooltip-mode              Display tooltips for the current word.
+• diff-auto-refine-mode                Toggle automatic diff hunk finer highlighting (Diff Auto Refine mode).
+• diff-hl-amend-mode[P]                Show changes against the second-last revision in ‘diff-hl-mode’.
+• diff-hl-dir-mode[P]                  Toggle ‘diff-hl-mode’ integration in a ‘vc-dir-mode’ buffer.
+• diff-hl-dired-mode[P]                Toggle VC diff highlighting on the side of a Dired window.
+• diff-hl-flydiff-mode[P]              Perform highlighting on-the-fly.
+• diff-hl-inline-popup-transient-mode[P] Temporal minor mode to control an inline popup
+• diff-hl-margin-local-mode[P]         Toggle displaying ‘diff-hl-mode’ highlights on the margin locally.
+• diff-hl-margin-mode[P]               Toggle displaying ‘diff-hl-mode’ highlights on the margin.
+• diff-hl-mode[P]                      Toggle VC diff highlighting.
+• diff-hl-show-hunk-mouse-mode[P]      Enables the margin and fringe to show a posframe/popup with vc diffs when clicked.
+• diff-minor-mode                      Toggle Diff minor mode.
+• dired-async--modeline-mode[P]        Notify mode-line that an async process run.
+• dired-async-mode[P]                  Do dired actions asynchronously.
+• dired-hide-details-mode              Toggle visibility of detailed information in current Dired buffer.
+• dired-isearch-filenames-mode         Toggle file names searching on or off.
+• dired-omit-mode                      Toggle omission of uninteresting files in Dired (Dired-Omit mode).
+• dirtrack-debug-mode                  Toggle Dirtrack debugging.
+• dirtrack-mode                        Toggle directory tracking in shell buffers (Dirtrack mode).
+• display-battery-mode                 Toggle battery status display in mode line (Display Battery mode).
+• display-fill-column-indicator-mode   Toggle display of ‘fill-column’ indicator.
+• display-line-numbers-mode            Toggle display of line numbers in the buffer.
+• display-time-mode                    Toggle display of time, load level, and mail flag in mode lines.
+• doc-view-minor-mode                  Toggle displaying buffer via Doc View (Doc View minor mode).
+• doc-view-presentation-mode           Minor mode used while in presentation mode.
+• double-mode                          Toggle special insertion on double keypresses (Double mode).
+• dynamic-completion-mode              Toggle dynamic word-completion on or off.
+• ede-dired-minor-mode                 A minor mode that should only be activated in DIRED buffers.
+• ede-minor-mode                       Toggle EDE (Emacs Development Environment) minor mode.
+• edebug-mode                          Mode for Emacs Lisp buffers while in Edebug.
+• eldoc-mode                           Toggle echo area display of Lisp objects at point (ElDoc mode).
+• electric-indent-mode                 Toggle on-the-fly reindentation of text lines (Electric Indent mode).
+• electric-layout-mode                 Automatically insert newlines around some chars.
+• electric-pair-mode                   Toggle automatic parens pairing (Electric Pair mode).
+• electric-quote-mode                  Toggle on-the-fly requoting (Electric Quote mode).
+• elide-head-mode                      Toggle eliding (hiding) header material in the current buffer.
+• emacs-lock-mode                      Toggle Emacs Lock mode in the current buffer.
+• enriched-mode                        Minor mode for editing text/enriched files.
+• epa-global-mail-mode                 Minor mode to hook EasyPG into Mail mode.
+• epa-mail-mode                        A minor-mode for composing encrypted/clearsigned mails.
+• eshell-arg-mode                      Minor mode for the arg eshell module.
+• eshell-command-mode                  Minor mode for ‘eshell-command’ input.
+• eshell-proc-mode                     Minor mode for the proc eshell module.
+• fido-mode                            An enhanced ‘icomplete-mode’ that emulates ‘ido-mode’.
+• fido-vertical-mode                   Toggle vertical candidate display in ‘fido-mode’.
+• file-name-shadow-mode                Toggle file-name shadowing in minibuffers (File-Name Shadow mode).
+• flymake-mode                         Toggle Flymake mode on or off.
+• flyspell-mode                        Toggle on-the-fly spell checking (Flyspell mode).
+• follow-mode                          Toggle Follow mode.
+• font-lock-mode                       Toggle syntax highlighting in this buffer (Font Lock mode).
+• footnote-mode                        Toggle Footnote mode.
+• gc-buffers-mode[P]                   Toggle killing garbage buffers automatically.
+• gif-screencast-mode[P]               gif-screencast bindings
+• git-commit-mode[P]                   Auxiliary minor mode used when editing Git commit messages.
+• git-gutter-mode[P]                   Git-Gutter mode
+• glasses-mode                         Minor mode for making identifiers likeThis readable.
+• global-auto-revert-mode              Toggle Global Auto-Revert Mode.
+• global-centered-cursor-mode[P]       Toggle Centered-Cursor mode in all buffers.
+• global-company-mode[P]               Toggle Company mode in all buffers.
+• global-corfu-mode[P]                 Toggle Corfu mode in all buffers.
+• global-cwarn-mode                    Toggle Cwarn mode in all buffers.
+• global-dash-fontify-mode[P]          Toggle Dash-Fontify mode in all buffers.
+• global-diff-hl-amend-mode[P]         Toggle Diff-Hl-Amend mode in all buffers.
+• global-diff-hl-mode[P]               Toggle Diff-Hl mode in all buffers.
+• global-diff-hl-show-hunk-mouse-mode[P] Toggle Diff-Hl-Show-Hunk-Mouse mode in all buffers.
+• global-display-fill-column-indicator-mode Toggle Display-Fill-Column-Indicator mode in all buffers.
+• global-display-line-numbers-mode     Toggle Display-Line-Numbers mode in all buffers.
+• global-ede-mode                      Toggle global EDE (Emacs Development Environment) mode.
+• global-eldoc-mode                    Toggle Eldoc mode in all buffers.
+• global-font-lock-mode                Toggle Font-Lock mode in all buffers.
+• global-git-commit-mode[P]            Edit Git commit messages.
+• global-git-gutter-mode[P]            Toggle Git-Gutter mode in all buffers.
+• global-goto-address-mode             Toggle Goto-Address mode in all buffers.
+• global-hi-lock-mode                  Toggle Hi-Lock mode in all buffers.
+• global-highlight-changes-mode        Toggle Highlight-Changes mode in all buffers.
+• global-highlight-parentheses-mode[P] Toggle Highlight-Parentheses mode in all buffers.
+• global-hl-column-mode[P]             Toggle Hl-Column mode in all buffers.
+• global-hl-line-mode                  Toggle line highlighting in all buffers (Global Hl-Line mode).
+• global-origami-indicators-mode[P]    Toggle Origami-Indicators mode in all buffers.
+• global-origami-mode[P]               Toggle Origami mode in all buffers.
+• global-pangu-spacing-mode[P]         Toggle Pangu-Spacing mode in all buffers.
+• global-prettify-symbols-mode         Toggle Prettify-Symbols mode in all buffers.
+• global-reveal-mode                   Toggle Reveal mode in all buffers (Global Reveal mode).
+• global-semantic-highlight-edits-mode Toggle global use of option ‘semantic-highlight-edits-mode’.
+• global-semantic-highlight-func-mode  Toggle global use of option ‘semantic-highlight-func-mode’.
+• global-semantic-show-parser-state-mode Toggle global use of option ‘semantic-show-parser-state-mode’.
+• global-semantic-show-unmatched-syntax-mode Toggle global use of option ‘semantic-show-unmatched-syntax-mode’.
+• global-semantic-stickyfunc-mode      Toggle global use of option ‘semantic-stickyfunc-mode’.
+• global-semanticdb-minor-mode         Toggle Semantic DB mode.
+• global-so-long-mode                  Toggle automated performance mitigations for files with long lines.
+• global-subword-mode                  Toggle Subword mode in all buffers.
+• global-superword-mode                Toggle Superword mode in all buffers.
+• global-tab-line-mode                 Toggle Tab-Line mode in all buffers.
+• global-tree-sitter-mode[P]           Toggle Tree-Sitter mode in all buffers.
+• global-visual-line-mode              Toggle Visual-Line mode in all buffers.
+• global-whitespace-mode               Toggle whitespace visualization globally (Global Whitespace mode).
+• global-whitespace-newline-mode       Toggle global newline visualization (Global Whitespace Newline mode).
+• global-word-wrap-whitespace-mode     Toggle Word-Wrap-Whitespace mode in all buffers.
+• glyphless-display-mode               Minor mode for displaying glyphless characters in the current buffer.
+• gnus-binary-mode                     Minor mode for providing a binary group interface in Gnus summary buffers.
+• gnus-dead-summary-mode               Minor mode for Gnus summary buffers.
+• gnus-dired-mode                      Minor mode for intersections of gnus and dired.
+• gnus-draft-mode                      Minor mode for providing a draft summary buffers.
+• gnus-mailing-list-mode               Minor mode for providing mailing-list commands.
+• gnus-message-citation-mode           Minor mode providing more font-lock support for nested citations.
+• gnus-pick-mode                       Minor mode for providing a pick-and-read interface in Gnus summary buffers.
+• gnus-topic-mode                      Minor mode for topicsifying Gnus group buffers.
+• gnus-undo-mode                       Minor mode for providing ‘undo’ in Gnus buffers.
+• goto-address-mode                    Minor mode to buttonize URLs and e-mail addresses in the current buffer.
+• goto-address-prog-mode               Like ‘goto-address-mode’, but only for comments and strings.
+• gpm-mouse-mode                       Toggle mouse support in GNU/Linux consoles (GPM Mouse mode).
+• grugru-find-function-integration-mode[P] ‘describe-function’ can find functions defined by ‘grugru-define-function’.
+• grugru-highlight-mode[P]             Highlight if any rotatable text is at point.
+• gud-tooltip-mode                     Toggle the display of GUD tooltips.
+• header-line-indent-mode              Mode to indent the header line in ‘display-line-numbers-mode’ buffers.
+• hexl-follow-ascii-mode               Minor mode to follow ASCII in current Hexl buffer.
+• hi-lock-mode                         Toggle selective highlighting of patterns (Hi Lock mode).
+• hide-ifdef-mode                      Toggle features to hide/show #ifdef blocks (Hide-Ifdef mode).
+• highlight-changes-mode               Toggle highlighting changes in this buffer (Highlight Changes mode).
+• highlight-changes-visible-mode       Toggle visibility of highlighting due to Highlight Changes mode.
+• highlight-parentheses-mode[P]        Minor mode to highlight the surrounding parentheses.
+• hl-column-mode[P]                    Toggle highlighting of the current column.
+• hl-line-mode                         Toggle highlighting of the current line (Hl-Line mode).
+• horizontal-scroll-bar-mode           Toggle horizontal scroll bars on all frames (Horizontal Scroll Bar mode).
+• hs-minor-mode                        Minor mode to selectively hide/show code and comment blocks.
+• html-autoview-mode                   Toggle viewing of HTML files on save (HTML Autoview mode).
+• ibuffer-auto-mode                    Toggle use of Ibuffer’s auto-update facility (Ibuffer Auto mode).
+• icomplete-mode                       Toggle incremental minibuffer completion (Icomplete mode).
+• icomplete-vertical-mode              Toggle vertical candidate display in ‘icomplete-mode’ or ‘fido-mode’.
+• iimage-mode                          Toggle Iimage mode on or off.
+• ilog-log-buffer-mode[O]              Minor mode for the ilog log buffer.
+• image-dired-minor-mode               Setup easy-to-use keybindings for Image-Dired in Dired mode.
+• image-minor-mode                     Toggle Image minor mode in this buffer.
+• indent-tabs-mode                     Toggle whether indentation can insert TAB characters.
+• interaction-log-mode[O]              Global minor mode logging keys, commands, file loads and messages.
+• isearch-fold-quotes-mode             Minor mode to aid searching for ` characters in help modes.
+• ispell-minor-mode                    Toggle last-word spell checking (Ispell minor mode).
+• iswitchb-mode                        Toggle Iswitchb mode.
+• jit-lock-debug-mode                  Minor mode to help debug code run from jit-lock.
+• keycast-header-line-mode[P]          Show current command and its key binding in the header line.
+• keycast-log-mode[P]                  Log invoked commands and their key bindings in a buffer.
+• keycast-mode-line-mode[P] (keycast-mode) Show current command and its key binding in the mode line.
+• keycast-tab-bar-mode[P]              Show current command and its key binding in the tab bar.
+• keyfreq-autosave-mode[P]             Keyfreq Autosave mode automatically saves
+• keyfreq-mode[P]                      Keyfreq mode records number of times each command was
+• keypression-mode[P]                  Keystroke visualizer for GUI version Emacs.
+• latex-electric-env-pair-mode         Toggle Latex Electric Env Pair mode.
+• line-number-mode                     Toggle line number display in the mode line (Line Number mode).
+• lock-file-mode                       Toggle file locking in the current buffer (Lock File mode).
+• lost-selection-mode                  Toggle ‘lost-selection-mode’.
+• lsp-bridge-mode[O]                   LSP Bridge mode.
+• magit-auto-revert-mode[P]            Toggle Magit Auto Revert mode.
+• magit-blame-mode[P]                  Display blame information inline.
+• magit-blame-read-only-mode[P]        Provide keybindings for Magit-Blame mode.
+• magit-blob-mode[P]                   Enable some Magit features in blob-visiting buffers.
+• magit-wip-after-apply-mode[P]        Commit to work-in-progress refs.
+• magit-wip-after-save-local-mode[P]   After saving, also commit to a worktree work-in-progress ref.
+• magit-wip-after-save-mode[P]         Toggle Magit-Wip-After-Save-Local mode in all buffers.
+• magit-wip-before-change-mode[P]      Commit to work-in-progress refs before certain destructive changes.
+• magit-wip-initial-backup-mode[P]     Before saving a buffer for the first time, commit to a wip ref.
+• magit-wip-mode[P]                    Save uncommitted changes to work-in-progress refs.
+• mail-abbrevs-mode                    Toggle abbrev expansion of mail aliases (Mail Abbrevs mode).
+• markdown-live-preview-mode[P]        Toggle native previewing on save for a specific markdown file.
+• master-mode                          Toggle Master mode.
+• menu-bar-mode                        Toggle display of a menu bar on each frame (Menu Bar mode).
+• mh-showing-mode                      Minor mode to show the message in a separate window.
+• midnight-mode                        Non-nil means run ‘midnight-hook’ at midnight.
+• minibuffer-depth-indicate-mode       Toggle Minibuffer Depth Indication mode.
+• minibuffer-electric-default-mode     Toggle Minibuffer Electric Default mode.
+• mlscroll-mode[P]                     Minor mode for displaying an interactive scrollbar in the mode line.
+• mml-mode                             Minor mode for editing MML.
+• mmm-mode[P]                          Minor mode to allow multiple major modes in one buffer.
+• mouse-wheel-mode                     Toggle mouse wheel support (Mouse Wheel mode).
+• msb-mode                             Toggle Msb mode.
+• next-error-follow-minor-mode         Minor mode for compilation, occur and diff modes.
+• nroff-electric-mode                  Toggle automatic nroff request pairing (Nroff Electric mode).
+• on-screen-global-mode[P] (global-on-screen-mode) Global minor mode guiding your eyes while scrolling.
+• on-screen-mode[P]                    Buffer local minor mode guiding your eyes while scrolling.
+• org-beamer-mode                      Support for editing Beamer oriented Org mode files.
+• org-capture-mode                     Minor mode for special key bindings in a capture buffer.
+• org-cdlatex-mode                     Toggle the minor ‘org-cdlatex-mode’.
+• org-indent-mode                      When active, indent text according to outline structure.
+• org-list-checkbox-radio-mode         When turned on, use list checkboxes as radio buttons.
+• org-num-mode                         Dynamic numbering of headlines in an Org buffer.
+• org-roam-db-autosync-mode[P]         Global minor mode to keep your Org-roam session automatically synchronized.
+• org-roam-ui-follow-mode[P]           Set whether ORUI should follow your every move in Emacs.
+• org-roam-ui-mode[P]                  Enable org-roam-ui.
+• org-src-mode                         Minor mode for language major mode buffers generated by Org.
+• org-table-follow-field-mode          Minor mode to make the table field editor window follow the cursor.
+• org-table-header-line-mode           Display the first row of the table at point in the header line.
+• orgtbl-mode                          The Org mode table editor as a minor mode for use in other modes.
+• origami-auto-global-mode[P]          Apply initial folding when finding (opening) a file buffer
+• origami-indicators-mode[P]           Minor mode for indicators mode.
+• origami-mode[P]                      Minor mode to selectively hide/show text in the current buffer.
+• outline-minor-mode                   Toggle Outline minor mode.
+• overwrite-mode                       Toggle Overwrite mode.
+• pangu-spacing-mode[P]                Toggle pangu-spacing-mode
+• paragraph-indent-minor-mode          Minor mode for editing text, with leading spaces starting a paragraph.
+• pascal-outline-mode                  Outline-line minor mode for Pascal mode.
+• pcre-mode[P]                         Use emulated PCRE syntax for regexps wherever possible.
+• pixel-scroll-mode                    A minor mode to scroll text pixel-by-pixel.
+• pixel-scroll-precision-mode          Toggle pixel scrolling.
+• pkg-dm-mode[P]                       Minor mode ‘pkg-dm-mode’.
+• popwin-mode[P]                       Minor mode for ‘popwin-mode’.
+• prettify-symbols-mode                Toggle Prettify Symbols mode.
+• pyim-isearch-mode[P]                 这个 mode 为 isearch 添加拼音搜索功能.
+• quickrun-autorun-mode[P]             ‘quickrun’ after saving buffer.
+• rainbow-mode[P]                      Colorize strings that represent colors.
+• rcirc-multiline-minor-mode           Minor mode for editing multiple lines in rcirc.
+• rcirc-omit-mode                      Toggle the hiding of "uninteresting" lines.
+• rcirc-track-minor-mode               Global minor mode for tracking activity in rcirc buffers.
+• read-extended-command-mode           Minor mode used for completion in ‘read-extended-command’.
+• recentf-excl-mode[P]                 Minor mode ‘recentf-excl-mode’.
+• recentf-mode                         Toggle keeping track of opened files (Recentf mode).
+• rectangle-mark-mode                  Toggle the region as rectangular.
+• refill-mode                          Toggle automatic refilling (Refill mode).
+• reftex-isearch-minor-mode            When on, isearch searches the whole document, not only the current file.
+• reftex-mode                          Minor mode with distinct support for \label, \ref and \cite in LaTeX.
+• repeat-mode                          Toggle Repeat mode.
+• reveal-mode                          Toggle uncloaking of invisible text near point (Reveal mode).
+• rng-validate-mode                    Minor mode performing continual validation against a RELAX NG schema.
+• rst-minor-mode                       Toggle ReST minor mode.
+• ruler-mode                           Toggle display of ruler in header line (Ruler mode).
+• rxt--read-pcre-mode[P]               Minor-mode with key-bindings for toggling PCRE flags.
+• rxt-global-mode[P]                   Toggle Rxt mode in all buffers.
+• rxt-mode[P]                          Regex translation utilities.
+• save-place-mode                      Non-nil means automatically save place in each file.
+• savehist-mode                        Toggle saving of minibuffer history (Savehist mode).
+• scroll-all-mode                      Toggle shared scrolling in same-frame windows (Scroll-All mode).
+• scroll-lock-mode                     Buffer-local minor mode for pager-like scrolling.
+• semantic-highlight-edits-mode        Minor mode for highlighting changes made in a buffer.
+• semantic-highlight-func-mode         Minor mode to highlight the first line of the current tag.
+• semantic-mode                        Toggle parser features (Semantic mode).
+• semantic-show-parser-state-mode      Minor mode for displaying parser cache state in the modeline.
+• semantic-show-unmatched-syntax-mode  Minor mode to highlight unmatched lexical syntax tokens.
+• semantic-stickyfunc-mode             Minor mode to show the title of a tag in the header line.
+• server-mode                          Toggle Server mode.
+• sgml-electric-tag-pair-mode          Toggle SGML Electric Tag Pair mode.
+• sh-electric-here-document-mode       Make << insert a here document skeleton.
+• shell-command-with-editor-mode[P]    Teach ‘shell-command’ to use current Emacs instance as editor.
+• shell-dirtrack-mode                  Toggle directory tracking in this shell buffer (Shell Dirtrack mode).
+• shell-highlight-undef-mode           Highlight undefined shell commands and aliases.
+• show-paren-mode                      Toggle visualization of matching parens (Show Paren mode).
+• sis-auto-refresh-mode[P]             Automaticly refresh input source.
+• sis-context-mode[P]                  Switch input source smartly according to context.
+• sis-global-context-mode[P]           Toggle Sis-Context mode in all buffers.
+• sis-global-cursor-color-mode[P]      Automaticly change cursor color according to input source.
+• sis-global-inline-mode[P]            Toggle Sis-Inline mode in all buffers.
+• sis-global-respect-mode[P]           Respect buffer/mode by proper input source.
+• sis-inline-mode[P]                   English overlay mode for mixed language editing.
+• sis-log-mode[P]                      Log the execution of this package.
+• size-indication-mode                 Toggle buffer size display in the mode line (Size Indication mode).
+• smerge-mode                          Minor mode to simplify editing output from the diff3 program.
+• so-long-minor-mode                   This is the minor mode equivalent of ‘so-long-mode’.
+• strokes-mode                         Toggle Strokes mode, a global minor mode.
+• subword-mode (c-subword-mode, capitalized-words-mode) Toggle subword movement and editing (Subword mode).
+• superword-mode                       Toggle superword movement and editing (Superword mode).
+• tab-bar-history-mode                 Toggle tab history mode for the tab bar.
+• tab-bar-mode                         Toggle the tab bar in all graphical frames (Tab Bar mode).
+• tab-line-mode                        Toggle display of tab line in the windows displaying the current buffer.
+• table-fixed-width-mode               Cell width is fixed when this is non-nil.
+• tar-subfile-mode                     Minor mode for editing an element of a tar-file.
+• temp-buffer-resize-mode              Toggle auto-resizing temporary buffer windows (Temp Buffer Resize Mode).
+• terminal-focus-reporting-mode[P]     Minor mode for terminal focus reporting integration.
+• text-scale-mode                      Minor mode for displaying buffer text in a larger/smaller font.
+• tildify-mode                         Adds electric behavior to space character.
+• tool-bar-mode                        Toggle the tool bar in all graphical frames (Tool Bar mode).
+• tooltip-mode                         Toggle Tooltip mode.
+• topsy-mode[P]                        Minor mode to show a simple sticky header.
+• transient-mark-mode                  Toggle Transient Mark mode.
+• transient-resume-mode                Auxiliary minor-mode used to resume a transient after viewing help.
+• translate-mode[P]                    Minor mode for translation buffer.
+• translate-reference-mode[P]          Minor mode for artcle referring buffer.
+• tree-sitter-debug-mode[P]            Toggle syntax tree debugging for the current buffer.
+• tree-sitter-hl-mode[P]               Toggle syntax highlighting based on Tree-sitter’s syntax tree.
+• tree-sitter-mode[P]                  Minor mode that keeps an up-to-date syntax tree using incremental parsing.
+• treesit-explore-mode                 Enable exploring the current buffer’s syntax tree.
+• treesit-inspect-mode                 Minor mode that displays in the mode-line the node which starts at point.
+• type-break-mode                      Enable or disable typing-break mode.
+• type-break-mode-line-message-mode    Toggle warnings about typing breaks in the mode line.
+• type-break-query-mode                Toggle typing break queries.
+• undelete-frame-mode                  Enable the ‘undelete-frame’ command.
+• url-handler-mode                     Handle URLs as if they were file names throughout Emacs.
+• vc-dir-git-mode                      A minor mode for git-specific commands in ‘vc-dir-mode’ buffers.
+• vhdl-electric-mode                   Toggle VHDL electric mode.
+• vhdl-hs-minor-mode                   Toggle hideshow minor mode and update menu bar.
+• vhdl-stutter-mode                    Toggle VHDL stuttering mode.
+• view-mode                            Toggle View mode, a minor mode for viewing text but not editing it.
+• viper-harness-minor-mode             Familiarize Viper with a minor mode defined in LOAD-FILE.
+• visible-mode                         Toggle making all invisible text temporarily visible (Visible mode).
+• visual-line-mode                     Toggle visual line based editing (Visual Line mode) in the current buffer.
+• which-function-mode                  Toggle mode line display of current function (Which Function mode).
+• whitespace-mode                      Toggle whitespace visualization (Whitespace mode).
+• whitespace-newline-mode              Toggle newline visualization (Whitespace Newline mode).
+• widget-minor-mode                    Minor mode for traversing widgets.
+• windmove-mode                        Global minor mode for default windmove commands.
+• window-divider-mode                  Display dividers between windows (Window Divider mode).
+• winner-mode                          Toggle Winner mode on or off.
+• with-editor-mode[P]                  Edit a file as the $EDITOR of an external process.
+• word-wrap-whitespace-mode            Allow ‘word-wrap’ to fold on all breaking whitespace characters.
+• wucuo-mode[P]                        Toggle spell checking (Wucuo mode).
+• xref-etags-mode                      Minor mode to make xref use etags again.
+• xterm-mouse-mode                     Toggle XTerm mouse mode.
+• yas-global-mode[P] (yas/global-mode) Toggle Yas minor mode in all buffers.
+• yas-minor-mode[P] (yas/minor-mode)   Toggle YASnippet mode.
+• youtube-sub-extractor-subtitles-mode[P] Minor mode for youtube-sub-extractor.
+• zoom-mode[P]                         Perform ‘zoom’ automatically as the selected window changes.
