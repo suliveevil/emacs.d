@@ -7,6 +7,14 @@
 (setq use-short-answers t) ;; use y/n instead of yes/no
 (setq confirm-kill-emacs (lambda (prompt) (y-or-n-p-with-timeout "确认退出？" 10 "y")))
 
+;; custome-file
+;; {{{
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(unless (file-exists-p custom-file)
+  (write-region "" nil custom-file))
+(when (file-exists-p custom-file)
+  (load custom-file))
+;; }}}
 
 ;; encoding: prefer UTF-8 everywhere
 ;; {{{
@@ -47,6 +55,8 @@
 ;; {{{
 (setq vc-follow-symlinks t)
 ;; }}}
+
+
 
 ;; package: package-enable-at-startup is before init but after early-init
 ;; {{{
