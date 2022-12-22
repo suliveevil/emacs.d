@@ -161,11 +161,17 @@ Version 2018-06-18 2021-09-30"
          $fpath )))))
 ;; }}}
 
-
 ;; ido
 ;; {{{
 ;; (ido-mode 1)
 ;; (setq ido-vertical-mode t)
+;; }}}
+
+;; isearch
+;; {{{
+;; M-<: first match
+;; M->: last  match
+(setq isearch-lazy-count t) ;; anzu
 ;; }}}
 
 ;; package.el: mirror 插件镜像
@@ -253,6 +259,35 @@ Version 2018-06-18 2021-09-30"
   (insert "}"))
 ;; }}}
 
+
+;; helpful
+;; {{{
+;; Note that the built-in `describe-function' includes both functions
+;; and macros. `helpful-function' is functions only, so we provide
+;; `helpful-callable' as a drop-in replacement.
+(keymap-global-set "C-h f" #'helpful-callable)
+(keymap-global-set "C-h v" #'helpful-variable)
+(keymap-global-set "C-h k" #'helpful-key)
+;;
+;; Lookup the current symbol at point. C-c C-d is a common keybinding
+;; for this in lisp modes.
+(keymap-global-set "C-c C-d" #'helpful-at-point)
+;;
+;; Look up *F*unctions (excludes macros).
+(keymap-global-set "C-h F" #'helpful-function)
+;; By default, C-h F is bound to `Info-goto-emacs-command-node'. Helpful
+;; already links to the manual, if a function is referenced there.
+;;
+;; Look up *C*ommands.
+(keymap-global-set "C-h C" #'helpful-command)
+;; By default, C-h C is bound to describe `describe-coding-system'. I
+;; don't find this very useful, but it's frequently useful to only
+;; look at interactive functions.
+;;
+;; helpful + ivy
+;; (setq counsel-describe-function-function #'helpful-callable)
+;; (setq counsel-describe-variable-function #'helpful-variable)
+;; }}}
 
 ;; org-auto-tangle
 ;; {{{
@@ -625,7 +660,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
                     "#+title: ${title}\n")
          :unnarrowed t)
         ;; s:
-        ;; t: todo
+        ;; t: topic todo
+	                ("b" "book notes" plain "%?"
+                 :target (file+head "book/book%<%Y%m%d%H>-${slug}.org"
+									"#+title: ${title}\n#+filetags: :bookreading: \n\n")
+                 :unnarrowed t)
         ;; u:
         ;; v:
         ;; w:
