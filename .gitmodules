@@ -1,3 +1,6 @@
 [submodule "lib/keyfreq"]
 	path = lib/keyfreq
 	url = git@github.com:suliveevil/keyfreq.git
+[submodule "lib/org-auto-tangle"]
+	path = lib/org-auto-tangle
+	url = git@github.com:yilkalargaw/org-auto-tangle.git

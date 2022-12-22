@@ -249,6 +249,13 @@ Version 2018-06-18 2021-09-30"
   (insert "}"))
 ;; }}}
 
+
+;; org-auto-tangle
+;; {{{
+(require 'org-auto-tangle)
+(add-hook 'org-mode-hook 'org-auto-tangle-mode)
+;; }}}
+
 ;; magit + git-gutter
 (global-git-gutter-mode +1)
 
@@ -357,23 +364,24 @@ Version 2018-06-18 2021-09-30"
 
 ;; vertico-posframe
 ;; {{{
-;; (require 'vertico-posframe)
-;; (vertico-posframe-mode 1)
-;; (setq vertico-multiform-commands
-;;       '((consult-line
-;;          posframe
-;;          (vertico-posframe-poshandler . posframe-poshandler-frame-top-center)
-;;          (vertico-posframe-border-width . 10)
-;;          ;; NOTE: This is useful when emacs is used in both in X and
-;;          ;; terminal, for posframe do not work well in terminal, so
-;;          ;; vertico-buffer-mode will be used as fallback at the
-;;          ;; moment.
-;;          (vertico-posframe-fallback-mode . vertico-buffer-mode))
-;;         (t posframe)))
-;; (vertico-multiform-mode 1)
-;; (setq vertico-posframe-parameters
-;;       '((left-fringe . 20)
-;;         (right-fringe . 20)))
+(require 'posframe)
+(require 'vertico-posframe)
+(vertico-posframe-mode 1)
+(setq vertico-multiform-commands
+      '((consult-line
+         posframe
+         (vertico-posframe-poshandler . posframe-poshandler-frame-top-center)
+         (vertico-posframe-border-width . 10)
+         ;; NOTE: This is useful when emacs is used in both in X and
+         ;; terminal, for posframe do not work well in terminal, so
+         ;; vertico-buffer-mode will be used as fallback at the
+         ;; moment.
+         (vertico-posframe-fallback-mode . vertico-buffer-mode))
+        (t posframe)))
+(vertico-multiform-mode 1)
+(setq vertico-posframe-parameters
+      '((left-fringe . 20)
+        (right-fringe . 20)))
 ;; }}}
 
 ;; orderless: minibuffer filter, works with icomplete

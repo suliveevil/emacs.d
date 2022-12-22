@@ -1,0 +1,523 @@
+# -*- mode: org; coding: utf-8; -*-
+:PROPERTIES:
+:ID:       F624EBD2-6026-4CE9-A732-C43AF6FC0CB0
+:END:
+#+TITLE: config
+#+DATE: 2022-12-21 15:25:26 +0800
+
+
+
+* 使用 Org 管理 Emacs 配置
+
+
+
+[[https://github.com/suliveevil/emacs.d][suliveevil/emacs.d]]
+
+
+
+** misc
+
+[[https://github.com/phillord/lentic][phillord/lentic]]: Create views of the same content in two Emacs buffers
+
+org-auto-tangle
+
+[[https://github.com/novoid/dot-emacs][novoid/dot-emacs]]
+
+[[https://github.com/alhassy/emacs.d][alhassy/emacs.d]]
+
+[[https://github.com/willbchang/ward-emacs][willbchang/ward-emacs]]: Make Emacs an easy to use Text Editor for English and Chinese on macOS.
+
+[[https://github.com/kimim/kimim-emacs][kimim/kimim-emacs]]
+
+[[https://github.com/ilyaw39/.emacs.d][ilyaw39/.emacs.d]]: A simple setup for emacs-mac focusing on scientific writing in Org mode.
+
+[[https://github.com/xieyuheng/conf/tree/master/emacs][xieyuheng/conf/emacs]]
+
+[[https://github.com/HerculeWu/HubbleEmacs][HerculeWu/HubbleEmacs]]
+
+[[https://github.com/MatthewZMD/.emacs.d#org1b52e83][MatthewZMD/.emacs.d]]
+
+* Emacs & 插件
+
+** 环境与版本
+
+#+begin_quote
+GNU Emacs 30.0.50 (build 1, aarch64-apple-darwin22.2.0, NS appkit-2299.30
+ Version 13.1 (Build 22C65)) of 2022-12-09
+#+end_quote
+
+
+** Emacs 依赖
+
+[[./assets/emacs-plus-dependency.svg][Emacs Plus Dependency]]
+
+** 插件依赖
+
+[[./assets/emacs-package-dependency.svg][Emacs Packages Dependency]]
+
+* org-auto-tangle
+:PROPERTIES:
+:ID:       46E0BD8B-E8D6-4C18-81A2-152B33B8CCD2
+:END:
+#+auto_tangle: t
+
+test org-auto-tangle
+
+#+begin_src emacs-lisp
+  ;; 2022-12-23 02:27:06 +0800
+#+end_src
+
+* early-init.el
+:PROPERTIES: header-args:elisp :tangle (concat (file-name-directory (buffer-file-name)) "early-init.el")
+:ID:       784F9397-6131-4F5B-B2BE-6A4C87A9C36E
+:END:
+
+
+** Backtrace & Debug
+
+#+begin_src emacs-lisp
+  (setq debug-on-error t)
+  ;; (setq byte-compile-warnings not free-vars unresolved obsolete)
+  (setq byte-compile-warnings nil)
+#+end_src
+
+** Confirm before quit
+
+#+begin_src emacs-lisp
+  (setq confirm-kill-emacs (lambda (prompt) (y-or-n-p-with-timeout "确认退出？" 10 "y")))
+  ;; (setq confirm-kill-emacs 'yes-or-no-p)
+  (setq use-short-answers t) ;; use y/n instead of yes/no
+#+end_src
+
+** Garbage Collection
+
+#+begin_src emacs-lisp
+  ;; Increase the GC threshold for faster startup
+  ;; The default is 800 kilobytes.  Measured in bytes.
+  (setq gc-cons-threshold (* 1024 1024 500)) ;; 500 MiB
+#+end_src
+
+#+begin_src emacs-lisp
+  ;; Don't collect garbage when init
+  (setq gc-cons-threshold most-positive-fixnum) ;; 2^61 on my device
+#+end_src
+
+#+begin_src emacs-lisp
+  (setq gc-cons-percentage 0.6)
+#+end_src
+
+** Profile
+
+#+begin_src emacs-lisp
+  ;; Profile emacs startup
+  (add-hook 'emacs-startup-hook
+	    (lambda ()
+	      (message "*** Emacs loaded in %s with %d garbage collections."
+		       (format "%.2f seconds"
+			       (float-time
+				(time-subtract after-init-time before-init-time)))
+		       gcs-done)))
+#+end_src
+
+** OS & GUI detection
+
+#+begin_src emacs-lisp
+  (defconst *is-mac* (eq system-type 'darwin))
+  (defconst *is-linux* (eq system-type 'gnu/linux))
+  (defconst *is-windows* (or (eq system-type 'ms-dos) (eq system-type 'windows-nt)))
+#+end_src
+
+** UI
+
+** Version Control
+
+#+begin_src emacs-lisp
+  (setq vc-follow-symlinks t)
+#+end_src
+
+** provide
+
+#+begin_src emacs-lisp
+  (provide 'early-init)
+#+end_src
+
+** misc
+
+[[https://emacs-china.org/t/emacs-q-emacs/18380][速度突破裸配置／emacs -Q 的极限：emacs 启动时间只够你眨眼？ - Emacs China]]
+
+
+
+* init.el
+:PROPERTIES: header-args:elisp :tangle (concat (file-name-directory (buffer-file-name)) "init.el")
+:ID:       70B791B8-DF05-413C-B551-18405414C5C4
+:END:
+
+for custom.el
+
+#+begin_src emacs-lisp
+  (setq custom-file "~/.emacs.d/custom.el")
+  (ignore-errors (load custom-file)) ;; It may not yet exist.
+#+end_src
+
+* custom.el
+
+* custom-post.el
+
+
+
+* .dir-locals.el
+
+#+begin_src emacs-lisp
+  (setq enable-local-variables :safe)
+#+end_src
+
+
+* Package & Mode
+
+
+
+* Alias Abbrev Snippet
+
+
+
+* App 联动
+
+* Backyard 试验场
+
+** refresh-file
+
+不能处理 C-c ' 后的 Org 临时 buffer 内容
+
+* Bookmark 书签
+
+** binky-mode
+
+Jump between locations
+
+* Buffer
+
+* Character 字符
+
+** 大小写
+
+
+* Chinese 中文
+
+* Clipboard 剪贴板
+
+* Commands
+
+* Comment 注释
+
+* Completion 补全
+
+* DAP
+
+* Data 数据
+
+* Diagram 图表
+
+* Diff 文本对比
+
+* Doc 帮助文档
+
+* EAF
+
+* Edit
+
+* Emacs Lisp
+
+
+* Email 邮箱邮件
+
+** gnus
+
+
+* File 文件管理
+
+
+
+* Find & Search
+
+
+* Fold 折叠
+
+* Format 格式化/排版
+
+
+* Game 游戏
+
+
+* Git: Version Control 版本管理
+
+
+* Grammar & Spell
+
+
+
+* History 操作历史
+
+
+* Key 快捷键
+
+** keyfreq
+
+** repeat-mode
+
+* Link 连接和链接
+
+
+
+* LSP
+
+* Markdown
+
+
+* Mouse & Trackpad 鼠标和触控板
+
+* Multimedia
+
+** Audio
+
+*** STT
+
+*** TTS
+
+** Video
+
+** Lyric & Subtitle
+
+
+* Org
+
+
+** misc
+
+
+
+* Org-roam
+
+** basic
+
+#+begin_src emacs-lisp
+(use-package org-roam
+  :ensure t
+  :defer t ;; autoload
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ("C-c n j" . org-roam-dailies-capture-today) ;; Dailies
+         )
+  :config
+  ;; If you're using a vertical completion framework,
+  ;; you might want a more informative completion interface
+  (setq org-roam-directory (file-truename "~/MyNotes")) ;; default directory
+  ;; file-truename is optional
+  ;; it seems required when use symbolic links, which Org-roam does not resolve
+  (setq org-roam-file-extensions '("org" "md")) ;; enable Org-roam for markdown
+  (require 'org-roam-protocol)                  ;; org-roam-protocol
+  )
+#+end_src
+
+** backlink
+
+#+begin_src emacs-lisp
+(require 'org)
+(require 'org-roam)
+(cl-defmethod org-roam-node-directories ((node org-roam-node))
+  (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
+      (format "(%s)" (car (split-string dirs "/")))
+    ""))
+;;
+(cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
+  (let* ((count (caar (org-roam-db-query
+                       [:select (funcall count source)
+                                :from links
+                                :where (= dest $s1)
+                                :and (= type "id")]
+                       (org-roam-node-id node)))))
+    (format "[%d]" count)))
+;;
+(setq org-roam-node-display-template
+      "${directories:10} ${title:100} ${backlinkscount:6} ${tags:50}")
+#+end_src
+
+** completion
+
+#+begin_src emacs-lisp
+  (setq org-roam-completion-everywhere t)
+#+end_src
+
+** node hierarchy
+
+#+begin_src emacs-lisp
+    (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
+    (let ((level (org-roam-node-level node)))
+      (concat
+       (when (> level 0) (concat (org-roam-node-file-title node) " > "))
+       (when (> level 1) (concat (string-join (org-roam-node-olp node) " > ") " > "))
+       (org-roam-node-title node))))
+
+  (setq org-roam-node-display-template "${hierarchy:*} ${tags:20}")
+#+end_src
+
+** slug
+
+** tag filter
+
+#+begin_src emacs-lisp
+  (defun my/org-roam-filter-by-tag (tag-name)
+  (lambda (node)
+    (member tag-name (org-roam-node-tags node))))
+
+(defun my/org-roam-list-notes-by-tag (tag-name)
+  (mapcar #'org-roam-node-file
+          (seq-filter
+           (my/org-roam-filter-by-tag tag-name)
+           (org-roam-node-list))))
+#+end_src
+
+** template
+
+#+begin_src emacs-lisp
+  (setq org-roam-capture-templates
+      '(
+        ;; a: audio & music
+        ;; b: book
+        ;; c:
+        ("d" "default" plain "%?"
+         :target (file+head "${slug}.org"
+                            "#+TITLE: ${title}\n#+CATEGORY:\n#+FILETAGS:\n")
+         ;; #+DATE: %<%Y-%m-%d-%H:%M:%S %Z>\n
+         :empty-lines 1
+         :immediate-finish t
+         :kill-buffer t
+         :unnarrowed  t)
+        ;; ("e" "emacs" plain "%?"
+        ;;  :target (file+head "${title}.org"
+        ;;                     "#+TITLE: ${title}\n#+CATEGORY:\n#+FILETAGS:\n")
+        ;;  :unnarrowed  t)
+        ;; f:
+        ;; g:
+        ;; h: human
+        ;; i:
+        ;; j:
+        ;; k:
+        ;; l:
+        ;; m:
+        ;; n:
+        ;; o:
+        ;; p: project
+        ;; q:
+        ("r" "reference" plain "%? \n %(v-i-or-nothing) \n\n%(v-a-or-nothing)"
+         :target
+         (file+head "references/%<%Y%m%d%H%M%S>-${title}.org"
+                    "#+title: ${title}\n")
+         :unnarrowed t)
+        ;; s:
+        ;; t: todo
+        ;; u:
+        ;; v:
+        ;; w:
+        ;; x:
+        ;; y:
+        ;; z:
+        ))
+#+end_src
+
+** UI
+
+** org-roam-ui
+#+begin_src emacs-lisp
+  (use-package org-roam-ui
+  :after org-roam
+  ;; normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+  ;; a hookable mode anymore, you're advised to pick something yourself
+  ;; if you don't care about startup time, use
+  ;; :hook (after-init . org-roam-ui-mode)
+  :bind (("C-c G" . org-roam-ui-open)
+         )
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t)
+  )
+#+end_src
+
+** md-roam
+
+安装
+
+package-vc-install
+
+M-x package-vc-install RET https://github.com/nobiot/md-roam.git RET
+
+git submodule
+
+#+begin_src emacs-lisp
+  (add-to-list  'load-path "~/.config/emacs/extensions/md-roam")
+  (require 'md-roam)
+#+end_src
+
+#+begin_src emacs-lisp
+  (require 'org-roam)
+  (require 'md-roam)
+  (md-roam-mode 1)           ; md-roam-mode must be active before org-roam-db-sync
+  (setq md-roam-file-extension "md") ; default "md". Specify an extension such as "markdown"
+  (org-roam-db-autosync-mode 1) ; autosync-mode triggers db-sync. md-roam-mode must be already active
+#+end_src
+
+** provide
+
+#+begin_src emacs-lisp
+  (provide 'init-roam)
+#+end_src
+
+** misc
+
+* Programming 编程相关
+
+
+
+** ctag
+
+* Project 项目
+
+* Session/Workspace 工作区
+
+* Shell & Terminal
+
+* Syntax
+
+tree-sitter
+
+* UI
+
+
+* websocket
+
+
+* Window Management
+
+* WWW
+
+
+* memo
+
+
+天马行空/胡思乱想
+
+
+** DONE 给 diff-lisp 写一个函数，用一个快捷键执行两个操作：选择 A 和 B。
+
+* misc
+
+
+org-ql
+
+https://whhone.com/emacs-config/#taking-note-with-org-roam
+
+
