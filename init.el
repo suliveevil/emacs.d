@@ -409,6 +409,7 @@ Version 2018-06-18 2021-09-30"
 ;; {{{
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia
+  :insure: t
   ;; Either bind `marginalia-cycle' globally or only in the minibuffer
   :bind (("C-M-a" . marginalia-cycle)
          :map minibuffer-local-map
