@@ -35,6 +35,7 @@
 
 ;; UI
 ;; {{{
+(setq inhibit-splash-screen t)        ;; 禁用欢迎界面
 (tool-bar-mode -1)          ;; 工具栏
 (set-fringe-mode 10)        ;;
 (global-visual-line-mode 1) ;;
