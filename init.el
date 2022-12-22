@@ -94,6 +94,11 @@
 (add-hook 'after-init-hook 'benchmark-init/deactivate)
 ;; }}}
 
+;; org-auto-tangle
+;; {{{
+(require 'org-auto-tangle)
+(add-hook 'org-mode-hook 'org-auto-tangle-mode)
+;; }}}
 
 ;; package config
 ;; {{{
@@ -374,7 +379,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
         ;; c:
         ("d" "default" plain "%?"
          :target (file+head "${slug}.org"
-                            "#+title: ${title}\n#+category:\n#+filetags: \n")
+                            "#+title: ${title}\n#+category:\n#+filetags:\n")
          ;; #+date: %<%Y-%m-%d-%H:%M:%S %Z>\n
          :empty-lines 1
          :immediate-finish t
