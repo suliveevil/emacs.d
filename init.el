@@ -1,3 +1,4 @@
+;; -*- origami-fold-style: triple-braces -*-
 ;; init
 
 ;; completion: buffer and minibuffer
@@ -284,10 +285,22 @@ Version 2018-06-18 2021-09-30"
 (add-hook 'after-init-hook 'benchmark-init/deactivate)
 ;; }}}
 
-;; org-auto-tangle
+;; avy
 ;; {{{
-(require 'org-auto-tangle)
-(add-hook 'org-mode-hook 'org-auto-tangle-mode)
+;; https://karthinks.com/software/avy-can-do-anything
+(keymap-global-set "C-;"     #'avy-goto-char)
+(keymap-global-set "C-'"     #'avy-goto-char-2)
+(keymap-global-set "M-g f"   #'avy-goto-line)
+(keymap-global-set "M-g w"   #'avy-goto-word-1)
+(keymap-global-set "M-g e"   #'avy-goto-word-0)
+(keymap-global-set "C-c C-j" #'avy-resume)
+;; }}}
+
+;; ace-pinyin
+;; {{{
+(require 'ace-pinyin)
+(setq ace-pinyin-use-avy t)
+(ace-pinyin-global-mode +1)
 ;; }}}
 
 ;; package config
