@@ -41,10 +41,10 @@
 ;; (setq backup-directory-alist `((".*" . ,(expand-file-name "backup" user-emacs-directory))))
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
-(setq make-backup-files t         ; backup of a file the first time it is saved.
-      backup-by-copying t         ; don't clobber symlinks
-      version-control t           ; version numbers for backup files
-      delete-old-versions t       ; delete excess backup files silently
+(setq make-backup-files t ; backup of a file the first time it is saved.
+      backup-by-copying t ; don't clobber symlinks
+      version-control t	  ; version numbers for backup files
+      delete-old-versions t	 ; delete excess backup files silently
       delete-by-moving-to-trash t
       dired-kept-versions 2
       kept-old-versions 6 ; oldest versions to keep when a new numbered backup is made (default: 2)
@@ -84,7 +84,7 @@
 
 ;; 快速打开文件
 ;; {{{
-(defun open-init-file()	;; Emacs init
+(defun open-init-file() ;; Emacs init
   (interactive)
   (find-file "~/.config/emacs/init.el"))
 ;; (keymap-global-set "<f2>" #'open-init-file)
@@ -159,6 +159,54 @@ Version 2018-06-18 2021-09-30"
        (progn
          (message "File path copied: %s" $fpath)
          $fpath )))))
+;; }}}
+
+;; refresh-file: format/indent elisp file
+;; {{{
+;; https://github.com/manateelazycat/lazycat-emacs/blob/master/site-lisp/extensions/lazycat/basic-toolkit.el
+(defun refresh-file ()
+  "Automatic reload current file."
+  (interactive)
+  (cond ((eq major-mode 'emacs-lisp-mode)
+         (indent-buffer)
+         (indent-comment-buffer)
+         (save-buffer)
+         (load-file (buffer-file-name)))
+        ((member major-mode '(lisp-mode c-mode perl-mode))
+         (indent-buffer)
+         (indent-comment-buffer)
+         (save-buffer))
+        ((member major-mode '(haskell-mode sh-mode))
+         (indent-comment-buffer)
+         (save-buffer))
+        ((derived-mode-p 'scss-mode)
+         (require 'css-sort)
+         (css-sort))
+        (t (message "Current mode is not supported, so not reload"))))
+(defun indent-buffer ()
+  "Automatic format current buffer."
+  (interactive)
+  (if (derived-mode-p 'python-mode)
+      (message "Don't indent python buffer, it will mess up the code syntax.")
+    (save-excursion
+      (indent-region (point-min) (point-max) nil)
+      (delete-trailing-whitespace)
+      (untabify (point-min) (point-max)))))
+(defun indent-comment-buffer ()
+  "Indent comment of buffer."
+  (interactive)
+  (indent-comment-region (point-min) (point-max)))
+
+(defun indent-comment-region (start end)
+  "Indent region."
+  (interactive "r")
+  (save-excursion
+    (setq end (copy-marker end))
+    (goto-char start)
+    (while (< (point) end)
+      (if (comment-search-forward end t)
+          (comment-indent)
+        (goto-char end)))))
 ;; }}}
 
 ;; ido
@@ -353,9 +401,9 @@ Version 2018-06-18 2021-09-30"
 ;; {{{
 (add-hook 'prog-mode-hook 'origami-mode)
 (with-eval-after-load 'origami
-    (define-key origami-mode-map (kbd "C-c f") 'origami-recursively-toggle-node)
-    (define-key origami-mode-map (kbd "C-c F") 'origami-toggle-all-nodes)
-    )
+  (define-key origami-mode-map (kbd "C-c f") 'origami-recursively-toggle-node)
+  (define-key origami-mode-map (kbd "C-c F") 'origami-toggle-all-nodes)
+  )
 ;; }}}
 
 ;; vertico
@@ -661,10 +709,10 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
          :unnarrowed t)
         ;; s:
         ;; t: topic todo
-	                ("b" "book notes" plain "%?"
-                 :target (file+head "book/book%<%Y%m%d%H>-${slug}.org"
-									"#+title: ${title}\n#+filetags: :bookreading: \n\n")
-                 :unnarrowed t)
+        ("t" "topic" plain "%?"
+         :target (file+head "topics/${title}.org"
+                            "#+title: ${title}\n")
+         :unnarrowed t)
         ;; u:
         ;; v:
         ;; w:
