@@ -40,6 +40,7 @@ it is disabled.
 (autoload 'marginalia-cycle "marginalia" "\
 Cycle between annotators in `marginalia-annotator-registry'." t)
 (register-definition-prefixes "marginalia" '("marginalia-"))
+
 
 ;;; End of scraped data
 

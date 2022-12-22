@@ -220,6 +220,9 @@ Version 2018-06-18 2021-09-30"
                                    ("jcs-elpa"                   . 7)
                                    ))
 (package-initialize) ;; pair with (setq package-enable-at-startup nil) ;; early-init
+;; 防止反复调用 package-refresh-contents 影响加载速度
+(when (not package-archive-contents)
+  (package-refresh-contents))
 ;; }}}
 
 ;; package dependency graph (Graphviz)
@@ -349,7 +352,7 @@ Version 2018-06-18 2021-09-30"
 (use-package vertico-directory
   :after vertico
   :ensure nil
-  ;; More convenient directory navigation commands
+  ;; ;;  More convenient directory navigation commands
   :bind (:map vertico-map
               ("RET" . vertico-directory-enter)
               ("DEL" . vertico-directory-delete-char)
