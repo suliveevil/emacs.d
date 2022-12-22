@@ -1,6 +1,6 @@
 Benchmark results
 
-╼►[benchmark-init/root nil 268ms]
+╼►[benchmark-init/root nil 269ms]
   ├─[default load 6ms]
   ├─[keyfreq require 10ms]
   ├─[org-roam require 3ms]
@@ -31,12 +31,12 @@ Benchmark results
   │ │   ╰─[compat-24 load 4ms]
   │ │     ╰─[compat-macs require 6ms]
   │ ╰─[dash require 6ms]
-  ├─[vertico-posframe require 1ms]
-  ├─[posframe require 59ms]
+  ├─[vertico-posframe require 2ms]
+  ├─[posframe require 60ms]
   ├─[kmacro require 6ms]
   ├─[bind-key require 4ms]
   │ ╰─[easy-mmode require 6ms]
   ├─[~/.config/emacs/history load 1ms]
   ╰─[ace-pinyin require 7ms]
     ├─[pinyinlib require 2ms]
-    ╰─[avy require 4ms]
+    ╰─[avy require 5ms]
