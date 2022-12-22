@@ -310,6 +310,16 @@ Version 2018-06-18 2021-09-30"
 ;; (require 'init-package) ;; packages installed by package.el
 ;; }}}
 
+
+;; fold: origami
+;; {{{
+(add-hook 'prog-mode-hook 'origami-mode)
+(with-eval-after-load 'origami
+    (define-key origami-mode-map (kbd "C-c f") 'origami-recursively-toggle-node)
+    (define-key origami-mode-map (kbd "C-c F") 'origami-toggle-all-nodes)
+    )
+;; }}}
+
 ;; vertico
 ;; {{{
 (use-package vertico
@@ -409,7 +419,7 @@ Version 2018-06-18 2021-09-30"
 ;; {{{
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia
-  :insure: t
+  :ensure t
   ;; Either bind `marginalia-cycle' globally or only in the minibuffer
   :bind (("C-M-a" . marginalia-cycle)
          :map minibuffer-local-map
