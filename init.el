@@ -1060,6 +1060,8 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; {{{
 ;; (require 'topsy)
 (add-hook 'prog-mode-hook #'topsy-mode)
+;; (require 'org-sticky-header)
+(add-hook 'org-mode-hook #'org-sticky-header-mode)
 ;; }}}
 
 ;; init.el
