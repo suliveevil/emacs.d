@@ -307,6 +307,25 @@ Version 2018-06-18 2021-09-30"
   (insert "}"))
 ;; }}}
 
+;; pyim
+;; {{{
+(require 'pyim)
+(require 'pyim-cregexp-utils)
+(require 'pyim-cstring-utils)
+;; (require 'pyim-basedict) ; 拼音词库设置
+;; (pyim-basedict-enable)   ; 拼音词库
+(require 'pyim-greatdict)
+(pyim-greatdict-enable)
+(setq default-input-method "pyim")
+(setq pyim-page-tooltip '(posframe popup minibuffer))
+(setq pyim-page-length 9)
+;; 金手指设置，可以将光标处的编码，比如：拼音字符串，转换为中文。
+(global-set-key (kbd "M-j") 'pyim-convert-string-at-point)
+;; 按 "C-<return>" 将光标前的 regexp 转换为可以搜索中文的 regexp.
+(define-key minibuffer-local-map (kbd "C-<return>") 'pyim-cregexp-convert-at-point)
+(pyim-default-scheme 'quanpin)
+(pyim-isearch-mode 1) ;; 开启代码搜索中文功能（比如拼音，五笔码等）
+;; }}}
 
 ;; helpful
 ;; {{{

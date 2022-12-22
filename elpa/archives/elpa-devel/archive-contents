@@ -591,7 +591,7 @@
 		     (:authors
 		      ("Jackson Ray Hamilton" . "jackson@jacksonrayhamilton.com")))])
  (corfu .
-	[(0 34 0 20221221 220050)
+	[(0 34 0 20221222 154808)
 	 ((emacs
 	   (27 1)))
 	 "Completion Overlay Region FUnction" tar
@@ -599,7 +599,7 @@
 	  (:maintainer "Daniel Mendler" . "mail@daniel-mendler.de")
 	  (:authors
 	   ("Daniel Mendler" . "mail@daniel-mendler.de"))
-	  (:commit . "8b4c3c27ab49b7a5f42d880565e4c8b2d01bc025"))])
+	  (:commit . "d524a0c738f6c5dcc4234d5779035965b1bdf28c"))])
  (coterm .
 	 [(1 6 0 20221005 121655)
 	  ((emacs
@@ -2059,7 +2059,7 @@
 	(:url . "https://elpa.gnu.org/packages/map.html")
 	(:commit . "e25a108b09d12502527620ec379a0950cb577311"))])
  (marginalia .
-	     [(0 15 0 20221206 14702)
+	     [(1 0 0 20221222 143418)
 	      ((emacs
 		(27 1)))
 	      "Enrich existing commands with completion annotations" tar
@@ -2067,7 +2067,7 @@
 	       (:maintainer "Omar Antolín Camarena <omar@matem.unam.mx>, Daniel Mendler" . "mail@daniel-mendler.de")
 	       (:authors
 		("Omar Antolín Camarena <omar@matem.unam.mx>, Daniel Mendler" . "mail@daniel-mendler.de"))
-	       (:commit . "58ce23c92072a1274633f7567caa1aeca4c1b550"))])
+	       (:commit . "4c8f6b8848cc47d70431adb74864967cc5986895"))])
  (markchars .
 	    [(0 2 2 0 20221221 80510)
 	     nil "Mark chars fitting certain characteristics" tar
@@ -3871,7 +3871,7 @@
 		  ("Wilson Snyder" . "wsnyder@wsnyder.org"))
 		 (:commit . "79e1bff2694444a27036b08e8fa2a6619b40dc2a"))])
  (vertico .
-	  [(0 29 0 20221221 225811)
+	  [(1 0 0 20221222 154855)
 	   ((emacs
 	     (27 1)))
 	   "VERTical Interactive COmpletion" tar
@@ -3879,7 +3879,7 @@
 	    (:maintainer "Daniel Mendler" . "mail@daniel-mendler.de")
 	    (:authors
 	     ("Daniel Mendler" . "mail@daniel-mendler.de"))
-	    (:commit . "25676de12bc19cb4cc6c159d04b108923c9045b0"))])
+	    (:commit . "bedd146c3ffc236d746d088a94c3858eca0618d9"))])
  (vertico-posframe .
 		   [(0 6 0 0 20221219 231923)
 		    ((emacs
