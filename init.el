@@ -249,6 +249,25 @@ Version 2018-06-18 2021-09-30"
   (insert "}"))
 ;; }}}
 
+;; magit + git-gutter
+(global-git-gutter-mode +1)
+
+;; package database: epkg + epkgs
+;; {{{
+(setq epkg-repository "~/Documents/GitHub/epkgs")
+(setq package-list-unversioned t) ;; unversioned packages(ibuffer and so on)
+;; 怎样快速找到 elpa 目录下那些重复的包 - Emacs China
+;; https://emacs-china.org/t/topic/4244
+(defun list-packages-and-versions ()
+  "Returns a list of all installed packages and their versions"
+  (interactive)
+  (mapcar
+   (lambda (pkg)
+     `(,pkg ,(package-desc-version
+              (cadr (assq pkg package-alist)))))
+   package-activated-list))
+;; }}}
+
 ;; profile: benchmark-init
 ;; {{{
 (require 'benchmark-init-modes)

@@ -1,4 +1,8 @@
-digraph G {"emacsql" -> "emacs";
+digraph G {"epkg" -> "emacs";
+"epkg" -> "compat";
+"epkg" -> "closql";
+"epkg" -> "llama";
+"emacsql" -> "emacs";
 "websocket" -> "cl-lib";
 "orderless" -> "emacs";
 "org-roam" -> "emacs";
@@ -14,7 +18,11 @@ digraph G {"emacsql" -> "emacs";
 "compat" -> "emacs";
 "compat" -> "nadvice";
 "simple-httpd" -> "cl-lib";
+"git-gutter" -> "emacs";
 "dash" -> "emacs";
+"closql" -> "emacs";
+"closql" -> "compat";
+"closql" -> "emacsql-sqlite";
 "async" -> "emacs";
 "marginalia" -> "emacs";
 "org-auto-tangle" -> "emacs";
@@ -26,4 +34,5 @@ digraph G {"emacsql" -> "emacs";
 "emacsql-sqlite" -> "emacs";
 "emacsql-sqlite" -> "emacsql";
 "benchmark-init" -> "emacs";
+"llama" -> "seq";
 }
