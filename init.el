@@ -665,6 +665,20 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   )
 ;; }}}
 
+;; markdown-mode
+;; {{{
+(autoload 'markdown-mode "markdown-mode"
+  "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist
+             '("\\.\\(?:md\\|markdown\\|mk/d\\|mdown\\|mkdn\\|mdwn\\)\\'" . markdown-mode))
+(autoload 'gfm-mode "markdown-mode"
+  "Major mode for editing GitHub Flavored Markdown files" t)
+(add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
+(setq markdown-command "multimarkdown")
+(setq markdown-enable-wiki-links t) ;; wikilink/backlink
+(setq markdown-wiki-link-search-type "project")
+;; }}}
+
 ;; md-roam
 ;; {{{
 ;; https://emacs.stackexchange.com/questions/5465/how-to-migrate-markdown-files-to-emacs-org-mode-format
