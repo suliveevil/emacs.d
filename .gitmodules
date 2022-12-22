@@ -7,3 +7,6 @@
 [submodule "lib/pyim-greatdict"]
 	path = lib/pyim-greatdict
 	url = git@github.com:tumashu/pyim-greatdict.git
+[submodule "lib/pyim-tsinghua-dict"]
+	path = lib/pyim-tsinghua-dict
+	url = git@github.com:redguardtoo/pyim-tsinghua-dict.git

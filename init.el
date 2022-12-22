@@ -312,19 +312,36 @@ Version 2018-06-18 2021-09-30"
 (require 'pyim)
 (require 'pyim-cregexp-utils)
 (require 'pyim-cstring-utils)
+(keymap-global-set "M-f" 'pyim-forward-word)
+(keymap-global-set "M-b" 'pyim-backward-word)
 ;; (require 'pyim-basedict) ; 拼音词库设置
 ;; (pyim-basedict-enable)   ; 拼音词库
-(require 'pyim-greatdict)
-(pyim-greatdict-enable)
+;; (require 'pyim-greatdict)
+;; (pyim-greatdict-enable)
+(require 'pyim-tsinghua-dict)
+(pyim-tsinghua-dict-enable)
 (setq default-input-method "pyim")
 (setq pyim-page-tooltip '(posframe popup minibuffer))
 (setq pyim-page-length 9)
+(setq-default pyim-punctuation-translate-p '(auto)) ;; 全角半角
 ;; 金手指设置，可以将光标处的编码，比如：拼音字符串，转换为中文。
 (global-set-key (kbd "M-j") 'pyim-convert-string-at-point)
 ;; 按 "C-<return>" 将光标前的 regexp 转换为可以搜索中文的 regexp.
 (define-key minibuffer-local-map (kbd "C-<return>") 'pyim-cregexp-convert-at-point)
 (pyim-default-scheme 'quanpin)
 (pyim-isearch-mode 1) ;; 开启代码搜索中文功能（比如拼音，五笔码等）
+;; 让 vertico, selectrum 等补全框架，通过 orderless 支持拼音搜索候选项功能。
+(defun my-orderless-regexp (orig-func component)
+  (let ((result (funcall orig-func component)))
+    (pyim-cregexp-build result)))
+(advice-add 'orderless-regexp :around #'my-orderless-regexp)
+;; }}}
+
+;; ace-pinyin
+;; {{{
+(require 'ace-pinyin)
+(setq ace-pinyin-use-avy t)
+(ace-pinyin-global-mode +1)
 ;; }}}
 
 ;; helpful
@@ -401,12 +418,6 @@ Version 2018-06-18 2021-09-30"
 (keymap-global-set "C-c C-j" #'avy-resume)
 ;; }}}
 
-;; ace-pinyin
-;; {{{
-(require 'ace-pinyin)
-(setq ace-pinyin-use-avy t)
-(ace-pinyin-global-mode +1)
-;; }}}
 
 ;; package config
 ;; {{{
@@ -514,10 +525,10 @@ Version 2018-06-18 2021-09-30"
 
 ;; orderless: minibuffer filter, works with icomplete
 ;; {{{
-;; (require 'orderless)
-;; (setq completion-styles '(orderless basic)
-;;       completion-category-defaults nil
-;;       completion-category-overrides '((file (styles basic partial-completion))))
+(require 'orderless)
+(setq completion-styles '(orderless basic)
+      completion-category-defaults nil
+      completion-category-overrides '((file (styles basic partial-completion))))
 ;; }}}
 
 ;; marginalia: minibuffer annotations
