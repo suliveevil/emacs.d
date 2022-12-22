@@ -1,6 +1,63 @@
 ;; -*- origami-fold-style: triple-braces -*-
 ;; init
 
+;; frame
+;; {{{
+(setq frame-size-history t)
+(setq frame-title-format
+      '(buffer-file-name (:eval (abbreviate-file-name buffer-file-name))
+                         (dired-directory dired-directory "%b")))
+;; }}}
+
+;; font and syntax
+;; {{{
+(set-face-attribute 'default nil
+                    :family "Sarasa Mono SC Nerd"
+                    :height 140 ;; 更改显示字体大小
+                    )
+(global-font-lock-mode t) ;; turn on syntax highlighting for all buffers
+;; }}}
+
+;; pretty-symbols
+;; {{{
+(add-hook 'prog-mode-hook 'prettify-symbols-mode)
+(setq-default prettify-symbols-alist
+              '(("lambda" . ?λ)
+                ("function" . ?𝑓)))
+;; }}}
+
+;; cursor
+;; {{{
+;; make cursor the width of the character it is under
+;; i.e. full width of a TAB
+(setq x-stretch-cursor t)
+;; cursor line: 光标所在行显示/高亮
+(global-hl-line-mode t) ;; highlight current line
+(custom-set-faces '(hl-line ((t (:background "grey")))))
+;; }}}
+
+;; line: wrap/truncate
+;; {{{
+(setq word-wrap-by-category t) ;; improves CJK + Latin word-wrapping
+(setq scroll-margin 5)
+(global-display-line-numbers-mode 1)
+(setq global-display-line-numbers-width-start t)
+(setq display-line-numbers-grow-only t)    ;; do not shrink line number width
+(setq display-line-numbers-type 'relative) ;; 相对行号
+;; }}}
+
+;; column
+;; {{{
+(setq-default fill-column 80) ;; M-x set-fill-column RET
+(add-hook 'after-init-hook 'global-display-fill-column-indicator-mode)
+;; }}}
+
+;; mode-line
+;; {{{
+(display-battery-mode t) ;; display battery status
+(setq column-number-mode t) ;; 在 mode line 数字形式显示光标所在列
+;; }}}
+
 ;; completion: buffer and minibuffer
 ;; {{{
 ;; window
@@ -434,6 +491,14 @@ Version 2018-06-18 2021-09-30"
   (define-key origami-mode-map (kbd "C-c f") 'origami-recursively-toggle-node)
   (define-key origami-mode-map (kbd "C-c F") 'origami-toggle-all-nodes)
   )
+;; }}}
+
+;; goggles: visual hint for operations
+;; {{{
+(use-package goggles
+  :hook ((prog-mode text-mode) . goggles-mode)
+  :config
+  (setq-default goggles-pulse t)) ;; set to nil to disable pulsing
 ;; }}}
 
 ;; vertico
@@ -968,6 +1033,33 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;;        )))
 ;; }}}
 
+;; highlight-parentheses
+;; {{{
+(require 'highlight-parentheses)
+;; (add-hook 'prog-mode-hook #'highlight-parentheses-mode)
+(global-highlight-parentheses-mode 1)
+;; 括号颜色（由内向外）
+(setq highlight-parentheses-colors '(
+                                     "Green"
+                                     "Blue"
+                                     "Orange"
+                                     "Purple"
+                                     "Yellow"
+                                     "Red"
+                                     ;; "Pink" ;; only six colors supported ?
+                                     ))
+;; Apple Six Colors
+;; (setq highlight-parentheses-colors '("#61BB46" "#FDB827" "#F5821F" "#E03A3E" "#963D97" "#009DDC"))
+;;
+;; Emacs builtin
+;; (setq show-paren-when-point-inside-paren t
+;;       show-paren-when-point-in-periphery t)
+;; }}}
 
+;; sticky header: topsy
+;; {{{
+;; (require 'topsy)
+(add-hook 'prog-mode-hook #'topsy-mode)
+;; }}}
 
 ;; init.el
