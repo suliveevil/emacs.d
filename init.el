@@ -768,21 +768,6 @@ Version 2018-06-18 2021-09-30"
   (setq vertico-cycle t)
   )
 
-
-(add-hook 'vertico-mode-hook
-          (lambda ()
-            ;; (keymap-set vertico-mode-hook "?"
-            ;;             'minibuffer-completion-help)
-            ;; (keymap-set vertico-mode-map "M-RET"
-            ;;             'minibuffer-force-complete-and-exit)
-            ;; (keymap-set vertico-map "M-TAB"
-            ;;       'minibuffer-complete)
-            (keymap-set vertico-map "C-<return>"
-                        'vertico-exit-input)
-            ))
-
-
-
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
   :init
