@@ -270,6 +270,16 @@ Jump between locations
 
 * LSP
 
+** lsp-bridge
+
+*** 冲突
+lsp-mode
+eglot
+company-mode
+corfu
+
+
+
 * Markdown
 
 

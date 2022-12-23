@@ -768,6 +768,10 @@ Version 2018-06-18 2021-09-30"
   (setq vertico-cycle t)
   )
 
+(define-key vertico-map "?" #'minibuffer-completion-help)
+(define-key vertico-map (kbd "M-RET") #'minibuffer-force-complete-and-exit)
+(define-key vertico-map (kbd "M-TAB") #'minibuffer-complete)
+
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
   :init
@@ -1053,6 +1057,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
         ("t" "topic" plain "%?"
          :target (file+head "topics/${title}.org"
                             "#+title: ${title}\n")
+	 :immediate-finish t
          :unnarrowed t)
         ;; u:
         ;; v:

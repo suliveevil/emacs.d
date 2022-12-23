@@ -13,6 +13,7 @@ digraph G {"epkg" -> "emacs";
 "deadgrep" -> "spinner";
 "transient" -> "emacs";
 "transient" -> "compat";
+"yasnippet" -> "cl-lib";
 "graphviz-dot-mode" -> "emacs";
 "xr" -> "emacs";
 "org-roam" -> "emacs";
