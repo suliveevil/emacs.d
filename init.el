@@ -1,6 +1,23 @@
 ;; -*- origami-fold-style: triple-braces -*-
 ;; init
 
+;; buffer
+;; {{{
+(defun my/side-buffer ()
+  (interactive)
+  (let ((other (buffer-name (window-buffer (next-window)))))
+    (delete-other-windows)
+    (set-frame-width (selected-frame)
+                     (+ (frame-width (selected-frame)) (window-width)))
+    (split-window-horizontally)
+    (split-window-vertically)
+    (with-selected-window (next-window)
+      (set-window-buffer (selected-window) other))
+    (with-selected-window (previous-window)
+      (set-window-buffer (selected-window) "*Scratch*"))))
+(keymap-global-set "C-c B" #'my/side-buffer)
+;; }}}
+
 ;; chunk
 ;; {{{
 ;; Increase how much is read from processes in a single chunk (default is 4kb)
@@ -29,6 +46,27 @@ occurence of CHAR."
 ;; [go-to-char.el - EmacsWiki](https://www.emacswiki.org/emacs/go-to-char.el)
 ;; [joseph-go-to-char - EmacsWiki](https://www.emacswiki.org/emacs/joseph-go-to-char)
 ;; [doitian/iy-go-to-char: Go to next CHAR which is similar to "f" and "t" in vim](https://github.com/doitian/iy-go-to-char)
+;; }}}
+
+;; window
+;; {{{
+;; toggle one window
+;; https://github.com/manateelazycat/toggle-one-window
+(defvar toggle-one-window-window-configuration nil
+  "The window configuration use for `toggle-one-window'.")
+;;
+(defun my/toggle-one-window ()
+  "Toggle between window layout and one window."
+  (interactive)
+  (if (equal (length (cl-remove-if #'window-dedicated-p (window-list))) 1)
+      (if toggle-one-window-window-configuration
+          (progn
+            (set-window-configuration toggle-one-window-window-configuration)
+            (setq toggle-one-window-window-configuration nil))
+        (message "No other windows exist."))
+    (setq toggle-one-window-window-configuration (current-window-configuration))
+    (delete-other-windows)))
+(keymap-global-set "C-c C-w" #'my/toggle-one-window)
 ;; }}}
 
 ;; frame
@@ -72,6 +110,23 @@ occurence of CHAR."
 (keymap-global-set "s-x" #'kill-region)             ;; C-w    : cut       : 剪切
 (keymap-global-set "s-z" #'undo)                    ;; C-_    : undo      : 撤销
 (keymap-global-set "s-Z" #'undo-redo)               ;; C-M-_  : undo-redo : 重做
+;;
+(keymap-global-set "S-s-<return>" #'toggle-frame-maximized)
+(keymap-global-set "C-s-f"        #'toggle-frame-fullscreen) ;; macOS
+;; }}}
+
+;; mouse
+;; {{{
+;; (defun mouse-hover-tooltip (&optional arg)
+;;   "Show mouse hover help info using pos-tip-show."
+;;   (interactive)
+;;   (let ((help (help-at-pt-kbd-string)))
+;;     (if help
+;;         (pos-tip-show help nil nil nil 0)
+;;       (if (not arg) (message "No local help at point"))))
+;;   (unwind-protect
+;;       (push (read-event) unread-command-events)
+;;     (pos-tip-hide)))
 ;; }}}
 
 ;; pretty-symbols
@@ -136,7 +191,7 @@ occurence of CHAR."
 ;; {{{
 (add-hook 'prog-mode 'hs-minor-mode)
 (add-to-list 'hs-special-modes-alist
-	     '(emacs-lisp-mode "{" "}" ";;" nil nil))
+             '(emacs-lisp-mode "{" "}" ";;" nil nil))
 (keymap-global-set "C-c TAB" #'hs-toggle-hiding)
 (keymap-global-set "M-+" #'hs-show-all)
 ;; }}}
@@ -165,8 +220,8 @@ occurence of CHAR."
       `((".*" . ,temporary-file-directory)))
 (setq make-backup-files t ; backup of a file the first time it is saved.
       backup-by-copying t ; don't clobber symlinks
-      version-control t	  ; version numbers for backup files
-      delete-old-versions t	 ; delete excess backup files silently
+      version-control t   ; version numbers for backup files
+      delete-old-versions t      ; delete excess backup files silently
       delete-by-moving-to-trash t
       dired-kept-versions 2
       kept-old-versions 6 ; oldest versions to keep when a new numbered backup is made (default: 2)
@@ -751,7 +806,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
      (org-roam-node-title node))))
 ;;
 (setq org-roam-node-display-template
-      "${directories:10} ${title:50} ${hierarchy:*} ${backlinkscount:6} ${tags:50}")
+      "${title:50} ${hierarchy:*} ${backlinkscount:6} ${tags:50} ${directories:10}")
 ;;
 ;; (setq org-roam-node-display-template (concat
 ;;                                    "${type:8} ${backlinkscount:3} ${hierarchy:*}"
