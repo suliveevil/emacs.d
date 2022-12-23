@@ -49,11 +49,11 @@ GNU Emacs 30.0.50 (build 1, aarch64-apple-darwin22.2.0, NS appkit-2299.30
 
 ** Emacs 依赖
 
-[[./assets/emacs-plus-dependency.svg][Emacs Plus Dependency]]
+[[file:./assets/emacs-plus-dependency.svg][Emacs Plus Dependency]]
 
 ** 插件依赖
 
-[[./assets/emacs-package-dependency.svg][Emacs Packages Dependency]]
+[[file:./assets/emacs-package-dependency.svg][Emacs Packages Dependency]]
 
 * org-auto-tangle
 :PROPERTIES:
@@ -353,14 +353,14 @@ Jump between locations
 ** node hierarchy
 
 #+begin_src emacs-lisp
-    (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
-    (let ((level (org-roam-node-level node)))
-      (concat
-       (when (> level 0) (concat (org-roam-node-file-title node) " > "))
-       (when (> level 1) (concat (string-join (org-roam-node-olp node) " > ") " > "))
-       (org-roam-node-title node))))
+  (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
+  (let ((level (org-roam-node-level node)))
+    (concat
+     (when (> level 0) (concat (org-roam-node-file-title node) " > "))
+     (when (> level 1) (concat (string-join (org-roam-node-olp node) " > ") " > "))
+     (org-roam-node-title node))))
 
-  (setq org-roam-node-display-template "${hierarchy:*} ${tags:20}")
+(setq org-roam-node-display-template "${hierarchy:*} ${tags:20}")
 #+end_src
 
 ** slug
@@ -382,69 +382,69 @@ Jump between locations
 ** template
 
 #+begin_src emacs-lisp
-  (setq org-roam-capture-templates
-      '(
-        ;; a: audio & music
-        ;; b: book
-        ;; c:
-        ("d" "default" plain "%?"
-         :target (file+head "${slug}.org"
-                            "#+TITLE: ${title}\n#+CATEGORY:\n#+FILETAGS:\n")
-         ;; #+DATE: %<%Y-%m-%d-%H:%M:%S %Z>\n
-         :empty-lines 1
-         :immediate-finish t
-         :kill-buffer t
-         :unnarrowed  t)
-        ;; ("e" "emacs" plain "%?"
-        ;;  :target (file+head "${title}.org"
-        ;;                     "#+TITLE: ${title}\n#+CATEGORY:\n#+FILETAGS:\n")
-        ;;  :unnarrowed  t)
-        ;; f:
-        ;; g:
-        ;; h: human
-        ;; i:
-        ;; j:
-        ;; k:
-        ;; l:
-        ;; m:
-        ;; n:
-        ;; o:
-        ;; p: project
-        ;; q:
-        ("r" "reference" plain "%? \n %(v-i-or-nothing) \n\n%(v-a-or-nothing)"
-         :target
-         (file+head "references/%<%Y%m%d%H%M%S>-${title}.org"
-                    "#+title: ${title}\n")
-         :unnarrowed t)
-        ;; s:
-        ;; t: todo
-        ;; u:
-        ;; v:
-        ;; w:
-        ;; x:
-        ;; y:
-        ;; z:
-        ))
+(setq org-roam-capture-templates
+    '(
+      ;; a: audio & music
+      ;; b: book
+      ;; c:
+      ("d" "default" plain "%?"
+       :target (file+head "${slug}.org"
+                          "#+TITLE: ${title}\n#+CATEGORY:\n#+FILETAGS:\n")
+       ;; #+DATE: %<%Y-%m-%d-%H:%M:%S %Z>\n
+       :empty-lines 1
+       :immediate-finish t
+       :kill-buffer t
+       :unnarrowed  t)
+      ;; ("e" "emacs" plain "%?"
+      ;;  :target (file+head "${title}.org"
+      ;;                     "#+TITLE: ${title}\n#+CATEGORY:\n#+FILETAGS:\n")
+      ;;  :unnarrowed  t)
+      ;; f:
+      ;; g:
+      ;; h: human
+      ;; i:
+      ;; j:
+      ;; k:
+      ;; l:
+      ;; m:
+      ;; n:
+      ;; o:
+      ;; p: project
+      ;; q:
+      ("r" "reference" plain "%? \n %(v-i-or-nothing) \n\n%(v-a-or-nothing)"
+       :target
+       (file+head "references/%<%Y%m%d%H%M%S>-${title}.org"
+                  "#+title: ${title}\n")
+       :unnarrowed t)
+      ;; s:
+      ;; t: todo
+      ;; u:
+      ;; v:
+      ;; w:
+      ;; x:
+      ;; y:
+      ;; z:
+      ))
 #+end_src
 
 ** UI
 
 ** org-roam-ui
 #+begin_src emacs-lisp
-  (use-package org-roam-ui
-  :after org-roam
-  ;; normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-  ;; a hookable mode anymore, you're advised to pick something yourself
-  ;; if you don't care about startup time, use
-  ;; :hook (after-init . org-roam-ui-mode)
-  :bind (("C-c G" . org-roam-ui-open)
-         )
-  :config
-  (setq org-roam-ui-sync-theme t
-        org-roam-ui-follow t
-        org-roam-ui-update-on-save t
-        org-roam-ui-open-on-start t)
-  )
+(use-package org-roam-ui
+:after org-roam
+;; normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+;; a hookable mode anymore, you're advised to pick something yourself
+;; if you don't care about startup time, use
+;; :hook (after-init . org-roam-ui-mode)
+:bind (("C-c G" . org-roam-ui-open)
+       )
+:config
+(setq org-roam-ui-sync-theme t
+      org-roam-ui-follow t
+      org-roam-ui-update-on-save t
+      org-roam-ui-open-on-start t)
+)
 #+end_src
 
 ** md-roam
@@ -458,22 +458,22 @@ M-x package-vc-install RET https://github.com/nobiot/md-roam.git RET
 git submodule
 
 #+begin_src emacs-lisp
-  (add-to-list  'load-path "~/.config/emacs/extensions/md-roam")
-  (require 'md-roam)
+(add-to-list  'load-path "~/.config/emacs/extensions/md-roam")
+(require 'md-roam)
 #+end_src
 
 #+begin_src emacs-lisp
-  (require 'org-roam)
-  (require 'md-roam)
-  (md-roam-mode 1)           ; md-roam-mode must be active before org-roam-db-sync
-  (setq md-roam-file-extension "md") ; default "md". Specify an extension such as "markdown"
-  (org-roam-db-autosync-mode 1) ; autosync-mode triggers db-sync. md-roam-mode must be already active
+(require 'org-roam)
+(require 'md-roam)
+(md-roam-mode 1)           ; md-roam-mode must be active before org-roam-db-sync
+(setq md-roam-file-extension "md") ; default "md". Specify an extension such as "markdown"
+(org-roam-db-autosync-mode 1) ; autosync-mode triggers db-sync. md-roam-mode must be already active
 #+end_src
 
 ** provide
 
 #+begin_src emacs-lisp
-  (provide 'init-roam)
+(provide 'init-roam)
 #+end_src
 
 ** misc
