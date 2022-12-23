@@ -76,6 +76,15 @@
 (setq completion-cycle-threshold 10)
 ;; }}}
 
+;; fold
+;; {{{
+(add-hook 'prog-mode 'hs-minor-mode)
+(add-to-list 'hs-special-modes-alist
+	     '(emacs-lisp-mode "{" "}" ";;" nil nil))
+(keymap-global-set "C-c TAB" #'hs-toggle-hiding)
+(keymap-global-set "M-+" #'hs-show-all)
+;; }}}
+
 
 ;; completion: dabbrev: dynamic abbreviation expand
 ;; {{{
@@ -475,7 +484,6 @@ Version 2018-06-18 2021-09-30"
 (keymap-global-set "C-c C-j" #'avy-resume)
 ;; }}}
 
-
 ;; package config
 ;; {{{
 ;; (add-to-list 'load-path (expand-file-name "init-package.el"  (concat user-emacs-directory))) ;; :FIXME:
@@ -483,15 +491,6 @@ Version 2018-06-18 2021-09-30"
 ;; (require 'init-package) ;; packages installed by package.el
 ;; }}}
 
-
-;; fold: origami
-;; {{{
-(add-hook 'prog-mode-hook 'origami-mode)
-(with-eval-after-load 'origami
-  (define-key origami-mode-map (kbd "C-c f") 'origami-recursively-toggle-node)
-  (define-key origami-mode-map (kbd "C-c F") 'origami-toggle-all-nodes)
-  )
-;; }}}
 
 ;; goggles: visual hint for operations
 ;; {{{
