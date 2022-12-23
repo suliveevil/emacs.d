@@ -407,6 +407,46 @@ Version 2018-06-18 2021-09-30"
 (setq org-edit-src-content-indentation 0);代码块初始缩进范围
 ;; }}}
 
+;; open with default app
+;; {{{
+;; https://emacs-china.org/t/pdf/14954/5
+(defun my/open-with (arg)
+  "使用外部程序打开浏览的文件或者当前光标下的链接.
+处于 dired mode 时, 打开当前光标下的文件;
+若当前光标下存在链接，使用外部程序打开链接;
+使用 prefix ARG 时指定使用的外部程序."
+  (interactive "P")
+  (let ((current-file-name
+         (cond ((eq major-mode 'dired-mode) (dired-get-file-for-visit))
+               ((help-at-pt-string)
+                (pcase (cdr (split-string (help-at-pt-string) ":" t " "))
+                  ((or `(,path) `(,(pred (string= "file")) ,path) `(,_ ,path ,_))
+                   (expand-file-name path))
+                  (`(,proto ,path) (concat proto ":" path))))
+               (t (or (thing-at-point 'url) buffer-file-name))))
+        (program (if arg
+                     (read-shell-command "Open current file with: ")
+                   "open")))
+    (call-process program nil 0 nil current-file-name)))
+;; }}}
+
+;; Alfred
+;; {{{
+;; https://github.com/xuchunyang/emacs.d/blob/master/lisp/alfred.el
+(defun my/alfred-search (b e)
+  "Activate Alfred with selected text."
+  (interactive "r")
+  (do-applescript
+   (format "tell application id \"com.runningwithcrayons.Alfred\" to search \"%s\""
+           (mapconcat  ;; In AppleScript String, " and \ are speical characters
+            (lambda (char)
+              (pcase char
+                (?\" (string ?\\ ?\"))
+                (?\\ (string ?\\ ?\\))
+                (_   (string char))))
+            (buffer-substring b e) ""))))
+;; }}}
+
 ;; package.el: mirror 插件镜像
 ;; {{{
 ;; GitHub connection: https://github.com/hedzr/mirror-list
@@ -495,6 +535,90 @@ Version 2018-06-18 2021-09-30"
 ;; fuck
 ;; {{{
 (require 'fuck)
+;; }}}
+
+;; dictionary: Apple 词典: osx-dictionary
+;; {{{
+;; (require 'osx-dictionary)
+(keymap-global-set "C-c d" #'osx-dictionary-search-word-at-point)
+;; }}}
+
+
+;; Siri Shortcuts: Translate
+;; {{{
+;; Apple Translate in Siri Shortcuts.
+;; shortcuts://run-shortcut?name=[name]&input=[input]&text=[text]
+;; shortcuts://run-shortcut?name=EmacsTranslate&input=text&text=Hello%20World!
+;; shortcuts://x-callback-url/run-shortcut?name=EmacsTranslate&input=text&text=Hello%20World!
+;; (require 'siri-shortcuts)
+;; highlight temporarily
+;; [cedet/pulse.el](https://github.com/emacs-pkg-mirrors/cedet/blob/master/common/pulse.el)
+;; [beacon: beacon-blink](https://github.com/Malabarba/beacon)
+(defun my/siri-translate ()
+  (interactive)
+  (siri-shortcuts-browse-url 'run-shortcut "EmacsTranslate" "text" (thing-at-point 'sentence t))
+  ;; (pulse-momentary-highlight-region begin end)
+  ;; (message "Translated to %s" CLIPBOARD )
+  )
+(keymap-global-set "C-c t" #'my/siri-translate)
+;; }}}
+
+;; Siri Shortcuts: OCR
+;; {{{
+(defun my/siri-ocr ()
+    (interactive)
+    ;; (siri-shortcuts-run "EmacsOCR")
+    ;; (shell-command "shortcuts run \"EmacsOCR\"")
+    (shell-command "shortcuts run \"OCR Selected Area\"")
+    (do-applescript "tell application id \"org.gnu.Emacs\" to activate")
+  )
+(keymap-global-set "C-c M-o" #'my/siri-ocr)
+;; }}}
+
+;; MacVim
+;; {{{
+;; }}}
+
+;; Neovide
+;; {{{
+;; }}}
+
+;; Visual Studio Code
+;; {{{
+;; https://github.com/pietroiusti/.emacs.d/blob/master/custom-functions.el
+(defun my/open-in-vscode ()
+  (interactive)
+  (start-process-shell-command "code"
+                               nil
+                               (concat "code --goto "
+                                       (buffer-file-name)
+                                       ":"
+                                       (int-to-string (line-number-at-pos))
+                                       ":"
+                                       (int-to-string (current-column)))))
+;; (w32-shell-execute "open" "vscode-path" (format "-g %s:%s:%s" (buffer-file-name) (int-to-string (line-number-at-pos)) (int-to-string (current-column))))
+;; better solution
+;; https://emacs-china.org/t/leader-vscode/19166/29
+;; (defun my/open-in-vscode ()
+;;   "Open current file with vscode."
+;;   (interactive)
+;;   (let ((line (number-to-string (line-number-at-pos)))
+;;         (column (number-to-string (current-column))))
+;;     (apply 'call-process "code" nil nil nil (list (concat buffer-file-name ":" line ":" column) "--goto"))))
+(keymap-set global-map "C-c c" #'my/open-in-vscode)
+;; }}}
+
+;; Obsidian
+;; {{{
+;; https://emacs-china.org/t/emacs-obsidian/22504/11?u=suliveevil
+(defun my/open-in-obsidian () ;; 在 Obsidian 中打开当前 Emacs 正在编辑的文件
+  (interactive)
+  (browse-url-xdg-open
+   (concat "obsidian://open?path=" (url-hexify-string (buffer-file-name)))))
+;; doom emacs 中的按键绑定， SPC-f-o
+;; (map! :leader
+;;       :desc "open current file in obsidian"
+;;       "f o" #'open-current-file-in-obsidian)
 ;; }}}
 
 ;; pyim
