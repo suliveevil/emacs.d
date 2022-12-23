@@ -165,7 +165,7 @@ occurence of CHAR."
 
 ;; mode-line
 ;; {{{
-(display-battery-mode t) ;; display battery status
+(display-battery-mode t)    ;; display battery status
 (setq column-number-mode t) ;; 在 mode line 数字形式显示光标所在列
 ;; }}}
 
@@ -218,10 +218,10 @@ occurence of CHAR."
 ;; (setq backup-directory-alist `((".*" . ,(expand-file-name "backup" user-emacs-directory))))
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
-(setq make-backup-files t ; backup of a file the first time it is saved.
-      backup-by-copying t ; don't clobber symlinks
-      version-control t   ; version numbers for backup files
-      delete-old-versions t      ; delete excess backup files silently
+(setq make-backup-files t	  ; backup of a file the first time it is saved.
+      backup-by-copying t	  ; don't clobber symlinks
+      version-control t		  ; version numbers for backup files
+      delete-old-versions t	  ; delete excess backup files silently
       delete-by-moving-to-trash t
       dired-kept-versions 2
       kept-old-versions 6 ; oldest versions to keep when a new numbered backup is made (default: 2)
@@ -402,9 +402,9 @@ Version 2018-06-18 2021-09-30"
 ;; org-mode
 ;; {{{
 ;; code block: TAB 格式化
-(setq org-src-fontify-natively 1);代码块语法高亮
-(setq org-src-tab-acts-natively 1);开启代码块语法缩进
-(setq org-edit-src-content-indentation 0);代码块初始缩进范围
+(setq org-src-fontify-natively 1)	  ;代码块语法高亮
+(setq org-src-tab-acts-natively 1)	  ;开启代码块语法缩进
+(setq org-edit-src-content-indentation 0) ;代码块初始缩进范围
 ;; }}}
 
 ;; open with default app
@@ -438,7 +438,7 @@ Version 2018-06-18 2021-09-30"
   (interactive "r")
   (do-applescript
    (format "tell application id \"com.runningwithcrayons.Alfred\" to search \"%s\""
-           (mapconcat  ;; In AppleScript String, " and \ are speical characters
+           (mapconcat ;; In AppleScript String, " and \ are speical characters
             (lambda (char)
               (pcase char
                 (?\" (string ?\\ ?\"))
@@ -566,11 +566,11 @@ Version 2018-06-18 2021-09-30"
 ;; Siri Shortcuts: OCR
 ;; {{{
 (defun my/siri-ocr ()
-    (interactive)
-    ;; (siri-shortcuts-run "EmacsOCR")
-    ;; (shell-command "shortcuts run \"EmacsOCR\"")
-    (shell-command "shortcuts run \"OCR Selected Area\"")
-    (do-applescript "tell application id \"org.gnu.Emacs\" to activate")
+  (interactive)
+  ;; (siri-shortcuts-run "EmacsOCR")
+  ;; (shell-command "shortcuts run \"EmacsOCR\"")
+  (shell-command "shortcuts run \"OCR Selected Area\"")
+  (do-applescript "tell application id \"org.gnu.Emacs\" to activate")
   )
 (keymap-global-set "C-c M-o" #'my/siri-ocr)
 ;; }}}
@@ -639,9 +639,9 @@ Version 2018-06-18 2021-09-30"
 (setq pyim-page-length 9)
 (setq-default pyim-punctuation-translate-p '(auto)) ;; 全角半角
 ;; 金手指设置，可以将光标处的编码，比如：拼音字符串，转换为中文。
-(global-set-key (kbd "M-j") 'pyim-convert-string-at-point)
+;; (global-set-key (kbd "M-j") 'pyim-convert-string-at-point)
 ;; 按 "C-<return>" 将光标前的 regexp 转换为可以搜索中文的 regexp.
-(define-key minibuffer-local-map (kbd "C-<return>") 'pyim-cregexp-convert-at-point)
+;; (define-key minibuffer-local-map (kbd "C-<return>") 'pyim-cregexp-convert-at-point)
 (pyim-default-scheme 'quanpin)
 (pyim-isearch-mode 1) ;; 开启代码搜索中文功能（比如拼音，五笔码等）
 ;; 让 vertico, selectrum 等补全框架，通过 orderless 支持拼音搜索候选项功能。
@@ -768,9 +768,20 @@ Version 2018-06-18 2021-09-30"
   (setq vertico-cycle t)
   )
 
-(define-key vertico-map "?" #'minibuffer-completion-help)
-(define-key vertico-map (kbd "M-RET") #'minibuffer-force-complete-and-exit)
-(define-key vertico-map (kbd "M-TAB") #'minibuffer-complete)
+
+(add-hook 'vertico-mode-hook
+          (lambda ()
+            ;; (keymap-set vertico-mode-hook "?"
+            ;;             'minibuffer-completion-help)
+            ;; (keymap-set vertico-mode-map "M-RET"
+            ;;             'minibuffer-force-complete-and-exit)
+            ;; (keymap-set vertico-map "M-TAB"
+            ;;       'minibuffer-complete)
+            (keymap-set vertico-map "C-<return>"
+                        'vertico-exit-input)
+            ))
+
+
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
@@ -1057,7 +1068,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
         ("t" "topic" plain "%?"
          :target (file+head "topics/${title}.org"
                             "#+title: ${title}\n")
-	 :immediate-finish t
+         :immediate-finish t
          :unnarrowed t)
         ;; u:
         ;; v:
