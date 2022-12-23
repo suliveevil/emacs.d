@@ -591,7 +591,7 @@ Version 2018-06-18 2021-09-30"
 ;; orderless: minibuffer filter, works with icomplete
 ;; {{{
 (require 'orderless)
-(setq completion-styles '(orderless basic)
+(setq completion-styles '(orderless basic partial-completion flex initials substring)
       completion-category-defaults nil
       completion-category-overrides '((file (styles basic partial-completion))))
 ;; }}}
@@ -1063,5 +1063,36 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; (require 'org-sticky-header)
 (add-hook 'org-mode-hook #'org-sticky-header-mode)
 ;; }}}
+
+
+;; graphviz-dot-mode
+;; {{{
+(setq graphviz-dot-indent-width 4)
+(setq graphviz-dot-preview-extension "svg")
+;; }}}
+
+;; D2 Mode
+;; {{{
+(add-to-list 'auto-mode-alist '("\\.d2" . d2-mode))
+(defvar d2-mode-map
+  (let ((map (make-sparse-keymap)))
+    (keymap-set map "C-c C-c" #'d2-compile)
+    (keymap-set map "C-c C-f" #'d2-compile-file)
+    (keymap-set map "C-c C-b" #'d2-compile-buffer)
+    (keymap-set map "C-c C-r" #'d2-compile-region)
+    (keymap-set map "C-c C-h" #'d2-compile-file-and-browse)
+    (keymap-set map "C-c C-j" #'d2-compile-buffer-and-browse)
+    (keymap-set map "C-c C-k" #'d2-compile-region-and-browse)
+    (keymap-set map "C-c C-o" #'d2-open-browser)
+    (keymap-set map "C-x C-o" #'d2-view-current-svg)
+    (keymap-set map "C-c C-d" #'d2-open-doc)
+    map))
+;; }}}
+
+;; diagram-preview
+;; {{{
+
+;; }}}
+
 
 ;; init.el
