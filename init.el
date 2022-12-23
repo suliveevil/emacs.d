@@ -1,6 +1,36 @@
 ;; -*- origami-fold-style: triple-braces -*-
 ;; init
 
+;; chunk
+;; {{{
+;; Increase how much is read from processes in a single chunk (default is 4kb)
+(setq read-process-output-max #x10000) ;; 64kb
+;; }}}
+
+;; cursor move
+;; {{{
+;; [Emacs一行内移动cursor的最佳方案是什么？ - Emacs China](https://emacs-china.org/t/emacs-cursor/6753/12)
+;;
+;; char-wise
+;; goto-char by Oliver Scholz
+(defun my/go-to-char (n char)
+  "Move forward to Nth occurence of CHAR.
+Typing `wy-go-to-char-key' again will move forwad to the next Nth
+occurence of CHAR."
+  (interactive "p\ncGo to char: ")
+  (search-forward (string char) nil nil n)
+  (while (char-equal (read-char)
+                     char)
+    (search-forward (string char) nil nil n))
+  (setq unread-command-events (list last-input-event)))
+
+(keymap-set global-map "C-c a" #'my/go-to-char)
+;; similar work
+;; [go-to-char.el - EmacsWiki](https://www.emacswiki.org/emacs/go-to-char.el)
+;; [joseph-go-to-char - EmacsWiki](https://www.emacswiki.org/emacs/joseph-go-to-char)
+;; [doitian/iy-go-to-char: Go to next CHAR which is similar to "f" and "t" in vim](https://github.com/doitian/iy-go-to-char)
+;; }}}
+
 ;; frame
 ;; {{{
 (setq frame-size-history t)
@@ -16,6 +46,32 @@
                     :height 140 ;; 更改显示字体大小
                     )
 (global-font-lock-mode t) ;; turn on syntax highlighting for all buffers
+;; }}}
+
+;; key
+;; {{{
+;; bind: 全局按键/快捷键 (Global key bindings)
+(setq echo-keystrokes 0.1)
+(setq mac-command-modifier 'super         ;; s: super(Command/Win)
+      mac-right-command-modifier 'meta    ;; M: Meta (reachable for thumb)
+      mac-control-modifier 'control       ;; C: Ctrl
+      mac-right-control-modifier 'control ;; C: Ctrl
+      mac-option-modifier  'meta          ;; M: Meta (Option/Alt)
+      mac-right-option-modifier 'none     ;; macOS style Option
+      ;; mac-function-modifier            ;; Function Key
+      ;;                                  ;; A: Alt (redundant and not used)
+      ;;                                  ;; H: Hyper
+      ;;                                  ;; S: Shift
+      )
+(keymap-global-set "s-a" #'mark-whole-buffer)       ;;        : selection : 全选
+(keymap-global-set "s-c" #'kill-ring-save)          ;; M-w    : copy      : 复制
+(keymap-global-set "s-q" #'save-buffers-kill-emacs) ;;        : copy      : 复制
+(keymap-global-set "s-v" #'yank)                    ;; C-y    : paste/yank: 粘贴
+(keymap-global-set "s-w" #'delete-frame)            ;;        :           :
+(keymap-global-set "s-s" #'save-buffer)             ;; C-x C-s: save      : 保存
+(keymap-global-set "s-x" #'kill-region)             ;; C-w    : cut       : 剪切
+(keymap-global-set "s-z" #'undo)                    ;; C-_    : undo      : 撤销
+(keymap-global-set "s-Z" #'undo-redo)               ;; C-M-_  : undo-redo : 重做
 ;; }}}
 
 ;; pretty-symbols
@@ -288,6 +344,14 @@ Version 2018-06-18 2021-09-30"
 (setq isearch-lazy-count t) ;; anzu
 ;; }}}
 
+;; org-mode
+;; {{{
+;; code block: TAB 格式化
+(setq org-src-fontify-natively 1);代码块语法高亮
+(setq org-src-tab-acts-natively 1);开启代码块语法缩进
+(setq org-edit-src-content-indentation 0);代码块初始缩进范围
+;; }}}
+
 ;; package.el: mirror 插件镜像
 ;; {{{
 ;; GitHub connection: https://github.com/hedzr/mirror-list
@@ -371,6 +435,11 @@ Version 2018-06-18 2021-09-30"
                               nconcing (cl-loop for req in reqs
                                                 collect (format "\"%s\" -> \"%s\";\n" pkg req)))))
   (insert "}"))
+;; }}}
+
+;; fuck
+;; {{{
+(require 'fuck)
 ;; }}}
 
 ;; pyim
@@ -1032,6 +1101,33 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;;        )))
 ;; }}}
 
+;; free-keys
+;; {{{
+(require 'free-keys)
+(setq free-keys-modifiers '(
+                            ""
+                            "C"
+                            "M"
+                            "s"
+                            "S"
+                            ;; "A"
+                            ;; "H"
+                            ;; "A-C"
+                            ;; "A-M"
+                            "C-M"
+                            ;; "C-s"
+                            ;; "C-S"
+                            ;; "C-H"
+                            ;; "M-s"
+                            ;; "M-S"
+                            ;; "s-S"
+                            ;; "s-H"
+                            ;; "C-M-s"
+                            ;; "C-M-S"
+                            "C-c C"
+                            "C-x C" ))
+;; }}}
+
 ;; highlight-parentheses
 ;; {{{
 (require 'highlight-parentheses)
@@ -1062,7 +1158,6 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; (require 'org-sticky-header)
 (add-hook 'org-mode-hook #'org-sticky-header-mode)
 ;; }}}
-
 
 ;; graphviz-dot-mode
 ;; {{{
