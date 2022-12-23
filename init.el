@@ -902,7 +902,6 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
          ;; #+date: %<%Y-%m-%d-%H:%M:%S %Z>\n
          :empty-lines 1
          :immediate-finish t
-         :kill-buffer t
          :unnarrowed  t)
         ;; ("e" "emacs" plain "%?"
         ;;  :target (file+head "${title}.org"
