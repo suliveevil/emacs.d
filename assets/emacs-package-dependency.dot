@@ -4,6 +4,7 @@ digraph G {"epkg" -> "emacs";
 "epkg" -> "llama";
 "emacsql" -> "emacs";
 "markdown-mode" -> "emacs";
+"free-keys" -> "cl-lib";
 "websocket" -> "cl-lib";
 "orderless" -> "emacs";
 "deadgrep" -> "emacs";

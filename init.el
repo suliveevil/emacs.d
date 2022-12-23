@@ -954,25 +954,6 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; }}}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ;; package out of package.el :FIXME:
 ;; {{{
 ;; (add-to-list 'load-path (expand-file-name "init-lib.el" user-emacs-directory)) ;; :FIXME:
