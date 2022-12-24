@@ -407,6 +407,31 @@ Version 2018-06-18 2021-09-30"
 (setq org-edit-src-content-indentation 0) ;代码块初始缩进范围
 ;; }}}
 
+;; open app
+;; {{{
+(defun mac-launchpad/string-ends-with (s ending)
+  "Return non-nil if string S ends with ENDING."
+  (cond ((>= (length s) (length ending))
+         (let ((elength (length ending)))
+           (string= (substring s (- 0 elength)) ending)))
+        (t nil)))
+
+(defun mac-launchpad/find-mac-apps (folder)
+  (let* ((files (directory-files folder))
+         (without-dots (cl-delete-if (lambda (f) (or (string= "." f) (string= ".." f))) files))
+         (all-files (mapcar (lambda (f) (file-name-as-directory (concat (file-name-as-directory folder) f))) without-dots))
+         (result (cl-delete-if-not (lambda (s) (mac-launchpad/string-ends-with s ".app/")) all-files)))
+    result))
+
+(defun mac-launchpad ()
+  (interactive)
+  (let* ((apps (mac-launchpad/find-mac-apps "/Applications"))
+         (to-launch (completing-read "launch: " apps)))
+    (shell-command (format "open %s" to-launch))))
+
+;; (keymap-global-set "C-c C-l" #'mac-launchpad)
+;; }}}
+
 ;; open with default app
 ;; {{{
 ;; https://emacs-china.org/t/pdf/14954/5
@@ -1004,6 +1029,22 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
            (org-roam-node-list))))
 ;; }}}
 
+;; org-roam: search tag
+;; {{{
+(defun my/org-roam-node-find-by-tag ()
+  (interactive)
+    (let ((chosen-tag
+	   (completing-read "filter by tag: "
+			    (seq-uniq
+			     (org-roam-db-query
+			      [:select [tag]
+				       :from tags ])))))
+      (org-roam-node-find
+       nil
+       nil
+       (lambda (node) (member chosen-tag (org-roam-node-tags node))))))
+;; }}}
+
 ;; org-roam: template,  id (uuid) timestamps and so on
 ;; {{{
 (setq org-roam-capture-templates
@@ -1018,10 +1059,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
          :empty-lines 1
          :immediate-finish t
          :unnarrowed  t)
-        ;; ("e" "emacs" plain "%?"
-        ;;  :target (file+head "${title}.org"
-        ;;                     "#+title: ${title}\n#+category:\n#+filetags: \n")
-        ;;  :unnarrowed  t)
+        ("e" "emacs" plain "%?"
+         :target (file+head "Emacs/${title}.org"
+                            "#+title: ${title}\n#+category:\n#+filetags: \n")
+         :immediate-finish t
+         :unnarrowed  t)
         ;; f:
         ;; g:
         ;; h: human
