@@ -1,0 +1,283 @@
+
+
+** ideas
+
+*** rearrange frame when kill buffer
+
+** Mini frame
+
+[[Minibuffer frame for Nano Emacs][https://gist.github.com/rougier/126e358464e12aa28fac5b4f3dd5eb9c]]
+
+;; Nicolas .P Rougier emacs configuration - mini-frame configuration
+;; ---------------------------------------------------------------------
+(require 'vertico)
+(require 'marginalia)
+(require 'mini-frame)
+
+(defun minibuffer-setup ()
+
+  ;; This prevents the header line to spill over second line
+  (let ((inhibit-message t))
+    (toggle-truncate-lines 1))
+
+  (setq enable-recursive-minibuffers t)
+  
+  ;; This allows to have a consistent full width (fake) header like
+  (setq display-table (make-display-table))
+  (set-display-table-slot display-table
+                          'truncation (make-glyph-code ?\  'nano-subtle))
+  (set-display-table-slot display-table
+                          'wrap (make-glyph-code ?\  'nano-subtle))
+  (setq buffer-display-table display-table)
+  
+  (cursor-intangible-mode)
+  (face-remap-add-relative 'default :foreground "black")
+  (face-remap-add-relative 'completions-first-difference :foreground "black")
+  (let* ((left  (concat (propertize " "
+                                    'face '(nano-subtle)
+                                    'display '(raise +0.20))
+                        (propertize " Minibuffer"
+                                    'face 'nano-subtle)
+                        (propertize " "
+                                    'face 'nano-subtle
+                                    'display '(raise -0.30))))
+         (right (propertize "C-g: abort"
+                            'face '(:inherit (nano-faded nano-subtle)
+                                    :weight light)))
+         (spacer (propertize (make-string (- (window-width)
+                                             (length left)
+                                             (length right)
+                                             1) ?\ )
+                             'face 'nano-subtle))
+         (header (concat left spacer right " "))
+         (overlay (make-overlay (+ (point-min) 0) (+ (point-min) 0))))
+    (overlay-put overlay 'before-string
+        (concat
+         (propertize " " 'display header)
+         "\n"
+         ;; This provides a vertical gap (half a line) above the prompt.
+         (propertize " " 'face `(:extend t)
+                     'display '(raise .33)
+                     'read-only t 'cursor-intangible t)))))
+
+ (add-hook 'minibuffer-setup-hook #'minibuffer-setup)
+
+
+;; (defun minibuffer-exit ())
+;; (add-hook 'minibuffer-exit-hook #'minibuffer-exit)
+
+;; Prefix/Affix the current candidate. From
+;; https://github.com/minad/vertico/wiki#prefix-current-candidate-with-arrow
+(defun minibuffer-format-candidate (orig cand prefix suffix index _start)
+  (let ((prefix (if (= vertico--index index)
+                    "  " "   "))) 
+    (funcall orig cand prefix suffix index _start)))
+  
+(advice-add #'vertico--format-candidate
+            :around #'minibuffer-format-candidate)
+
+(with-eval-after-load 'vertico
+  (setq completion-styles '(basic substring partial-completion flex))
+  (setq vertico-count 10)
+  (setq vertico-count-format nil)
+  (setq vertico-grid-separator
+        #("  |  " 2 3 (display (space :width (1))
+                               face (:background "#ECEFF1"))))
+  (define-key vertico-map (kbd "<backtab>") #'minibuffer-complete)
+  (set-face-attribute 'vertico-current nil
+                      :inherit '(nano-strong nano-subtle))
+  (set-face-attribute 'completions-first-difference nil
+                      :inherit '(nano-default))
+  (set-face-attribute 'minibuffer-prompt nil
+                      :inherit '(nano-default nano-strong))
+  (setq minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+
+  (defun vertico--prompt-selection ()
+    "Highlight the prompt"
+    (let ((inhibit-modification-hooks t))
+      (set-text-properties (minibuffer-prompt-end) (point-max)
+                           '(face (nano-strong nano-salient))))))
+
+(with-eval-after-load 'marginalia
+  (setq truncate-string-ellipsis "…")
+  (setq marginalia--ellipsis "…")
+  (setq marginalia-align 'right)
+  (setq marginalia-align-offset -1))
+
+
+(with-eval-after-load 'mini-frame
+  (set-face-background 'child-frame-border (face-foreground 'nano-faded))
+  (setq mini-frame-default-height vertico-count)
+  (setq mini-frame-create-lazy t)
+  (setq mini-frame-show-parameters 'mini-frame-dynamic-parameters)
+  (setq mini-frame-ignore-commands
+        '("edebug-eval-expression" debugger-eval-expression))
+  (setq mini-frame-internal-border-color (face-foreground 'nano-subtle-i))
+  ;; (setq mini-frame-resize 'grow-only) ;; -> buggy as of 01/05/2021
+  ;; (setq mini-frame-resize 'not-set)
+  ;; (setq mini-frame-resize nil)
+  (setq mini-frame-resize t)
+  (setq mini-frame-resize-min-height 3)
+
+  
+  (defun mini-frame-dynamic-parameters ()
+    (let* ((edges       (window-pixel-edges))      ;; (left top right bottom)
+           (body-edges  (window-body-pixel-edges)) ;; (left top right bottom)
+           (left   (nth 0 edges))      ;; Take margins into account
+           (top    (nth 1 edges)) ;; Drop header line
+           (right  (nth 2 edges))      ;; Take margins into account
+           (bottom (nth 3 body-edges)) ;; Drop header line
+           (left   (if (eq left-fringe-width 0)
+                       left
+                     (- left (frame-parameter nil 'left-fringe))))
+           (right  (nth 2 edges))
+           (right  (if (eq right-fringe-width 0)
+                       right
+                     (+ right (frame-parameter nil 'right-fringe))))
+           (fringe-left 0)
+           (fringe-right 0)
+           (border 1)
+           ;; (width (- (frame-pixel-width) (* 2 (+ fringe border))))
+           (width (- right left fringe-left fringe-right (* 0 border)))
+           (y (- top border)))
+    `((left . ,(- left border))
+      (top . ,y)
+      (alpha . 1.0)
+      (width . (text-pixels . ,width))
+      (left-fringe . ,fringe-left)
+      (right-fringe . ,fringe-right)
+      (child-frame-border-width . ,border)
+      (internal-border-width . ,border)
+      (foreground-color . ,(face-foreground 'nano-default))
+      (background-color . ,(face-background 'highlight)))))
+  )
+
+(vertico-mode)
+(marginalia-mode)
+(mini-frame-mode t)
+
+(provide 'nano-minibuffer)
+
+** one func two commands
+
+[More things I’d like to see done in Emacs](https://amodernist.com/texts/emacs-hopes-2.html)
+(defun site/kill-region-or-word ()
+  "Call `kill-region' if there is an active region.
+Otherwise kill the last word, just like in Unix."
+  (interactive)
+  (call-interactively (if (region-active-p)
+                          #'kill-region
+                        #'backward-kill-word)))
+
+
+** load-path
+			
+[manateelazycat.github.io/2022-11-18-write-emacs-plugin.md](https://github.com/manateelazycat/manateelazycat.github.io/blob/master/_posts/2022-11-18-write-emacs-plugin.md)
+
+
+(defun add-subdirs-to-load-path (search-dir)
+  (interactive)
+  (let* ((dir (file-name-as-directory search-dir)))
+    (dolist (subdir
+             ;; 过滤出不必要的目录，提升 Emacs 启动速度
+             (cl-remove-if
+              #'(lambda (subdir)
+                  (or
+                   ;; 不是目录的文件都移除
+                   (not (file-directory-p (concat dir subdir)))
+                   ;; 父目录、 语言相关和版本控制目录都移除
+                   (member subdir '("." ".." 
+                                    "dist" "node_modules" "__pycache__" 
+                                    "RCS" "CVS" "rcs" "cvs" ".git" ".github")))) 
+              (directory-files dir)))
+      (let ((subdir-path (concat dir (file-name-as-directory subdir))))
+        ;; 目录下有 .el .so .dll 文件的路径才添加到 `load-path' 中，提升 Emacs 启动速度
+        (when (cl-some #'(lambda (subdir-file)
+                           (and (file-regular-p (concat subdir-path subdir-file))
+                                ;; .so .dll 文件指非 Elisp 语言编写的 Emacs 动态库
+                                (member (file-name-extension subdir-file) '("el" "so" "dll"))))
+                       (directory-files subdir-path))
+
+          ;; 注意：`add-to-list' 函数的第三个参数必须为 t ，表示加到列表末尾
+          ;; 这样 Emacs 会从父目录到子目录的顺序搜索 Elisp 插件，顺序反过来会导致 Emacs 无法正常启动
+          (add-to-list 'load-path subdir-path t))
+
+        ;; 继续递归搜索子目录
+        (add-subdirs-to-load-path subdir-path)))))
+
+(add-subdirs-to-load-path "~/.config/emacs/extensions")
+
+
+[manateelazycat.github.io/2019-05-12-emacs-optimize-startup-speed.md](https://github.com/manateelazycat/manateelazycat.github.io/blob/master/_posts/2019-05-12-emacs-optimize-startup-speed.md)
+
+
+** Fonts
+
+[fonts.el](https://gist.github.com/cxa/6dbbc30c4f71e74816f4378e09628659)
+
+(setq cxa/font-pairs
+	'((default
+	   :heading (:family "TheFutureFZYouHei" :weight bold :slant normal)
+	   :body (:family "WCaslonZZMC" :height 270)
+	   :code (:family "PitchFZ" :height 200))
+	  (Brill
+	   :heading (:family "TheFutureFZYouHei" :weight bold :slant normal)
+	   :body (:family "Brill" :height 270)
+	   :code (:family "PitchSansOPPO" :height 200))
+	  (questa
+	   :heading (:family "Questa Grande" :weight bold :slant normal)
+	   :body (:family "Questa" :height 240)
+	   :code (:family "Courier Prime" :height 240))
+	  (questa-sans
+	   :heading (:family "Questa Slab" :weight bold :slant normal)
+	   :body (:family "Questa Sans" :height 240)
+	   :code (:family "Courier Prime Sans" :height 240))
+	  (allrounder
+	   :heading (:family "Allrounder Grotesk" :slant normal)
+	   :body (:family "Allrounder Antiqua" :height 240)
+	   :code (:family "Courier Prime" :height 240))
+	  (mbtype
+	   :heading (:family "Heliotrope 8 Caps" :slant normal)
+	   :body (:family "Heliotrope")
+	   :code (:family "Targa Pro Mono"))))
+
+  (defun cxa/set-fonts (pair-name)
+    (let* ((fp (cdr (assoc pair-name cxa/font-pairs)))
+	   (heading (plist-get fp :heading))
+	   (body (plist-get fp :body))
+	   (text-size (plist-get body :height))
+	   (code (plist-get fp :code))
+	   (cookies nil))
+      (push (apply 'face-remap-add-relative 'variable-pitch body)
+	    cookies)
+      (push (apply 'face-remap-add-relative 'default code)
+	    cookies)
+      (push (apply 'face-remap-add-relative 'shr-code code)
+	    cookies)
+      ;; reset inline code size to match body size
+      (push (face-remap-add-relative 'shr-code :height text-size)
+	    cookies)
+      (cl-loop for face in '(shr-h1 shr-h2 shr-h3 shr-h4 shr-h5 shr-h6)
+	       for height in '(1.5 1.4 1.3 1.2 1.1 1.05)
+	       do
+	       (push (apply 'face-remap-add-relative face
+			    :height (round (* text-size height)) heading)
+		     cookies))
+      cookies))
+
+  (defun cxa/select-preset-fonts ()
+    (interactive)
+    (if (or (derived-mode-p 'nov-mode)
+	    (derived-mode-p 'eww-mode))
+	(let* ((choices (mapcar 'car cxa/font-pairs))
+	       (choice (completing-read "Select preset fonts: " choices)))
+	  (with-current-buffer (current-buffer)
+	    (when (boundp 'cxa/preset-fonts-cookies)
+	      (dolist (cookie cxa/preset-fonts-cookies)
+		(face-remap-remove-relative cookie)))
+	    (setq-local cxa/preset-fonts-cookies (cxa/set-fonts (intern choice)))))
+      (message "Adjust font for %s is not supported" major-mode)))
+
+** Misc
+

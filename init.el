@@ -739,15 +739,6 @@ Version 2018-06-18 2021-09-30"
 ;; (require 'init-package) ;; packages installed by package.el
 ;; }}}
 
-
-;; goggles: visual hint for operations
-;; {{{
-(use-package goggles
-  :hook ((prog-mode text-mode) . goggles-mode)
-  :config
-  (setq-default goggles-pulse t)) ;; set to nil to disable pulsing
-;; }}}
-
 ;; vertico
 ;; {{{
 (use-package vertico
@@ -1132,6 +1123,18 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 (org-roam-db-autosync-mode 1) ; autosync-mode triggers db-sync. md-roam-mode must be already active
 ;; }}}
 
+;; goggles: visual hint for operations
+;; {{{
+(use-package goggles
+  :hook ((prog-mode text-mode) . goggles-mode)
+  :config
+  (setq-default goggles-pulse t)) ;; set to nil to disable pulsing
+;; }}}
+
+;; doom-modeline
+;; {{{
+(add-hook 'after-init-hook #'doom-modeline-mode)
+;; }}}
 
 ;; package out of package.el :FIXME:
 ;; {{{

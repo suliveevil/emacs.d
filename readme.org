@@ -457,6 +457,34 @@ corfu
 )
 #+end_src
 
+#+begin_src emacs-lisp
+(defun org-roam-subtree-aware-preview-function ()
+    "Same as `org-roam-preview-default-function', but gets entire subtree in specific buffers."
+    (if (--> (org-roam-node-at-point)
+             (org-roam-node-file it)
+             (or (member it
+                         ;; This is a list of buffers where I want to see preview of subtree
+                         org-roam-subtree-aware-preview-buffers) 
+                 (f-ancestor-of-p bibtex-completion-notes-path it)))
+        (let ((beg (progn (org-roam-end-of-meta-data t)
+                          (point)))
+              (end (progn (org-previous-visible-heading 1)
+                          (org-end-of-subtree)
+                          (point))))
+          (-reduce 
+           (lambda (str el)
+             ;; remove properties not interested. If prop drawer is empty at the end, remove drawer itself
+             (s-replace-regexp (format "\n *:%s:.*$" el) "" str))
+           ;; remove links
+           (list (s-replace-regexp "\\[id:\\([a-z]\\|[0-9]\\)\\{8\\}-\\([a-z]\\|[0-9]\\)\\{4\\}-\\([a-z]\\|[0-9]\\)\\{4\\}-\\([a-z]\\|[0-9]\\)\\{4\\}-\\([a-z]\\|[0-9]\\)\\{12\\}\\]"
+                                   ""
+                                   (string-trim (buffer-substring-no-properties beg end)))
+                 "INTERLEAVE_PAGE_NOTE" "BRAIN_CHILDREN" okm-parent-property-name "PROPERTIES:\n *:END")))
+      (org-roam-preview-default-function)))
+
+  (setq org-roam-preview-function #'org-roam-subtree-aware-preview-function)
+#+end_src
+
 ** md-roam
 
 安装

@@ -380,7 +380,7 @@
 	       (:authors
 		("Artur Malabarba" . "emacs@endlessparentheses.com")))])
  (cape .
-       [(0 11 0 20221206 213944)
+       [(0 11 0 20221222 222457)
 	((emacs
 	  (27 1)))
 	"Completion At Point Extensions" tar
@@ -388,7 +388,7 @@
 	 (:maintainer "Daniel Mendler" . "mail@daniel-mendler.de")
 	 (:authors
 	  ("Daniel Mendler" . "mail@daniel-mendler.de"))
-	 (:commit . "351d7a65fc8ac76d7d5c737354ed7b2d7750b261"))])
+	 (:commit . "80d051389e3cc49367435f7b5d292d45c529ab49"))])
  (capf-autosuggest .
 		   [(0 3 0 20211123 104430)
 		    ((emacs
@@ -999,7 +999,7 @@
 	       ("Markus Triska" . "triska@metalevel.at"))
 	      (:commit . "cfcdf9e42821d246b7fbc84877aa4ecacc184a1c"))])
  (eev .
-      [(20221204 0 20221222 15353)
+      [(20221204 0 20221223 62352)
        ((emacs
 	 (24 4)))
        "Support for e-scripts (eepitch blocks, elisp hyperlinks, etc)" tar
@@ -1008,7 +1008,7 @@
 	(:maintainer "Eduardo Ochs" . "eduardoochs@gmail.com")
 	(:authors
 	 ("Eduardo Ochs" . "eduardoochs@gmail.com"))
-	(:commit . "c0328f0b799a11f67614c5d7f1ca727cff9853d4"))])
+	(:commit . "611294a403ffebc5c17b360d57815978670c6c65"))])
  (ef-themes .
 	    [(0 10 0 0 20221219 40550)
 	     ((emacs
@@ -1021,7 +1021,7 @@
 	       ("Protesilaos Stavrou" . "info@protesilaos.com"))
 	      (:commit . "ac62af004ebfedf744401a69806d72d0294ca78b"))])
  (eglot .
-	[(1 10 0 20221220 143016)
+	[(1 10 0 20221222 154411)
 	 ((emacs
 	   (26 3))
 	  (jsonrpc
@@ -1044,7 +1044,7 @@
 	  (:maintainer "João Távora" . "joaotavora@gmail.com")
 	  (:authors
 	   ("João Távora" . "joaotavora@gmail.com"))
-	  (:commit . "05740f05b732a5df473bdf9d1750e97f6a86f2c0"))])
+	  (:commit . "dcc564415252c97f92c9a3afe306d515b0f0fd8c"))])
  (el-search .
 	    [(1 12 6 1 0 20221221 75346)
 	     ((emacs
@@ -3881,7 +3881,7 @@
 	     ("Daniel Mendler" . "mail@daniel-mendler.de"))
 	    (:commit . "bedd146c3ffc236d746d088a94c3858eca0618d9"))])
  (vertico-posframe .
-		   [(0 6 0 0 20221219 231923)
+		   [(0 6 0 0 20221223 21224)
 		    ((emacs
 		      (26 0))
 		     (posframe
@@ -3894,7 +3894,7 @@
 		     (:maintainer "Feng Shu" . "tumashu@163.com")
 		     (:authors
 		      ("Feng Shu" . "tumashu@163.com"))
-		     (:commit . "ecc284bf6ca6322634b379913ad61b94f2d2f700"))])
+		     (:commit . "a3d0802d7b4a64be1c8c9344fe2de99f2c5ce7ff"))])
  (vigenere .
 	   [(1 0 0 20221221 82600)
 	    ((emacs

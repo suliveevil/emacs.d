@@ -16,3 +16,6 @@
 [submodule "lib/fuck"]
 	path = lib/fuck
 	url = git@github.com:suliveevil/fuck.el.git
+[submodule "lib/elisp-demos"]
+	path = lib/elisp-demos
+	url = git@github.com:suliveevil/elisp-demos.git
