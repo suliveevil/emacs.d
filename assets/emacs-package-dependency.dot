@@ -2,6 +2,8 @@ digraph G {"epkg" -> "emacs";
 "epkg" -> "compat";
 "epkg" -> "closql";
 "epkg" -> "llama";
+"exec-path-from-shell" -> "emacs";
+"exec-path-from-shell" -> "cl-lib";
 "emacsql" -> "emacs";
 "markdown-mode" -> "emacs";
 "free-keys" -> "cl-lib";

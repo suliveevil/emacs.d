@@ -218,10 +218,10 @@ occurence of CHAR."
 ;; (setq backup-directory-alist `((".*" . ,(expand-file-name "backup" user-emacs-directory))))
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
-(setq make-backup-files t	  ; backup of a file the first time it is saved.
-      backup-by-copying t	  ; don't clobber symlinks
-      version-control t		  ; version numbers for backup files
-      delete-old-versions t	  ; delete excess backup files silently
+(setq make-backup-files t         ; backup of a file the first time it is saved.
+      backup-by-copying t         ; don't clobber symlinks
+      version-control t           ; version numbers for backup files
+      delete-old-versions t       ; delete excess backup files silently
       delete-by-moving-to-trash t
       dired-kept-versions 2
       kept-old-versions 6 ; oldest versions to keep when a new numbered backup is made (default: 2)
@@ -402,8 +402,8 @@ Version 2018-06-18 2021-09-30"
 ;; org-mode
 ;; {{{
 ;; code block: TAB 格式化
-(setq org-src-fontify-natively 1)	  ;代码块语法高亮
-(setq org-src-tab-acts-natively 1)	  ;开启代码块语法缩进
+(setq org-src-fontify-natively 1)         ;代码块语法高亮
+(setq org-src-tab-acts-natively 1)        ;开启代码块语法缩进
 (setq org-edit-src-content-indentation 0) ;代码块初始缩进范围
 ;; }}}
 
@@ -427,7 +427,8 @@ Version 2018-06-18 2021-09-30"
   (interactive)
   (let* ((apps (mac-launchpad/find-mac-apps "/Applications"))
          (to-launch (completing-read "launch: " apps)))
-    (shell-command (format "open %s" to-launch))))
+    (shell-command (format "defaults read %sContents/Info.plist CFBundleIdentifier | xargs open -b" to-launch))))
+
 
 ;; (keymap-global-set "C-c C-l" #'mac-launchpad)
 ;; }}}
@@ -555,6 +556,14 @@ Version 2018-06-18 2021-09-30"
                               nconcing (cl-loop for req in reqs
                                                 collect (format "\"%s\" -> \"%s\";\n" pkg req)))))
   (insert "}"))
+;; }}}
+
+;; exec-path-from-shell
+;; {{{
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
+(when (daemonp)
+  (exec-path-from-shell-initialize))
 ;; }}}
 
 ;; fuck
@@ -1033,16 +1042,16 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; {{{
 (defun my/org-roam-node-find-by-tag ()
   (interactive)
-    (let ((chosen-tag
-	   (completing-read "filter by tag: "
-			    (seq-uniq
-			     (org-roam-db-query
-			      [:select [tag]
-				       :from tags ])))))
-      (org-roam-node-find
-       nil
-       nil
-       (lambda (node) (member chosen-tag (org-roam-node-tags node))))))
+  (let ((chosen-tag
+         (completing-read "filter by tag: "
+                          (seq-uniq
+                           (org-roam-db-query
+                            [:select [tag]
+                                     :from tags ])))))
+    (org-roam-node-find
+     nil
+     nil
+     (lambda (node) (member chosen-tag (org-roam-node-tags node))))))
 ;; }}}
 
 ;; org-roam: template,  id (uuid) timestamps and so on
@@ -1051,6 +1060,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
       '(
         ;; a: audio & music
         ;; b: book
+        ("b" "图书" plain "%?"
+         :target (file+head "图书/${title}.org"
+                            "#+title: ${title}\n#+category:\n#+filetags: \n")
+         :immediate-finish t
+         :unnarrowed  t)
         ;; c:
         ("d" "default" plain "%?"
          :target (file+head "${slug}.org"
@@ -1059,12 +1073,17 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
          :empty-lines 1
          :immediate-finish t
          :unnarrowed  t)
-        ("e" "emacs" plain "%?"
+        ("e" "Emacs" plain "%?"
          :target (file+head "Emacs/${title}.org"
                             "#+title: ${title}\n#+category:\n#+filetags: \n")
          :immediate-finish t
          :unnarrowed  t)
         ;; f:
+        ("f" "Function" plain "%?"
+         :target (file+head "Emacs/function/${title}.org"
+                            "#+title: ${title}\n#+category:\n#+filetags: \n")
+         :immediate-finish t
+         :unnarrowed  t)
         ;; g:
         ;; h: human
         ;; i:
@@ -1075,6 +1094,16 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
         ;; n:
         ;; o:
         ;; p: project
+        ("p" "project" plain "%?"
+         :target (file+head "${title}.org"
+                            "#+title: ${title}\n")
+         :immediate-finish t
+         :unnarrowed t)
+        ("P" "Emacs Package" plain "%?"
+         :target (file+head "Emacs/package/${title}.org"
+                            "#+title: ${title}\n#+filetags: :Emacs:\n")
+         :immediate-finish t
+         :unnarrowed t)
         ;; q:
         ("r" "reference" plain "%? \n %(v-i-or-nothing) \n\n%(v-a-or-nothing)"
          :target
@@ -1082,14 +1111,24 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
                     "#+title: ${title}\n")
          :unnarrowed t)
         ;; s:
+        ("s" "软件" plain "%?"
+         :target (file+head "software/${title}.org"
+                            "#+title: ${title}\n")
+         :immediate-finish t
+         :unnarrowed t)
         ;; t: topic todo
-        ("t" "topic" plain "%?"
+        ("t" "主题" plain "%?"
          :target (file+head "topics/${title}.org"
                             "#+title: ${title}\n")
          :immediate-finish t
          :unnarrowed t)
         ;; u:
         ;; v:
+        ("v" "变量" plain "%?"
+         :target (file+head "Emacs/variable/${title}.org"
+                            "#+title: ${title}\n")
+         :immediate-finish t
+         :unnarrowed t)
         ;; w:
         ;; x:
         ;; y:
