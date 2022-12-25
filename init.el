@@ -1207,16 +1207,22 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; org-similarity
 ;; {{{
 (require 'f)
-(require 'org-roam-similarity)
-;; directory to scan for possibly similar documents.
+(require 'org-similarity)
 ;; (setq org-similarity-directory org-directory)
-(setq org-roam-similarity-directory org-roam-directory)
-;; the language passed to nltk's Snowball stemmer
-(setq org-roam-similarity-language "english")
-;; how many similar entries to list at the end of the buffer
-(setq org-roam-similarity-number-of-documents 15)
-;; whether to prepend the list entries with their cosine similarity score
-(setq org-roam-similarity-show-scores t)
+(setq org-similarity-directory org-roam-directory)
+(setq org-similarity-language "english")
+(setq org-similarity-number-of-documents 15)
+(setq org-similarity-show-scores t)
+;; }}}
+
+;; org-roam-similarity
+;; {{{
+;; (require 'f)
+;; (require 'org-roam-similarity)
+;; (setq org-roam-similarity-directory org-roam-directory)
+;; (setq org-roam-similarity-language "english")
+;; (setq org-roam-similarity-number-of-documents 15)
+;; (setq org-roam-similarity-show-scores t)
 ;; }}}
 
 ;; markdown-mode
