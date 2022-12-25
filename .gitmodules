@@ -19,3 +19,6 @@
 [submodule "lib/elisp-demos"]
 	path = lib/elisp-demos
 	url = git@github.com:suliveevil/elisp-demos.git
+[submodule "lib/org-similarity"]
+	path = lib/org-similarity
+	url = git@github.com:suliveevil/org-similarity.git

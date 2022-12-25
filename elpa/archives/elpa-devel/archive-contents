@@ -380,7 +380,7 @@
 	       (:authors
 		("Artur Malabarba" . "emacs@endlessparentheses.com")))])
  (cape .
-       [(0 11 0 20221222 222457)
+       [(0 11 0 20221223 183832)
 	((emacs
 	  (27 1)))
 	"Completion At Point Extensions" tar
@@ -388,7 +388,7 @@
 	 (:maintainer "Daniel Mendler" . "mail@daniel-mendler.de")
 	 (:authors
 	  ("Daniel Mendler" . "mail@daniel-mendler.de"))
-	 (:commit . "80d051389e3cc49367435f7b5d292d45c529ab49"))])
+	 (:commit . "9b97dbbc7624415ee25f79de9ea357feb1e2e547"))])
  (capf-autosuggest .
 		   [(0 3 0 20211123 104430)
 		    ((emacs
@@ -556,7 +556,7 @@
 	    ("Philip Kaludercic" . "philipk@posteo.net"))
 	   (:commit . "1573aa2e6d478c30cc7f394b72cbaa4db77ef811"))])
  (consult .
-	  [(0 29 0 20221222 94003)
+	  [(0 29 0 20221224 164333)
 	   ((emacs
 	     (27 1))
 	    (compat
@@ -566,7 +566,7 @@
 	    (:maintainer "Daniel Mendler" . "mail@daniel-mendler.de")
 	    (:authors
 	     ("Daniel Mendler and Consult contributors"))
-	    (:commit . "3133aa19d0c03b4775451562a76aa35cc766c566"))])
+	    (:commit . "84bacb5b454c046d8f388f1386ffa39d52ddfd45"))])
  (consult-recoll .
 		 [(0 8 0 20221014 200255)
 		  ((emacs
@@ -591,7 +591,7 @@
 		     (:authors
 		      ("Jackson Ray Hamilton" . "jackson@jacksonrayhamilton.com")))])
  (corfu .
-	[(0 34 0 20221222 154808)
+	[(0 34 0 20221223 100755)
 	 ((emacs
 	   (27 1)))
 	 "Completion Overlay Region FUnction" tar
@@ -599,7 +599,7 @@
 	  (:maintainer "Daniel Mendler" . "mail@daniel-mendler.de")
 	  (:authors
 	   ("Daniel Mendler" . "mail@daniel-mendler.de"))
-	  (:commit . "d524a0c738f6c5dcc4234d5779035965b1bdf28c"))])
+	  (:commit . "948f7121c783936d4605ee713b497f839c16e128"))])
  (coterm .
 	 [(1 6 0 20221005 121655)
 	  ((emacs
@@ -999,7 +999,7 @@
 	       ("Markus Triska" . "triska@metalevel.at"))
 	      (:commit . "cfcdf9e42821d246b7fbc84877aa4ecacc184a1c"))])
  (eev .
-      [(20221204 0 20221223 62352)
+      [(20221204 0 20221225 135)
        ((emacs
 	 (24 4)))
        "Support for e-scripts (eepitch blocks, elisp hyperlinks, etc)" tar
@@ -1008,7 +1008,7 @@
 	(:maintainer "Eduardo Ochs" . "eduardoochs@gmail.com")
 	(:authors
 	 ("Eduardo Ochs" . "eduardoochs@gmail.com"))
-	(:commit . "611294a403ffebc5c17b360d57815978670c6c65"))])
+	(:commit . "8dc7d397e7aea6fba4fd4779b1ee562d96154f4d"))])
  (ef-themes .
 	    [(0 10 0 0 20221219 40550)
 	     ((emacs
@@ -1096,7 +1096,7 @@
 		     (:url . "https://elpa.gnu.org/packages/elisp-benchmarks.html")
 		     (:commit . "7122da523a9d23900f8ee7581cdc0f06e1b7a401"))])
  (embark .
-	 [(0 18 0 20221221 150349)
+	 [(0 18 0 20221224 114145)
 	  ((emacs
 	    (26 1)))
 	  "Conveniently act on minibuffer completions" tar
@@ -1105,9 +1105,9 @@
 	   (:maintainer "Omar Antolín Camarena" . "omar@matem.unam.mx")
 	   (:authors
 	    ("Omar Antolín Camarena" . "omar@matem.unam.mx"))
-	   (:commit . "e7a921060c867c2e61cea42ff10fde92a36be445"))])
+	   (:commit . "ee014d5f3c86eafae673a947b492fa03ffbacb4e"))])
  (embark-consult .
-		 [(0 6 0 20221221 150349)
+		 [(0 6 0 20221224 114145)
 		  ((emacs
 		    (27 1))
 		   (embark
@@ -1120,9 +1120,9 @@
 		   (:maintainer "Omar Antolín Camarena" . "omar@matem.unam.mx")
 		   (:authors
 		    ("Omar Antolín Camarena" . "omar@matem.unam.mx"))
-		   (:commit . "e7a921060c867c2e61cea42ff10fde92a36be445"))])
+		   (:commit . "ee014d5f3c86eafae673a947b492fa03ffbacb4e"))])
  (ement .
-	[(0 6 -1 0 20221125 201940)
+	[(0 6 -1 0 20221223 123705)
 	 ((emacs
 	   (27 1))
 	  (map
@@ -1143,7 +1143,7 @@
 	  (:maintainer "Adam Porter" . "adam@alphapapa.net")
 	  (:authors
 	   ("Adam Porter" . "adam@alphapapa.net"))
-	  (:commit . "f721fe3fb408bc28a7dbcb296226d834fd2304e6"))])
+	  (:commit . "8d55a6375dce7beda8a15e510cff670c588bc29b"))])
  (emms .
        [(12 0 20221208 193128)
 	((cl-lib
@@ -2059,7 +2059,7 @@
 	(:url . "https://elpa.gnu.org/packages/map.html")
 	(:commit . "e25a108b09d12502527620ec379a0950cb577311"))])
  (marginalia .
-	     [(1 0 0 20221222 143418)
+	     [(1 0 0 20221224 165702)
 	      ((emacs
 		(27 1)))
 	      "Enrich existing commands with completion annotations" tar
@@ -2067,7 +2067,7 @@
 	       (:maintainer "Omar Antolín Camarena <omar@matem.unam.mx>, Daniel Mendler" . "mail@daniel-mendler.de")
 	       (:authors
 		("Omar Antolín Camarena <omar@matem.unam.mx>, Daniel Mendler" . "mail@daniel-mendler.de"))
-	       (:commit . "4c8f6b8848cc47d70431adb74864967cc5986895"))])
+	       (:commit . "c1365bf0c7b5d32e7531fa8f1a9a3b64a155cec0"))])
  (markchars .
 	    [(0 2 2 0 20221221 80510)
 	     nil "Mark chars fitting certain characteristics" tar
@@ -2402,7 +2402,7 @@
 	      (:authors
 	       ("Michael Heerdegen" . "michael_heerdegen@web.de")))])
  (orderless .
-	    [(0 8 0 20221128 173026)
+	    [(0 8 0 20221223 161153)
 	     ((emacs
 	       (26 1)))
 	     "Completion style for matching regexps in any order" tar
@@ -2411,9 +2411,9 @@
 	      (:maintainer "Omar Antolín Camarena" . "omar@matem.unam.mx")
 	      (:authors
 	       ("Omar Antolín Camarena" . "omar@matem.unam.mx"))
-	      (:commit . "004cee6b8e01f8eb0cb1c683d0a637b14890600f"))])
+	      (:commit . "e3062280f924933e9c6f5dd1a71729ed98c8493a"))])
  (org .
-      [(9 6 0 20221221 184407)
+      [(9 6 0 20221225 91946)
        ((emacs
 	 (25 1)))
        "Outline-based notes management and organizer" tar
@@ -2422,7 +2422,7 @@
 	(:maintainer "Bastien Guerry" . "bzg@gnu.org")
 	(:authors
 	 ("Carsten Dominik" . "carsten.dominik@gmail.com"))
-	(:commit . "f731d45d28627a9e3c732070e55d68e2b16bda80"))])
+	(:commit . "d2b49c72b22c02a558d4d065bf468fc2f03d9a1a"))])
  (org-contacts .
 	       [(1 1 0 20221221 43108)
 		((emacs
@@ -2487,7 +2487,7 @@
 	      ("Taylor Grinn" . "grinntaylor@gmail.com"))
 	     (:commit . "27ea5d8b9be5bffb2a014324493383593b976ebf"))])
  (org-remark .
-	     [(1 0 5 0 20221214 72147)
+	     [(1 0 5 0 20221224 70001)
 	      ((emacs
 		(27 1))
 	       (org
@@ -2498,7 +2498,7 @@
 	       (:maintainer "Noboru Ota" . "me@nobiot.com")
 	       (:authors
 		("Noboru Ota" . "me@nobiot.com"))
-	       (:commit . "618d60393961f83f0e18881d970f070063064f13"))])
+	       (:commit . "2f8b05259b2a1ef01f038e599b103d925bbb1429"))])
  (org-transclusion .
 		   [(1 3 1 0 20221109 20535)
 		    ((emacs
@@ -2818,7 +2818,7 @@
 		   ("Feng Shu" . "tumashu@163.com"))
 		  (:commit . "d61af27686f7a39e6c138b7261a686e7ea7a0ef7"))])
  (python .
-	 [(0 28 0 20221215 172944)
+	 [(0 28 0 20221225 53021)
 	  ((emacs
 	    (24 4))
 	   (compat
@@ -2831,7 +2831,7 @@
 	   (:maintainer nil . "emacs-devel@gnu.org")
 	   (:authors
 	    ("Fabián E. Gallina" . "fgallina@gnu.org"))
-	   (:commit . "4331771222fe670bd45c460b5e4f68e0dd4dc3c1"))])
+	   (:commit . "48db8b68a8eb5c12d5682f2eb31cadc53186f5d7"))])
  (quarter-plane .
 		[(0 1 0 20221221 81727)
 		 nil "Minor mode for quarter-plane style editing" tar
@@ -3374,7 +3374,7 @@
 		("Christian Johansson" . "christian@cvj.se"))
 	       (:commit . "9311f9b4f8d25ce54fb7da9bf59d955fed366a4d"))])
  (standard-themes .
-		  [(1 1 0 0 20221219 40509)
+		  [(1 1 0 0 20221223 103600)
 		   ((emacs
 		     (27 1)))
 		   "Like the default theme but more consistent" tar
@@ -3383,7 +3383,7 @@
 		    (:maintainer "Standard-Themes Development" . "~protesilaos/standard-themes@lists.sr.ht")
 		    (:authors
 		     ("Protesilaos Stavrou" . "info@protesilaos.com"))
-		    (:commit . "e6890fb100cf55edc5756636e425c8de7dbe3756"))])
+		    (:commit . "08beba43e6c66afb7dd215e7753c2b79c02c0a98"))])
  (stream .
 	 [(2 2 5 0 20221221 82401)
 	  ((emacs
@@ -3746,7 +3746,7 @@
 		   ("Tom Schutzer-Weissmann" . "tom.weissmann@gmail.com"))
 		  (:commit . "ddffee7338136b46c8f1f544872045e991312ba2"))])
  (url-scgi .
-	   [(0 8 0 20221206 172827)
+	   [(0 8 0 20221224 42354)
 	    ((emacs
 	      (24 3)))
 	    "SCGI support for url.el" tar
@@ -3755,7 +3755,7 @@
 	     (:maintainer "Stefan Kangas" . "stefankangas@gmail.com")
 	     (:authors
 	      ("Stefan Kangas" . "stefankangas@gmail.com"))
-	     (:commit . "16611431bceb6a046ca19719ae97c6ba19780451"))])
+	     (:commit . "cf05aac1cd901247f0af1be14bd970465b76844c"))])
  (use-package .
 	      [(2 4 4 0 20221208 233230)
 	       ((emacs

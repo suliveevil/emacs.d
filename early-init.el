@@ -87,6 +87,7 @@
 
 ;; UI
 ;; {{{
+(push '(fullscreen . maximized) default-frame-alist)
 (setq inhibit-splash-screen t)        ;; 禁用欢迎界面
 (tool-bar-mode -1)          ;; 工具栏
 (set-fringe-mode 10)        ;;

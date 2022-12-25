@@ -6,8 +6,8 @@
 ;; Maintainer: Omar Antolín Camarena <omar@matem.unam.mx>, Daniel Mendler <mail@daniel-mendler.de>
 ;; Created: 2020
 ;; Version: 1.0
-;; Package-Version: 20221222.1434
-;; Package-Commit: 4c8f6b8848cc47d70431adb74864967cc5986895
+;; Package-Version: 20221224.1657
+;; Package-Commit: c1365bf0c7b5d32e7531fa8f1a9a3b64a155cec0
 ;; Package-Requires: ((emacs "27.1"))
 ;; Homepage: https://github.com/minad/marginalia
 
@@ -594,6 +594,9 @@ keybinding since CAND includes it."
           ;; Emacs bug#53988: abbrev-table-p throws an error
           ((guard (ignore-errors (abbrev-table-p val))) (propertize "#<abbrev-table>" 'face 'marginalia-value))
           ((pred char-table-p) (propertize "#<char-table>" 'face 'marginalia-value))
+          ;; Emacs 29 comes with callable objects or object closures (OClosures)
+          ((guard (and (fboundp 'oclosure-type) (oclosure-type val)))
+           (format (propertize "#<oclosure %s>" 'face 'marginalia-function) (oclosure-type val)))
           ((pred byte-code-function-p) (propertize "#<byte-code-function>" 'face 'marginalia-function))
           ((and (pred functionp) (pred symbolp))
            ;; NOTE: We are not consistent here, values are generally printed unquoted. But we

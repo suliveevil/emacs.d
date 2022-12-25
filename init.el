@@ -1,6 +1,11 @@
 ;; -*- origami-fold-style: triple-braces -*-
 ;; init
 
+(let (
+      (gc-cons-threshold most-positive-fixnum)
+      (file-name-handler-alist nil)
+      ))
+
 ;; test
 ;; {{{
 (add-to-list 'load-path (expand-file-name "~/.config/emacs/bisec"))
@@ -204,7 +209,7 @@ occurence of CHAR."
 
 ;; completion: dabbrev: dynamic abbreviation expand
 ;; {{{
-(keymap-global-set "C-<tab>"               #'dabbrev-expand)
+(keymap-global-set               "C-<tab>" #'dabbrev-expand)
 (keymap-set minibuffer-local-map "C-<tab>" #'dabbrev-expand)
 ;; }}}
 
@@ -726,6 +731,18 @@ Version 2018-06-18 2021-09-30"
 ;; (setq counsel-describe-variable-function #'helpful-variable)
 ;; }}}
 
+;; moom
+;; {{{
+(add-hook 'after-init-hook 'moom-mode)
+(with-eval-after-load "moom"
+  (setq moom-use-font-module nil)
+  (when (require 'moom-transient nil t)
+    (moom-transient-hide-cursor) ;; if needed
+    (define-key moom-mode-map (kbd "C-c o") #'moom-transient-dispatch)
+    )
+  )
+;; }}}
+
 ;; org-auto-tangle
 ;; {{{
 (require 'org-auto-tangle)
@@ -733,7 +750,9 @@ Version 2018-06-18 2021-09-30"
 ;; }}}
 
 ;; magit + git-gutter
+;; {{{
 (global-git-gutter-mode +1)
+;; }}}
 
 ;; package database: epkg + epkgs
 ;; {{{
@@ -902,6 +921,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
      (marginalia-annotate-binding cand)
      (marginalia--documentation (marginalia--function-doc sym)))))
 ;; }}}
+
 
 ;; org-roam: basic config
 ;; {{{
@@ -1084,7 +1104,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
          :immediate-finish t
          :unnarrowed  t)
         ;; f:
-        ("f" "Function" plain "%?"
+        ("f" "Emacs Function" plain "%?"
          :target (file+head "Emacs/function/${title}.org"
                             "#+title: ${title}\n#+category:\n#+filetags: \n")
          :immediate-finish t
@@ -1104,7 +1124,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
                             "#+title: ${title}\n")
          :immediate-finish t
          :unnarrowed t)
-        ("P" "Emacs Package" plain "%?"
+        ("P" "Emacs 包/插件" plain "%?"
          :target (file+head "Emacs/package/${title}.org"
                             "#+title: ${title}\n#+filetags: :Emacs:\n")
          :immediate-finish t
@@ -1129,7 +1149,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
          :unnarrowed t)
         ;; u:
         ;; v:
-        ("v" "变量" plain "%?"
+        ("v" "Emacs 变量" plain "%?"
          :target (file+head "Emacs/variable/${title}.org"
                             "#+title: ${title}\n")
          :immediate-finish t
@@ -1182,6 +1202,21 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
         org-roam-ui-update-on-save t
         org-roam-ui-open-on-start t)
   )
+;; }}}
+
+;; org-similarity
+;; {{{
+(require 'f)
+(require 'org-roam-similarity)
+;; directory to scan for possibly similar documents.
+;; (setq org-similarity-directory org-directory)
+(setq org-roam-similarity-directory org-roam-directory)
+;; the language passed to nltk's Snowball stemmer
+(setq org-roam-similarity-language "english")
+;; how many similar entries to list at the end of the buffer
+(setq org-roam-similarity-number-of-documents 15)
+;; whether to prepend the list entries with their cosine similarity score
+(setq org-roam-similarity-show-scores t)
 ;; }}}
 
 ;; markdown-mode
@@ -1355,24 +1390,27 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 (require 'free-keys)
 (setq free-keys-modifiers '(
                             ""
-                            "C"
-                            "M"
-                            "s"
-                            "S"
                             ;; "A"
-                            ;; "H"
+                            "C"
+                            "H"
+                            "M"
+                            "S"
+                            "s"
                             ;; "A-C"
+                            ;; "A-H"
                             ;; "A-M"
-                            "C-M"
-                            ;; "C-s"
-                            ;; "C-S"
+                            ;; "A-S"
+                            ;; "A-s"
                             ;; "C-H"
-                            ;; "M-s"
+                            "C-M"
+                            ;; "C-S"
+                            ;; "C-s"
                             ;; "M-S"
-                            ;; "s-S"
+                            ;; "M-s"
                             ;; "s-H"
-                            ;; "C-M-s"
+                            ;; "S-s"
                             ;; "C-M-S"
+                            ;; "C-M-s"
                             "C-c C"
                             "C-x C" ))
 ;; }}}

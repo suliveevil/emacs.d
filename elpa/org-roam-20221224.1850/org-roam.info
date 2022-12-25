@@ -392,14 +392,6 @@ reading the documentation in the Emacs manual, see *note
 
    Org-roam also depends on a recent version of Org, which can be
 obtained in Org’s package repository (see *note (org)Installation::).
-To use Org’s ELPA archive:
-
-     (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
-
-   Once you have added your preferred archive, you need to update the
-local package list using:
-
-     M-x package-refresh-contents RET
 
    Once you have done that, you can install Org-roam and its
 dependencies using:
@@ -787,19 +779,25 @@ set:
 
      (setq org-roam-database-connector 'sqlite3)
 
-   **emacsql-libsqlite3**
-(https://github.com/emacscollective/emacsql-libsqlite3/)
+   **emacssql-sqlite-module**
+(https://melpa.org/#/emacsql-sqlite-module) (previously
+emacsql-libsqlite3)
 
-   ‘emacs-libsqlite3’ is a relatively young package which uses an Emacs
-module that exposes parts of the SQLite C API to Emacs Lisp, instead of
-using subprocess as ‘emacsql-sqlite’ does.  It is expected to be a more
-performant drop-in replacement for ‘emacs-sqlite’.
+   ‘emacs-sqlite-module’ is a relatively young package which uses an
+Emacs module that exposes parts of the SQLite C API to Emacs Lisp,
+instead of using subprocess as ‘emacsql-sqlite’ does.  It is expected to
+be a more performant drop-in replacement for ‘emacs-sqlite’.
 
-   At the moment it is experimental and does not work well with the SQL
-query load required by Org-roam, but you may still try it by ensuring
-the package is installed and setting:
+     (setq org-roam-database-connector 'sqlite-module)
 
-     (setq org-roam-database-connector 'libsqlite3)
+   **emacsql-sqlite-builtin**
+(https://melpa.org/#/emacsql-sqlite-builtin)
+
+   ‘emacsql-sqlite-builtin’ uses the in-built SQLite support for Emacs
+29 and later.  This is the recommended option if you are using a version
+of Emacs that supports it.
+
+     (setq org-roam-database-connector 'sqlite-builtin)
 
 
 File: org-roam.info,  Node: What to cache,  Next: When to cache,  Prev: How to cache,  Up: Customizing Node Caching
@@ -2624,90 +2622,90 @@ Node: Target Audience6768
 Node: A Brief Introduction to the Zettelkasten Method8644
 Node: Installation11802
 Node: Installing from MELPA12166
-Node: Installing from Source13425
-Node: Installation Troubleshooting16408
-Node: C Compiler16610
-Node: C Compiler for Windows17181
-Node: Getting Started18422
-Node: The Org-roam Node18714
-Node: Links between Nodes19542
-Node: Setting up Org-roam19947
-Node: Creating and Linking Nodes21554
-Node: Customizing Node Completions23274
-Node: Customizing Node Caching25494
-Node: How to cache25730
-Node: What to cache27766
-Node: When to cache29894
-Node: The Org-roam Buffer30663
-Node: Navigating the Org-roam Buffer32119
-Node: Configuring what is displayed in the buffer32835
-Node: Configuring the Org-roam buffer display34166
-Node: Styling the Org-roam buffer35667
-Node: Node Properties35879
-Node: Standard Org properties36098
-Node: Titles and Aliases36448
-Node: Tags37449
-Node: Refs38109
-Node: Citations39309
-Node: Using the Cached Information39875
-Node: Completion41022
-Node: Completing within Link Brackets41818
-Node: Completing anywhere42268
-Node: Encryption43044
-Node: The Templating System43800
-Node: Template Walkthrough44517
-Node: Org-roam Template Expansion46361
-Node: Extensions48248
-Node: org-roam-protocol48484
-Node: Installation (1)48946
-Node: Linux49788
-Node: Mac OS51314
-Ref: Testing org-protocol53352
-Node: Windows54365
-Node: The roam-node protocol55108
-Node: The roam-ref protocol55495
-Node: org-roam-graph56673
-Node: Graph Options58570
-Node: org-roam-dailies59592
-Node: Configuration59879
-Node: Usage60688
-Node: org-roam-export62484
-Node: Performance Optimization63004
-Node: Garbage Collection63210
-Node: The Org-mode Ecosystem64004
-Node: Browsing History with winner-mode64501
-Node: Versioning Notes65373
-Node: Full-text search with Deft66164
-Node: Org-journal66915
-Node: Org-download67727
-Node: mathpixel68244
-Node: Org-noter / Interleave68823
-Node: Bibliography69215
-Node: Spaced Repetition69976
-Node: FAQ70632
-Node: How do I have more than one Org-roam directory?71239
-Node: How do I create a note whose title already matches one of the candidates?72810
-Node: How can I stop Org-roam from creating IDs everywhere?73730
-Node: How do I migrate from Roam Research?74424
-Node: How to migrate from Org-roam v1?74921
-Node: How do I publish my notes with an Internet-friendly graph?76330
-Node: Configure org-mode for publishing77772
-Node: Overriding the default link creation function79258
-Node: Copying the generated file to the export directory79930
-Node: I'm seeing this ``Selecting deleted buffer'' error What do I do?80901
-Node: Developer's Guide to Org-roam81959
-Node: Org-roam's Design Principle82233
-Node: Building Extensions and Advanced Customization of Org-roam84223
-Node: Accessing the Database85485
-Node: Accessing and Modifying Nodes86214
-Node: Extending the Capture System88090
-Node: Appendix89632
-Node: Note-taking Workflows89819
-Node: Ecosystem91101
-Node: Keystroke Index91218
-Node: Command Index91369
-Node: Function Index91522
-Node: Variable Index93300
+Node: Installing from Source13181
+Node: Installation Troubleshooting16164
+Node: C Compiler16366
+Node: C Compiler for Windows16937
+Node: Getting Started18178
+Node: The Org-roam Node18470
+Node: Links between Nodes19298
+Node: Setting up Org-roam19703
+Node: Creating and Linking Nodes21310
+Node: Customizing Node Completions23030
+Node: Customizing Node Caching25250
+Node: How to cache25486
+Node: What to cache27679
+Node: When to cache29807
+Node: The Org-roam Buffer30576
+Node: Navigating the Org-roam Buffer32032
+Node: Configuring what is displayed in the buffer32748
+Node: Configuring the Org-roam buffer display34079
+Node: Styling the Org-roam buffer35580
+Node: Node Properties35792
+Node: Standard Org properties36011
+Node: Titles and Aliases36361
+Node: Tags37362
+Node: Refs38022
+Node: Citations39222
+Node: Using the Cached Information39788
+Node: Completion40935
+Node: Completing within Link Brackets41731
+Node: Completing anywhere42181
+Node: Encryption42957
+Node: The Templating System43713
+Node: Template Walkthrough44430
+Node: Org-roam Template Expansion46274
+Node: Extensions48161
+Node: org-roam-protocol48397
+Node: Installation (1)48859
+Node: Linux49701
+Node: Mac OS51227
+Ref: Testing org-protocol53265
+Node: Windows54278
+Node: The roam-node protocol55021
+Node: The roam-ref protocol55408
+Node: org-roam-graph56586
+Node: Graph Options58483
+Node: org-roam-dailies59505
+Node: Configuration59792
+Node: Usage60601
+Node: org-roam-export62397
+Node: Performance Optimization62917
+Node: Garbage Collection63123
+Node: The Org-mode Ecosystem63917
+Node: Browsing History with winner-mode64414
+Node: Versioning Notes65286
+Node: Full-text search with Deft66077
+Node: Org-journal66828
+Node: Org-download67640
+Node: mathpixel68157
+Node: Org-noter / Interleave68736
+Node: Bibliography69128
+Node: Spaced Repetition69889
+Node: FAQ70545
+Node: How do I have more than one Org-roam directory?71152
+Node: How do I create a note whose title already matches one of the candidates?72723
+Node: How can I stop Org-roam from creating IDs everywhere?73643
+Node: How do I migrate from Roam Research?74337
+Node: How to migrate from Org-roam v1?74834
+Node: How do I publish my notes with an Internet-friendly graph?76243
+Node: Configure org-mode for publishing77685
+Node: Overriding the default link creation function79171
+Node: Copying the generated file to the export directory79843
+Node: I'm seeing this ``Selecting deleted buffer'' error What do I do?80814
+Node: Developer's Guide to Org-roam81872
+Node: Org-roam's Design Principle82146
+Node: Building Extensions and Advanced Customization of Org-roam84136
+Node: Accessing the Database85398
+Node: Accessing and Modifying Nodes86127
+Node: Extending the Capture System88003
+Node: Appendix89545
+Node: Note-taking Workflows89732
+Node: Ecosystem91014
+Node: Keystroke Index91131
+Node: Command Index91282
+Node: Function Index91435
+Node: Variable Index93213
 
 End Tag Table
 
