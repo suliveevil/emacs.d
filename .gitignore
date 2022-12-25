@@ -55,6 +55,7 @@ annotations
 annotations/
 anaconda-mode/
 blink-search.db
+bisec/
 company-statistics-cache.el
 cookies
 custom-set-variables.el
