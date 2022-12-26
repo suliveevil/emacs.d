@@ -415,6 +415,31 @@ Version 2018-06-18 2021-09-30"
 (setq org-src-fontify-natively 1)         ;代码块语法高亮
 (setq org-src-tab-acts-natively 1)        ;开启代码块语法缩进
 (setq org-edit-src-content-indentation 0) ;代码块初始缩进范围
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '(
+   (awk . t)
+   ;; (c   .  t)
+   (calc   .  t)
+   (comint   .  t)
+   (css   .  t)
+   (dot . t)
+   (emacs-lisp   .  t)
+   (eshell   .  t)
+   (haskell . t)
+   (js   .  t)
+   (latex . t)
+   (lua   .  t)
+   (org   .  t)
+   (perl   .  t)
+   (plantuml   .  t)
+   (python . t)
+   (ruby . t)
+   (sed   .  t)
+   (shell . t)
+   (sql   .  t)
+   (sqlite . t)
+   ))
 ;; }}}
 
 ;; open app
@@ -741,6 +766,13 @@ Version 2018-06-18 2021-09-30"
     (define-key moom-mode-map (kbd "C-c o") #'moom-transient-dispatch)
     )
   )
+;; }}}
+
+;; {{{ ace-window
+;; (require 'ace-window)
+(keymap-global-set "M-o" #'ace-window)
+(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+
 ;; }}}
 
 ;; org-auto-tangle
@@ -1083,30 +1115,31 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; {{{
 (setq org-roam-capture-templates
       '(
+	;; #+date: %<%Y-%m-%d-%H:%M:%S %Z>\n
+	;; #+date: %<%FT%T%z>\n
         ;; a: audio & music
         ;; b: book
         ("b" "图书" plain "%?"
          :target (file+head "图书/${title}.org"
-                            "#+title: ${title}\n#+category:\n#+filetags: \n")
+                            "#+title: ${title}\n#+date: %<%FT%T%z>\n#+category:\n#+filetags: \n")
          :immediate-finish t
          :unnarrowed  t)
         ;; c:
         ("d" "default" plain "%?"
          :target (file+head "${slug}.org"
-                            "#+title: ${title}\n#+category:\n#+filetags:\n")
-         ;; #+date: %<%Y-%m-%d-%H:%M:%S %Z>\n
+                            "#+title: ${title}\n#+date: %<%FT%T%z>\n#+category:\n#+filetags:\n")
          :empty-lines 1
          :immediate-finish t
          :unnarrowed  t)
         ("e" "Emacs" plain "%?"
-         :target (file+head "Emacs/${title}.org"
-                            "#+title: ${title}\n#+category:\n#+filetags: \n")
+         :target (file+head "Emacs/${slug}.org"
+                            "#+title: ${title}\n#+date: %<%FT%T%z>\n#+category:\n#+filetags: \n")
          :immediate-finish t
          :unnarrowed  t)
         ;; f:
         ("f" "Emacs Function" plain "%?"
-         :target (file+head "Emacs/function/${title}.org"
-                            "#+title: ${title}\n#+category:\n#+filetags: \n")
+         :target (file+head "Emacs/function/${slug}.org"
+                            "#+title: ${title}\n#+date: %<%FT%T%z>\n#+category:\n#+filetags: \n")
          :immediate-finish t
          :unnarrowed  t)
         ;; g:
@@ -1120,38 +1153,37 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
         ;; o:
         ;; p: project
         ("p" "project" plain "%?"
-         :target (file+head "${title}.org"
-                            "#+title: ${title}\n")
+         :target (file+head "${slug}.org"
+                            "#+title: ${title}\n#+date: %<%FT%T%z>\n")
          :immediate-finish t
          :unnarrowed t)
         ("P" "Emacs 包/插件" plain "%?"
          :target (file+head "Emacs/package/${title}.org"
-                            "#+title: ${title}\n#+filetags: :Emacs:\n")
+                            "#+title: ${title}\n#+date: %<%FT%T%z>\n#+filetags: :Emacs:\n")
          :immediate-finish t
          :unnarrowed t)
         ;; q:
         ("r" "reference" plain "%? \n %(v-i-or-nothing) \n\n%(v-a-or-nothing)"
-         :target
-         (file+head "references/%<%Y%m%d%H%M%S>-${title}.org"
-                    "#+title: ${title}\n")
+         :target (file+head "references/${title}-%<%FT%T%z>\n.org"
+                            "#+title: ${title}\n#+date: %<%FT%T%z>\n")
          :unnarrowed t)
         ;; s:
         ("s" "软件" plain "%?"
-         :target (file+head "software/${title}.org"
-                            "#+title: ${title}\n")
+         :target (file+head "software/${slug}.org"
+                            "#+title: ${title}\n#+date: %<%FT%T%z>\n")
          :immediate-finish t
          :unnarrowed t)
         ;; t: topic todo
         ("t" "主题" plain "%?"
-         :target (file+head "topics/${title}.org"
-                            "#+title: ${title}\n")
+         :target (file+head "topics/${slug}.org"
+                            "#+title: ${title}\n#+date: %<%FT%T%z>\n")
          :immediate-finish t
          :unnarrowed t)
         ;; u:
         ;; v:
         ("v" "Emacs 变量" plain "%?"
-         :target (file+head "Emacs/variable/${title}.org"
-                            "#+title: ${title}\n")
+         :target (file+head "Emacs/variable/${slug}.org"
+                            "#+title: ${title}\n#+date: %<%FT%T%z>\n")
          :immediate-finish t
          :unnarrowed t)
         ;; w:

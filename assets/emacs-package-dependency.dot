@@ -51,6 +51,7 @@ digraph G {"epkg" -> "emacs";
 "pyim" -> "async";
 "pyim" -> "xr";
 "applescript-mode" -> "emacs";
+"ace-window" -> "avy";
 "shrink-path" -> "emacs";
 "shrink-path" -> "s";
 "shrink-path" -> "dash";
