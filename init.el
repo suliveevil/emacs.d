@@ -960,25 +960,19 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 (use-package org-roam
   :ensure t
   :defer t ;; autoload
-  :bind (("C-c n l" . org-roam-buffer-toggle)
+  :bind (
+         ("C-c n a" . org-roam-alias-add)
+         ("C-c n c" . org-roam-capture)
          ("C-c n f" . org-roam-node-find)
          ("C-c n g" . org-roam-graph)
          ("C-c n i" . org-roam-node-insert)
-         ("C-c n c" . org-roam-capture)
          ("C-c n j" . org-roam-dailies-capture-today) ;; Dailies
-         (:map org-mode-map
-               ("C-c n i" . org-roam-node-insert)
-               ("C-c n o" . org-id-get-create)
-               ("C-c n t" . org-roam-tag-add)
-               ("C-c n a" . org-roam-alias-add)
-               ("C-c n m". completion-at-point)
-               ("C-c n l" . org-roam-buffer-toggle))
+         ("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n t" . org-roam-tag-add)
          )
   :config
-  ;; If you're using a vertical completion framework,
-  ;; you might want a more informative completion interface
-  ;; file-truename is optional
-  ;; it seems required when use symbolic links, which Org-roam does not resolve
+  (setq org-roam-directory "~/org-roam")
+  (setq org-roam-db-location "~/org-roam/org-roam.db")
   (setq org-roam-file-extensions '("org" "md")) ;; enable Org-roam for markdown
   (require 'org-roam-protocol)                  ;; org-roam-protocol
   )
@@ -1124,6 +1118,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
                             "#+title: ${title}\n#+date: %<%FT%T%z>\n#+category:\n#+filetags: \n")
          :immediate-finish t
          :unnarrowed  t)
+        ("bz" "Z综合性图书" plain "%?"
+         :target (file+head "图书/Z综合性图书/${title}.org"
+                            "#+title: ${title}\n#+date: %<%FT%T%z>\n#+category:\n#+filetags: \n")
+         :immediate-finish t
+         :unnarrowed  t)
         ;; c:
         ("d" "default" plain "%?"
          :target (file+head "${slug}.org"
@@ -1240,7 +1239,6 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; {{{
 (require 'f)
 (require 'org-similarity)
-;; (setq org-similarity-directory org-directory)
 (setq org-similarity-directory org-roam-directory)
 (setq org-similarity-language "english")
 (setq org-similarity-number-of-documents 15)
@@ -1249,12 +1247,12 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 
 ;; org-roam-similarity
 ;; {{{
-;; (require 'f)
-;; (require 'org-roam-similarity)
-;; (setq org-roam-similarity-directory org-roam-directory)
-;; (setq org-roam-similarity-language "english")
-;; (setq org-roam-similarity-number-of-documents 15)
-;; (setq org-roam-similarity-show-scores t)
+(require 'f)
+(require 'org-roam-similarity)
+(setq org-roam-similarity-directory org-roam-directory)
+(setq org-roam-similarity-language "english")
+(setq org-roam-similarity-number-of-documents 15)
+(setq org-roam-similarity-show-scores t)
 ;; }}}
 
 ;; markdown-mode

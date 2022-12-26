@@ -22,3 +22,6 @@
 [submodule "lib/org-similarity"]
 	path = lib/org-similarity
 	url = git@github.com:suliveevil/org-similarity.git
+[submodule "lib/org-roam-similarity"]
+	path = lib/org-roam-similarity
+	url = git@github.com:Vidianos-Giannitsis/org-roam-similarity.git
