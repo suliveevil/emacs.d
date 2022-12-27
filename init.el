@@ -565,6 +565,15 @@ Version 2018-06-18 2021-09-30"
   (package-refresh-contents))
 ;; }}}
 
+;; profile: benchmark-init
+;; {{{
+(require 'benchmark-init-modes)
+(require 'benchmark-init)
+(benchmark-init/activate)
+;; To disable collection of benchmark data after init is done.
+(add-hook 'after-init-hook 'benchmark-init/deactivate)
+;; }}}
+
 ;; package dependency graph (Graphviz)
 ;; {{{
 ;; https://emacs-china.org/t/package/22775/2?u=suliveevil
@@ -642,6 +651,14 @@ Version 2018-06-18 2021-09-30"
   (do-applescript "tell application id \"org.gnu.Emacs\" to activate")
   )
 (keymap-global-set "C-c M-o" #'my/siri-ocr)
+;; }}}
+
+;; khoj
+;; {{{
+;; Install Khoj Package from MELPA Stable
+(use-package khoj
+   :ensure t
+   :bind ("C-c s" . 'khoj))
 ;; }}}
 
 ;; MacVim
@@ -800,15 +817,6 @@ Version 2018-06-18 2021-09-30"
      `(,pkg ,(package-desc-version
               (cadr (assq pkg package-alist)))))
    package-activated-list))
-;; }}}
-
-;; profile: benchmark-init
-;; {{{
-(require 'benchmark-init-modes)
-(require 'benchmark-init)
-(benchmark-init/activate)
-;; To disable collection of benchmark data after init is done.
-(add-hook 'after-init-hook 'benchmark-init/deactivate)
 ;; }}}
 
 ;; avy
@@ -1237,12 +1245,13 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 
 ;; org-similarity
 ;; {{{
-(require 'f)
 (require 'org-similarity)
 (setq org-similarity-directory org-roam-directory)
 (setq org-similarity-language "english")
 (setq org-similarity-number-of-documents 15)
 (setq org-similarity-show-scores t)
+(setq org-similarity-use-id-scores t)
+(setq org-similarity-recursive-search t)
 ;; }}}
 
 ;; org-roam-similarity

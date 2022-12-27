@@ -37,6 +37,7 @@ digraph G {"epkg" -> "emacs";
 "magit" -> "transient";
 "magit" -> "with-editor";
 "osx-dictionary" -> "cl-lib";
+"khoj" -> "emacs";
 "ace-pinyin" -> "avy";
 "ace-pinyin" -> "pinyinlib";
 "magit-section" -> "emacs";

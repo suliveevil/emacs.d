@@ -1,6 +1,6 @@
-(define-package "orderless" "20221223.2211" "Completion style for matching regexps in any order"
+(define-package "orderless" "20221225.1428" "Completion style for matching regexps in any order"
   '((emacs "26.1"))
-  :commit "e3062280f924933e9c6f5dd1a71729ed98c8493a" :authors
+  :commit "847694e78c12d903d5e3f6cb365a5d3b984db537" :authors
   '(("Omar Antolín Camarena" . "omar@matem.unam.mx"))
   :maintainer
   '("Omar Antolín Camarena" . "omar@matem.unam.mx")

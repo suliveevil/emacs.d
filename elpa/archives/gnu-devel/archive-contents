@@ -556,7 +556,7 @@
 	    ("Philip Kaludercic" . "philipk@posteo.net"))
 	   (:commit . "1573aa2e6d478c30cc7f394b72cbaa4db77ef811"))])
  (consult .
-	  [(0 29 0 20221224 164333)
+	  [(0 29 0 20221226 172545)
 	   ((emacs
 	     (27 1))
 	    (compat
@@ -566,7 +566,7 @@
 	    (:maintainer "Daniel Mendler" . "mail@daniel-mendler.de")
 	    (:authors
 	     ("Daniel Mendler and Consult contributors"))
-	    (:commit . "84bacb5b454c046d8f388f1386ffa39d52ddfd45"))])
+	    (:commit . "794e000e02d5efb19362f5e89e7171e9fdd1fb7e"))])
  (consult-recoll .
 		 [(0 8 0 20221014 200255)
 		  ((emacs
@@ -999,7 +999,7 @@
 	       ("Markus Triska" . "triska@metalevel.at"))
 	      (:commit . "cfcdf9e42821d246b7fbc84877aa4ecacc184a1c"))])
  (eev .
-      [(20221204 0 20221225 135)
+      [(20221227 0 20221227 5405)
        ((emacs
 	 (24 4)))
        "Support for e-scripts (eepitch blocks, elisp hyperlinks, etc)" tar
@@ -1008,7 +1008,7 @@
 	(:maintainer "Eduardo Ochs" . "eduardoochs@gmail.com")
 	(:authors
 	 ("Eduardo Ochs" . "eduardoochs@gmail.com"))
-	(:commit . "8dc7d397e7aea6fba4fd4779b1ee562d96154f4d"))])
+	(:commit . "94b49dbfbce8cbef6f8cee1bb63dd86c6e9c776a"))])
  (ef-themes .
 	    [(0 10 0 0 20221219 40550)
 	     ((emacs
@@ -2402,7 +2402,7 @@
 	      (:authors
 	       ("Michael Heerdegen" . "michael_heerdegen@web.de")))])
  (orderless .
-	    [(0 8 0 20221223 161153)
+	    [(1 0 0 20221225 82849)
 	     ((emacs
 	       (26 1)))
 	     "Completion style for matching regexps in any order" tar
@@ -2411,9 +2411,9 @@
 	      (:maintainer "Omar Antolín Camarena" . "omar@matem.unam.mx")
 	      (:authors
 	       ("Omar Antolín Camarena" . "omar@matem.unam.mx"))
-	      (:commit . "e3062280f924933e9c6f5dd1a71729ed98c8493a"))])
+	      (:commit . "847694e78c12d903d5e3f6cb365a5d3b984db537"))])
  (org .
-      [(9 6 0 20221225 91946)
+      [(9 6 0 20221227 95024)
        ((emacs
 	 (25 1)))
        "Outline-based notes management and organizer" tar
@@ -2422,7 +2422,7 @@
 	(:maintainer "Bastien Guerry" . "bzg@gnu.org")
 	(:authors
 	 ("Carsten Dominik" . "carsten.dominik@gmail.com"))
-	(:commit . "d2b49c72b22c02a558d4d065bf468fc2f03d9a1a"))])
+	(:commit . "af56f52ccb0011bc5d43187c3f4b15b0b61d995d"))])
  (org-contacts .
 	       [(1 1 0 20221221 43108)
 		((emacs
@@ -2487,7 +2487,7 @@
 	      ("Taylor Grinn" . "grinntaylor@gmail.com"))
 	     (:commit . "27ea5d8b9be5bffb2a014324493383593b976ebf"))])
  (org-remark .
-	     [(1 0 5 0 20221224 70001)
+	     [(1 0 5 0 20221225 170224)
 	      ((emacs
 		(27 1))
 	       (org
@@ -2498,7 +2498,7 @@
 	       (:maintainer "Noboru Ota" . "me@nobiot.com")
 	       (:authors
 		("Noboru Ota" . "me@nobiot.com"))
-	       (:commit . "2f8b05259b2a1ef01f038e599b103d925bbb1429"))])
+	       (:commit . "a6b79194d824cd4d703820be5d353305f8fc57c7"))])
  (org-transclusion .
 		   [(1 3 1 0 20221109 20535)
 		    ((emacs
@@ -3574,7 +3574,7 @@
 	  ("Oleh Krehel" . "ohwoeowho@gmail.com"))
 	 (:commit . "c107480fca7e42737c51b2afaa33ac31e92a7290"))])
  (tmr .
-      [(0 4 0 0 20220714 170726)
+      [(0 4 0 0 20221226 160532)
        ((emacs
 	 (27 1)))
        "Set timers using a convenient notation" tar
@@ -3585,7 +3585,7 @@
 	 ("Protesilaos Stavrou" . "info@protesilaos.com")
 	 ("Damien Cassou" . "damien@cassou.me")
 	 ("Daniel Mendler" . "mail@daniel-mendler.de"))
-	(:commit . "00c0ea6518b4a025f2765a7052391bf34f55d01d"))])
+	(:commit . "5a8527ee01b59ce55ecdb3d3ce3e2110e8b87a3d"))])
  (tomelr .
 	 [(0 4 3 0 20220511 213722)
 	  ((emacs
