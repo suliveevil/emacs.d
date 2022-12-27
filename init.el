@@ -1172,7 +1172,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
          :unnarrowed t)
         ;; q:
         ("r" "reference" plain "%?"
-         :target (file+head "reference/${title}-%<%FT%T%z>.org"
+         :target (file+head "reference/${slug}.org"
                             "#+title: ${title}\n#+date: %<%FT%T%z>\n")
          :unnarrowed t)
         ;; s:
@@ -1246,13 +1246,12 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 
 ;; org-similarity
 ;; {{{
-(setenv "PYTHONIOENCODING" "utf-8")
 (require 'org-similarity)
-(setq org-similarity-directory org-roam-directory)
+(defvaralias 'org-similarity-directory 'org-roam-directory)
 (setq org-similarity-language "english")
 (setq org-similarity-number-of-documents 15)
 (setq org-similarity-show-scores t)
-(setq org-similarity-use-id-scores t)
+(setq org-similarity-use-id-links t)
 (setq org-similarity-recursive-search t)
 ;; }}}
 
