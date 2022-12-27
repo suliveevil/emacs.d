@@ -983,6 +983,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   (setq org-roam-db-location "~/org-roam/org-roam.db")
   (setq org-roam-file-extensions '("org" "md")) ;; enable Org-roam for markdown
   (require 'org-roam-protocol)                  ;; org-roam-protocol
+  (org-roam-db-autosync-mode 1) ;; if md-roam installed, move to md-roam config
   )
 ;; }}}
 
