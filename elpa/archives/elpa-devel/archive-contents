@@ -518,7 +518,7 @@
 		 (:url . "https://elpa.gnu.org/packages/company-ebdb.html")
 		 (:commit . "f8967ecb4037d1a08d4028af4f9abe2394d4563e"))])
  (company-math .
-	       [(1 5 0 20221206 213733)
+	       [(1 5 1 0 20221227 132907)
 		((company
 		  (0 8 0))
 		 (math-symbol-lists
@@ -529,7 +529,7 @@
 		 (:maintainer "Vitalie Spinu" . "spinuvit@gmail.com")
 		 (:authors
 		  ("Vitalie Spinu" . "spinuvit@gmail.com"))
-		 (:commit . "3e1bd33f5a5a3fe4afc834919a4ad36c34f5ce98"))])
+		 (:commit . "3eb006874e309ff4076d947fcbd61bb6806aa508"))])
  (company-statistics .
 		     [(0 2 3 0 20170210 193350)
 		      ((emacs
@@ -1096,7 +1096,7 @@
 		     (:url . "https://elpa.gnu.org/packages/elisp-benchmarks.html")
 		     (:commit . "7122da523a9d23900f8ee7581cdc0f06e1b7a401"))])
  (embark .
-	 [(0 18 0 20221224 114145)
+	 [(0 18 0 20221227 132104)
 	  ((emacs
 	    (26 1)))
 	  "Conveniently act on minibuffer completions" tar
@@ -1105,9 +1105,9 @@
 	   (:maintainer "Omar Antolín Camarena" . "omar@matem.unam.mx")
 	   (:authors
 	    ("Omar Antolín Camarena" . "omar@matem.unam.mx"))
-	   (:commit . "ee014d5f3c86eafae673a947b492fa03ffbacb4e"))])
+	   (:commit . "629cce948c562361ddd6136d7cc49c5c981bb610"))])
  (embark-consult .
-		 [(0 6 0 20221224 114145)
+		 [(0 6 0 20221227 132104)
 		  ((emacs
 		    (27 1))
 		   (embark
@@ -1120,7 +1120,7 @@
 		   (:maintainer "Omar Antolín Camarena" . "omar@matem.unam.mx")
 		   (:authors
 		    ("Omar Antolín Camarena" . "omar@matem.unam.mx"))
-		   (:commit . "ee014d5f3c86eafae673a947b492fa03ffbacb4e"))])
+		   (:commit . "629cce948c562361ddd6136d7cc49c5c981bb610"))])
  (ement .
 	[(0 6 -1 0 20221223 123705)
 	 ((emacs
@@ -2413,7 +2413,7 @@
 	       ("Omar Antolín Camarena" . "omar@matem.unam.mx"))
 	      (:commit . "847694e78c12d903d5e3f6cb365a5d3b984db537"))])
  (org .
-      [(9 6 0 20221227 95024)
+      [(9 6 0 20221227 101404)
        ((emacs
 	 (25 1)))
        "Outline-based notes management and organizer" tar
@@ -2422,7 +2422,7 @@
 	(:maintainer "Bastien Guerry" . "bzg@gnu.org")
 	(:authors
 	 ("Carsten Dominik" . "carsten.dominik@gmail.com"))
-	(:commit . "af56f52ccb0011bc5d43187c3f4b15b0b61d995d"))])
+	(:commit . "5549357bf2cccc5ae3c58eb92e997126faa9fb5b"))])
  (org-contacts .
 	       [(1 1 0 20221221 43108)
 		((emacs
@@ -2487,7 +2487,7 @@
 	      ("Taylor Grinn" . "grinntaylor@gmail.com"))
 	     (:commit . "27ea5d8b9be5bffb2a014324493383593b976ebf"))])
  (org-remark .
-	     [(1 0 5 0 20221225 170224)
+	     [(1 0 5 0 20221228 3110)
 	      ((emacs
 		(27 1))
 	       (org
@@ -2498,7 +2498,7 @@
 	       (:maintainer "Noboru Ota" . "me@nobiot.com")
 	       (:authors
 		("Noboru Ota" . "me@nobiot.com"))
-	       (:commit . "a6b79194d824cd4d703820be5d353305f8fc57c7"))])
+	       (:commit . "5fb747a419366a33e6659a992ada8a35aa8bd655"))])
  (org-transclusion .
 		   [(1 3 1 0 20221109 20535)
 		    ((emacs
@@ -3533,7 +3533,7 @@
 		       (:keywords "convenience")
 		       (:url . "https://elpa.gnu.org/packages/temp-buffer-browse.html"))])
  (tempel .
-	 [(0 5 0 20221221 200354)
+	 [(0 6 0 20221228 62938)
 	  ((emacs
 	    (27 1)))
 	  "Tempo templates/snippets with in-buffer field editing" tar
@@ -3541,7 +3541,7 @@
 	   (:maintainer "Daniel Mendler" . "mail@daniel-mendler.de")
 	   (:authors
 	    ("Daniel Mendler" . "mail@daniel-mendler.de"))
-	   (:commit . "eafb06e9d2be347f22b356388a8fa05b3cf24599"))])
+	   (:commit . "9a25bacc16eac8b83c1bef1aefa0be27cfa8a762"))])
  (test-simple .
 	      [(1 3 0 0 20200722 214339)
 	       ((cl-lib

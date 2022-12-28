@@ -96,7 +96,7 @@
 ;; }}}
 
 
-;; version control
+;; symlink and version control
 ;; {{{
 (setq vc-follow-symlinks t)
 ;; }}}
@@ -146,9 +146,4 @@
         (add-subdirs-to-load-path subdir-path)))))
 
 (add-subdirs-to-load-path "~/.config/emacs/lib")
-;; }}}
-
-;; symlink and version control
-;; {{{
-(setq vc-follow-symlinks t)
 ;; }}}

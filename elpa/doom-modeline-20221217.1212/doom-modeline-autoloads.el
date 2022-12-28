@@ -41,6 +41,8 @@ evaluate `(default-value \\='doom-modeline-mode)'.
 The mode's hook is called both when the mode is enabled and when
 it is disabled.
 
+\\{doom-modeline-mode-map}
+
 (fn &optional ARG)" t)
 (register-definition-prefixes "doom-modeline" '("doom-modeline-"))
 
