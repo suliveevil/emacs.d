@@ -12,6 +12,7 @@ digraph G {"epkg" -> "emacs";
 "deadgrep" -> "dash";
 "deadgrep" -> "s";
 "deadgrep" -> "spinner";
+"rfc-mode" -> "emacs";
 "transient" -> "emacs";
 "transient" -> "compat";
 "yasnippet" -> "cl-lib";

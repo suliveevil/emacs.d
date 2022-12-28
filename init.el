@@ -1013,15 +1013,30 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
                        (org-roam-node-id node)))))
     (format "[%d]" count)))
 ;;
+  (cl-defmethod org-roam-node-filetitle ((node org-roam-node))
+    "Return the file TITLE for the node."
+    (if-let ((file (org-roam-node-file node)))
+        (with-temp-buffer
+          (insert-file-contents file nil 0 1024)
+          (cadr (assoc "TITLE"
+                       (org-collect-keywords (list "TITLE")))))
+      (cadr (assoc "TITLE"
+                   (org-collect-keywords (list "TITLE"))))))
+
 (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
-  (let ((level (org-roam-node-level node)))
+  "Return the hierarchy for the node."
+  (let ((title (org-roam-node-title node))
+        (olp (org-roam-node-olp node))
+        (level (org-roam-node-level node))
+        (filetitle (org-roam-node-filetitle node)))
     (concat
-     (when (> level 0) (concat (org-roam-node-file-title node) " > "))
-     (when (> level 1) (concat (string-join (org-roam-node-olp node) " > ") " > "))
-     (org-roam-node-title node))))
+     (if (> level 0) (concat filetitle " > "))
+     (if (> level 1) (concat (string-join olp " > ") " > "))
+     title))
+  )
 ;;
 (setq org-roam-node-display-template
-      "${title:50} ${hierarchy:*} ${backlinkscount:6} ${tags:50} ${directories:10}")
+      "${title:20} ${hierarchy:50} ${backlinkscount:5} ${tags:30} ${directories:15}")
 ;;
 ;; (setq org-roam-node-display-template (concat
 ;;                                    "${type:8} ${backlinkscount:3} ${hierarchy:*}"
@@ -1127,7 +1142,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
         ;; #+date: %<%Y-%m-%d-%H:%M:%S %Z>\n
         ;; #+date: %<%FT%T%z>\n
         ;; a: audio & music
-	;; A
+        ;; A
         ;; B
         ("b" "图书" plain "%?"
          :target (file+head "图书/${slug}.org"
@@ -1140,45 +1155,45 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
         ;;  :immediate-finish t
         ;;  :unnarrowed  t)
         ;; c:
-	;; C
+        ;; C
         ("d" "default" plain "%?"
          :target (file+head "${slug}.org"
                             "#+title: ${title}\n#+date: %<%FT%T%z>\n#+category:\n#+filetags:\n")
          :empty-lines 1
          :immediate-finish t
          :unnarrowed  t)
-	;; D
+        ;; D
         ("e" "Emacs" plain "%?"
          :target (file+head "Emacs/${slug}.org"
                             "#+title: ${title}\n#+date: %<%FT%T%z>\n#+category:\n#+filetags: \n")
          :immediate-finish t
          :unnarrowed  t)
-	;; E
+        ;; E
         ;; f:
         ("f" "Emacs Function" plain "%?"
          :target (file+head "Emacs/function/${title}.org"
                             "#+title: ${title}\n#+date: %<%FT%T%z>\n#+category:\n#+filetags: \n")
          :immediate-finish t
          :unnarrowed  t)
-	;; F
+        ;; F
         ;; g:
-	;; G
+        ;; G
         ;; h: human
-	;; H
+        ;; H
         ;; i:
-	;; I
+        ;; I
         ;; j:
-	;; J
+        ;; J
         ;; k:
-	;; K
+        ;; K
         ;; l:
-	;; L
+        ;; L
         ;; m:
-	;; M
+        ;; M
         ;; n:
-	;; N
+        ;; N
         ;; o:
-	;; O
+        ;; O
         ("p" "project" plain "%?"
          :target (file+head "${slug}.org"
                             "#+title: ${title}\n#+date: %<%FT%T%z>\n")
@@ -1190,29 +1205,29 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
          :immediate-finish t
          :unnarrowed t)
         ;; q:
-	;; Q
+        ;; Q
         ("r" "reference" plain "%?"
          :target (file+head "reference/${slug}.org"
                             "#+title: ${title}\n#+date: %<%FT%T%z>\n")
          :immediate-finish t
          :unnarrowed t)
-	;; R
+        ;; R
         ;; s:
         ("s" "软件" plain "%?"
          :target (file+head "software/${slug}.org"
                             "#+title: ${title}\n#+date: %<%FT%T%z>\n")
          :immediate-finish t
          :unnarrowed t)
-	;; S
+        ;; S
         ;; t: topic todo
         ("t" "主题" plain "%?"
          :target (file+head "topics/${slug}.org"
                             "#+title: ${title}\n#+date: %<%FT%T%z>\n")
          :immediate-finish t
          :unnarrowed t)
-	;; T
+        ;; T
         ;; u:
-	;; U
+        ;; U
         ("v" "Emacs 变量" plain "%?"
          :target (file+head "Emacs/variable/${title}.org"
                             "#+title: ${title}\n#+date: %<%FT%T%z>\n")
@@ -1220,13 +1235,13 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
          :unnarrowed t)
         ;; V:
         ;; w:
-	;; W
+        ;; W
         ;; x:
-	;; X
+        ;; X
         ;; y:
-	;; Y
+        ;; Y
         ;; z:
-	;; Z
+        ;; Z
         ))
 ;; }}}
 
@@ -1549,6 +1564,12 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; diagram-preview
 ;; {{{
 
+;; }}}
+
+;; RFC
+;; {{{
+(require 'rfc-mode)
+(setq rfc-mode-directory (expand-file-name "~/Documents/GitHub/RFC-all/txt/"))
 ;; }}}
 
 ;; all-the-icons
