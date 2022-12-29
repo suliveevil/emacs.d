@@ -25,3 +25,6 @@
 [submodule "lib/org-roam-similarity"]
 	path = lib/org-roam-similarity
 	url = git@github.com:Vidianos-Giannitsis/org-roam-similarity.git
+[submodule "lib/modeline-char"]
+	path = lib/modeline-char
+	url = git@github.com:emacsmirror/modeline-char.git

@@ -1584,6 +1584,12 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 (setq rfc-mode-directory (expand-file-name "~/Documents/GitHub/RFC-all/txt/"))
 ;; }}}
 
+;; unicode
+;; {{{
+(require 'modeline-char)
+(add-hook 'after-init-hook 'mlc-char-in-mode-line-mode-global)
+;; }}}
+
 ;; all-the-icons
 ;; {{{
 (when (display-graphic-p)
