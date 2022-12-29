@@ -416,6 +416,22 @@ Version 2018-06-18 2021-09-30"
 
 ;; org-mode
 ;; {{{
+;; 显示当前 heading 内容并折叠其他
+;; https://emacstil.com/til/2021/09/09/fold-heading/
+(defun org-show-current-heading-tidily ()
+  (interactive)
+  "Show next entry, keeping other entries closed."
+  (if (save-excursion (end-of-line) (outline-invisible-p))
+      (progn (org-show-entry) (show-children))
+    (outline-back-to-heading)
+    (unless (and (bolp) (org-on-heading-p))
+      (org-up-heading-safe)
+      (hide-subtree)
+      (error "Boundary reached"))
+    (org-overview)
+    (org-reveal t)
+    (org-show-entry)
+    (show-children)))
 ;; code block: TAB 格式化
 (setq org-src-fontify-natively 1)         ;代码块语法高亮
 (setq org-src-tab-acts-natively 1)        ;开启代码块语法缩进

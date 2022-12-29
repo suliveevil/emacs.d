@@ -1,9 +1,10 @@
 # -*- mode: org; coding: utf-8; -*-
-:PROPERTIES:
+:PROPERTIES: header-args:emacs-lisp :tangle readme.el
 :ID:       F624EBD2-6026-4CE9-A732-C43AF6FC0CB0
 :END:
-#+TITLE: config
-#+DATE: 2022-12-21 15:25:26 +0800
+#+title: config
+#+date: 2022-12-21 15:25:26 +0800
+#+auto_tangle: t
 
 
 
@@ -13,9 +14,15 @@
 
 [[https://github.com/suliveevil/emacs.d][suliveevil/emacs.d]]
 
+** reference
 
+[[https://leanpub.com/lit-config/read#leanpub-auto-emacs-and-org-mode][Literate Configuration | Leanpub]]
 
 ** misc
+
+[[https://sach.ac/dotemacs/index.html][Sacha Chua's Emacs configuration]]
+
+[[https://fortune-teller-amy-88756.netlify.app/knusper][Knusper's Emacs configuration]]
 
 [[https://github.com/phillord/lentic][phillord/lentic]]: Create views of the same content in two Emacs buffers
 
@@ -63,7 +70,7 @@ GNU Emacs 30.0.50 (build 1, aarch64-apple-darwin22.2.0, NS appkit-2299.30
 
 test org-auto-tangle
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   ;; 2022-12-23 02:27:06 +0800
 #+end_src
 
@@ -75,70 +82,70 @@ test org-auto-tangle
 
 ** Backtrace & Debug
 
-#+begin_src emacs-lisp
-  (setq debug-on-error t)
-  ;; (setq byte-compile-warnings not free-vars unresolved obsolete)
-  (setq byte-compile-warnings nil)
+#+begin_src emacs-lisp :tangle yes
+(setq debug-on-error t)
+;; (setq byte-compile-warnings not free-vars unresolved obsolete)
+(setq byte-compile-warnings nil)
 #+end_src
 
 ** Confirm before quit
 
-#+begin_src emacs-lisp
-  (setq confirm-kill-emacs (lambda (prompt) (y-or-n-p-with-timeout "确认退出？" 10 "y")))
-  ;; (setq confirm-kill-emacs 'yes-or-no-p)
-  (setq use-short-answers t) ;; use y/n instead of yes/no
+#+begin_src emacs-lisp :tangle yes
+(setq confirm-kill-emacs (lambda (prompt) (y-or-n-p-with-timeout "确认退出？" 10 "y")))
+;; (setq confirm-kill-emacs 'yes-or-no-p)
+(setq use-short-answers t) ;; use y/n instead of yes/no
 #+end_src
 
 ** Garbage Collection
 
-#+begin_src emacs-lisp
-  ;; Increase the GC threshold for faster startup
-  ;; The default is 800 kilobytes.  Measured in bytes.
-  (setq gc-cons-threshold (* 1024 1024 500)) ;; 500 MiB
+#+begin_src emacs-lisp :tangle yes
+;; Increase the GC threshold for faster startup
+;; The default is 800 kilobytes.  Measured in bytes.
+(setq gc-cons-threshold (* 1024 1024 500)) ;; 500 MiB
 #+end_src
 
-#+begin_src emacs-lisp
-  ;; Don't collect garbage when init
-  (setq gc-cons-threshold most-positive-fixnum) ;; 2^61 on my device
+#+begin_src emacs-lisp :tangle yes
+;; Don't collect garbage when init
+(setq gc-cons-threshold most-positive-fixnum) ;; 2^61 on my device
 #+end_src
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (setq gc-cons-percentage 0.6)
 #+end_src
 
 ** Profile
 
-#+begin_src emacs-lisp
-  ;; Profile emacs startup
-  (add-hook 'emacs-startup-hook
-	    (lambda ()
-	      (message "*** Emacs loaded in %s with %d garbage collections."
-		       (format "%.2f seconds"
-			       (float-time
-				(time-subtract after-init-time before-init-time)))
-		       gcs-done)))
+#+begin_src emacs-lisp :tangle yes
+;; Profile emacs startup
+(add-hook 'emacs-startup-hook
+	  (lambda ()
+	    (message "*** Emacs loaded in %s with %d garbage collections."
+		     (format "%.2f seconds"
+			     (float-time
+			      (time-subtract after-init-time before-init-time)))
+		     gcs-done)))
 #+end_src
 
 ** OS & GUI detection
 
-#+begin_src emacs-lisp
-  (defconst *is-mac* (eq system-type 'darwin))
-  (defconst *is-linux* (eq system-type 'gnu/linux))
-  (defconst *is-windows* (or (eq system-type 'ms-dos) (eq system-type 'windows-nt)))
+#+begin_src emacs-lisp :tangle no
+(defconst *is-mac* (eq system-type 'darwin))
+(defconst *is-linux* (eq system-type 'gnu/linux))
+(defconst *is-windows* (or (eq system-type 'ms-dos) (eq system-type 'windows-nt)))
 #+end_src
 
 ** UI
 
 ** Version Control
 
-#+begin_src emacs-lisp
-  (setq vc-follow-symlinks t)
+#+begin_src emacs-lisp :tangle yes
+(setq vc-follow-symlinks t)
 #+end_src
 
 ** provide
 
 #+begin_src emacs-lisp
-  (provide 'early-init)
+(provide 'early-init)
 #+end_src
 
 ** misc

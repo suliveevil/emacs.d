@@ -172,7 +172,7 @@
 			  ("Thien-Thi Nguyen" . "ttn@gnu.org"))
 			 (:commit . "ec8ce763e51fd91b3d9816799b6e828e3a9ea9eb"))])
  (async .
-	[(1 9 7 0 20221217 64913)
+	[(1 9 7 0 20221228 131520)
 	 ((emacs
 	   (24 4)))
 	 "Asynchronous processing in Emacs" tar
@@ -181,7 +181,7 @@
 	  (:maintainer "Thierry Volpiatto" . "thievol@posteo.net")
 	  (:authors
 	   ("John Wiegley" . "jwiegley@gmail.com"))
-	  (:commit . "c4772bec684776e93f1b8d845b452dc850ee2315"))])
+	  (:commit . "270c3d0bd99386dd9a8538990401993a6a3cb1bc"))])
  (auctex .
 	 [(13 1 6 0 20221118 193251)
 	  ((emacs
@@ -556,7 +556,7 @@
 	    ("Philip Kaludercic" . "philipk@posteo.net"))
 	   (:commit . "1573aa2e6d478c30cc7f394b72cbaa4db77ef811"))])
  (consult .
-	  [(0 29 0 20221226 172545)
+	  [(0 29 0 20221228 163333)
 	   ((emacs
 	     (27 1))
 	    (compat
@@ -566,7 +566,7 @@
 	    (:maintainer "Daniel Mendler" . "mail@daniel-mendler.de")
 	    (:authors
 	     ("Daniel Mendler and Consult contributors"))
-	    (:commit . "794e000e02d5efb19362f5e89e7171e9fdd1fb7e"))])
+	    (:commit . "16b2dc5e34c8a500adbee394b42c0e0d7fd24ad8"))])
  (consult-recoll .
 		 [(0 8 0 20221014 200255)
 		  ((emacs
@@ -999,7 +999,7 @@
 	       ("Markus Triska" . "triska@metalevel.at"))
 	      (:commit . "cfcdf9e42821d246b7fbc84877aa4ecacc184a1c"))])
  (eev .
-      [(20221227 0 20221227 5405)
+      [(20221227 0 20221229 52831)
        ((emacs
 	 (24 4)))
        "Support for e-scripts (eepitch blocks, elisp hyperlinks, etc)" tar
@@ -1008,7 +1008,7 @@
 	(:maintainer "Eduardo Ochs" . "eduardoochs@gmail.com")
 	(:authors
 	 ("Eduardo Ochs" . "eduardoochs@gmail.com"))
-	(:commit . "94b49dbfbce8cbef6f8cee1bb63dd86c6e9c776a"))])
+	(:commit . "cf99d5ef23104a5d010662451528f6a5c6dc2d25"))])
  (ef-themes .
 	    [(0 10 0 0 20221219 40550)
 	     ((emacs
@@ -1190,7 +1190,7 @@
 	       (:url . "https://elpa.gnu.org/packages/epoch-view.html")
 	       (:commit . "7a9773a8b55491bd47f23dfdb6c4224f5cc8e50c"))])
  (erc .
-      [(5 4 1 0 20221219 54908)
+      [(5 4 1 0 20221228 65138)
        ((emacs
 	 (27 1))
 	(compat
@@ -1201,7 +1201,7 @@
 	(:maintainer "Amin Bandali <bandali@gnu.org>, F. Jason Park" . "jp@neverwas.me")
 	(:authors
 	 ("Alexander L. Belikoff" . "alexander@belikoff.net"))
-	(:commit . "05740f05b732a5df473bdf9d1750e97f6a86f2c0"))])
+	(:commit . "dce6791e9934d029ffae45793a5d05096346be0c"))])
  (ergoemacs-mode .
 		 [(5 16 10 12 0 20220410 223821)
 		  ((emacs
@@ -1446,7 +1446,7 @@
 	     (:url . "https://elpa.gnu.org/packages/gle-mode.html")
 	     (:commit . "ff6e97819b525cbc1fea07f78e5b93eb5814eeb1"))])
  (gnat-compiler .
-		[(1 0 0 0 20221221 111242)
+		[(1 0 0 0 20221228 92523)
 		 ((emacs
 		   (25 3))
 		  (wisi
@@ -1456,7 +1456,7 @@
 		  (:authors
 		   ("Stephen Leake" . "stephen_leake@member.fsf.org"))
 		  (:url . "https://elpa.gnu.org/packages/gnat-compiler.html")
-		  (:commit . "7496273a2e9cf971aeef232b252b2eea93c93a74"))])
+		  (:commit . "8ca2e5bcd244c8d191035c3c4e011e31e534738e"))])
  (gnome-c-style .
 		[(0 1 0 20160130 1526)
 		 nil "minor mode for editing GNOME-style C source code" tar
@@ -1487,13 +1487,14 @@
 	     (:url . "https://elpa.gnu.org/packages/gnu-elpa.html")
 	     (:commit . "c2022f680f36a7b007d482d788d6885d815070c3"))])
  (gnu-elpa-keyring-update .
-			  [(2019 3 0 20201201 160212)
+			  [(2022 12 0 20221228 123117)
 			   nil "Update Emacs's GPG keyring for GNU ELPA" tar
 			   ((:keywords "maint" "tools")
 			    (:maintainer "Stefan Monnier" . "monnier@iro.umontreal.ca")
 			    (:authors
 			     ("Stefan Monnier" . "monnier@iro.umontreal.ca"))
-			    (:url . "https://elpa.gnu.org/packages/gnu-elpa-keyring-update.html"))])
+			    (:url . "https://elpa.gnu.org/packages/gnu-elpa-keyring-update.html")
+			    (:commit . "685192692f809e3d8c336e27170a2b819925202f"))])
  (gnugo .
 	[(3 1 2 0 20221212 224439)
 	 ((ascii-art-to-unicode
@@ -2162,7 +2163,7 @@
 	     ("David Engster" . "deng@randomsample.de"))
 	    (:url . "https://elpa.gnu.org/packages/minimap.html"))])
  (mmm-mode .
-	   [(0 5 9 0 20221102 223616)
+	   [(0 5 9 0 20221228 193134)
 	    ((emacs
 	      (25 1))
 	     (cl-lib
@@ -2173,7 +2174,7 @@
 	     (:maintainer "Dmitry Gutov" . "dgutov@yandex.ru")
 	     (:authors
 	      ("Michael Abraham Shulman" . "viritrilbia@gmail.com"))
-	     (:commit . "8725cfc12bded653d52a6a223c4d34bec2b1d538"))])
+	     (:commit . "171bf6395b8a95a2d08d41fa38cc1799025d3916"))])
  (modus-themes .
 	       [(3 0 0 0 20221028 45155)
 		((emacs
@@ -2413,7 +2414,7 @@
 	       ("Omar Antolín Camarena" . "omar@matem.unam.mx"))
 	      (:commit . "847694e78c12d903d5e3f6cb365a5d3b984db537"))])
  (org .
-      [(9 6 0 20221227 101404)
+      [(9 6 0 20221229 95513)
        ((emacs
 	 (25 1)))
        "Outline-based notes management and organizer" tar
@@ -2422,7 +2423,7 @@
 	(:maintainer "Bastien Guerry" . "bzg@gnu.org")
 	(:authors
 	 ("Carsten Dominik" . "carsten.dominik@gmail.com"))
-	(:commit . "5549357bf2cccc5ae3c58eb92e997126faa9fb5b"))])
+	(:commit . "a9c0d4cde2ce039d00c0168a31868b9bb74b2814"))])
  (org-contacts .
 	       [(1 1 0 20221221 43108)
 		((emacs
@@ -2793,7 +2794,7 @@
 	    ("Protesilaos Stavrou" . "info@protesilaos.com"))
 	   (:commit . "e01a8f7e80c5c83dfcfb87b10e0213d4963e4d15"))])
  (pyim .
-       [(5 2 8 0 20221107 22637)
+       [(5 2 9 0 20221229 24125)
 	((emacs
 	  (25 1))
 	 (async
@@ -2807,7 +2808,7 @@
 	 (:authors
 	  ("Ye Wenbin" . "wenbinye@163.com")
 	  ("Feng Shu" . "tumashu@163.com"))
-	 (:commit . "16f7c3cf0736a65d8af0c8ba8396343dbd17e368"))])
+	 (:commit . "65af410a6671725727593e2ea2767a97bdeb79b0"))])
  (pyim-basedict .
 		[(0 5 4 0 20220614 110824)
 		 nil "The default pinyin dict of pyim" tar
@@ -2818,7 +2819,7 @@
 		   ("Feng Shu" . "tumashu@163.com"))
 		  (:commit . "d61af27686f7a39e6c138b7261a686e7ea7a0ef7"))])
  (python .
-	 [(0 28 0 20221225 53021)
+	 [(0 28 0 20221228 131325)
 	  ((emacs
 	    (24 4))
 	   (compat
@@ -2831,7 +2832,7 @@
 	   (:maintainer nil . "emacs-devel@gnu.org")
 	   (:authors
 	    ("Fabián E. Gallina" . "fgallina@gnu.org"))
-	   (:commit . "48db8b68a8eb5c12d5682f2eb31cadc53186f5d7"))])
+	   (:commit . "dce6791e9934d029ffae45793a5d05096346be0c"))])
  (quarter-plane .
 		[(0 1 0 20221221 81727)
 		 nil "Minor mode for quarter-plane style editing" tar
