@@ -459,11 +459,37 @@ The extension, in a file name, is the part that follows the last
 
 (defalias 'f-descendant-of? 'f-descendant-of-p)
 
-(defun f-hidden-p (path)
-  "Return t if PATH is hidden, nil otherwise."
-  (unless (f-exists-p path)
-    (error "Path does not exist: %s" path))
-  (string= (substring path 0 1) "."))
+(defun f-hidden-p (path &optional behavior)
+  "Return t if PATH is hidden, nil otherwise.
+
+BEHAVIOR controls when a path should be considered as hidden
+depending on its value.  Beware, if PATH begins with \"./\", the
+current dir \".\" will not be considered as hidden.
+
+When BEHAVIOR is nil, it will only check if the path begins with
+a dot, as in .a/b/c, and return t if there is one.  This is the
+old behavior of f.el left as default for backward-compatibility
+purposes.
+
+When BEHAVIOR is ANY, return t if any of the elements of PATH is
+hidden, nil otherwise.
+
+When BEHAVIOR is LAST, return t only if the last element of PATH
+is hidden, nil otherwise.
+
+TODO: Hidden directories and files on Windows are marked
+differently than on *NIX systems.  This should be properly
+implemented."
+  (let ((split-path (f-split path))
+        (check-hidden (lambda (elt)
+                        (and (string= (substring elt 0 1) ".")
+                             (not (member elt '("." "..")))))))
+    (pcase behavior
+      ('any  (-any check-hidden split-path))
+      ('last (apply check-hidden (last split-path)))
+      (otherwise (if (null otherwise)
+                     (funcall check-hidden (car split-path))
+                   (error "Invalid value %S for argument BEHAVIOR" otherwise))))))
 
 (defalias 'f-hidden? 'f-hidden-p)
 

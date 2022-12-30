@@ -2414,7 +2414,7 @@
 	       ("Omar Antolín Camarena" . "omar@matem.unam.mx"))
 	      (:commit . "847694e78c12d903d5e3f6cb365a5d3b984db537"))])
  (org .
-      [(9 6 0 20221229 95513)
+      [(9 6 0 20221229 213636)
        ((emacs
 	 (25 1)))
        "Outline-based notes management and organizer" tar
@@ -2423,7 +2423,7 @@
 	(:maintainer "Bastien Guerry" . "bzg@gnu.org")
 	(:authors
 	 ("Carsten Dominik" . "carsten.dominik@gmail.com"))
-	(:commit . "a9c0d4cde2ce039d00c0168a31868b9bb74b2814"))])
+	(:commit . "29103fc6028e99c251ec8ea05981c553bd74eac0"))])
  (org-contacts .
 	       [(1 1 0 20221221 43108)
 		((emacs
