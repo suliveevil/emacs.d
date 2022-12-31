@@ -380,7 +380,7 @@
 	       (:authors
 		("Artur Malabarba" . "emacs@endlessparentheses.com")))])
  (cape .
-       [(0 11 0 20221223 183832)
+       [(0 12 0 20221231 93238)
 	((emacs
 	  (27 1)))
 	"Completion At Point Extensions" tar
@@ -388,7 +388,7 @@
 	 (:maintainer "Daniel Mendler" . "mail@daniel-mendler.de")
 	 (:authors
 	  ("Daniel Mendler" . "mail@daniel-mendler.de"))
-	 (:commit . "9b97dbbc7624415ee25f79de9ea357feb1e2e547"))])
+	 (:commit . "0bbe3620d6b04f07124b6cde3d979252bdc5782d"))])
  (capf-autosuggest .
 		   [(0 3 0 20211123 104430)
 		    ((emacs
@@ -591,7 +591,7 @@
 		     (:authors
 		      ("Jackson Ray Hamilton" . "jackson@jacksonrayhamilton.com")))])
  (corfu .
-	[(0 34 0 20221223 100755)
+	[(0 34 0 20221230 35029)
 	 ((emacs
 	   (27 1)))
 	 "Completion Overlay Region FUnction" tar
@@ -599,7 +599,7 @@
 	  (:maintainer "Daniel Mendler" . "mail@daniel-mendler.de")
 	  (:authors
 	   ("Daniel Mendler" . "mail@daniel-mendler.de"))
-	  (:commit . "948f7121c783936d4605ee713b497f839c16e128"))])
+	  (:commit . "391a4870fee9cdcd0fdecfa468e2726fd670e5e1"))])
  (coterm .
 	 [(1 6 0 20221005 121655)
 	  ((emacs
@@ -999,7 +999,7 @@
 	       ("Markus Triska" . "triska@metalevel.at"))
 	      (:commit . "cfcdf9e42821d246b7fbc84877aa4ecacc184a1c"))])
  (eev .
-      [(20221227 0 20221229 52831)
+      [(20221227 0 20230101 3024)
        ((emacs
 	 (24 4)))
        "Support for e-scripts (eepitch blocks, elisp hyperlinks, etc)" tar
@@ -1008,9 +1008,9 @@
 	(:maintainer "Eduardo Ochs" . "eduardoochs@gmail.com")
 	(:authors
 	 ("Eduardo Ochs" . "eduardoochs@gmail.com"))
-	(:commit . "cf99d5ef23104a5d010662451528f6a5c6dc2d25"))])
+	(:commit . "6db90e604e475a8abc63aa613f32c10bf73421b5"))])
  (ef-themes .
-	    [(0 10 0 0 20221219 40550)
+	    [(0 10 0 0 20221230 155401)
 	     ((emacs
 	       (27 1)))
 	     "Colorful and legible themes" tar
@@ -1019,7 +1019,7 @@
 	      (:maintainer "Ef-Themes Development" . "~protesilaos/ef-themes@lists.sr.ht")
 	      (:authors
 	       ("Protesilaos Stavrou" . "info@protesilaos.com"))
-	      (:commit . "ac62af004ebfedf744401a69806d72d0294ca78b"))])
+	      (:commit . "707f8afe0b088658b44346a7b78d7967c915f9f9"))])
  (eglot .
 	[(1 10 0 20221222 154411)
 	 ((emacs
@@ -2414,7 +2414,7 @@
 	       ("Omar Antolín Camarena" . "omar@matem.unam.mx"))
 	      (:commit . "847694e78c12d903d5e3f6cb365a5d3b984db537"))])
  (org .
-      [(9 6 0 20221229 213636)
+      [(9 6 0 20221231 131346)
        ((emacs
 	 (25 1)))
        "Outline-based notes management and organizer" tar
@@ -2423,7 +2423,7 @@
 	(:maintainer "Bastien Guerry" . "bzg@gnu.org")
 	(:authors
 	 ("Carsten Dominik" . "carsten.dominik@gmail.com"))
-	(:commit . "29103fc6028e99c251ec8ea05981c553bd74eac0"))])
+	(:commit . "24740a9e84297b0b3ffbf74b79e59630466fc017"))])
  (org-contacts .
 	       [(1 1 0 20221221 43108)
 		((emacs
@@ -2452,7 +2452,7 @@
 	     (:authors
 	      ("Ian Dunn" . "dunni@gnu.org")))])
  (org-modern .
-	     [(0 6 0 20221214 171339)
+	     [(0 7 0 20221231 93455)
 	      ((emacs
 		(27 1)))
 	      "Modern looks for Org" tar
@@ -2460,7 +2460,7 @@
 	       (:maintainer "Daniel Mendler" . "mail@daniel-mendler.de")
 	       (:authors
 		("Daniel Mendler" . "mail@daniel-mendler.de"))
-	       (:commit . "010eade723881ca234a12bd94b791e2000cd2a15"))])
+	       (:commit . "c9c0c5135a66382f55681bc84f3a2658a7c8ac76"))])
  (org-notify .
 	     [(0 1 0 0 20221102 174044)
 	      ((emacs
@@ -2546,7 +2546,7 @@
 	(:url . "https://elpa.gnu.org/packages/osc.html")
 	(:commit . "62eda3d8fb288b6a16c35a7220a507d0991c5a74"))])
  (osm .
-      [(0 8 0 20221206 14043)
+      [(0 9 0 20221231 215602)
        ((emacs
 	 (27 1)))
        "OpenStreetMap viewer" tar
@@ -2554,7 +2554,7 @@
 	(:maintainer "Daniel Mendler" . "mail@daniel-mendler.de")
 	(:authors
 	 ("Daniel Mendler" . "mail@daniel-mendler.de"))
-	(:commit . "9f717ca40efc3f05ed9cafd4589baa887559edb5"))])
+	(:commit . "4f18c7dc78620f2a40b543e6857cd70acc867dbf"))])
  (other-frame-window .
 		     [(1 0 6 0 20221221 81352)
 		      ((emacs
@@ -2677,7 +2677,7 @@
 	      ("Daiki Ueno" . "ueno@gnu.org"))
 	     (:url . "https://elpa.gnu.org/packages/pinentry.html"))])
  (plz .
-      [(0 3 -1 0 20221210 143848)
+      [(0 4 -1 0 20221231 163105)
        ((emacs
 	 (26 3)))
        "HTTP library" tar
@@ -2686,7 +2686,7 @@
 	(:maintainer "Adam Porter" . "adam@alphapapa.net")
 	(:authors
 	 ("Adam Porter" . "adam@alphapapa.net"))
-	(:commit . "b62731f21d82d1cd31bc13874ae7d211b3e902a3"))])
+	(:commit . "b6072edeec1f0e2465d273db74a8f2f7726e6bce"))])
  (poke .
        [(2 1 0 20221205 1807)
 	((emacs
@@ -2764,7 +2764,7 @@
 	   ((:url . "https://elpa.gnu.org/packages/project.html")
 	    (:commit . "05740f05b732a5df473bdf9d1750e97f6a86f2c0"))])
  (psgml .
-	[(1 3 4 0 20221221 81659)
+	[(1 3 5 0 20221229 184738)
 	 nil "SGML-editing mode with parsing support" tar
 	 ((:keywords "languages")
 	  (:maintainer "Lennart Staflin" . "lstaflin@gmail.com")
@@ -2772,7 +2772,7 @@
 	   ("Lennart Staflin" . "lenst@lysator.liu.se")
 	   ("James Clark" . "jjc@clark.com"))
 	  (:url . "https://elpa.gnu.org/packages/psgml.html")
-	  (:commit . "d92ab0476c2eacfddaa48bcfa293ae99d5a95756"))])
+	  (:commit . "697fcf7d80513257d90b7331297495bb9e01003d"))])
  (pspp-mode .
 	    [(1 1 0 20221221 81719)
 	     nil "Major mode for editing PSPP files" tar
@@ -3375,7 +3375,7 @@
 		("Christian Johansson" . "christian@cvj.se"))
 	       (:commit . "9311f9b4f8d25ce54fb7da9bf59d955fed366a4d"))])
  (standard-themes .
-		  [(1 1 0 0 20221223 103600)
+		  [(1 1 0 0 20221230 155558)
 		   ((emacs
 		     (27 1)))
 		   "Like the default theme but more consistent" tar
@@ -3384,7 +3384,7 @@
 		    (:maintainer "Standard-Themes Development" . "~protesilaos/standard-themes@lists.sr.ht")
 		    (:authors
 		     ("Protesilaos Stavrou" . "info@protesilaos.com"))
-		    (:commit . "08beba43e6c66afb7dd215e7753c2b79c02c0a98"))])
+		    (:commit . "7f9cb52b3632c2e11d1395973f22ce91f78e48de"))])
  (stream .
 	 [(2 2 5 0 20221221 82401)
 	  ((emacs
@@ -3534,7 +3534,7 @@
 		       (:keywords "convenience")
 		       (:url . "https://elpa.gnu.org/packages/temp-buffer-browse.html"))])
  (tempel .
-	 [(0 6 0 20221228 62938)
+	 [(0 6 0 20221230 50522)
 	  ((emacs
 	    (27 1)))
 	  "Tempo templates/snippets with in-buffer field editing" tar
@@ -3542,7 +3542,7 @@
 	   (:maintainer "Daniel Mendler" . "mail@daniel-mendler.de")
 	   (:authors
 	    ("Daniel Mendler" . "mail@daniel-mendler.de"))
-	   (:commit . "9a25bacc16eac8b83c1bef1aefa0be27cfa8a762"))])
+	   (:commit . "4ef1d29e9f962fcc59a3569d7d6593dc075c86e6"))])
  (test-simple .
 	      [(1 3 0 0 20200722 214339)
 	       ((cl-lib
@@ -3614,16 +3614,16 @@
 	      ("Trevor Edwin Pogue" . "trevor.pogue@gmail.com"))
 	     (:commit . "4f090520174cab0fa752765b7c18885efb6cce11"))])
  (tramp .
-	[(2 5 4 0 20221129 121355)
+	[(2 6 0 0 20221230 101537)
 	 ((emacs
-	   (25 1)))
+	   (26 1)))
 	 "Transparent Remote Access, Multiple Protocol" tar
 	 ((:url . "https://www.gnu.org/software/tramp/")
 	  (:keywords "comm" "processes")
 	  (:maintainer "Michael Albinus" . "michael.albinus@gmx.de")
 	  (:authors
 	   ("Kai Großjohann" . "kai.grossjohann@gmx.net"))
-	  (:commit . "12745adb7381cce671fc707946331b561e0cb372"))])
+	  (:commit . "f1e00a4adb4de8f322f48cceec7e5c8bd3b298b6"))])
  (tramp-nspawn .
 	       [(1 0 1 0 20220923 120957)
 		((emacs

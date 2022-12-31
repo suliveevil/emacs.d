@@ -796,6 +796,7 @@ Version 2018-06-18 2021-09-30"
 ;; moom
 ;; {{{
 (add-hook 'after-init-hook 'moom-mode)
+;; moom + transient
 (with-eval-after-load "moom"
   (setq moom-use-font-module nil)
   (when (require 'moom-transient nil t)
@@ -825,7 +826,9 @@ Version 2018-06-18 2021-09-30"
 
 ;; difftastic + magit
 ;; {{{
-(with-eval-after-load 'magit
+;; (with-eval-after-load 'magit
+(use-package magit
+  :config
   (defun my/magit--with-difftastic (buffer command)
     "Run COMMAND with GIT_EXTERNAL_DIFF=difft then show result in BUFFER."
     (let ((process-environment
@@ -1127,7 +1130,8 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   (setq org-roam-directory "~/org-roam")
   (setq org-roam-db-location "~/org-roam/org-roam.db")
   (setq org-roam-file-extensions '("org" "md")) ;; enable Org-roam for markdown
-  (require 'org-roam-protocol)                  ;; org-roam-protocol
+  (setq org-roam-node-display-template "${title:50} ${tags:30}")
+  (require 'org-roam-protocol)  ;; org-roam-protocol
   (org-roam-db-autosync-mode 1) ;; if md-roam installed, move to md-roam config
   )
 ;; }}}
