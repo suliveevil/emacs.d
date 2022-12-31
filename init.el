@@ -635,7 +635,9 @@ Version 2018-06-18 2021-09-30"
 
 ;; fuck
 ;; {{{
-(require 'fuck)
+(use-package fuck
+  :defer t
+  )
 ;; }}}
 
 ;; dictionary: Apple 词典: osx-dictionary
@@ -1060,7 +1062,7 @@ Version 2018-06-18 2021-09-30"
 ;; orderless: minibuffer filter, works with icomplete
 ;; {{{
 (require 'orderless)
-(setq completion-styles '(basic initials substring partial-completion flex orderless)
+(setq completion-styles '(orderless basic initials substring partial-completion flex)
       completion-category-defaults nil
       completion-category-overrides '((file (styles basic partial-completion))))
 ;; }}}
@@ -1095,6 +1097,19 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
      (marginalia--documentation (marginalia--function-doc sym)))))
 ;; }}}
 
+;; org-mode Face for org-id links.                                      ; FIXME
+;; {{{
+;; (defface my-org-id-link
+;;   '((t
+;;      :inherit org-link
+;;      :underline nil
+;;      ;; :foreground "#009600"
+;;      :group 'org-faces
+;;      ))
+;;   :group 'org-faces)
+;; (with-eval-after-load 'ol
+;;   (org-link-set-parameters "id" :face 'my-org-id-link))
+;; }}}
 
 ;; org-roam: basic config
 ;; {{{
@@ -1113,6 +1128,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
          ("C-c n t" . org-roam-tag-add)
          )
   :config
+  (setq org-roam-completion-everywhere t)
   (setq org-roam-directory "~/org-roam")
   (setq org-roam-db-location "~/org-roam/org-roam.db")
   (setq org-roam-file-extensions '("org" "md")) ;; enable Org-roam for markdown
@@ -1121,16 +1137,27 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   )
 ;; }}}
 
+;; org-roam: directory
+;; {{{
+;; }}}
+
+;; org-roam: node directory                                                       ; FIXME
+;; {{{
+;; (with-eval-after-load 'org-roam
+;;   (cl-defmethod org-roam-node-directories ((node org-roam-node))
+;;     (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
+;;         (format "(%s)" (car (split-string dirs "/")))
+;;       ""))
+;;   (setq org-roam-node-display-template
+;;         "${title:30} ${tags:30} ${directories:15}")
+;;   )
+;; }}}
+
 ;; org-roam: backlink count & node hierarchy
 ;; {{{
 ;; ;; https://github.com/Jousimies/.emacs.d/blob/master/lisp/init-roam.el
 ;; (require 'org)
 ;; (require 'org-roam)
-;; ;;
-;; (cl-defmethod org-roam-node-directories ((node org-roam-node))
-;;   (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
-;;       (format "(%s)" (car (split-string dirs "/")))
-;;     ""))
 ;; ;;
 ;; (cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
 ;;   (let* ((count (caar (org-roam-db-query
@@ -1165,13 +1192,10 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; ;;
 ;; (setq org-roam-node-display-template
 ;;       "${title:30} ${backlinkscount:5} ${tags:30} ${directories:15}")
-(setq org-roam-node-display-template
-      "${title:30} ${tags:30} ${directories:15}")
 ;; }}}
 
 ;; org-roam: completion
 ;; {{{
-(setq org-roam-completion-everywhere t)
 ;;roam links support auto-completion via completion-at-point
 ;; call M-x completion-at-point within a roam link.
 ;; Where the | character represents the cursor:
@@ -1384,7 +1408,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
    ((eq system-type 'darwin)
     (shell-command
      ;; net.sourceforge.sqlitebrowser
-     (format "open \"/Applications/DB Browser for SQLite.app\" --args --table nodes %s" org-roam-db-location)))
+     (format "open -b \"net.sourceforge.sqlitebrowser\" --args --table nodes %s" org-roam-db-location)))
    (t
     (message "my/org-roam-view-db not yet working on this system-type"))))
 ;; }}}
@@ -1409,24 +1433,16 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 
 ;; org-similarity
 ;; {{{
-(require 'org-similarity)
-;; (with-no-warnings (defvaralias 'org-similarity-directory 'org-roam-directory))
-(with-suppressed-warnings (defvaralias 'org-similarity-directory 'org-roam-directory))
-(setq org-similarity-language "english")
-(setq org-similarity-number-of-documents 15)
-(setq org-similarity-show-scores t)
-(setq org-similarity-use-id-links t)
-(setq org-similarity-recursive-search t)
-;; }}}
-
-;; org-roam-similarity
-;; {{{
-(require 'f)
-(require 'org-roam-similarity)
-(setq org-roam-similarity-directory org-roam-directory)
-(setq org-roam-similarity-language "english")
-(setq org-roam-similarity-number-of-documents 15)
-(setq org-roam-similarity-show-scores t)
+(use-package org-similarity
+  :after org-roam
+  :config
+  (with-suppressed-warnings (defvaralias 'org-similarity-directory 'org-roam-directory))
+  (setq org-similarity-language "english")
+  (setq org-similarity-number-of-documents 15)
+  (setq org-similarity-show-scores t)
+  (setq org-similarity-use-id-links t)
+  (setq org-similarity-recursive-search t)
+  )
 ;; }}}
 
 ;; markdown-mode
@@ -1451,7 +1467,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; (require 'md-roam)
 ;; (md-roam-mode 1)           ; md-roam-mode must be active before org-roam-db-sync
 ;; (setq md-roam-file-extension "md") ; default "md". Specify an extension such as "markdown"
-(org-roam-db-autosync-mode 1) ; autosync-mode triggers db-sync. md-roam-mode must be already active
+;; (org-roam-db-autosync-mode 1) ; autosync-mode triggers db-sync. md-roam-mode must be already active
 ;; }}}
 
 ;; goggles: visual hint for operations
@@ -1477,8 +1493,8 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; keyfreq: Track Emacs commands frequency
 ;; {{{
 ;; keyfreq fork: keyfreq-html-v2 show keyboard heat map
+(require 'keyfreq) ;; 导入插件包
 (setq keyfreq-folder "~/.config/emacs/lib/keyfreq")
-(require 'keyfreq)        ;; 导入插件包
 (keyfreq-mode 1)          ;; 启动插件包
 (keyfreq-autosave-mode 1) ;; 自动保存模式
 (setq-default keyfreq-file "~/.config/emacs/assets/keyfreq-log")
@@ -1687,8 +1703,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 
 ;; RFC
 ;; {{{
-(require 'rfc-mode)
-(setq rfc-mode-directory (expand-file-name "~/Documents/GitHub/RFC-all/txt/"))
+(use-package rfc-mode
+  :defer t
+  :config
+  (setq rfc-mode-directory (expand-file-name "~/Documents/GitHub/RFC-all/txt/"))
+  )
 ;; }}}
 
 ;; unicode
@@ -1712,17 +1731,17 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   :diminish
   :bind ("<f8>" . olivetti-mode)
   :init
-  (setq olivetti-body-width 0.618)
+  ;; (setq olivetti-body-width 0.618) ; default: fill-column+2
   (defun xs-toggle-olivetti-for-org ()
     "if current buffer is org and only one visible buffer
   enable olivetti mode"
     (if (and (eq (buffer-local-value 'major-mode (current-buffer)) 'org-mode)
-	     (or (eq (length (window-list nil nil nil)) 1)
-		 (window-at-side-p (frame-first-window) 'right))) ;; frame-first-window 的 mode 是 org-mode 并且没有右边 window
-	(olivetti-mode 1)
+             (or (eq (length (window-list nil nil nil)) 1)
+                 (window-at-side-p (frame-first-window) 'right))) ;; frame-first-window 的 mode 是 org-mode 并且没有右边 window
+        (olivetti-mode 1)
       (olivetti-mode 0)
       (when (eq (buffer-local-value 'major-mode (current-buffer)) 'org-mode)
-	(visual-line-mode 1))))
+        (visual-line-mode 1))))
   (add-hook 'org-mode-hook #'xs-toggle-olivetti-for-org)
   (add-hook 'window-configuration-change-hook #'xs-toggle-olivetti-for-org))
 ;; }}}
