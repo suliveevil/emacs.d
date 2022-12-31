@@ -276,15 +276,10 @@ occurence of CHAR."
 
 ;; 快速打开文件
 ;; {{{
-(defun open-init-file() ;; Emacs init
+(defun my/open-init-file() ;; Emacs init
   (interactive)
-  (find-file "~/.config/emacs/init.el"))
-;; (keymap-global-set "<f2>" #'open-init-file)
-;;
-(defun open-early-init-file() ;; Emacs early-init
-  (interactive)
-  (find-file "~/.config/emacs/early-init.el"))
-;; (keymap-global-set "<f2>" #'open-early-init-file)
+  (find-file-other-window user-init-file))
+(keymap-global-set "C-c I" #'my/open-init-file)
 ;;
 ;; (defun open-goku-file()      ;; Emacs early-init
 ;;   (interactive)
