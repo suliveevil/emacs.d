@@ -1123,48 +1123,50 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 
 ;; org-roam: backlink count & node hierarchy
 ;; {{{
-;; https://github.com/Jousimies/.emacs.d/blob/master/lisp/init-roam.el
-(require 'org)
-(require 'org-roam)
-;;
-(cl-defmethod org-roam-node-directories ((node org-roam-node))
-  (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
-      (format "(%s)" (car (split-string dirs "/")))
-    ""))
-;;
-(cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
-  (let* ((count (caar (org-roam-db-query
-                       [:select (funcall count source)
-                                :from links
-                                :where (= dest $s1)
-                                :and (= type "id")]
-                       (org-roam-node-id node)))))
-    (format "[%d]" count)))
-;;
-;;   (cl-defmethod org-roam-node-filetitle ((node org-roam-node))
-;;     "Return the file TITLE for the node."
-;;     (if-let ((file (org-roam-node-file node)))
-;;         (with-temp-buffer
-;;           (insert-file-contents file nil 0 1024)
-;;           (cadr (assoc "TITLE"
-;;                        (org-collect-keywords (list "TITLE")))))
-;;       (cadr (assoc "TITLE"
-;;                    (org-collect-keywords (list "TITLE"))))))
+;; ;; https://github.com/Jousimies/.emacs.d/blob/master/lisp/init-roam.el
+;; (require 'org)
+;; (require 'org-roam)
+;; ;;
+;; (cl-defmethod org-roam-node-directories ((node org-roam-node))
+;;   (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
+;;       (format "(%s)" (car (split-string dirs "/")))
+;;     ""))
+;; ;;
+;; (cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
+;;   (let* ((count (caar (org-roam-db-query
+;;                        [:select (funcall count source)
+;;                                 :from links
+;;                                 :where (= dest $s1)
+;;                                 :and (= type "id")]
+;;                        (org-roam-node-id node)))))
+;;     (format "[%d]" count)))
+;; ;;
+;; ;;   (cl-defmethod org-roam-node-filetitle ((node org-roam-node))
+;; ;;     "Return the file TITLE for the node."
+;; ;;     (if-let ((file (org-roam-node-file node)))
+;; ;;         (with-temp-buffer
+;; ;;           (insert-file-contents file nil 0 1024)
+;; ;;           (cadr (assoc "TITLE"
+;; ;;                        (org-collect-keywords (list "TITLE")))))
+;; ;;       (cadr (assoc "TITLE"
+;; ;;                    (org-collect-keywords (list "TITLE"))))))
 
-;; (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
-;;   "Return the hierarchy for the node."
-;;   (let ((title (org-roam-node-title node))
-;;         (olp (org-roam-node-olp node))
-;;         (level (org-roam-node-level node))
-;;         (filetitle (org-roam-node-filetitle node)))
-;;     (concat
-;;      (if (> level 0) (concat filetitle " > "))
-;;      (if (> level 1) (concat (string-join olp " > ") " > "))
-;;      title))
-;;   )
-;;
+;; ;; (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
+;; ;;   "Return the hierarchy for the node."
+;; ;;   (let ((title (org-roam-node-title node))
+;; ;;         (olp (org-roam-node-olp node))
+;; ;;         (level (org-roam-node-level node))
+;; ;;         (filetitle (org-roam-node-filetitle node)))
+;; ;;     (concat
+;; ;;      (if (> level 0) (concat filetitle " > "))
+;; ;;      (if (> level 1) (concat (string-join olp " > ") " > "))
+;; ;;      title))
+;; ;;   )
+;; ;;
+;; (setq org-roam-node-display-template
+;;       "${title:30} ${backlinkscount:5} ${tags:30} ${directories:15}")
 (setq org-roam-node-display-template
-      "${title:30} ${backlinkscount:5} ${tags:30} ${directories:15}")
+      "${title:30} ${tags:30} ${directories:15}")
 ;; }}}
 
 ;; org-roam: completion
