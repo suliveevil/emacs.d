@@ -658,12 +658,14 @@ Version 2018-06-18 2021-09-30"
 
 ;; Siri Shortcuts: Translate
 ;; {{{
+(add-to-list 'display-buffer-alist
+  (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
 (defun my/siri-translate ()
   (interactive)
   (let ((tempfile
          (make-temp-file "siri-translate-" nil ".txt") ; temp file
 	 ))
-    (write-region (format "%s" (thing-at-point 'sentence)) nil tempfile)
+    (write-region (format "%s" (thing-at-point 'paragraph)) nil tempfile)
     (shell-command (format "shortcuts run \"Translate File\" -i %s &" tempfile))
     )
   (do-applescript "tell application id \"org.gnu.Emacs\" to activate")
@@ -1742,6 +1744,27 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
         (visual-line-mode 1))))
   (add-hook 'org-mode-hook #'xs-toggle-olivetti-for-org)
   (add-hook 'window-configuration-change-hook #'xs-toggle-olivetti-for-org))
+;; }}}
+
+;; osm
+;; {{{
+(use-package osm
+  :bind (("C-c m h" . osm-home)
+         ("C-c m s" . osm-search)
+         ("C-c m v" . osm-server)
+         ("C-c m t" . osm-goto)
+         ("C-c m x" . osm-gpx-show)
+         ("C-c m j" . osm-bookmark-jump))
+
+  :custom
+  ;; Take a look at the customization group `osm' for more options.
+  (osm-server 'default) ;; Configure the tile server
+  (osm-copyright t)     ;; Display the copyright information
+
+  :init
+  ;; Load Org link support
+  (with-eval-after-load 'org
+    (require 'osm-ol)))
 ;; }}}
 
 ;; lsp-bridge
