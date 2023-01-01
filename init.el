@@ -1263,6 +1263,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 
 ;; org-roam: search tag
 ;; {{{
+;; https://emacs-china.org/t/orgmode-tag/21429/15
 (defun my/org-roam-node-find-by-tag ()
   (interactive)
   (let ((chosen-tag
@@ -1743,6 +1744,15 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
         (visual-line-mode 1))))
   (add-hook 'org-mode-hook #'xs-toggle-olivetti-for-org)
   (add-hook 'window-configuration-change-hook #'xs-toggle-olivetti-for-org))
+;; }}}
+
+;; lsp-bridge
+;; {{{
+(require 'yasnippet)
+(yas-global-mode 1)
+
+(require 'lsp-bridge)
+(global-lsp-bridge-mode)
 ;; }}}
 
 ;; init.el

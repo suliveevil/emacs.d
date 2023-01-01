@@ -28,3 +28,6 @@
 [submodule "lib/modeline-char"]
 	path = lib/modeline-char
 	url = git@github.com:emacsmirror/modeline-char.git
+[submodule "lib/lsp-bridge"]
+	path = lib/lsp-bridge
+	url = git@github.com:manateelazycat/lsp-bridge.git

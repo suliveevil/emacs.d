@@ -28,6 +28,12 @@
 
 org-auto-tangle
 
+[[https://github.com/smartepsh/.emacs.d/blob/master/init_el.org][smartepsh/.emacs.d/init_el.org]]
+
+[[https://github.com/coco-hkk/dot/blob/main/emacs.org][coco-hkk/dot/emacs.org]]
+
+[[https://github.com/zhuchong530/.emacs.d][zhuchong530/.emacs.d]]
+
 [[https://github.com/novoid/dot-emacs][novoid/dot-emacs]]
 
 [[https://github.com/alhassy/emacs.d][alhassy/emacs.d]]
@@ -43,6 +49,8 @@ org-auto-tangle
 [[https://github.com/HerculeWu/HubbleEmacs][HerculeWu/HubbleEmacs]]
 
 [[https://github.com/MatthewZMD/.emacs.d#org1b52e83][MatthewZMD/.emacs.d]]
+
+[[https://github.com/Ethanlinyf/General-Pure-Emacs][Ethanlinyf/General-Pure-Emacs]]
 
 * Emacs & 插件
 
