@@ -106,6 +106,7 @@ digraph G {"epkg" -> "emacs";
 "emacsql-sqlite" -> "emacs";
 "emacsql-sqlite" -> "emacsql";
 "goggles" -> "emacs";
+"elisp-demos" -> "emacs";
 "benchmark-init" -> "emacs";
 "vertico" -> "emacs";
 "org-sticky-header" -> "emacs";

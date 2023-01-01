@@ -628,6 +628,11 @@ Version 2018-06-18 2021-09-30"
   (exec-path-from-shell-initialize))
 ;; }}}
 
+;; elisp-demos
+;; {{{
+(advice-add 'helpful-update :after #'elisp-demos-advice-helpful-update)
+;; }}}
+
 ;; fuck
 ;; {{{
 (use-package fuck
@@ -641,36 +646,29 @@ Version 2018-06-18 2021-09-30"
 (keymap-global-set "C-c d" #'osx-dictionary-search-word-at-point)
 ;; }}}
 
-
-;; Siri Shortcuts: Translate
-;; {{{
-;; Apple Translate in Siri Shortcuts.
-;; shortcuts://run-shortcut?name=[name]&input=[input]&text=[text]
-;; shortcuts://run-shortcut?name=EmacsTranslate&input=text&text=Hello%20World!
-;; shortcuts://x-callback-url/run-shortcut?name=EmacsTranslate&input=text&text=Hello%20World!
-;; (require 'siri-shortcuts)
-;; highlight temporarily
-;; [cedet/pulse.el](https://github.com/emacs-pkg-mirrors/cedet/blob/master/common/pulse.el)
-;; [beacon: beacon-blink](https://github.com/Malabarba/beacon)
-(defun my/siri-translate ()
-  (interactive)
-  (siri-shortcuts-browse-url 'run-shortcut "EmacsTranslate" "text" (thing-at-point 'sentence t))
-  ;; (pulse-momentary-highlight-region begin end)
-  ;; (message "Translated to %s" CLIPBOARD )
-  )
-(keymap-global-set "C-c t" #'my/siri-translate)
-;; }}}
-
 ;; Siri Shortcuts: OCR
 ;; {{{
 (defun my/siri-ocr ()
   (interactive)
-  ;; (siri-shortcuts-run "EmacsOCR")
-  ;; (shell-command "shortcuts run \"EmacsOCR\"")
   (shell-command "shortcuts run \"OCR Selected Area\"")
   (do-applescript "tell application id \"org.gnu.Emacs\" to activate")
   )
 (keymap-global-set "C-c M-o" #'my/siri-ocr)
+;; }}}
+
+;; Siri Shortcuts: Translate
+;; {{{
+(defun my/siri-translate ()
+  (interactive)
+  (let ((tempfile
+         (make-temp-file "siri-translate-" nil ".txt") ; temp file
+	 ))
+    (write-region (format "%s" (thing-at-point 'sentence)) nil tempfile)
+    (shell-command (format "shortcuts run \"Translate File\" -i %s &" tempfile))
+    )
+  (do-applescript "tell application id \"org.gnu.Emacs\" to activate")
+  )
+(keymap-global-set "C-c t" #'my/siri-translate)
 ;; }}}
 
 ;; khoj
