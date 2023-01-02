@@ -18,6 +18,9 @@
 
 ;; buffer
 ;; {{{
+;; ibuffer
+(keymap-global-set "C-x C-b" #'ibuffer)
+
 (defun my/side-buffer ()
   (interactive)
   (let ((other (buffer-name (window-buffer (next-window)))))
@@ -78,6 +81,9 @@ occurence of CHAR."
 ;; [go-to-char.el - EmacsWiki](https://www.emacswiki.org/emacs/go-to-char.el)
 ;; [joseph-go-to-char - EmacsWiki](https://www.emacswiki.org/emacs/joseph-go-to-char)
 ;; [doitian/iy-go-to-char: Go to next CHAR which is similar to "f" and "t" in vim](https://github.com/doitian/iy-go-to-char)
+;;
+;; zap-up-to-char
+(keymap-global-set "M-z" #'zap-up-to-char)
 ;; }}}
 
 ;; window
@@ -123,10 +129,10 @@ occurence of CHAR."
 ;; bind: 全局按键/快捷键 (Global key bindings)
 (setq echo-keystrokes 0.1)
 (setq mac-command-modifier 'super         ;; s: super(Command/Win)
-      mac-right-command-modifier 'meta    ;; M: Meta (reachable for thumb)
       mac-control-modifier 'control       ;; C: Ctrl
       mac-right-control-modifier 'control ;; C: Ctrl
       mac-option-modifier  'meta          ;; M: Meta (Option/Alt)
+      mac-right-command-modifier 'hyper   ;; H: hyper (reachable for thumb)      
       mac-right-option-modifier 'none     ;; macOS style Option
       ;; mac-function-modifier            ;; Function Key
       ;;                                  ;; A: Alt (redundant and not used)
@@ -233,6 +239,8 @@ occurence of CHAR."
 
 ;; completion: buffer and minibuffer
 ;; {{{
+;; hippie-expand
+(keymap-global-set "M-/" #'hippie-expand)
 ;; window
 (add-to-list 'display-buffer-alist
              '("\\*Completions\\*"
@@ -456,8 +464,11 @@ Version 2018-06-18 2021-09-30"
 
 ;; ido
 ;; {{{
-;; (ido-mode 1)
-;; (setq ido-vertical-mode t)
+(use-package ido
+  :config
+  (setq ido-vertical-mode t)
+  (setq ido-enable-flex-matching t)
+  )
 ;; }}}
 
 ;; isearch
@@ -721,7 +732,7 @@ Version 2018-06-18 2021-09-30"
   (shell-command "shortcuts run \"OCR Selected Area\"")
   (do-applescript "tell application id \"org.gnu.Emacs\" to activate")
   )
-(keymap-global-set "C-c M-o" #'my/siri-ocr)
+(keymap-global-set "C-c H-o" #'my/siri-ocr)
 ;; }}}
 
 ;; Siri Shortcuts: Translate
@@ -753,7 +764,7 @@ Version 2018-06-18 2021-09-30"
       (push-mark (beginning-of-line) t t)
       (end-of-line)
       (comment-dwim nil))))
-(keymap-global-set "C-c C" #'comment-current-line-dwim)
+(keymap-global-set "H-/" #'comment-current-line-dwim)
 ;; }}}
 
 ;; deadgrep
@@ -835,8 +846,8 @@ Version 2018-06-18 2021-09-30"
 (require 'pyim)
 (require 'pyim-cregexp-utils)
 (require 'pyim-cstring-utils)
-(keymap-global-set "M-f" 'pyim-forward-word)
-(keymap-global-set "M-b" 'pyim-backward-word)
+(keymap-global-set "H-f" 'pyim-forward-word)
+(keymap-global-set "H-b" 'pyim-backward-word)
 ;; (require 'pyim-basedict) ; 拼音词库设置
 ;; (pyim-basedict-enable)   ; 拼音词库
 ;; (require 'pyim-greatdict)
@@ -848,7 +859,7 @@ Version 2018-06-18 2021-09-30"
 (setq pyim-page-length 9)
 (setq-default pyim-punctuation-translate-p '(auto)) ;; 全角半角
 ;; 金手指设置，可以将光标处的编码，比如：拼音字符串，转换为中文。
-;; (global-set-key (kbd "M-j") 'pyim-convert-string-at-point)
+(global-set-key (kbd "H-j") 'pyim-convert-string-at-point)
 ;; 按 "C-<return>" 将光标前的 regexp 转换为可以搜索中文的 regexp.
 ;; (define-key minibuffer-local-map (kbd "C-<return>") 'pyim-cregexp-convert-at-point)
 (pyim-default-scheme 'quanpin)
@@ -914,7 +925,7 @@ Version 2018-06-18 2021-09-30"
 
 ;; {{{ ace-window
 ;; (require 'ace-window)
-(keymap-global-set "M-o" #'ace-window)
+(keymap-global-set "H-o" #'ace-window)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
 
 ;; }}}
@@ -1598,6 +1609,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; doom-modeline
 ;; {{{
 (add-hook 'after-init-hook #'doom-modeline-mode)
+(setq doom-modeline-support-imenu t)
 ;; }}}
 
 ;; package out of package.el :FIXME:
@@ -1886,18 +1898,22 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 
 ;; lsp-bridge
 ;; {{{
-(use-package yasnippet
-  :defer 1
-  :config
-  (yas-global-mode 1)
-  )
-
-(use-package lsp-bridge
-  :defer 1
-  :after yasnippet
-  :config
-  (global-lsp-bridge-mode)
-  )
+;; (use-package lsp-bridge
+;;   :after (yasnippet)
+;;   ;; :hook (prog-mode . lsp-bridge-mode)
+;;   :config
+;;   (global-lsp-bridge-mode)
+;;   (add-to-list 'lsp-bridge-org-babel-lang-list "emacs-lisp")
+;;   (add-to-list 'lsp-bridge-org-babel-lang-list "shell")
+;;   )
+(run-with-idle-timer
+    1 nil
+    #'(lambda ()
+	(require 'yasnippet)
+	(yas-global-mode 1)
+	(require 'lsp-bridge)
+	(global-lsp-bridge-mode)
+        ))
 ;; }}}
 
 ;; init.el
