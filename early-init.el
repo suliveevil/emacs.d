@@ -87,7 +87,16 @@
 
 ;; UI
 ;; {{{
-(push '(fullscreen . maximized) default-frame-alist)
+;; (push '(fullscreen . maximized) default-frame-alist)
+(setq default-frame-alist
+       '((height . 46)
+         (width . 97)
+         (left . 700)
+         (top . 20)
+         ;; (vertical-scroll-bars . nil)
+         ;; (horizontal-scroll-bars . nil)
+	 ;; (tool-bar-lines . 0)
+         ))
 (setq inhibit-splash-screen t)        ;; 禁用欢迎界面
 (tool-bar-mode -1)          ;; 工具栏
 (set-fringe-mode 10)        ;;

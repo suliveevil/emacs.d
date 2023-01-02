@@ -169,7 +169,7 @@ occurence of CHAR."
                 ("function" . ?𝑓)))
 ;; }}}
 
-;; cursor
+;; cursor and region
 ;; {{{
 ;; make cursor the width of the character it is under
 ;; i.e. full width of a TAB
@@ -177,16 +177,46 @@ occurence of CHAR."
 ;; cursor line: 光标所在行显示/高亮
 (global-hl-line-mode t) ;; highlight current line
 (custom-set-faces '(hl-line ((t (:background "grey")))))
+(delete-selection-mode 1) ;; 选中文字后输入，用输入替换选中的文字
+(global-subword-mode) ;; camelCase and superword-mode
 ;; }}}
 
-;; line: wrap/truncate
+;; line
 ;; {{{
+;; wrap/truncate
 (setq word-wrap-by-category t) ;; improves CJK + Latin word-wrapping
 (setq scroll-margin 5)
 (global-display-line-numbers-mode 1)
 (setq global-display-line-numbers-width-start t)
 (setq display-line-numbers-grow-only t)    ;; do not shrink line number width
 (setq display-line-numbers-type 'relative) ;; 相对行号
+;; new line
+;; https://github.com/manateelazycat/open-newline
+(defun open-newline-above (arg)
+  "Move to the previous line (like vi) and then opens a line."
+  (interactive "p")
+  (beginning-of-line)
+  (open-line arg)
+  (if (not (member major-mode '(haskell-mode org-mode literate-haskell-mode)))
+      (indent-according-to-mode)
+    (beginning-of-line)))
+(keymap-global-set "C-c O" #'open-newline-above)
+(defun open-newline-below (arg)
+  "Move to the next line (like vi) and then opens a line."
+  (interactive "p")
+  (end-of-line)
+  (open-line arg)
+  (call-interactively 'next-line arg)
+  (if (not (member major-mode '(haskell-mode org-mode literate-haskell-mode)))
+      (indent-according-to-mode)
+    (beginning-of-line)))
+(keymap-global-set "C-c C-o" #'open-newline-below)
+;; }}}
+
+;; sentence: 断句
+;; {{{
+(setq sentence-end "\\([。！？]\\|……\\|[.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*")
+;; (setq sentence-end-double-space nil)
 ;; }}}
 
 ;; column
@@ -217,6 +247,8 @@ occurence of CHAR."
 ;; style
 (setq completion-styles '(substring initials partial-completion flex basic))
 (setq completion-cycle-threshold 10)
+;; pair
+(electric-pair-mode 1)
 ;; }}}
 
 ;; fold
@@ -228,6 +260,15 @@ occurence of CHAR."
 (keymap-global-set "M-+" #'hs-show-all)
 ;; }}}
 
+;; time
+;; {{{
+(defun my/date-and-time-iso8601 ()
+  (interactive)
+  (insert (format-time-string "%FT%T%z"))
+  )
+
+(keymap-global-set "C-c D" #'my/date-and-time-iso8601)
+;; }}}
 
 ;; completion: dabbrev: dynamic abbreviation expand
 ;; {{{
@@ -712,7 +753,7 @@ Version 2018-06-18 2021-09-30"
       (push-mark (beginning-of-line) t t)
       (end-of-line)
       (comment-dwim nil))))
-(keymap-global-set "M-/" #'comment-current-line-dwim)
+(keymap-global-set "C-c C" #'comment-current-line-dwim)
 ;; }}}
 
 ;; deadgrep
