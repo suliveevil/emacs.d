@@ -636,7 +636,7 @@ Version 2018-06-18 2021-09-30"
 ;; fuck
 ;; {{{
 (use-package fuck
-  :defer t
+  :defer 2
   )
 ;; }}}
 
@@ -659,13 +659,14 @@ Version 2018-06-18 2021-09-30"
 ;; Siri Shortcuts: Translate
 ;; {{{
 (add-to-list 'display-buffer-alist
-  (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
+             (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
 (defun my/siri-translate ()
   (interactive)
   (let ((tempfile
          (make-temp-file "siri-translate-" nil ".txt") ; temp file
-	 ))
+         ))
     (write-region (format "%s" (thing-at-point 'paragraph)) nil tempfile)
+    (end-of-paragraph-text)
     (shell-command (format "shortcuts run \"Translate File\" -i %s &" tempfile))
     )
   (do-applescript "tell application id \"org.gnu.Emacs\" to activate")
@@ -828,6 +829,7 @@ Version 2018-06-18 2021-09-30"
 ;; {{{
 ;; (with-eval-after-load 'magit
 (use-package magit
+  :defer 2
   :config
   (defun my/magit--with-difftastic (buffer command)
     "Run COMMAND with GIT_EXTERNAL_DIFF=difft then show result in BUFFER."
@@ -1113,7 +1115,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; {{{
 (use-package org-roam
   :ensure t
-  :defer t ;; autoload
+  :defer 1
   :bind (
          ("C-c n a" . org-roam-alias-add)
          ("C-c n c" . org-roam-capture)
@@ -1731,7 +1733,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   :diminish
   :bind ("<f8>" . olivetti-mode)
   :init
-  ;; (setq olivetti-body-width 0.618) ; default: fill-column+2
+  (setq olivetti-body-width 0.618)	; default: fill-column+2
   (defun xs-toggle-olivetti-for-org ()
     "if current buffer is org and only one visible buffer
   enable olivetti mode"
@@ -1769,11 +1771,18 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 
 ;; lsp-bridge
 ;; {{{
-(require 'yasnippet)
-(yas-global-mode 1)
+(use-package yasnippet
+  :defer 1
+  :config
+  (yas-global-mode 1)
+  )
 
-(require 'lsp-bridge)
-(global-lsp-bridge-mode)
+(use-package lsp-bridge
+  :defer 1
+  :after yasnippet
+  :config
+  (global-lsp-bridge-mode)
+  )
 ;; }}}
 
 ;; init.el

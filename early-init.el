@@ -106,6 +106,11 @@
 (setq enable-recursive-minibuffers t)
 ;; }}}
 
+;; email
+;; {{{
+(setq user-mail-address "suliveevil@qq.com")
+(setq user-full-name "suliveevil")
+;; }}}
 
 ;; package: package-enable-at-startup is before init but after early-init
 ;; {{{
