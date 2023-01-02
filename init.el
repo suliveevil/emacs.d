@@ -436,27 +436,27 @@ Version 2018-06-18 2021-09-30"
 (org-babel-do-load-languages
  'org-babel-load-languages
  '(
-   (awk . t)
-   ;; (c   .  t)
-   (calc   .  t)
-   (comint   .  t)
-   (css   .  t)
-   (dot . t)
-   (emacs-lisp   .  t)
-   (eshell   .  t)
-   (haskell . t)
-   (js   .  t)
-   (latex . t)
-   (lua   .  t)
-   (org   .  t)
-   (perl   .  t)
-   (plantuml   .  t)
-   (python . t)
-   (ruby . t)
-   (sed   .  t)
-   (shell . t)
-   (sql   .  t)
-   (sqlite . t)
+   (awk		.	t)
+   ;; (c           .       t)
+   (calc	.	t)
+   (comint	.	t)
+   (css		.	t)
+   (dot		.	t)
+   (emacs-lisp  .	t)
+   (eshell	.	t)
+   (haskell	.	t)
+   (js		.	t)
+   (latex	.	t)
+   (lua		.	t)
+   (org		.	t)
+   (perl	.	t)
+   (plantuml	.	t)
+   (python	.	t)
+   (ruby	.	t)
+   (sed		.	t)
+   (shell	.	t)
+   (sql		.	t)
+   (sqlite	.	t)
    ))
 ;; }}}
 
@@ -638,6 +638,16 @@ Version 2018-06-18 2021-09-30"
 (use-package fuck
   :defer 2
   )
+;; }}}
+
+;; pangu-spacing
+;; {{{
+(use-package pangu-spacing
+  :defer 1
+  :config
+  (global-pangu-spacing-mode 1)
+  (setq pangu-spacing-real-insert-separtor t)
+)
 ;; }}}
 
 ;; dictionary: Apple 词典: osx-dictionary
@@ -1254,13 +1264,16 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; {{{
 (defun my/org-roam-filter-by-tag (tag-name)
   (lambda (node)
-    (member tag-name (org-roam-node-tags node))))
+    (member tag-name (org-roam-node-tags node)))
+  )
 
 (defun my/org-roam-list-notes-by-tag (tag-name)
+  (interactive)
   (mapcar #'org-roam-node-file
           (seq-filter
            (my/org-roam-filter-by-tag tag-name)
-           (org-roam-node-list))))
+           (org-roam-node-list)))
+  )
 ;; }}}
 
 ;; org-roam: search tag
@@ -1733,7 +1746,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   :diminish
   :bind ("<f8>" . olivetti-mode)
   :init
-  (setq olivetti-body-width 0.618)	; default: fill-column+2
+  (setq olivetti-body-width 90)		; default: fill-column+2
   (defun xs-toggle-olivetti-for-org ()
     "if current buffer is org and only one visible buffer
   enable olivetti mode"
