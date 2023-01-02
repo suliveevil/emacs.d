@@ -1,13 +1,13 @@
 ;;; marginalia.el --- Enrich existing commands with completion annotations -*- lexical-binding: t -*-
 
-;; Copyright (C) 2021, 2022  Free Software Foundation, Inc.
+;; Copyright (C) 2021-2023 Free Software Foundation, Inc.
 
 ;; Author: Omar Antolín Camarena <omar@matem.unam.mx>, Daniel Mendler <mail@daniel-mendler.de>
 ;; Maintainer: Omar Antolín Camarena <omar@matem.unam.mx>, Daniel Mendler <mail@daniel-mendler.de>
 ;; Created: 2020
 ;; Version: 1.0
-;; Package-Version: 20221224.1657
-;; Package-Commit: c1365bf0c7b5d32e7531fa8f1a9a3b64a155cec0
+;; Package-Version: 20230101.1109
+;; Package-Commit: 077fcfb548eaa076c08431b0d712ea947d42c66c
 ;; Package-Requires: ((emacs "27.1"))
 ;; Homepage: https://github.com/minad/marginalia
 

@@ -31,6 +31,23 @@
     (with-selected-window (previous-window)
       (set-window-buffer (selected-window) "*Scratch*"))))
 (keymap-global-set "C-c B" #'my/side-buffer)
+
+;; kill buffer
+(defun my/kill-all-other-buffers ()
+  (interactive)
+  (mapc 'kill-buffer (cdr (buffer-list (current-buffer)))))
+
+;; delete buffer file
+(defun my/delete-current-file ()
+  "Delete the file associated with the current buffer.
+Delete the current buffer too.
+If no file is associated, just close buffer without prompt for save."
+  (interactive)
+  (let ((currentFile (buffer-file-name)))
+    (when (yes-or-no-p (concat "Delete file?: " currentFile))
+      (kill-buffer (current-buffer))
+      (when currentFile
+        (delete-file currentFile)))))
 ;; }}}
 
 ;; chunk
@@ -41,7 +58,7 @@
 
 ;; cursor move
 ;; {{{
-;; [Emacs一行内移动cursor的最佳方案是什么？ - Emacs China](https://emacs-china.org/t/emacs-cursor/6753/12)
+;; [Emacs 一行内移动 cursor 的最佳方案是什么？ - Emacs China](https://emacs-china.org/t/emacs-cursor/6753/12)
 ;;
 ;; char-wise
 ;; goto-char by Oliver Scholz
@@ -436,27 +453,27 @@ Version 2018-06-18 2021-09-30"
 (org-babel-do-load-languages
  'org-babel-load-languages
  '(
-   (awk		.	t)
+   (awk         .       t)
    ;; (c           .       t)
-   (calc	.	t)
-   (comint	.	t)
-   (css		.	t)
-   (dot		.	t)
-   (emacs-lisp  .	t)
-   (eshell	.	t)
-   (haskell	.	t)
-   (js		.	t)
-   (latex	.	t)
-   (lua		.	t)
-   (org		.	t)
-   (perl	.	t)
-   (plantuml	.	t)
-   (python	.	t)
-   (ruby	.	t)
-   (sed		.	t)
-   (shell	.	t)
-   (sql		.	t)
-   (sqlite	.	t)
+   (calc        .       t)
+   (comint      .       t)
+   (css         .       t)
+   (dot         .       t)
+   (emacs-lisp  .       t)
+   (eshell      .       t)
+   (haskell     .       t)
+   (js          .       t)
+   (latex       .       t)
+   (lua         .       t)
+   (org         .       t)
+   (perl        .       t)
+   (plantuml    .       t)
+   (python      .       t)
+   (ruby        .       t)
+   (sed         .       t)
+   (shell       .       t)
+   (sql         .       t)
+   (sqlite      .       t)
    ))
 ;; }}}
 
@@ -647,7 +664,7 @@ Version 2018-06-18 2021-09-30"
   :config
   (global-pangu-spacing-mode 1)
   (setq pangu-spacing-real-insert-separtor t)
-)
+  )
 ;; }}}
 
 ;; dictionary: Apple 词典: osx-dictionary
@@ -682,6 +699,40 @@ Version 2018-06-18 2021-09-30"
   (do-applescript "tell application id \"org.gnu.Emacs\" to activate")
   )
 (keymap-global-set "C-c t" #'my/siri-translate)
+;; }}}
+
+;; comment
+;; {{{
+(defun comment-current-line-dwim ()
+  "Comment or uncomment the current line/region."
+  (interactive)
+  (save-excursion
+    (if (use-region-p)
+        (comment-or-uncomment-region (region-beginning) (region-end))
+      (push-mark (beginning-of-line) t t)
+      (end-of-line)
+      (comment-dwim nil))))
+(keymap-global-set "M-/" #'comment-current-line-dwim)
+;; }}}
+
+;; deadgrep
+;; {{{
+(use-package deadgrep
+  :bind*
+  (("C-c r" . deadgrep)
+   ("C-c f" . grep-org-files))
+  :config
+  (defun grep-org-files (words)
+    (interactive "sSearch org files: ")
+    (let ((default-directory org-roam-directory)
+          (deadgrep--file-type '(glob . "*.org"))
+          (deadgrep--context '(1 . 1))
+          (deadgrep--search-type 'regexp))
+      (deadgrep words)
+      )
+    )
+  )
+
 ;; }}}
 
 ;; khoj
@@ -760,7 +811,7 @@ Version 2018-06-18 2021-09-30"
 ;; 按 "C-<return>" 将光标前的 regexp 转换为可以搜索中文的 regexp.
 ;; (define-key minibuffer-local-map (kbd "C-<return>") 'pyim-cregexp-convert-at-point)
 (pyim-default-scheme 'quanpin)
-(pyim-isearch-mode 1) ;; 开启代码搜索中文功能（比如拼音，五笔码等）
+;; (pyim-isearch-mode 1) ;; 开启代码搜索中文功能（比如拼音，五笔码等）
 ;; 让 vertico, selectrum 等补全框架，通过 orderless 支持拼音搜索候选项功能。
 (defun my-orderless-regexp (orig-func component)
   (let ((result (funcall orig-func component)))
@@ -770,9 +821,12 @@ Version 2018-06-18 2021-09-30"
 
 ;; ace-pinyin
 ;; {{{
-(require 'ace-pinyin)
-(setq ace-pinyin-use-avy t)
-(ace-pinyin-global-mode +1)
+(use-package ace-pinyin
+  :defer 1
+  :config
+  (setq ace-pinyin-use-avy t)
+  (ace-pinyin-global-mode +1)
+  )
 ;; }}}
 
 ;; helpful
@@ -826,8 +880,17 @@ Version 2018-06-18 2021-09-30"
 
 ;; org-auto-tangle
 ;; {{{
-(require 'org-auto-tangle)
-(add-hook 'org-mode-hook 'org-auto-tangle-mode)
+(use-package org-auto-tangle
+  :hook (org-mode . org-auto-tangle-mode)
+  )
+;; }}}
+
+;; project
+;; {{{
+(use-package project
+  :bind-keymap
+  (("C-c p" . project-prefix-map))
+  )
 ;; }}}
 
 ;; magit + git-gutter
@@ -1143,7 +1206,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   (setq org-roam-db-location "~/org-roam/org-roam.db")
   (setq org-roam-file-extensions '("org" "md")) ;; enable Org-roam for markdown
   (setq org-roam-node-display-template "${title:50} ${tags:30}")
-  (require 'org-roam-protocol)  ;; org-roam-protocol
+  (require 'org-roam-protocol)	;; org-roam-protocol
   (org-roam-db-autosync-mode 1) ;; if md-roam installed, move to md-roam config
   )
 ;; }}}
@@ -1307,11 +1370,6 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
                             "#+title: ${title}\n#+date: %<%FT%T%z>\n#+category:\n#+filetags: \n")
          :immediate-finish t
          :unnarrowed  t)
-        ;; ("bz" "Z综合性图书" plain "%?"
-        ;;  :target (file+head "图书/Z综合性图书/${title}.org"
-        ;;                     "#+title: ${title}\n#+date: %<%FT%T%z>\n#+category:\n#+filetags: \n")
-        ;;  :immediate-finish t
-        ;;  :unnarrowed  t)
         ;; c:
         ;; C
         ("d" "default" plain "%?"
@@ -1462,16 +1520,19 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 
 ;; markdown-mode
 ;; {{{
-(autoload 'markdown-mode "markdown-mode"
-  "Major mode for editing Markdown files" t)
-(add-to-list 'auto-mode-alist
-             '("\\.\\(?:md\\|markdown\\|mk/d\\|mdown\\|mkdn\\|mdwn\\)\\'" . markdown-mode))
-(autoload 'gfm-mode "markdown-mode"
-  "Major mode for editing GitHub Flavored Markdown files" t)
-(add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
-(setq markdown-command "multimarkdown")
-(setq markdown-enable-wiki-links t) ;; wikilink/backlink
-(setq markdown-wiki-link-search-type "project")
+(use-package markdown-mode
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . gfm-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "pandoc")
+  :config
+  (setq visual-line-column 90)
+  (setq markdown-fontify-code-blocks-natively t)
+  (setq markdown-enable-wiki-links t) ;; wikilink/backlink
+  (setq markdown-wiki-link-search-type "project")
+  (setq markdown-enable-math t)
+  )
 ;; }}}
 
 ;; md-roam

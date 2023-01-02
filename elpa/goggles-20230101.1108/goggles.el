@@ -1,13 +1,13 @@
 ;;; goggles.el --- Pulse modified regions -*- lexical-binding: t -*-
 
-;; Copyright (C) 2020-2022 Daniel Mendler
+;; Copyright (C) 2020-2023 Daniel Mendler
 
 ;; Author: Daniel Mendler
 ;; Created: 2020
 ;; License: GPL-3.0-or-later
 ;; Version: 0.2
-;; Package-Version: 20221011.1137
-;; Package-Commit: f0e80d3be9f5195682f8edf903ded9cdc947683a
+;; Package-Version: 20230101.1108
+;; Package-Commit: 5e0e08ece6cf04280040b5f5980ec4a085fdb38a
 ;; Package-Requires: ((emacs "27.1"))
 ;; Homepage: https://github.com/minad/goggles
 

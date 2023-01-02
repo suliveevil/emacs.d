@@ -69,15 +69,15 @@
 (set-buffer-file-coding-system          'utf-8-unix) ;;
 (set-charset-priority                   'unicode)    ;;
 (set-clipboard-coding-system            'utf-8-unix) ;; clipboard
-(set-default-coding-systems             'utf-8)	;; buffer/file: 打开文件时的默认编码
-(set-file-name-coding-system            'utf-8-unix)	;; unix/linux/macos
-(set-keyboard-coding-system             'utf-8-unix)	;; keyboard
-(set-next-selection-coding-system       'utf-8-unix)	;; selection
-(set-selection-coding-system            'utf-8)		;; selection
-(set-terminal-coding-system             'utf-8-unix)		;; terminal
-(setq coding-system-for-read            'utf-8)			;;
-(setq default-buffer-file-coding-system 'utf-8)				;;
-(setq locale-coding-system              'utf-8)	;; local
+(set-default-coding-systems             'utf-8) ;; buffer/file: 打开文件时的默认编码
+(set-file-name-coding-system            'utf-8-unix)    ;; unix/linux/macos
+(set-keyboard-coding-system             'utf-8-unix)    ;; keyboard
+(set-next-selection-coding-system       'utf-8-unix)    ;; selection
+(set-selection-coding-system            'utf-8)         ;; selection
+(set-terminal-coding-system             'utf-8-unix)            ;; terminal
+(setq coding-system-for-read            'utf-8)                 ;;
+(setq default-buffer-file-coding-system 'utf-8)                         ;;
+(setq locale-coding-system              'utf-8) ;; local
 ;; }}}
 
 ;; locale
@@ -92,7 +92,7 @@
 (tool-bar-mode -1)          ;; 工具栏
 (set-fringe-mode 10)        ;;
 (global-visual-line-mode 1) ;;
-(setq visible-bell t)	    ;; 关闭提示声音
+(setq visible-bell t)       ;; 关闭提示声音
 ;; }}}
 
 
@@ -124,7 +124,7 @@
   (interactive)
   (let* ((dir (file-name-as-directory search-dir)))
     (dolist (subdir
-             ;; 过滤出不必要的目录，提升Emacs启动速度
+             ;; 过滤出不必要的目录，提升 Emacs 启动速度
              (cl-remove-if
               #'(lambda (subdir)
                   (or
@@ -136,15 +136,15 @@
                                     "RCS" "CVS" "rcs" "cvs" ".git" ".github"))))
               (directory-files dir)))
       (let ((subdir-path (concat dir (file-name-as-directory subdir))))
-        ;; 目录下有 .el .so .dll 文件的路径才添加到 `load-path' 中，提升Emacs启动速度
+        ;; 目录下有 .el .so .dll 文件的路径才添加到 `load-path' 中，提升 Emacs 启动速度
         (when (cl-some #'(lambda (subdir-file)
                            (and (file-regular-p (concat subdir-path subdir-file))
-                                ;; .so .dll 文件指非Elisp语言编写的Emacs动态库
+                                ;; .so .dll 文件指非 Elisp 语言编写的 Emacs 动态库
                                 (member (file-name-extension subdir-file) '("el" "so" "dll"))))
                        (directory-files subdir-path))
 
           ;; 注意：`add-to-list' 函数的第三个参数必须为 t ，表示加到列表末尾
-          ;; 这样Emacs会从父目录到子目录的顺序搜索Elisp插件，顺序反过来会导致Emacs无法正常启动
+          ;; 这样 Emacs 会从父目录到子目录的顺序搜索 Elisp 插件，顺序反过来会导致 Emacs 无法正常启动
           (add-to-list 'load-path subdir-path t))
 
         ;; 继续递归搜索子目录

@@ -2,4 +2,4 @@
 
 
 
-;; (provide 'init-package)
+(provide 'init-package)
