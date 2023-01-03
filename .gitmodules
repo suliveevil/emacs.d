@@ -34,6 +34,3 @@
 [submodule "lib/screenshot"]
 	path = lib/screenshot
 	url = git@github.com:tecosaur/screenshot.git
-[submodule "lib/ftable"]
-	path = lib/ftable
-	url = git@github.com:casouri/ftable.git
