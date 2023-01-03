@@ -155,6 +155,9 @@ occurence of CHAR."
 
 ;; mouse
 ;; {{{
+(setq mouse-wheel-tilt-scroll t)
+(setq mouse-wheel-flip-direction t)
+;;
 ;; (defun mouse-hover-tooltip (&optional arg)
 ;;   "Show mouse hover help info using pos-tip-show."
 ;;   (interactive)
@@ -181,10 +184,10 @@ occurence of CHAR."
 ;; i.e. full width of a TAB
 (setq x-stretch-cursor t)
 ;; cursor line: 光标所在行显示/高亮
-(global-hl-line-mode t) ;; highlight current line
+;; (global-hl-line-mode t) ;; highlight current line
 (custom-set-faces '(hl-line ((t (:background "grey")))))
 (delete-selection-mode 1) ;; 选中文字后输入，用输入替换选中的文字
-(global-subword-mode) ;; camelCase and superword-mode
+(global-subword-mode)     ;; camelCase and superword-mode
 ;; }}}
 
 ;; line
@@ -280,6 +283,7 @@ occurence of CHAR."
 
 ;; completion: dabbrev: dynamic abbreviation expand
 ;; {{{
+(keymap-set minibuffer-mode-map "TAB" #'minibuffer-complete)
 (keymap-global-set               "C-<tab>" #'dabbrev-expand)
 (keymap-set minibuffer-local-map "C-<tab>" #'dabbrev-expand)
 ;; }}}
@@ -352,6 +356,17 @@ occurence of CHAR."
 ;;   (find-file "~/.config/karabiner.edn")
 ;;   (find-file "~/.config/goku/karabiner.edn")
 ;; )
+;; }}}
+
+;; dired
+;; {{{
+(require 'dired)
+(defun dired-open-dwim ()
+  (interactive)
+  (if (file-directory-p (dired-file-name-at-point))
+      (dired-find-file)
+    (dired-find-file-other-window)))
+(keymap-set dired-mode-map "RET" 'dired-open-dwim)
 ;; }}}
 
 ;; file name/file extension/file path
@@ -480,6 +495,8 @@ Version 2018-06-18 2021-09-30"
 
 ;; org-mode
 ;; {{{
+(keymap-global-set "C-c l" #'org-store-link)
+;;
 ;; 显示当前 heading 内容并折叠其他
 ;; https://emacstil.com/til/2021/09/09/fold-heading/
 (defun org-show-current-heading-tidily ()
@@ -532,6 +549,25 @@ Version 2018-06-18 2021-09-30"
    (sql         .       t)
    (sqlite      .       t)
    ))
+;; }}}
+
+;; tree-sitter
+;; {{{
+(when (treesit-available-p)
+  (setq major-mode-remap-alist
+        '((c-mode          . c-ts-mode)
+          (cmake-mode      . cmake-ts-mode)
+          ;; (c++-mode        . c++-ts-mode)
+          (conf-toml-mode  . toml-ts-mode)
+          (csharp-mode     . csharp-ts-mode)
+          (css-mode        . css-ts-mode)
+          (java-mode       . java-ts-mode)
+          (js-mode         . js-ts-mode)
+          (javascript-mode . js-ts-mode)
+          (js-json-mode    . json-ts-mode)
+          ;; (python-mode     . python-ts-mode)
+          (ruby-mode       . ruby-ts-mode)
+          (sh-mode         . bash-ts-mode))))
 ;; }}}
 
 ;; open app
@@ -710,17 +746,57 @@ Version 2018-06-18 2021-09-30"
 ;; fuck
 ;; {{{
 (use-package fuck
-  :defer 2
+  ;; :defer 2
   )
 ;; }}}
 
 ;; pangu-spacing
 ;; {{{
 (use-package pangu-spacing
-  :defer 1
+  ;; :defer 1
   :config
   (global-pangu-spacing-mode 1)
   (setq pangu-spacing-real-insert-separtor t)
+  )
+;; }}}
+
+;; smart-input-source
+;; {{{
+(use-package sis
+  :init
+  ;; `C-s/r' 默认优先使用英文 必须在 sis-global-respect-mode 前配置
+  (setq sis-respect-go-english-triggers
+        (list 'isearch-forward 'isearch-backward) ; isearch-forward 时默认进入 en
+        sis-respect-restore-triggers
+        (list 'isearch-exit 'isearch-abort))
+  :config
+  (sis-ism-lazyman-config
+   "com.apple.keylayout.ABC"
+   "com.apple.inputmethod.SCIM.ITABC"
+   'macism
+   )
+  (sis-global-cursor-color-mode t)
+  (sis-global-respect-mode t)
+  (sis-global-context-mode t)
+  (sis-global-inline-mode t)   ; 中文状态下，中文后<spc>切换英文，结束后切回中文
+  ;; (keymap-global-set "<f9>" #'sis-log-mode) ; 开启日志
+  ;; 特殊定制
+  (setq sis-default-cursor-color "green" ;; 英文光标色
+        sis-other-cursor-color "purple"  ;; 中文光标色 green
+        ;; sis-inline-tighten-head-rule 'all ; 删除头部空格，默认 1，删除一个空格，1/0/'all
+        sis-inline-tighten-tail-rule 'all ; 删除尾部空格，默认 1，删除一个空格，1/0/'all
+        sis-inline-with-english t ; 默认是 t, 中文 context 下输入<spc>进入内联英文
+        sis-inline-with-other t) ; 默认是 nil，而且 prog-mode 不建议开启, 英文 context 下输入<spc><spc>进行内联中文
+  ;; 特殊 buffer 禁用 sis 前缀,使用 Emacs 原生快捷键  setqsis-prefix-override-buffer-disable-predicates
+  (setq sis-prefix-override-buffer-disable-predicates
+        (list 'minibufferp
+              (lambda (buffer) ; magit revision magit 的 keymap 是基于 text property 的，优先级比 sis 更高。进入 magit 后，disable sis 的映射
+                (sis--string-match-p "^magit-revision:" (buffer-name buffer)))
+              (lambda (buffer) ; special buffer，所有*打头的 buffer，但是不包括*Scratch* *New, *About GNU 等 buffer
+                (and (sis--string-match-p "^\*" (buffer-name buffer))
+                     (not (sis--string-match-p "^\*About GNU Emacs" (buffer-name buffer))) ; *About GNU Emacs" 仍可使用 C-h/C-x/C-c 前缀
+                     (not (sis--string-match-p "^\*New" (buffer-name buffer)))
+                     (not (sis--string-match-p "^\*Scratch" (buffer-name buffer))))))) ; *Scratch*  仍可使用 C-h/C-x/C-c 前缀
   )
 ;; }}}
 
@@ -756,10 +832,10 @@ Version 2018-06-18 2021-09-30"
      (format "%s" (thing-at-point 'paragraph))
      nil
      tempfile)
-    (end-of-paragraph-text) ; jump to end of paragraph
+    (end-of-paragraph-text)             ; jump to end of paragraph
     (shell-command (format "shortcuts run \"Translate File\" -i %s &" tempfile))
     )
-  (do-applescript "tell application id \"org.gnu.Emacs\" to activate")
+  (shell-command "open -b org.gnu.Emacs")
   )
 (defun my/siri-translate2english ()
   (interactive)
@@ -771,10 +847,10 @@ Version 2018-06-18 2021-09-30"
      (format "%s" (thing-at-point 'paragraph))
      nil
      tempfile)
-    (end-of-paragraph-text) ; jump to end of paragraph
+    (end-of-paragraph-text)             ; jump to end of paragraph
     (shell-command (format "shortcuts run \"Translate File 2 English\" -i %s &" tempfile))
     )
-  (do-applescript "tell application id \"org.gnu.Emacs\" to activate")
+  (shell-command "open -b org.gnu.Emacs")
   )
 
 (keymap-global-set "C-c t" #'my/siri-translate)
@@ -902,7 +978,7 @@ Version 2018-06-18 2021-09-30"
 ;; ace-pinyin
 ;; {{{
 (use-package ace-pinyin
-  :defer 1
+  ;; :defer 1
   :config
   (setq ace-pinyin-use-avy t)
   (ace-pinyin-global-mode +1)
@@ -984,7 +1060,7 @@ Version 2018-06-18 2021-09-30"
 ;; {{{
 ;; (with-eval-after-load 'magit
 (use-package magit
-  :defer 2
+  ;; :defer 2
   :config
   (defun my/magit--with-difftastic (buffer command)
     "Run COMMAND with GIT_EXTERNAL_DIFF=difft then show result in BUFFER."
@@ -1127,10 +1203,129 @@ Version 2018-06-18 2021-09-30"
 ;; (require 'init-package) ;; packages installed by package.el
 ;; }}}
 
+;; consult
+;; {{{
+;; Example configuration for Consult
+(use-package consult
+  ;; Replace bindings. Lazily loaded due by `use-package'.
+  :bind (;; C-c bindings (mode-specific-map)
+         ("C-c h" . consult-history)
+         ("C-c m c" . consult-mode-command)
+         ("C-c k" . consult-kmacro)
+         ;; C-x bindings (ctl-x-map)
+         ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+         ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+         ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+         ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
+         ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+         ;; Custom M-# bindings for fast register access
+         ("M-#" . consult-register-load)
+         ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+         ("C-M-#" . consult-register)
+         ;; Other custom bindings
+         ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+         ;; M-g bindings (goto-map)
+         ("M-g e" . consult-compile-error)
+         ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
+         ("M-g g" . consult-goto-line)             ;; orig. goto-line
+         ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
+         ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+         ("M-g m" . consult-mark)
+         ("M-g k" . consult-global-mark)
+         ("M-g i" . consult-imenu)
+         ("M-g I" . consult-imenu-multi)
+         ;; M-s bindings (search-map)
+         ("M-s d" . consult-find)
+         ("M-s D" . consult-locate)
+         ("M-s g" . consult-grep)
+         ("M-s G" . consult-git-grep)
+         ("M-s r" . consult-ripgrep)
+         ("M-s l" . consult-line)
+         ("M-s L" . consult-line-multi)
+         ("M-s k" . consult-keep-lines)
+         ("M-s u" . consult-focus-lines)
+         ;; Isearch integration
+         ("M-s e" . consult-isearch-history)
+         :map isearch-mode-map
+         ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
+         ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
+         ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
+         ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+         ;; Minibuffer history
+         :map minibuffer-local-map
+         ("M-s" . consult-history)                 ;; orig. next-matching-history-element
+         ("M-r" . consult-history))                ;; orig. previous-matching-history-element
+
+  ;; Enable automatic preview at point in the *Completions* buffer. This is
+  ;; relevant when you use the default completion UI.
+  :hook (completion-list-mode . consult-preview-at-point-mode)
+
+  ;; The :init configuration is always executed (Not lazy)
+  :init
+
+  ;; Optionally configure the register formatting. This improves the register
+  ;; preview for `consult-register', `consult-register-load',
+  ;; `consult-register-store' and the Emacs built-ins.
+  (setq register-preview-delay 0.5
+        register-preview-function #'consult-register-format)
+
+  ;; Optionally tweak the register preview window.
+  ;; This adds thin lines, sorting and hides the mode line of the window.
+  (advice-add #'register-preview :override #'consult-register-window)
+
+  ;; Use Consult to select xref locations with preview
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+
+  ;; Configure other variables and modes in the :config section,
+  ;; after lazily loading the package.
+  :config
+
+  ;; Optionally configure preview. The default value
+  ;; is 'any, such that any key triggers the preview.
+  ;; (setq consult-preview-key 'any)
+  ;; (setq consult-preview-key (kbd "M-."))
+  ;; (setq consult-preview-key (list (kbd "<S-down>") (kbd "<S-up>")))
+  ;; For some commands and buffer sources it is useful to configure the
+  ;; :preview-key on a per-command basis using the `consult-customize' macro.
+  (consult-customize
+   consult-theme :preview-key '(:debounce 0.2 any)
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-bookmark consult--source-file-register
+   consult--source-recent-file consult--source-project-recent-file
+   ;; :preview-key (kbd "M-.")
+   :preview-key '(:debounce 0.4 any))
+
+  ;; Optionally configure the narrowing key.
+  ;; Both < and C-+ work reasonably well.
+  (setq consult-narrow-key "<") ;; (kbd "C-+")
+
+  ;; Optionally make narrowing help available in the minibuffer.
+  ;; You may want to use `embark-prefix-help-command' or which-key instead.
+  ;; (define-key consult-narrow-map (vconcat consult-narrow-key "?") #'consult-narrow-help)
+
+  ;; By default `consult-project-function' uses `project-root' from project.el.
+  ;; Optionally configure a different project root function.
+  ;; There are multiple reasonable alternatives to chose from.
+  ;;;; 1. project.el (the default)
+  ;; (setq consult-project-function #'consult--default-project--function)
+  ;;;; 2. projectile.el (projectile-project-root)
+  ;; (autoload 'projectile-project-root "projectile")
+  ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
+  ;;;; 3. vc.el (vc-root-dir)
+  ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
+  ;;;; 4. locate-dominating-file
+  ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
+  )
+;; }}}
+
 ;; vertico
 ;; {{{
 (use-package vertico
   :init
+  (fido-mode -1)
   (vertico-mode)
   (vertico-mouse-mode)
 
@@ -1216,10 +1411,14 @@ Version 2018-06-18 2021-09-30"
 
 ;; orderless: minibuffer filter, works with icomplete
 ;; {{{
-(require 'orderless)
-(setq completion-styles '(orderless basic initials substring partial-completion flex)
-      completion-category-defaults nil
-      completion-category-overrides '((file (styles basic partial-completion))))
+(use-package orderless
+  ;; (setq completion-styles '(orderless basic initials substring partial-completion flex)
+  :config
+  (setq completion-styles '(orderless)
+        completion-category-defaults nil
+        completion-category-overrides '((file
+                                         (styles basic partial-completion))
+                                        )))
 ;; }}}
 
 ;; marginalia: minibuffer annotations
@@ -1228,9 +1427,9 @@ Version 2018-06-18 2021-09-30"
 (use-package marginalia
   :ensure t
   ;; Either bind `marginalia-cycle' globally or only in the minibuffer
-  :bind (("C-M-a" . marginalia-cycle)
-         :map minibuffer-local-map
-         ("C-M-a" . marginalia-cycle))
+  ;; :bind (("C-M-a" . marginalia-cycle)
+  ;;        :map minibuffer-local-map
+  ;;        ("C-M-a" . marginalia-cycle))
   :init ;; The :init configuration is always executed (Not lazy!)
   ;; Must be in the :init section of use-package such that the mode gets
   ;; enabled right away. Note that this forces loading the package.
@@ -1270,7 +1469,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; {{{
 (use-package org-roam
   :ensure t
-  :defer 1
+  ;; :defer 1
   :bind (
          ("C-c n a" . org-roam-alias-add)
          ("C-c n c" . org-roam-capture)
@@ -1586,6 +1785,36 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   )
 ;; }}}
 
+;; consult-org-roam
+;; {{{
+(use-package consult-org-roam
+  :ensure t
+  :after org-roam
+  :init
+  (require 'consult-org-roam)
+  ;; Activate the minor mode
+  (consult-org-roam-mode 1)
+  :custom
+  ;; Use `ripgrep' for searching with `consult-org-roam-search'
+  (consult-org-roam-grep-func #'consult-ripgrep)
+  ;; Configure a custom narrow key for `consult-buffer'
+  (consult-org-roam-buffer-narrow-key ?r)
+  ;; Display org-roam buffers right after non-org-roam buffers
+  ;; in consult-buffer (and not down at the bottom)
+  (consult-org-roam-buffer-after-buffers t)
+  :config
+  ;; Eventually suppress previewing for certain functions
+  (consult-customize
+   consult-org-roam-forward-links
+   :preview-key (kbd "M-."))
+  :bind
+  ;; Define some convenient keybindings as an addition
+  ("C-c n e" . consult-org-roam-file-find)
+  ("C-c n b" . consult-org-roam-backlinks)
+  ("C-c n l" . consult-org-roam-forward-links)
+  ("C-c n r" . consult-org-roam-search))
+;; }}}
+
 ;; org-similarity
 ;; {{{
 (use-package org-similarity
@@ -1863,7 +2092,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; RFC
 ;; {{{
 (use-package rfc-mode
-  :defer t
+  ;; :defer t
   :config
   (setq rfc-mode-directory (expand-file-name "~/Documents/GitHub/RFC-all/txt/"))
   )
@@ -1881,6 +2110,12 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   (require 'all-the-icons))
 (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 (add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup)
+;; }}}
+
+;; auto-dark
+;; {{{
+(use-package auto-dark
+  :init (auto-dark-mode t))
 ;; }}}
 
 ;; olivetti

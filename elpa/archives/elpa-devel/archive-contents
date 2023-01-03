@@ -380,7 +380,7 @@
 	       (:authors
 		("Artur Malabarba" . "emacs@endlessparentheses.com")))])
  (cape .
-       [(0 12 0 20230101 110651)
+       [(0 12 0 20230102 181601)
 	((emacs
 	  (27 1)))
 	"Completion At Point Extensions" tar
@@ -388,7 +388,7 @@
 	 (:maintainer "Daniel Mendler" . "mail@daniel-mendler.de")
 	 (:authors
 	  ("Daniel Mendler" . "mail@daniel-mendler.de"))
-	 (:commit . "68ae230a5b7ca523bfac2eecf6e2ce9b691cdd04"))])
+	 (:commit . "da2bf90d23f07c982e5e9dc6f87a059ae2ee52a2"))])
  (capf-autosuggest .
 		   [(0 3 0 20211123 104430)
 		    ((emacs
@@ -556,7 +556,7 @@
 	    ("Philip Kaludercic" . "philipk@posteo.net"))
 	   (:commit . "1573aa2e6d478c30cc7f394b72cbaa4db77ef811"))])
  (consult .
-	  [(0 29 0 20230101 110729)
+	  [(0 30 0 20230102 164558)
 	   ((emacs
 	     (27 1))
 	    (compat
@@ -566,7 +566,7 @@
 	    (:maintainer "Daniel Mendler" . "mail@daniel-mendler.de")
 	    (:authors
 	     ("Daniel Mendler and Consult contributors"))
-	    (:commit . "93091590b2a2029bcecce3fa355f8857a8775836"))])
+	    (:commit . "201e46a911820d85db7670f93b2df50c4941303e"))])
  (consult-recoll .
 		 [(0 8 0 20221014 200255)
 		  ((emacs
@@ -601,7 +601,7 @@
 	   ("Daniel Mendler" . "mail@daniel-mendler.de"))
 	  (:commit . "677933a8cd259a166d8a24d84876bbcdb18923b5"))])
  (coterm .
-	 [(1 6 0 20221005 121655)
+	 [(1 6 0 20221015 160420)
 	  ((emacs
 	    (26 1))
 	   (compat
@@ -612,7 +612,7 @@
 	   (:maintainer "jakanakaevangeli" . "jakanakaevangeli@chiru.no")
 	   (:authors
 	    ("jakanakaevangeli" . "jakanakaevangeli@chiru.no"))
-	   (:commit . "1799a182d8da41d93319f161e4ab6c948315f7e1"))])
+	   (:commit . "ce3206fbd7156685e2d2f3fbc39b3eea3334754b"))])
  (counsel .
 	  [(0 13 4 0 20221015 95041)
 	   ((emacs
@@ -767,7 +767,7 @@
 	     ("Phil Sainty" . "psainty@orcon.net.nz"))
 	    (:keywords "convenience"))])
  (denote .
-	 [(1 2 0 0 20230101 152947)
+	 [(1 2 0 0 20230103 10310)
 	  ((emacs
 	    (28 1)))
 	  "Simple notes with an efficient file-naming scheme" tar
@@ -775,7 +775,7 @@
 	   (:maintainer "Denote Development" . "~protesilaos/denote@lists.sr.ht")
 	   (:authors
 	    ("Protesilaos Stavrou" . "info@protesilaos.com"))
-	   (:commit . "ee2ad59bee48f946d8f3fc0adaaf589c9d98cef0"))])
+	   (:commit . "63e00a3e05e0db4c396a275ca135618eaf6e9c7d"))])
  (detached .
 	   [(0 10 1 0 20221129 143049)
 	    ((emacs
@@ -1021,7 +1021,7 @@
 	       ("Protesilaos Stavrou" . "info@protesilaos.com"))
 	      (:commit . "4e0cf3c02a87fb8a4583dc36595d9c6e4303e65b"))])
  (eglot .
-	[(1 10 0 20230101 53112)
+	[(1 10 0 20230102 5753)
 	 ((emacs
 	   (26 3))
 	  (jsonrpc
@@ -1044,7 +1044,7 @@
 	  (:maintainer "João Távora" . "joaotavora@gmail.com")
 	  (:authors
 	   ("João Távora" . "joaotavora@gmail.com"))
-	  (:commit . "4e4a808eca8f68a8079272442aab0f8815abdaa8"))])
+	  (:commit . "2ee6012b3faaf12710ec63626795148caeef0f6a"))])
  (el-search .
 	    [(1 12 6 1 0 20221221 75346)
 	     ((emacs
@@ -1190,7 +1190,7 @@
 	       (:url . "https://elpa.gnu.org/packages/epoch-view.html")
 	       (:commit . "7a9773a8b55491bd47f23dfdb6c4224f5cc8e50c"))])
  (erc .
-      [(5 4 1 0 20230101 53112)
+      [(5 4 1 0 20230102 54839)
        ((emacs
 	 (27 1))
 	(compat
@@ -1201,7 +1201,7 @@
 	(:maintainer "Amin Bandali <bandali@gnu.org>, F. Jason Park" . "jp@neverwas.me")
 	(:authors
 	 ("Alexander L. Belikoff" . "alexander@belikoff.net"))
-	(:commit . "4e4a808eca8f68a8079272442aab0f8815abdaa8"))])
+	(:commit . "b5b6159d036fd167c6cab21532c2fdd587051d28"))])
  (ergoemacs-mode .
 		 [(5 16 10 12 0 20220410 223821)
 		  ((emacs
@@ -1392,7 +1392,7 @@
 	(:url . "https://elpa.gnu.org/packages/fsm.html")
 	(:commit . "595d57373934ad94423c7f37a6c9cce5df81ec6c"))])
  (ftable .
-	 [(1 0 0 20210802 173525)
+	 [(1 1 0 20230102 145125)
 	  ((emacs
 	    (26 0)))
 	  "Fill a table to fit in n columns" tar
@@ -1400,7 +1400,8 @@
 	   (:keywords "convenience" "text" "table")
 	   (:maintainer "Yuan Fu" . "casouri@gmail.com")
 	   (:authors
-	    ("Yuan Fu" . "casouri@gmail.com")))])
+	    ("Yuan Fu" . "casouri@gmail.com"))
+	   (:commit . "d7c243ac3be2a67986f53f3dc31ba1426e82b771"))])
  (gcmh .
        [(0 2 1 0 20201116 225142)
 	((emacs
@@ -1702,7 +1703,7 @@
 	  (:url . "https://elpa.gnu.org/packages/ilist.html")
 	  (:commit . "c8edbb4ba109186ee5371310a2ac0f9ccbca77cd"))])
  (inspector .
-	    [(0 8 0 20220930 100104)
+	    [(0 9 0 20230102 141221)
 	     ((emacs
 	       (27 1)))
 	     "Tool for inspection of Emacs Lisp objects" tar
@@ -1711,7 +1712,7 @@
 	      (:maintainer "Mariano Montone" . "marianomontone@gmail.com")
 	      (:authors
 	       ("Mariano Montone" . "marianomontone@gmail.com"))
-	      (:commit . "0e89d28558f57db4519f154bb72ce617a8c6265d"))])
+	      (:commit . "83db8f170b1760bfeae0f86fd26701c40360bfcc"))])
  (ioccur .
 	 [(2 6 0 20211231 163129)
 	  ((emacs
@@ -2415,7 +2416,7 @@
 	       ("Omar Antolín Camarena" . "omar@matem.unam.mx"))
 	      (:commit . "847694e78c12d903d5e3f6cb365a5d3b984db537"))])
  (org .
-      [(9 6 0 20230102 90823)
+      [(9 6 0 20230103 75859)
        ((emacs
 	 (25 1)))
        "Outline-based notes management and organizer" tar
@@ -2424,7 +2425,7 @@
 	(:maintainer "Bastien Guerry" . "bzg@gnu.org")
 	(:authors
 	 ("Carsten Dominik" . "carsten.dominik@gmail.com"))
-	(:commit . "82cc6f0fe84d8fe2efb346c447544aa7a0fdbf0c"))])
+	(:commit . "30314c60385148de2e44bb6b3319c02d296de170"))])
  (org-contacts .
 	       [(1 1 0 20221221 43108)
 		((emacs
@@ -2547,7 +2548,7 @@
 	(:url . "https://elpa.gnu.org/packages/osc.html")
 	(:commit . "62eda3d8fb288b6a16c35a7220a507d0991c5a74"))])
  (osm .
-      [(0 9 0 20230101 160221)
+      [(0 9 0 20230102 153138)
        ((emacs
 	 (27 1)))
        "OpenStreetMap viewer" tar
@@ -2555,7 +2556,7 @@
 	(:maintainer "Daniel Mendler" . "mail@daniel-mendler.de")
 	(:authors
 	 ("Daniel Mendler" . "mail@daniel-mendler.de"))
-	(:commit . "880dacaf8d9c415bede356f20dbe798e37a90d95"))])
+	(:commit . "8bd0049a5be4d373733dbfd87c8cb0901fb02d0e"))])
  (other-frame-window .
 		     [(1 0 6 0 20221221 81352)
 		      ((emacs
@@ -3692,7 +3693,7 @@
 	 (:authors
 	  ("Toby Cubitt" . "toby-predictive@dr-qubit.org")))])
  (triples .
-	  [(0 2 0 20230101 144019)
+	  [(0 2 1 0 20230102 210159)
 	   ((seq
 	     (2 0))
 	    (emacs
@@ -3703,7 +3704,7 @@
 	    (:maintainer "Andrew Hyatt" . "ahyatt@gmail.com")
 	    (:authors
 	     ("Andrew Hyatt" . "ahyatt@gmail.com"))
-	    (:commit . "0d7555226aa9a74c2721edb0c7a0272f42880a0d"))])
+	    (:commit . "bf65ed2b311a6a13632ae758b054dc52fa292b90"))])
  (undo-tree .
 	    [(0 8 2 0 20220312 180415)
 	     ((queue

@@ -46,6 +46,13 @@
 (add-hook 'after-init-hook #'my/emacs-init-time)
 ;; }}}
 
+;; startup
+;; {{{
+(setq initial-major-mode 'fundamental-mode)
+(setq inhibit-startup-screen t)
+(setq inhibit-startup-echo-area-message (user-login-name))
+;; }}}
+
 (setq debug-on-error t)
 
 (setq use-short-answers t) ;; use y/n instead of yes/no
@@ -101,6 +108,7 @@
 (tool-bar-mode -1)          ;; 工具栏
 (set-fringe-mode 10)        ;;
 (global-visual-line-mode 1) ;;
+(context-menu-mode 1)       ;; 鼠标右键菜单
 (setq visible-bell t)       ;; 关闭提示声音
 ;; }}}
 
