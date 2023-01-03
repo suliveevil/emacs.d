@@ -502,6 +502,10 @@ Version 2018-06-18 2021-09-30"
 (setq org-src-fontify-natively 1)         ;代码块语法高亮
 (setq org-src-tab-acts-natively 1)        ;开启代码块语法缩进
 (setq org-edit-src-content-indentation 0) ;代码块初始缩进范围
+;;
+(setq org-fontify-todo-headline nil)
+(setq org-fontify-done-headline nil)
+;;
 (setq org-babel-python-command "python3")
 (org-babel-do-load-languages
  'org-babel-load-languages

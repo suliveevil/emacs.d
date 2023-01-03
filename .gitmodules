@@ -31,3 +31,6 @@
 [submodule "lib/lsp-bridge"]
 	path = lib/lsp-bridge
 	url = git@github.com:manateelazycat/lsp-bridge.git
+[submodule "lib/screenshot"]
+	path = lib/screenshot
+	url = git@github.com:tecosaur/screenshot.git
