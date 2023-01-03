@@ -132,7 +132,7 @@ occurence of CHAR."
       mac-control-modifier 'control       ;; C: Ctrl
       mac-right-control-modifier 'control ;; C: Ctrl
       mac-option-modifier  'meta          ;; M: Meta (Option/Alt)
-      mac-right-command-modifier 'hyper   ;; H: hyper (reachable for thumb)      
+      mac-right-command-modifier 'hyper   ;; H: hyper (reachable for thumb)
       mac-right-option-modifier 'none     ;; macOS style Option
       ;; mac-function-modifier            ;; Function Key
       ;;                                  ;; A: Alt (redundant and not used)
@@ -502,6 +502,7 @@ Version 2018-06-18 2021-09-30"
 (setq org-src-fontify-natively 1)         ;代码块语法高亮
 (setq org-src-tab-acts-natively 1)        ;开启代码块语法缩进
 (setq org-edit-src-content-indentation 0) ;代码块初始缩进范围
+(setq org-babel-python-command "python3")
 (org-babel-do-load-languages
  'org-babel-load-languages
  '(
@@ -738,19 +739,42 @@ Version 2018-06-18 2021-09-30"
 ;; Siri Shortcuts: Translate
 ;; {{{
 (add-to-list 'display-buffer-alist
-             (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
+             (cons
+              "\\*Async Shell Command\\*.*"
+              (cons #'display-buffer-no-window nil)))
 (defun my/siri-translate ()
   (interactive)
-  (let ((tempfile
-         (make-temp-file "siri-translate-" nil ".txt") ; temp file
-         ))
-    (write-region (format "%s" (thing-at-point 'paragraph)) nil tempfile)
-    (end-of-paragraph-text)
+  (let
+      ((tempfile
+        (make-temp-file "siri-translate-" nil ".txt")
+        ))
+    (write-region
+     (format "%s" (thing-at-point 'paragraph))
+     nil
+     tempfile)
+    (end-of-paragraph-text) ; jump to end of paragraph
     (shell-command (format "shortcuts run \"Translate File\" -i %s &" tempfile))
     )
   (do-applescript "tell application id \"org.gnu.Emacs\" to activate")
   )
+(defun my/siri-translate2english ()
+  (interactive)
+  (let
+      ((tempfile
+        (make-temp-file "siri-translate-" nil ".txt")
+        ))
+    (write-region
+     (format "%s" (thing-at-point 'paragraph))
+     nil
+     tempfile)
+    (end-of-paragraph-text) ; jump to end of paragraph
+    (shell-command (format "shortcuts run \"Translate File 2 English\" -i %s &" tempfile))
+    )
+  (do-applescript "tell application id \"org.gnu.Emacs\" to activate")
+  )
+
 (keymap-global-set "C-c t" #'my/siri-translate)
+(keymap-global-set "C-c e" #'my/siri-translate2english)
 ;; }}}
 
 ;; comment
@@ -945,9 +969,11 @@ Version 2018-06-18 2021-09-30"
   )
 ;; }}}
 
-;; magit + git-gutter
+;; diff-hl
 ;; {{{
-(global-git-gutter-mode +1)
+(global-diff-hl-mode)
+;; (global-git-gutter-mode +1) ; BUG when deleting folded 17000+lines
+
 ;; }}}
 
 ;; difftastic + magit
@@ -1258,7 +1284,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   (setq org-roam-db-location "~/org-roam/org-roam.db")
   (setq org-roam-file-extensions '("org" "md")) ;; enable Org-roam for markdown
   (setq org-roam-node-display-template "${title:50} ${tags:30}")
-  (require 'org-roam-protocol)	;; org-roam-protocol
+  (require 'org-roam-protocol)  ;; org-roam-protocol
   (org-roam-db-autosync-mode 1) ;; if md-roam installed, move to md-roam config
   )
 ;; }}}
@@ -1860,7 +1886,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   :diminish
   :bind ("<f8>" . olivetti-mode)
   :init
-  (setq olivetti-body-width 90)		; default: fill-column+2
+  (setq olivetti-body-width 90)         ; default: fill-column+2
   (defun xs-toggle-olivetti-for-org ()
     "if current buffer is org and only one visible buffer
   enable olivetti mode"
@@ -1907,13 +1933,13 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;;   (add-to-list 'lsp-bridge-org-babel-lang-list "shell")
 ;;   )
 (run-with-idle-timer
-    1 nil
-    #'(lambda ()
-	(require 'yasnippet)
-	(yas-global-mode 1)
-	(require 'lsp-bridge)
-	(global-lsp-bridge-mode)
-        ))
+ 1 nil
+ #'(lambda ()
+     (require 'yasnippet)
+     (yas-global-mode 1)
+     (require 'lsp-bridge)
+     (global-lsp-bridge-mode)
+     ))
 ;; }}}
 
 ;; init.el
