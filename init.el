@@ -929,7 +929,7 @@ Version 2018-06-18 2021-09-30"
 ;;   (let ((line (number-to-string (line-number-at-pos)))
 ;;         (column (number-to-string (current-column))))
 ;;     (apply 'call-process "code" nil nil nil (list (concat buffer-file-name ":" line ":" column) "--goto"))))
-(keymap-set global-map "C-c c" #'my/open-in-vscode)
+;; (keymap-set global-map "C-c C" #'my/open-in-vscode)
 ;; }}}
 
 ;; Obsidian

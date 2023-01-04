@@ -82,6 +82,8 @@ digraph G {"epkg" -> "emacs";
 "spinner" -> "emacs";
 "marginalia" -> "emacs";
 "moom" -> "emacs";
+"keycast" -> "emacs";
+"keycast" -> "compat";
 "f" -> "emacs";
 "f" -> "s";
 "f" -> "dash";
