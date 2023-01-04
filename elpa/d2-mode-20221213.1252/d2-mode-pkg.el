@@ -1,0 +1,2 @@
+;;; Generated package description from d2-mode.el  -*- no-byte-compile: t -*-
+(define-package "d2-mode" "20221213.1252" "Major mode for working with d2 graphs" '((emacs "26.1")) :commit "d57d5405645192ae3291dad9c64197c5b72ee852" :authors '(("Andor Kesselman" . "andor@henosisknot.com")) :maintainer '("Andor Kesselman" . "andor@henosisknot.com") :keywords '("d2" "graphs" "tools" "processes") :url "https://github.com/andorsk/d2-mode")

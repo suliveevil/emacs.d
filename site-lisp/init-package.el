@@ -280,6 +280,14 @@
     map))
 ;; }}}
 
+;; (org-babel-do-load-languages
+;;     'org-babel-load-languages
+;;     '(
+;;       ;; (mermaid . t)
+;;       (scheme . t)
+;;       (d2 . t)))
+    
+
 ;; osm: OpenStreetMap
 ;; {{{
 (use-package osm

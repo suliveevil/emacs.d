@@ -61,6 +61,18 @@ GNU Emacs 30.0.50 (build 1, aarch64-apple-darwin22.2.0, NS appkit-2299.30
  Version 13.1 (Build 22C65)) of 2023-01-03
 #+end_quote
 
+** 安装
+
+[[https://github.com/emacs-mirror/emacs][emacs-mirror/emacs: Mirror of GNU Emacs]]
+
+[[https://github.com/suliveevil/build-emacs-macos][suliveevil/build-emacs-macos: Build script for emacs and macos]]
+
+
+
+#+begin_src shell
+export PATH=$PATH:/Applications/Emacs.app/Contents/MacOS
+export PATH=$PATH:/Applications/Emacs.app/Contents/MacOS/bin
+#+end_src
 
 ** Emacs 依赖
 
