@@ -34,3 +34,6 @@
 [submodule "lib/screenshot"]
 	path = lib/screenshot
 	url = git@github.com:tecosaur/screenshot.git
+[submodule "lib/subed"]
+	path = lib/subed
+	url = git@github.com:sachac/subed.git

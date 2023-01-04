@@ -101,6 +101,32 @@
 (setq system-time-locale "C")
 ;; }}}
 
+;; key
+;; {{{
+;; repeat-mode
+(setq repeat-mode t)
+(defvar org-mode-navigation-repeat-map
+  "Keymap to repeat `org-mode' navigation key sequences.  Used in `repeat-mode'."
+  ;; org-mode C-c C-n 或 C-p 或 C-f 或 C-b 或 C-i 或 C-u
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-n") #'org-next-visible-heading)
+    (define-key map (kbd "C-p") #'org-previous-visible-heading)
+    (define-key map (kbd "C-f") #'org-forward-heading-same-level)
+    (define-key map (kbd "C-b") #'org-backward-heading-same-level)
+    (define-key map (kbd "C-u") #'org-up-heading)
+    (define-key map (kbd "C-i") #'org-down-heading)
+    (--each '(
+              org-next-visible-heading
+              org-previous-visible-heading
+              org-forward-heading-same-level
+              org-backward-heading-same-level
+              org-up-heading org-down-heading)
+      (put it 'repeat-map 'org-mode-navigation-repeat-map)
+      )
+    map)
+  )
+;; }}}
+
 ;; UI
 ;; {{{
 ;; (push '(fullscreen . maximized) default-frame-alist)
@@ -119,6 +145,14 @@
 (global-visual-line-mode 1) ;;
 (setq visible-bell t)       ;; 关闭提示声音
 (context-menu-mode 1)       ;; 鼠标右键菜单
+(setq context-menu-functions
+      '(context-menu-ffap
+        occur-context-menu
+        context-menu-region
+        context-menu-undo
+        context-menu-minor
+	context-menu-local
+	))
 (setq use-dialog-box nil)   ;; 鼠标点击不触发弹窗
 ;; }}}
 
@@ -214,4 +248,20 @@
         (add-subdirs-to-load-path subdir-path)))))
 
 (add-subdirs-to-load-path "~/.config/emacs/lib")
+
+(defun add-files-to-load-path (folder)
+  "Add FOLDER and its subdirectories to `load-path'."
+  (let ((base folder))
+    (unless (member base load-path)
+      (add-to-list 'load-path base))
+    (dolist (f (directory-files base))
+      (let ((name (concat base "/" f)))
+        (when (and (file-directory-p name)
+                   (not (equal f ".."))
+                   (not (equal f ".")))
+          (unless (member base load-path)
+            (add-to-list 'load-path name)))))))
+
+(add-files-to-load-path (expand-file-name "site-lisp" user-emacs-directory))
+
 ;; }}}

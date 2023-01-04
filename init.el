@@ -514,6 +514,26 @@ Version 2018-06-18 2021-09-30"
       (show-children))
     ))
 ;; code block: TAB 格式化
+(setq org-src-lang-modes
+      '(
+        ("C" . c)
+        ("C++" . c++)
+        ("asymptote" . asy)
+        ("bash" . sh)
+        ("beamer" . latex)
+        ("calc" . fundamental)
+        ("cpp" . c++)
+        ("desktop" . conf-desktop)
+        ("ditaa" . artist)
+        ("dot"  . graphviz-dot)
+        ("elisp" . emacs-lisp)
+	;; ("json"  . json-ts)
+        ("ocaml" . tuareg)
+        ("screen" . shell-script)
+        ("shell" . sh)
+        ("sqlite" . sql)
+        ("toml" . conf-toml)
+        ))
 (setq org-src-fontify-natively 1)         ;代码块语法高亮
 (setq org-src-tab-acts-natively 1)        ;开启代码块语法缩进
 (setq org-edit-src-content-indentation 0) ;代码块初始缩进范围
@@ -1204,10 +1224,10 @@ Version 2018-06-18 2021-09-30"
          ("C-c k" . consult-kmacro)
          ;; C-x bindings (ctl-x-map)
          ("C-x M-:" . consult-complex-command) ;; orig. repeat-complex-command
-         ("C-x b" . consult-buffer)	       ;; orig. switch-to-buffer
+         ("C-x b" . consult-buffer)            ;; orig. switch-to-buffer
          ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
          ("C-x 5 b" . consult-buffer-other-frame) ;; orig. switch-to-buffer-other-frame
-         ("C-x r b" . consult-bookmark)		  ;; orig. bookmark-jump
+         ("C-x r b" . consult-bookmark)           ;; orig. bookmark-jump
          ("C-x p b" . consult-project-buffer) ;; orig. project-switch-to-buffer
          ;; Custom M-# bindings for fast register access
          ("M-#" . consult-register-load)
@@ -1217,10 +1237,10 @@ Version 2018-06-18 2021-09-30"
          ("M-y" . consult-yank-pop) ;; orig. yank-pop
          ;; M-g bindings (goto-map)
          ("M-g e" . consult-compile-error)
-         ("M-g f" . consult-flymake)	 ;; Alternative: consult-flycheck
-         ("M-g g" . consult-goto-line)	 ;; orig. goto-line
+         ("M-g f" . consult-flymake)     ;; Alternative: consult-flycheck
+         ("M-g g" . consult-goto-line)   ;; orig. goto-line
          ("M-g M-g" . consult-goto-line) ;; orig. goto-line
-         ("M-g o" . consult-outline)	 ;; Alternative: consult-org-heading
+         ("M-g o" . consult-outline)     ;; Alternative: consult-org-heading
          ("M-g m" . consult-mark)
          ("M-g k" . consult-global-mark)
          ("M-g i" . consult-imenu)
@@ -1241,7 +1261,7 @@ Version 2018-06-18 2021-09-30"
          ("M-e" . consult-isearch-history)   ;; orig. isearch-edit-string
          ("M-s e" . consult-isearch-history) ;; orig. isearch-edit-string
          ("M-s l" . consult-line) ;; needed by consult-line to detect isearch
-         ("M-s L" . consult-line-multi)	;; needed by consult-line to detect isearch
+         ("M-s L" . consult-line-multi) ;; needed by consult-line to detect isearch
          ;; Minibuffer history
          :map minibuffer-local-map
          ("M-s" . consult-history)  ;; orig. next-matching-history-element
@@ -1799,10 +1819,10 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
    :preview-key (kbd "M-."))
   :bind
   ;; Define some convenient keybindings as an addition
-  ("C-c n e" . consult-org-roam-file-find)
+  ("C-c n F" . consult-org-roam-file-find)
   ("C-c n b" . consult-org-roam-backlinks)
   ("C-c n l" . consult-org-roam-forward-links)
-  ("C-c n r" . consult-org-roam-search))
+  ("C-c n s" . consult-org-roam-search))
 ;; }}}
 
 ;; org-similarity
@@ -1847,209 +1867,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; (org-roam-db-autosync-mode 1) ; autosync-mode triggers db-sync. md-roam-mode must be already active
 ;; }}}
 
-;; goggles: visual hint for operations
-;; {{{
-(use-package goggles
-  :hook ((prog-mode text-mode) . goggles-mode)
-  :config
-  (setq-default goggles-pulse t)) ;; set to nil to disable pulsing
-;; }}}
-
-;; doom-modeline
-;; {{{
-;; (add-hook 'after-init-hook #'doom-modeline-mode)
-;; (setq doom-modeline-support-imenu t)
-(use-package doom-modeline
-  :custom
-  ;; Don't compact font caches during GC. Windows Laggy Issue
-  (inhibit-compacting-font-caches t)
-  (doom-modeline-minor-modes t)
-  (doom-modeline-icon t)
-  (doom-modeline-major-mode-color-icon t)
-  (doom-modeline-height 18)
-  :config
-  (doom-modeline-mode))
-;; }}}
-
 ;; package out of package.el :FIXME:
 ;; {{{
 ;; (add-to-list 'load-path (expand-file-name "init-lib.el" user-emacs-directory)) ;; :FIXME:
 ;; (add-to-list 'load-path "~/.config/emacs/init-lib.el")
 ;; (require 'init-lib)     ;; packages out of package.el
-;; }}}
-
-;; keyfreq: Track Emacs commands frequency
-;; {{{
-;; keyfreq fork: keyfreq-html-v2 show keyboard heat map
-(require 'keyfreq) ;; 导入插件包
-(setq keyfreq-folder "~/.config/emacs/lib/keyfreq")
-(keyfreq-mode 1)          ;; 启动插件包
-(keyfreq-autosave-mode 1) ;; 自动保存模式
-(setq-default keyfreq-file "~/.config/emacs/assets/keyfreq-log")
-;; (defun turnon-keyfreq-mode ()
-;;   "Turn on keyfreq."
-;;   (interactive)
-;;   (my-run-with-idle-timer 4 (lambda () ;; ;; Fire up keyfreq a few seconds later to start up emacs faster
-;;                               (keyfreq-mode 1)
-;;                               (keyfreq-autosave-mode 1))))
-;;
-;; }}}
-
-;; keyferq: 排除命令: exclude commands
-;; {{{
-(with-eval-after-load 'keyfreq
-  (setq keyfreq-excluded-commands
-        '(
-          ;; abort-recursive-edit
-          ;; ace-window
-          ;; avy-goto-line
-          ;; backward-char
-          ;; clipboard-kill-ring-save
-          ;; comint-previous-input
-          ;; comint-send-input
-          ;; delete-backward-char
-          ;; describe-variable
-          ;; electric-pair-delete-pair
-          ;; eval-buffer
-          ;; exit-minibuffer
-          ;; ffip
-          ;; forward-char
-          ;; goto-line
-          ;; hippie-expand
-          ;; indent-new-comment-line
-          ;; ispell-minor-check
-          ;; js-mode
-          ;; js2-line-break
-          ;; kill-sentence
-          ;; left-char
-          ;; mac-mwheel-scroll
-          ;; magit-next-line
-          ;; magit-previous-line
-          ;; markdown-exdent-or-delete
-          ;; markdown-outdent-or-delete
-          ;; minibuffer-complete
-          ;; minibuffer-complete-and-exit
-          ;; minibuffer-keyboard-quit
-          ;; mouse-drag-region
-          ;; mouse-set-point
-          ;; move-beginning-of-line
-          ;; move-end-of-line
-          ;; mwheel-scroll
-          ;; my-company-number
-          ;; my-setup-develop-environment
-          ;; newline-and-indent
-          ;; next-history-element
-          ;; next-line
-          ;; package-menu-execute
-          ;; pcomplete
-          ;; previous-history-element
-          ;; previous-line
-          ;; push-button
-          ;; pwd
-          ;; quit-window
-          ;; recenter-top-bottom
-          ;; right-char
-          ;; rjsx-electric-gt
-          ;; rjsx-electric-lt
-          ;; self-insert-command
-          ;; shellcop-erase-buffer
-          ;; smarter-move-beginning-of-line
-          ;; suspend-frame
-          ;; term-send-raw
-          ;; turnon-keyfreq-mode
-          ;; typescript-insert-and-indent
-          ;; undefined ;; lambda function
-          ;; wgrep-finish-edit
-          ;; xterm-paste
-          ;; yank
-          )) )
-;; }}}
-
-;; keyfreq: 正则表达式排除模式, excluded regexp
-;; {{{
-;; (with-eval-after-load 'keyfreq
-;; (setq keyfreq-excluded-regexp
-;;       '(
-;;         "^ace-jump-"
-;;         "^backward-"
-;;         "^company-"
-;;         "^dired"
-;;         "^evil-"
-;;         "^forward-"
-;;         "^general-dispatch-self-insert-command-"
-;;         "^gnus-"
-;;         "^ido-"
-;;         "^isearch-"
-;;         "^ivy-"
-;;         "^keyboard-"
-;;         "^keyfreq-"
-;;         "^my-hydra-.*/body"
-;;         "^next-"
-;;         "^org-"
-;;         "^paredit-"
-;;         "^save-"
-;;         "^scroll-"
-;;         "^select-window-"
-;;         "^undo-"
-;;         "^w3m-"
-;;         "^web-mode"
-;;         "^y-or-n-"
-;;         "^yas-"
-;;         "emms-"
-;;        )))
-;; }}}
-
-;; free-keys
-;; {{{
-(require 'free-keys)
-(setq free-keys-modifiers '(
-                            ""
-                            ;; "A"
-                            "C"
-                            "H"
-                            "M"
-                            "S"
-                            "s"
-                            ;; "A-C"
-                            ;; "A-H"
-                            ;; "A-M"
-                            ;; "A-S"
-                            ;; "A-s"
-                            ;; "C-H"
-                            "C-M"
-                            ;; "C-S"
-                            ;; "C-s"
-                            ;; "M-S"
-                            ;; "M-s"
-                            ;; "s-H"
-                            ;; "S-s"
-                            ;; "C-M-S"
-                            ;; "C-M-s"
-                            "C-c C"
-                            "C-x C" ))
-;; }}}
-
-;; highlight-parentheses
-;; {{{
-(require 'highlight-parentheses)
-;; (add-hook 'prog-mode-hook #'highlight-parentheses-mode)
-(global-highlight-parentheses-mode 1)
-;; 括号颜色（由内向外）
-(setq highlight-parentheses-colors '(
-                                     "Green"
-                                     "Blue"
-                                     "Orange"
-                                     "Purple"
-                                     "Yellow"
-                                     "Red"
-                                     ;; "Pink" ;; only six colors supported ?
-                                     ))
-;; Apple Six Colors
-;; (setq highlight-parentheses-colors '("#61BB46" "#FDB827" "#F5821F" "#E03A3E" "#963D97" "#009DDC"))
-;;
-;; Emacs builtin
-;; (setq show-paren-when-point-inside-paren t
-;;       show-paren-when-point-in-periphery t)
 ;; }}}
 
 ;; sticky header: topsy
@@ -2060,42 +1882,10 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 (add-hook 'org-mode-hook #'org-sticky-header-mode)
 ;; }}}
 
-;; graphviz-dot-mode
-;; {{{
-(setq graphviz-dot-indent-width 4)
-(setq graphviz-dot-preview-extension "svg")
-;; }}}
-
-;; D2 Mode
-;; {{{
-(add-to-list 'auto-mode-alist '("\\.d2" . d2-mode))
-(defvar d2-mode-map
-  (let ((map (make-sparse-keymap)))
-    (keymap-set map "C-c C-c" #'d2-compile)
-    (keymap-set map "C-c C-f" #'d2-compile-file)
-    (keymap-set map "C-c C-b" #'d2-compile-buffer)
-    (keymap-set map "C-c C-r" #'d2-compile-region)
-    (keymap-set map "C-c C-h" #'d2-compile-file-and-browse)
-    (keymap-set map "C-c C-j" #'d2-compile-buffer-and-browse)
-    (keymap-set map "C-c C-k" #'d2-compile-region-and-browse)
-    (keymap-set map "C-c C-o" #'d2-open-browser)
-    (keymap-set map "C-x C-o" #'d2-view-current-svg)
-    (keymap-set map "C-c C-d" #'d2-open-doc)
-    map))
-;; }}}
 
 ;; diagram-preview
 ;; {{{
 
-;; }}}
-
-;; RFC
-;; {{{
-(use-package rfc-mode
-  ;; :defer t
-  :config
-  (setq rfc-mode-directory (expand-file-name "~/Documents/GitHub/RFC-all/txt/"))
-  )
 ;; }}}
 
 ;; unicode
@@ -2113,54 +1903,6 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 (add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup)
 ;; }}}
 
-;; auto-dark
-;; {{{
-(use-package auto-dark
-  :init (auto-dark-mode t))
-;; }}}
-
-;; olivetti
-;; {{{
-;; https://emacs-china.org/t/emacs/19797/4
-(use-package olivetti
-  :diminish
-  :bind ("<f8>" . olivetti-mode)
-  :init
-  (setq olivetti-body-width 90)         ; default: fill-column+2
-  (defun xs-toggle-olivetti-for-org ()
-    "if current buffer is org and only one visible buffer
-  enable olivetti mode"
-    (if (and (eq (buffer-local-value 'major-mode (current-buffer)) 'org-mode)
-             (or (eq (length (window-list nil nil nil)) 1)
-                 (window-at-side-p (frame-first-window) 'right))) ;; frame-first-window 的 mode 是 org-mode 并且没有右边 window
-        (olivetti-mode 1)
-      (olivetti-mode 0)
-      (when (eq (buffer-local-value 'major-mode (current-buffer)) 'org-mode)
-        (visual-line-mode 1))))
-  (add-hook 'org-mode-hook #'xs-toggle-olivetti-for-org)
-  (add-hook 'window-configuration-change-hook #'xs-toggle-olivetti-for-org))
-;; }}}
-
-;; osm
-;; {{{
-(use-package osm
-  :bind (("C-c m h" . osm-home)
-         ("C-c m s" . osm-search)
-         ("C-c m v" . osm-server)
-         ("C-c m t" . osm-goto)
-         ("C-c m x" . osm-gpx-show)
-         ("C-c m j" . osm-bookmark-jump))
-
-  :custom
-  ;; Take a look at the customization group `osm' for more options.
-  (osm-server 'default) ;; Configure the tile server
-  (osm-copyright t)     ;; Display the copyright information
-
-  :init
-  ;; Load Org link support
-  (with-eval-after-load 'org
-    (require 'osm-ol)))
-;; }}}
 
 ;; lsp-bridge
 ;; {{{
@@ -2181,5 +1923,9 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
      (global-lsp-bridge-mode)
      ))
 ;; }}}
+
+(require 'init-package)
+
+(require 'init-lib)
 
 ;; init.el
