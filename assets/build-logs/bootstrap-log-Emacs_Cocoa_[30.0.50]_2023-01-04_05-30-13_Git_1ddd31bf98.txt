@@ -8,34 +8,30 @@
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C nt bootstrap-clean
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C doc/emacs bootstrap-clean
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C doc/misc bootstrap-clean
-rm -f ./*.o liblw.a \#* deps/*
-rm -f core ./*.o ./*.res
 rm -f libXMenu11.a ./*.o deps/*
-rm -f ./*.aux ./*.log ./*.toc ./*.cp ./*.cps ./*.fn ./*.fns ./*.ky ./*.kys \
-	  ./*.op ./*.ops ./*.pg ./*.pgs ./*.tp ./*.tps ./*.vr ./*.vrs
 rm -f core *.o *.res
-  GEN      lisp.mk
 rm -f ./*.aux ./*.log ./*.toc ./*.c[mp] ./*.c[mp]s ./*.fn ./*.fns \
 	  ./*.ky ./*.kys ./*.op ./*.ops ./*.p[gj] ./*.p[gj]s ./*.sc ./*.scs ./*.ss \
 	  ./*.t[gp] ./*.t[gp]s ./*.vr ./*.vrs
-rm -f Makefile
-rm -f Makefile
-rm -f seccomp-filter.bpf seccomp-filter.pfc seccomp-filter-exec.bpf seccomp-filter-exec.pfc
+rm -f ./*.o liblw.a \#* deps/*
+rm -f ./*.aux ./*.log ./*.toc ./*.cp ./*.cps ./*.fn ./*.fns ./*.ky ./*.kys \
+	  ./*.op ./*.ops ./*.pg ./*.pgs ./*.tp ./*.tps ./*.vr ./*.vrs
+  GEN      lisp.mk
+rm -f core ./*.o ./*.res
 rm -f runemacs addpm cmdproxy ddeclient 
+rm -f Makefile
+rm -f Makefile
 rm -f \
 	  ./../../info/emacs.info \
 	  ./../../info/emacs.info-[1-9] \
 	  ./../../info/emacs.info-[1-9][0-9]
+rm -f gnustmp*
+rm -f seccomp-filter.bpf seccomp-filter.pfc seccomp-filter-exec.bpf seccomp-filter-exec.pfc
 rm -fr deps
+rm -f TAGS Makefile *.rc
 rm -fr deps
 rm -f etags ctags emacsclient  ebrowse hexl    make-docfile make-fingerprint
-rm -f gnustmp*
-rm -f TAGS Makefile *.rc
 rm -f emacs.dvi emacs-xtra.dvi emacs.html emacs.pdf emacs-xtra.pdf emacs.ps emacs-xtra.ps
-rm -f TAGS
-rm -f TAGS Makefile blessmail
-rm -f Makefile
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -C doc/lispref bootstrap-clean
 for file in auth autotype bovine calc ccmode cl dbus dired-x ebrowse ede ediff edt efaq eglot eieio emacs-gnutls emacs-mime epa erc ert eshell eudc eww flymake forms gnus htmlfontify idlwave ido info.info mairix-el message mh-e modus-themes newsticker nxml-mode octave-mode org pcl-cvs pgg rcirc reftex remember sasl sc semantic ses sieve smtpmail speedbar srecode todo-mode tramp transient url use-package vhdl-mode vip viper vtable widget wisent woman efaq-w32; do \
 	  file=`echo ${file} | sed 's/\.info$//'`.info; \
 	  rm -f \
@@ -43,69 +39,73 @@ for file in auth autotype bovine calc ccmode cl dbus dired-x ebrowse ede ediff e
 	    ./../../info/${file}-[1-9] \
 	    ./../../info/${file}-[1-9][0-9]; \
 	done
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -C doc/lispintro bootstrap-clean
-rm -f ./*.[ao] ./*/*.o ./*-t \#* deps/*.d deps/*/*.d
+rm -f TAGS
+rm -f ./modus-themes.texi ./org.texi
+rm -f Makefile
+rm -f TAGS Makefile blessmail
 true
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -C test bootstrap-clean
 rm -f ./emacsver.texi TAGS
-rm -f ./*.aux ./*.log ./*.toc ./*.cp ./*.cps ./*.fn ./*.fns ./*.ky ./*.kys \
-	  ./*.op ./*.ops ./*.pg ./*.pgs ./*.tp ./*.tps ./*.vr ./*.vrs
-rm -f ./*.aux ./*.log ./*.toc ./*.cp ./*.cps ./*.fn ./*.fns ./*.ky ./*.kys \
-	  ./*.op ./*.ops ./*.pg ./*.pgs ./*.tp ./*.tps ./*.vr ./*.vrs
+rm -f ./*.dvi ./*.html ./*.pdf ./*.ps
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C doc/lispref bootstrap-clean
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C doc/lispintro bootstrap-clean
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C test bootstrap-clean
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C nextstep bootstrap-clean
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -C admin/charsets bootstrap-clean
+rm -f ./*.aux ./*.log ./*.toc ./*.cp ./*.cps ./*.fn ./*.fns ./*.ky ./*.kys \
+	  ./*.op ./*.ops ./*.pg ./*.pgs ./*.tp ./*.tps ./*.vr ./*.vrs
+rm -f ./*.[ao] ./*/*.o ./*-t \#* deps/*.d deps/*/*.d
+rm -f ./*.aux ./*.log ./*.toc ./*.cp ./*.cps ./*.fn ./*.fns ./*.ky ./*.kys \
+	  ./*.op ./*.ops ./*.pg ./*.pgs ./*.tp ./*.tps ./*.vr ./*.vrs
 rm -rf /tmp/emacs-build/nextstep/Emacs.app
 rm -f \
 	  ./../../info/eintr.info \
 	  ./../../info/eintr.info-[1-9]
-rm -f elisp[12]* vol[12].tmp
-make[3]: Nothing to be done for `bootstrap-clean'.
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C admin/charsets bootstrap-clean
 rm -f Makefile
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -C admin/unidata bootstrap-clean
-rm -f core *.stackdump alloca.h assert.h byteswap.h dirent.h errno.h execinfo.h fcntl.h getopt.h getopt-cdefs.h malloc/dynarray.gl.h malloc/dynarray-skeleton.gl.h malloc/scratch_buffer.gl.h ieee754.h inttypes.h gmp.h limits.h signal.h stdalign.h stdckdint.h stddef.h stdint.h stdio.h stdlib.h string.h sys/random.h sys/select.h sys/stat.h sys/time.h sys/types.h time.h unistd.h
-rm -f emacs-lisp-intro.dvi eintr.html emacs-lisp-intro.pdf emacs-lisp-intro.ps
-rm -f \
-	  ./../../info/elisp.info \
-	  ./../../info/elisp.info-[1-9] \
-	  ./../../info/elisp.info-[1-9][0-9]
+rm -f elisp[12]* vol[12].tmp
 rm -f GNUstep/Emacs.base/Resources/Info-gnustep.plist \
 	  GNUstep/Emacs.base/Resources/Emacs.desktop \
 	  Cocoa/Emacs.base/Contents/Info.plist \
 	  Cocoa/Emacs.base/Contents/Resources/English.lproj/InfoPlist.strings
-rm -f Makefile
-rm -f Makefile
+rm -f emacs-lisp-intro.dvi eintr.html emacs-lisp-intro.pdf emacs-lisp-intro.ps
+rm -f core *.stackdump alloca.h assert.h byteswap.h dirent.h errno.h execinfo.h fcntl.h getopt.h getopt-cdefs.h malloc/dynarray.gl.h malloc/dynarray-skeleton.gl.h malloc/scratch_buffer.gl.h ieee754.h inttypes.h gmp.h limits.h signal.h stdalign.h stdckdint.h stddef.h stdint.h stdio.h stdlib.h string.h sys/random.h sys/select.h sys/stat.h sys/time.h sys/types.h time.h unistd.h
+make[3]: Nothing to be done for `bootstrap-clean'.
+rm -f \
+	  ./../../info/elisp.info \
+	  ./../../info/elisp.info-[1-9] \
+	  ./../../info/elisp.info-[1-9][0-9]
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C admin/unidata bootstrap-clean
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C leim bootstrap-clean
-rm -f TAGS
-rm -f elisp.dvi elisp.html elisp.pdf elisp.ps
-rm -fr deps
-rm -f vol[12].dvi vol[12].pdf vol[12].ps
-/Applications/Xcode.app/Contents/Developer/usr/bin/make -C lisp bootstrap-clean
+rm -f Makefile
+rm -f Makefile
 rm -f ./../lisp/leim/quail/CCDOSPY.el ./../lisp/leim/quail/Punct.el ./../lisp/leim/quail/QJ.el ./../lisp/leim/quail/SW.el ./../lisp/leim/quail/TONEPY.el ./../lisp/leim/quail/4Corner.el ./../lisp/leim/quail/ARRAY30.el ./../lisp/leim/quail/ECDICT.el ./../lisp/leim/quail/ETZY.el ./../lisp/leim/quail/Punct-b5.el ./../lisp/leim/quail/PY-b5.el ./../lisp/leim/quail/QJ-b5.el ./../lisp/leim/quail/ZOZY.el ./../lisp/leim/quail/tsang-b5.el ./../lisp/leim/quail/quick-b5.el ./../lisp/leim/quail/tsang-cns.el ./../lisp/leim/quail/quick-cns.el ./../lisp/leim/quail/PY.el ./../lisp/leim/quail/ZIRANMA.el ./../lisp/leim/quail/CTLau.el ./../lisp/leim/quail/CTLau-b5.el ./../lisp/language/pinyin.el ./../lisp/leim/leim-list.el
+rm -fr deps
+rm -f TAGS
+/Applications/Xcode.app/Contents/Developer/usr/bin/make -C lisp bootstrap-clean
+rm -f elisp.dvi elisp.html elisp.pdf elisp.ps
+rm -f Makefile
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C admin/grammars bootstrap-clean
-rm -f ./modus-themes.texi ./org.texi
-rm -f ./*.dvi ./*.html ./*.pdf ./*.ps
-rm -f ./*.elc unidata.txt
+rm -f vol[12].dvi vol[12].pdf vol[12].ps
 make[3]: Nothing to be done for `bootstrap-clean'.
 rm -f Makefile
-rm -f Makefile
 rm -f TAGS
+rm -f ./*.elc unidata.txt
 find . '(' -name '*.log' -o -name '*.log~' ')' -delete
 find . -name '*.elc' -delete
+rm -f  ./cus-load.el ./finder-inf.el ./subdirs.el ./eshell/esh-groups.el
 rm -f temacs core ./*.core \#* ./*.o
 rm -f emacs emacs-*.*.*[0-9] emacs-*.*.*[0-9].pdmp
-rm -f ../etc/DOC*
 rm -f dmpstruct.h
-rm -f  ./cus-load.el ./finder-inf.el ./subdirs.el ./eshell/esh-groups.el
+rm -f ../etc/DOC*
 rm -f emacs.pdmp
 rm -f ../etc/DOC
 rm -f bootstrap-emacs bootstrap-emacs.pdmp 
 rm -f emacs-30.0.50
 rm -f buildobj.h
 rm -f globals.h gl-stamp
+find . '(' -name '*.xml' -a ! -path '*resources*' ')' -delete
 rm -f ./*.res ./*.tmp
 rm -f deps/*
 rm -f emacs-module.h epaths.h config.h config.stamp
-find . '(' -name '*.xml' -a ! -path '*resources*' ')' -delete
 if test -f ./.gdbinit; then \
 	  mv ./.gdbinit ./.gdbinit.save; \
 	  if test -f "./.gdbinit"; then rm -f ./.gdbinit.save; \
@@ -734,8 +734,8 @@ config.status: executing etc-refcards-emacsver.tex commands
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C doc/lispref info
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C doc/lispintro info
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C doc/emacs info
-/opt/homebrew/bin/gmkdir -p ../../info
   GEN      info/dir
+/opt/homebrew/bin/gmkdir -p ../../info
 /opt/homebrew/bin/gmkdir -p ../../info
 /opt/homebrew/bin/gmkdir -p ../../info
   GEN      ../../info/elisp.info
@@ -756,8 +756,8 @@ config.status: executing etc-refcards-emacsver.tex commands
 echo '#include "mini-gmp.h"' > gmp.h-t
   GEN      limits.h
   GEN      signal.h
-mv gmp.h-t gmp.h
   GEN      stdckdint.h
+mv gmp.h-t gmp.h
   GEN      stdint.h
   GEN      stdio.h
   GEN      stdlib.h
@@ -871,49 +871,49 @@ mv gmp.h-t gmp.h
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C ../admin/unidata emoji-zwj.el
   GEN      ../../etc/charsets/8859-2.map
   GEN      ../../etc/charsets/8859-3.map
-  GEN      ../../lisp/international/charscript.el
   GEN      ../../lisp/international/emoji-zwj.el
+  GEN      ../../lisp/international/charscript.el
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C ../admin/charsets cp51932.el
   GEN      ../../etc/charsets/CP932-2BYTE.map
+  GEN      ../../etc/charsets/8859-4.map
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C ../admin/charsets eucjp-ms.el
   GEN      ../../lisp/international/eucjp-ms.el
-  GEN      ../../etc/charsets/8859-4.map
   GEN      ../../etc/charsets/8859-5.map
   GEN      ../../etc/charsets/8859-6.map
   GEN      ../../etc/charsets/8859-7.map
   GEN      ../../etc/charsets/8859-8.map
   GEN      ../../etc/charsets/8859-9.map
   GEN      ../../etc/charsets/8859-10.map
-  GEN      ../../etc/charsets/8859-11.map
   CC       dispnew.o
+  GEN      ../../etc/charsets/8859-11.map
+  CC       frame.o
   GEN      ../../etc/charsets/8859-13.map
-  GEN      ../../lisp/international/cp51932.el
   GEN      ../../etc/charsets/8859-14.map
+  CC       scroll.o
+  GEN      ../../lisp/international/cp51932.el
   GEN      ../../etc/charsets/8859-15.map
   GEN      ../../etc/charsets/8859-16.map
-  CC       frame.o
+  CC       xdisp.o
   GEN      ../../etc/charsets/IBM037.map
-  CC       scroll.o
   GEN      ../../etc/charsets/IBM038.map
   GEN      ../../etc/charsets/IBM256.map
   GEN      ../../etc/charsets/IBM273.map
-  CC       xdisp.o
   GEN      ../../etc/charsets/IBM274.map
   GEN      ../../etc/charsets/IBM275.map
   GEN      ../../etc/charsets/IBM277.map
   GEN      ../../etc/charsets/IBM278.map
   CC       menu.o
-  GEN      ../../etc/charsets/IBM280.map
   CC       window.o
+  GEN      ../../etc/charsets/IBM280.map
   GEN      ../../etc/charsets/IBM281.map
   GEN      ../../etc/charsets/IBM284.map
   GEN      ../../etc/charsets/IBM285.map
-  GEN      ../../etc/charsets/IBM290.map
   CC       charset.o
+  GEN      ../../etc/charsets/IBM290.map
   GEN      ../../etc/charsets/IBM297.map
   GEN      ../../etc/charsets/IBM420.map
-  GEN      ../../etc/charsets/IBM423.map
   CC       coding.o
+  GEN      ../../etc/charsets/IBM423.map
   GEN      ../../etc/charsets/IBM424.map
   GEN      ../../etc/charsets/IBM437.map
   GEN      ../../etc/charsets/IBM500.map
@@ -926,55 +926,55 @@ mv gmp.h-t gmp.h
   GEN      ../../etc/charsets/IBM860.map
   GEN      ../../etc/charsets/IBM861.map
   GEN      ../../etc/charsets/IBM862.map
-  CC       category.o
   GEN      ../../etc/charsets/IBM863.map
+  CC       category.o
+  CC       ccl.o
+  CC       character.o
   GEN      ../../etc/charsets/IBM864.map
   GEN      ../../etc/charsets/IBM865.map
   GEN      ../../etc/charsets/IBM866.map
   GEN      ../../etc/charsets/IBM868.map
-  CC       ccl.o
+  CC       chartab.o
   GEN      ../../etc/charsets/IBM869.map
-  CC       character.o
   GEN      ../../etc/charsets/IBM870.map
   GEN      ../../etc/charsets/IBM871.map
   GEN      ../../etc/charsets/IBM874.map
-  CC       chartab.o
   GEN      ../../etc/charsets/IBM875.map
   GEN      ../../etc/charsets/IBM880.map
+  CC       bidi.o
   GEN      ../../etc/charsets/IBM891.map
   GEN      ../../etc/charsets/IBM903.map
   GEN      ../../etc/charsets/IBM904.map
   GEN      ../../etc/charsets/IBM905.map
   GEN      ../../etc/charsets/IBM918.map
-  CC       bidi.o
   GEN      ../../etc/charsets/IBM1004.map
   CC       cm.o
   GEN      ../../etc/charsets/IBM1026.map
   GEN      ../../etc/charsets/IBM1047.map
   GEN      ../../etc/charsets/CP737.map
+  CC       term.o
   GEN      ../../etc/charsets/CP775.map
   GEN      ../../etc/charsets/CP1125.map
   GEN      ../../etc/charsets/CP1250.map
+  CC       terminal.o
   GEN      ../../etc/charsets/CP1251.map
-  CC       term.o
   GEN      ../../etc/charsets/CP1252.map
   GEN      ../../etc/charsets/CP1253.map
   GEN      ../../etc/charsets/CP1254.map
-  CC       terminal.o
   GEN      ../../etc/charsets/CP1255.map
   GEN      ../../etc/charsets/CP1256.map
   GEN      ../../etc/charsets/CP1257.map
-  CC       xfaces.o
   GEN      ../../etc/charsets/CP1258.map
   GEN      ../../etc/charsets/CP10007.map
+  CC       xfaces.o
   GEN      ../../etc/charsets/CP720.map
+  CC       dbusbind.o
   GEN      ../../etc/charsets/CP858.map
   GEN      ../../etc/charsets/GB2312.map
   GEN      ../../etc/charsets/GBK.map
-  GEN      ../../etc/charsets/GB180302.map
-  CC       dbusbind.o
-  GEN      ../../etc/charsets/BIG5.map
   CC       emacs.o
+  GEN      ../../etc/charsets/GB180302.map
+  GEN      ../../etc/charsets/BIG5.map
   CC       keyboard.o
   GEN      ../../etc/charsets/BIG5-HKSCS.map
   GEN      ../../etc/charsets/CNS-1.map
@@ -989,64 +989,64 @@ mv gmp.h-t gmp.h
   GEN      ../../etc/charsets/CNS-F.map
   CC       sysdep.o
   GEN      ../../etc/charsets/JISX0201.map
-  GEN      ../../etc/charsets/JISX0208.map
   CC       bignum.o
+  GEN      ../../etc/charsets/JISX0208.map
   GEN      ../../etc/charsets/JISX0212.map
   GEN      ../../etc/charsets/JISX2132.map
-  GEN      ../../etc/charsets/JISC6226.map
-  GEN      ../../etc/charsets/JISX213A.map
   CC       buffer.o
+  GEN      ../../etc/charsets/JISC6226.map
+  CC       filelock.o
+  GEN      ../../etc/charsets/JISX213A.map
+  CC       insdel.o
   GEN      ../../etc/charsets/KSC5601.map
   GEN      ../../etc/charsets/KSC5636.map
-  CC       filelock.o
   GEN      ../../etc/charsets/JOHAB.map
   GEN      ../../etc/charsets/KOI-8.map
-  GEN      ../../etc/charsets/KOI8-R.map
-  CC       insdel.o
-  GEN      ../../etc/charsets/KOI8-U.map
   CC       marker.o
+  GEN      ../../etc/charsets/KOI8-R.map
+  GEN      ../../etc/charsets/KOI8-U.map
+  CC       minibuf.o
   GEN      ../../etc/charsets/KOI8-T.map
   GEN      ../../etc/charsets/ALTERNATIVNYJ.map
   GEN      ../../etc/charsets/MIK.map
-  CC       minibuf.o
   GEN      ../../etc/charsets/PTCP154.map
   GEN      ../../etc/charsets/TIS-620.map
+  CC       fileio.o
   GEN      ../../etc/charsets/VISCII.map
+  CC       dired.o
   GEN      ../../etc/charsets/VSCII.map
   GEN      ../../etc/charsets/VSCII-2.map
-  CC       fileio.o
   GEN      ../../etc/charsets/KA-PS.map
   GEN      ../../etc/charsets/KA-ACADEMY.map
   GEN      ../../etc/charsets/HP-ROMAN8.map
-  CC       dired.o
   GEN      ../../etc/charsets/NEXTSTEP.map
   GEN      ../../etc/charsets/MACINTOSH.map
   GEN      ../../etc/charsets/EBCDICUK.map
   GEN      ../../etc/charsets/EBCDICUS.map
+  CC       cmds.o
   GEN      ../../etc/charsets/stdenc.map
   GEN      ../../etc/charsets/symbol.map
-  CC       cmds.o
+  CC       casetab.o
   GEN      ../../etc/charsets/CP949-2BYTE.map
   GEN      ../../etc/charsets/BIG5-1.map
-  CC       casetab.o
+  CC       casefiddle.o
+  CC       indent.o
+  CC       search.o
   GEN      ../../etc/charsets/BIG5-2.map
   GEN      ../../etc/charsets/MULE-ethiopic.map
+  CC       regex-emacs.o
+  CC       undo.o
   GEN      ../../etc/charsets/MULE-ipa.map
   GEN      ../../etc/charsets/MULE-is13194.map
-  CC       casefiddle.o
   GEN      ../../etc/charsets/MULE-sisheng.map
   GEN      ../../etc/charsets/MULE-tibetan.map
   GEN      ../../etc/charsets/MULE-lviscii.map
-  CC       indent.o
   GEN      ../../etc/charsets/MULE-uviscii.map
   GEN      ../../etc/charsets/GB180304.map
   GEN      ../../etc/charsets/JISX2131.map
-  CC       search.o
-  CC       regex-emacs.o
-  CC       undo.o
-  GEN      charsets.stamp
   CC       alloc.o
   CC       pdumper.o
+  GEN      charsets.stamp
   CC       data.o
   CC       doc.o
   CC       editfns.o
@@ -1113,13 +1113,13 @@ ANCIENT=yes /Applications/Xcode.app/Contents/Developer/usr/bin/make -C ../lisp c
   ELC      emacs-lisp/macroexp.elc
   ELC      emacs-lisp/byte-opt.elc
   ELC      emacs-lisp/comp.elc
+  ELC      emacs-lisp/comp-cstr.elc
+  ELC      emacs-lisp/bytecomp.elc
   ELC      emacs-lisp/radix-tree.elc
   ELC      emacs-lisp/loaddefs-gen.elc
-  ELC      emacs-lisp/bytecomp.elc
-  ELC      emacs-lisp/comp-cstr.elc
 TZ=UTC0 touch -t 197001010000 emacs-lisp/radix-tree.elc
-TZ=UTC0 touch -t 197001010000 emacs-lisp/macroexp.elc
 TZ=UTC0 touch -t 197001010000 emacs-lisp/loaddefs-gen.elc
+TZ=UTC0 touch -t 197001010000 emacs-lisp/macroexp.elc
 TZ=UTC0 touch -t 197001010000 emacs-lisp/cconv.elc
 TZ=UTC0 touch -t 197001010000 emacs-lisp/byte-opt.elc
 TZ=UTC0 touch -t 197001010000 emacs-lisp/comp-cstr.elc
@@ -1129,88 +1129,88 @@ TZ=UTC0 touch -t 197001010000 emacs-lisp/comp.elc
   ELC+ELN  emacs-lisp/cconv.elc
   ELC+ELN  emacs-lisp/byte-opt.elc
   ELC+ELN  emacs-lisp/macroexp.elc
-  ELC+ELN  emacs-lisp/loaddefs-gen.elc
-  ELC+ELN  emacs-lisp/radix-tree.elc
-  ELC+ELN  emacs-lisp/comp-cstr.elc
   ELC+ELN  emacs-lisp/bytecomp.elc
   ELC+ELN  emacs-lisp/comp.elc
+  ELC+ELN  emacs-lisp/comp-cstr.elc
+  ELC+ELN  emacs-lisp/loaddefs-gen.elc
+  ELC+ELN  emacs-lisp/radix-tree.elc
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C ../lisp autoloads EMACS="../src/bootstrap-emacs"
-  ELC+ELN  ../lisp/buff-menu.elc
-  ELC+ELN  ../lisp/abbrev.elc
   ELC+ELN  ../lisp/composite.elc
-  ELC+ELN  ../lisp/bindings.elc
-  ELC+ELN  ../lisp/case-table.elc
   ELC+ELN  ../lisp/button.elc
-  ELC+ELN  international/titdic-cnv.elc
   ELC+ELN  ../lisp/cus-face.elc
+  ELC+ELN  ../lisp/abbrev.elc
+  ELC+ELN  ../lisp/case-table.elc
+  ELC+ELN  ../lisp/buff-menu.elc
+  ELC+ELN  international/titdic-cnv.elc
+  ELC+ELN  ../lisp/bindings.elc
   ELC+ELN  ../lisp/cus-start.elc
   ELC+ELN  ../lisp/custom.elc
-  ELC+ELN  ../lisp/disp-table.elc
-  ELC+ELN  ../lisp/dnd.elc
-  ELC+ELN  ../lisp/dos-fns.elc
-  ELC+ELN  ../lisp/dos-vars.elc
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C ../admin/grammars all EMACS="../../src/bootstrap-emacs"
   GEN      ../../lisp/cedet/semantic/bovine/c-by.el
   GEN      ../../lisp/cedet/semantic/bovine/make-by.el
+  ELC+ELN  ../lisp/disp-table.elc
+  ELC+ELN  ../lisp/dnd.elc
+  ELC+ELN  ../lisp/dos-fns.elc
+  GEN      ../../lisp/cedet/semantic/bovine/scm-by.el
+  ELC+ELN  ../lisp/dos-vars.elc
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C ../leim all EMACS="../src/bootstrap-emacs"
   GEN      ../lisp/leim/quail/CCDOSPY.el
   GEN      ../lisp/leim/quail/Punct.el
-  GEN      ../../lisp/cedet/semantic/bovine/scm-by.el
   ELC+ELN  ../lisp/dos-w32.elc
   ELC+ELN  ../lisp/dynamic-setting.elc
   ELC+ELN  ../lisp/electric.elc
-  GEN      ../lisp/leim/quail/QJ.el
   GEN      ../../lisp/cedet/semantic/grammar-wy.el
+  GEN      ../lisp/leim/quail/QJ.el
   GEN      ../lisp/leim/quail/SW.el
   GEN      ../../lisp/cedet/semantic/wisent/javat-wy.el
   ELC+ELN  ../lisp/emacs-lisp/backquote.elc
-  GEN      ../lisp/leim/quail/TONEPY.el
   ELC+ELN  ../lisp/emacs-lisp/byte-run.elc
-  GEN      ../lisp/leim/quail/4Corner.el
-  GEN      ../../lisp/cedet/semantic/wisent/js-wy.el
+  GEN      ../lisp/leim/quail/TONEPY.el
   ELC+ELN  ../lisp/emacs-lisp/cconv.elc
+  GEN      ../lisp/leim/quail/4Corner.el
   ELC+ELN  ../lisp/emacs-lisp/cl-generic.elc
   GEN      ../lisp/leim/quail/ARRAY30.el
-  GEN      ../lisp/leim/quail/ECDICT.el
   ELC+ELN  ../lisp/emacs-lisp/cl-preloaded.elc
   ELC+ELN  ../lisp/emacs-lisp/debug-early.elc
+  GEN      ../lisp/leim/quail/ECDICT.el
+  GEN      ../../lisp/cedet/semantic/wisent/js-wy.el
   GEN      ../lisp/leim/quail/ETZY.el
-  ELC+ELN  ../lisp/emacs-lisp/easymenu.elc
-  GEN      ../lisp/leim/quail/Punct-b5.el
-  ELC+ELN  ../lisp/emacs-lisp/eldoc.elc
-  ELC+ELN  ../lisp/emacs-lisp/float-sup.elc
-  GEN      ../lisp/leim/quail/PY-b5.el
   GEN      ../../lisp/cedet/semantic/wisent/python-wy.el
-  GEN      ../lisp/leim/quail/QJ-b5.el
+  GEN      ../lisp/leim/quail/Punct-b5.el
+  ELC+ELN  ../lisp/emacs-lisp/easymenu.elc
   GEN      ../../lisp/cedet/srecode/srt-wy.el
+  GEN      ../lisp/leim/quail/PY-b5.el
+  GEN      ../lisp/leim/quail/QJ-b5.el
   GEN      ../lisp/leim/quail/ZOZY.el
   GEN      ../lisp/leim/quail/tsang-b5.el
   GEN      ../lisp/leim/quail/tsang-cns.el
-  GEN      ../lisp/leim/quail/PY.el
-  GEN      ../lisp/leim/quail/ZIRANMA.el
-  GEN      ../lisp/leim/quail/CTLau.el
+  ELC+ELN  ../lisp/emacs-lisp/eldoc.elc
+  ELC+ELN  ../lisp/emacs-lisp/float-sup.elc
   ELC+ELN  ../lisp/emacs-lisp/lisp-mode.elc
-  GEN      ../lisp/leim/quail/CTLau-b5.el
+  GEN      ../lisp/leim/quail/PY.el
   ELC+ELN  ../lisp/emacs-lisp/lisp.elc
-  GEN      ../lisp/language/pinyin.el
   ELC+ELN  ../lisp/emacs-lisp/macroexp.elc
+  GEN      ../lisp/leim/quail/ZIRANMA.el
   ELC+ELN  ../lisp/emacs-lisp/map-ynp.elc
+  GEN      ../lisp/leim/quail/CTLau.el
+  GEN      ../lisp/leim/quail/CTLau-b5.el
   ELC+ELN  ../lisp/emacs-lisp/nadvice.elc
-  GEN      ../lisp/leim/leim-list.el
-  GEN      autoloads
+  GEN      ../lisp/language/pinyin.el
   ELC+ELN  ../lisp/emacs-lisp/oclosure.elc
   ELC+ELN  ../lisp/emacs-lisp/regexp-opt.elc
+  GEN      ../lisp/leim/leim-list.el
   ELC+ELN  ../lisp/emacs-lisp/rmc.elc
   ELC+ELN  ../lisp/emacs-lisp/seq.elc
   ELC+ELN  ../lisp/emacs-lisp/shorthands.elc
+  GEN      autoloads
   ELC+ELN  ../lisp/emacs-lisp/syntax.elc
   ELC+ELN  ../lisp/emacs-lisp/tabulated-list.elc
   ELC+ELN  ../lisp/emacs-lisp/timer.elc
   ELC+ELN  ../lisp/env.elc
   ELC+ELN  ../lisp/epa-hook.elc
   ELC+ELN  ../lisp/faces.elc
-  ELC+ELN  ../lisp/font-core.elc
   ELC+ELN  ../lisp/files.elc
+  ELC+ELN  ../lisp/font-core.elc
   ELC+ELN  ../lisp/font-lock.elc
   ELC+ELN  ../lisp/format.elc
   ELC+ELN  ../lisp/frame.elc
@@ -1222,73 +1222,73 @@ TZ=UTC0 touch -t 197001010000 emacs-lisp/comp.elc
   ELC+ELN  ../lisp/international/emoji-zwj.elc
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C ../admin/unidata all EMACS="../../src/bootstrap-emacs"
   ELC      uvs.elc
-  ELC+ELN  ../lisp/international/cp51932.elc
-  ELC+ELN  ../lisp/international/eucjp-ms.elc
   GEN      unidata.txt
   ELC      unidata-gen.elc
-  ELC+ELN  ../lisp/international/fontset.elc
+  ELC+ELN  ../lisp/international/cp51932.elc
+  ELC+ELN  ../lisp/international/eucjp-ms.elc
   GEN      ../../lisp/international/emoji-labels.el
   GEN      ../../lisp/international/uni-scripts.el
+  ELC+ELN  ../lisp/international/fontset.elc
   ELC+ELN  ../lisp/international/iso-transl.elc
   ELC+ELN  ../lisp/international/mule-cmds.elc
+  GEN      ../../lisp/international/uni-confusable.el
   ELC+ELN  ../lisp/international/mule-conf.elc
   ELC+ELN  ../lisp/international/mule-util.elc
-  ELC+ELN  ../lisp/international/mule.elc
-  GEN      ../../lisp/international/uni-confusable.el
   GEN      ../../lisp/international/idna-mapping.el
+  ELC+ELN  ../lisp/international/mule.elc
   ELC+ELN  ../lisp/isearch.elc
   ELC+ELN  ../lisp/jit-lock.elc
-  GEN      ../../lisp/international/uni-bidi.el
   ELC+ELN  ../lisp/jka-cmpr-hook.elc
-  ELC+ELN  ../lisp/keymap.elc
+  GEN      ../../lisp/international/uni-bidi.el
   GEN      ../../lisp/international/uni-brackets.el
+  ELC+ELN  ../lisp/keymap.elc
   GEN      ../../lisp/international/uni-category.el
   GEN      ../../lisp/international/uni-combining.el
-  GEN      ../../lisp/international/uni-comment.el
   ELC+ELN  ../lisp/language/burmese.elc
+  GEN      ../../lisp/international/uni-comment.el
+  ELC+ELN  ../lisp/language/cham.elc
   GEN      ../../lisp/international/uni-decimal.el
   GEN      ../../lisp/international/uni-decomposition.el
-  ELC+ELN  ../lisp/language/cham.elc
   GEN      ../../lisp/international/uni-digit.el
-  ELC+ELN  ../lisp/language/chinese.elc
-  ELC+ELN  ../lisp/language/cyrillic.elc
   GEN      ../../lisp/international/uni-lowercase.el
   GEN      ../../lisp/international/uni-mirrored.el
   GEN      ../../lisp/international/uni-name.el
-  ELC+ELN  ../lisp/language/czech.elc
-  ELC+ELN  ../lisp/language/english.elc
   GEN      ../../lisp/international/uni-numeric.el
+  ELC+ELN  ../lisp/language/chinese.elc
+  ELC+ELN  ../lisp/language/cyrillic.elc
+  GEN      ../../lisp/international/uni-old-name.el
+  ELC+ELN  ../lisp/language/czech.elc
+  GEN      ../../lisp/international/uni-special-lowercase.el
+  GEN      ../../lisp/international/uni-special-titlecase.el
+  ELC+ELN  ../lisp/language/english.elc
   ELC+ELN  ../lisp/language/ethiopic.elc
   ELC+ELN  ../lisp/language/european.elc
   ELC+ELN  ../lisp/language/georgian.elc
+  GEN      ../../lisp/international/uni-special-uppercase.el
   ELC+ELN  ../lisp/language/greek.elc
   ELC+ELN  ../lisp/language/hebrew.elc
-  GEN      ../../lisp/international/uni-old-name.el
+  GEN      ../../lisp/international/uni-titlecase.el
   ELC+ELN  ../lisp/language/indian.elc
   ELC+ELN  ../lisp/language/indonesian.elc
-  GEN      ../../lisp/international/uni-special-lowercase.el
-  GEN      ../../lisp/international/uni-special-titlecase.el
-  ELC+ELN  ../lisp/language/japanese.elc
-  GEN      ../../lisp/international/uni-special-uppercase.el
-  GEN      ../../lisp/international/uni-titlecase.el
   GEN      ../../lisp/international/uni-uppercase.el
-  ELC+ELN  ../lisp/language/lao.elc
+  ELC+ELN  ../lisp/language/japanese.elc
   ELC+ELN  ../lisp/language/khmer.elc
+  GEN      ../../lisp/international/charprop.el
   ELC+ELN  ../lisp/language/korean.elc
+  ELC+ELN  ../lisp/language/lao.elc
   ELC+ELN  ../lisp/language/misc-lang.elc
   ELC+ELN  ../lisp/language/philippine.elc
-  GEN      ../../lisp/international/charprop.el
   ELC+ELN  ../lisp/language/romanian.elc
   ELC+ELN  ../lisp/language/sinhala.elc
   ELC+ELN  ../lisp/language/slovak.elc
-  ELC+ELN  ../lisp/language/thai.elc
   ELC+ELN  ../lisp/language/tai-viet.elc
+  ELC+ELN  ../lisp/language/thai.elc
   ELC+ELN  ../lisp/language/tibetan.elc
   ELC+ELN  ../lisp/language/utf-8-lang.elc
   ELC+ELN  ../lisp/language/vietnamese.elc
   ELC+ELN  ../lisp/loaddefs.elc
-  ELC+ELN  ../lisp/menu-bar.elc
   ELC+ELN  ../lisp/ls-lisp.elc
+  ELC+ELN  ../lisp/menu-bar.elc
   ELC+ELN  ../lisp/minibuffer.elc
   ELC+ELN  ../lisp/mouse.elc
   ELC+ELN  ../lisp/mwheel.elc
@@ -1366,16 +1366,16 @@ cp -f ../src/emacs /tmp/emacs-build/nextstep/Emacs.app/Contents/MacOS/Emacs
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C lisp all
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C ../leim all EMACS="../src/emacs"
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C ../admin/grammars all EMACS="../../src/emacs"
-make[4]: Nothing to be done for `all'.
   GEN      cus-load.el
+make[4]: Nothing to be done for `all'.
 make[4]: Nothing to be done for `all'.
   GEN      finder-inf.el
   ELC      emacs-lisp/eieio-base.elc
-  GEN      autoloads
   ELC      emacs-lisp/eieio.elc
-  ELC      org/ox.elc
-  ELC      cedet/semantic/db.elc
   ELC      international/ja-dic-cnv.elc
+  GEN      autoloads
+  ELC      cedet/semantic/db.elc
+  ELC      org/ox.elc
   ELC      org/ox-texinfo.elc
   ELC      org/org-macro.elc
   ELC      org/org-element.elc
@@ -1386,16 +1386,16 @@ make[4]: Nothing to be done for `all'.
   GEN      modus-themes.texi
 /opt/homebrew/bin/gmkdir -p ../lisp/leim/ja-dic
   GEN      ../lisp/leim/ja-dic/ja-dic.el
-  ELC      align.elc
   ELC      ansi-color.elc
+  ELC      align.elc
   ELC      allout-widgets.elc
   ELC      allout.elc
-  ELC      ansi-osc.elc
   ELC      apropos.elc
+  ELC      ansi-osc.elc
   ELC      arc-mode.elc
   ELC      array.elc
-  ELC      auth-source-pass.elc
   ELC      auth-source.elc
+  ELC      auth-source-pass.elc
   ELC      autoinsert.elc
   ELC      autorevert.elc
   ELC      avoid.elc
@@ -1429,13 +1429,13 @@ make[4]: Nothing to be done for `all'.
   ELC      doc-view.elc
   ELC      dom.elc
   ELC      double.elc
-  ELC      echistory.elc
   ELC      ebuff-menu.elc
+  ELC      echistory.elc
   ELC      ecomplete.elc
   ELC      edmacro.elc
   ELC      ehelp.elc
-  ELC      elide-head.elc
   ELC      elec-pair.elc
+  ELC      elide-head.elc
   ELC      emacs-lock.elc
   ELC      epa-dired.elc
   ELC      epa-file.elc
@@ -1445,8 +1445,8 @@ make[4]: Nothing to be done for `all'.
   ELC      epg-config.elc
   ELC      epg.elc
   ELC      expand.elc
-  ELC+ELN  leim/ja-dic/ja-dic.elc
   ELC      external-completion.elc
+  ELC+ELN  leim/ja-dic/ja-dic.elc
   ELC      ezimage.elc
   ELC      face-remap.elc
   ELC      facemenu.elc
@@ -1468,15 +1468,15 @@ make[4]: Nothing to be done for `all'.
   ELC      forms.elc
   ELC      frameset.elc
   ELC      generic-x.elc
-  ELC      help-fns.elc
   ELC      help-at-pt.elc
+  ELC      help-fns.elc
   ELC      help-macro.elc
   ELC      help-mode.elc
   ELC      hex-util.elc
   ELC      hexl.elc
   ELC      hfy-cmap.elc
-  ELC      hilit-chg.elc
   ELC      hi-lock.elc
+  ELC      hilit-chg.elc
   ELC      hippie-exp.elc
   ELC      hl-line.elc
   ELC      htmlfontify.elc
@@ -1540,8 +1540,8 @@ make[4]: Nothing to be done for `all'.
   ELC      ps-print.elc
   ELC      ps-samp.elc
   ELC      recentf.elc
-  ELC      registry.elc
   ELC      rect.elc
+  ELC      registry.elc
   ELC      repeat.elc
   ELC      reposition.elc
   ELC      reveal.elc
@@ -1574,20 +1574,20 @@ make[4]: Nothing to be done for `all'.
   ELC      term.elc
   ELC      thingatpt.elc
   ELC      thread.elc
-  ELC      time-stamp.elc
   ELC      time.elc
+  ELC      time-stamp.elc
   ELC      timezone.elc
   ELC      tmm.elc
   ELC      transient.elc
   ELC      tree-widget.elc
   ELC      treesit.elc
-  ELC      type-break.elc
   ELC      tutorial.elc
+  ELC      type-break.elc
   ELC      userlock.elc
   ELC      vcursor.elc
   ELC      view.elc
-  ELC      wdired.elc
   ELC      whitespace.elc
+  ELC      wdired.elc
   ELC      wid-browse.elc
   ELC      wid-edit.elc
   ELC      windmove.elc
@@ -1646,8 +1646,8 @@ make[4]: Nothing to be done for `all'.
   ELC      calendar/cal-bahai.elc
   ELC      calendar/cal-china.elc
   ELC      calendar/cal-coptic.elc
-  ELC      calendar/cal-dst.elc
   ELC      calendar/cal-french.elc
+  ELC      calendar/cal-dst.elc
   ELC      calendar/cal-hebrew.elc
   ELC      calendar/cal-html.elc
   ELC      calendar/cal-islam.elc
@@ -1669,8 +1669,8 @@ make[4]: Nothing to be done for `all'.
   ELC      calendar/iso8601.elc
   ELC      calendar/lunar.elc
   ELC      calendar/parse-time.elc
-  ELC      calendar/solar.elc
   ELC      calendar/time-date.elc
+  ELC      calendar/solar.elc
   ELC      calendar/timeclock.elc
   ELC      calendar/todo-mode.elc
   ELC      cedet/cedet-cscope.elc
@@ -1696,11 +1696,11 @@ make[4]: Nothing to be done for `all'.
   ELC      cedet/ede/files.elc
   ELC      cedet/ede/generic.elc
   ELC      cedet/ede/linux.elc
-  ELC      cedet/ede/loaddefs.elc
   ELC      cedet/ede/locate.elc
+  ELC      cedet/ede/loaddefs.elc
   ELC      cedet/ede/make.elc
-  ELC      cedet/ede/makefile-edit.elc
   ELC      cedet/ede/pconf.elc
+  ELC      cedet/ede/makefile-edit.elc
   ELC      cedet/ede/pmake.elc
   ELC      cedet/ede/proj-archive.elc
   ELC      cedet/ede/proj-aux.elc
@@ -1745,8 +1745,8 @@ make[4]: Nothing to be done for `all'.
   ELC      cedet/semantic/find.elc
   ELC      cedet/semantic/format.elc
   ELC      cedet/semantic/fw.elc
-  ELC      cedet/semantic/grammar.elc
   ELC      cedet/semantic/grammar-wy.elc
+  ELC      cedet/semantic/grammar.elc
   ELC      cedet/semantic/grm-wy-boot.elc
   ELC      cedet/semantic/html.elc
   ELC      cedet/semantic/ia-sb.elc
@@ -1834,13 +1834,13 @@ make[4]: Nothing to be done for `all'.
   ELC      emacs-lisp/bindat.elc
   ELC      emacs-lisp/chart.elc
   ELC      emacs-lisp/check-declare.elc
-  ELC      emacs-lisp/cl-extra.elc
   ELC      emacs-lisp/checkdoc.elc
+  ELC      emacs-lisp/cl-extra.elc
   ELC      emacs-lisp/cl-indent.elc
   ELC      emacs-lisp/cl-loaddefs.elc
   ELC      emacs-lisp/cl-macs.elc
-  ELC      emacs-lisp/cl-seq.elc
   ELC      emacs-lisp/cl-print.elc
+  ELC      emacs-lisp/cl-seq.elc
   ELC      emacs-lisp/copyright.elc
   ELC      emacs-lisp/crm.elc
   ELC      emacs-lisp/cursor-sensor.elc
@@ -1867,8 +1867,8 @@ make[4]: Nothing to be done for `all'.
   ELC      emacs-lisp/gv.elc
   ELC      emacs-lisp/helper.elc
   ELC      emacs-lisp/hierarchy.elc
-  ELC      emacs-lisp/inline.elc
   ELC      emacs-lisp/icons.elc
+  ELC      emacs-lisp/inline.elc
   ELC      emacs-lisp/let-alist.elc
   ELC      emacs-lisp/lisp-mnt.elc
   ELC      emacs-lisp/map.elc
@@ -1901,22 +1901,22 @@ make[4]: Nothing to be done for `all'.
   ELC      emulation/cua-base.elc
   ELC      emulation/cua-gmrk.elc
   ELC      emulation/cua-rect.elc
-  ELC      emulation/edt-mapper.elc
   ELC      emulation/edt-lk201.elc
+  ELC      emulation/edt-mapper.elc
   ELC      emulation/edt-pc.elc
   ELC      emulation/edt-vt100.elc
   ELC      emulation/edt.elc
   ELC      emulation/keypad.elc
   ELC      emulation/viper-cmd.elc
-  ELC      emulation/viper-ex.elc
   ELC      emulation/viper-init.elc
+  ELC      emulation/viper-ex.elc
   ELC      emulation/viper-keym.elc
   ELC      emulation/viper-macs.elc
   ELC      emulation/viper-mous.elc
   ELC      emulation/viper-util.elc
   ELC      emulation/viper.elc
-  ELC      erc/erc-autoaway.elc
   ELC      erc/erc-backend.elc
+  ELC      erc/erc-autoaway.elc
   ELC      erc/erc-button.elc
   ELC      erc/erc-capab.elc
   ELC      erc/erc-common.elc
@@ -1924,8 +1924,8 @@ make[4]: Nothing to be done for `all'.
   ELC      erc/erc-dcc.elc
   ELC      erc/erc-desktop-notifications.elc
   ELC      erc/erc-ezbounce.elc
-  ELC      erc/erc-goodies.elc
   ELC      erc/erc-fill.elc
+  ELC      erc/erc-goodies.elc
   ELC      erc/erc-ibuffer.elc
   ELC      erc/erc-identd.elc
   ELC      erc/erc-imenu.elc
@@ -1935,8 +1935,8 @@ make[4]: Nothing to be done for `all'.
   ELC      erc/erc-loaddefs.elc
   ELC      erc/erc-log.elc
   ELC      erc/erc-match.elc
-  ELC      erc/erc-netsplit.elc
   ELC      erc/erc-menu.elc
+  ELC      erc/erc-netsplit.elc
   ELC      erc/erc-networks.elc
   ELC      erc/erc-notify.elc
   ELC      erc/erc-page.elc
@@ -1951,8 +1951,8 @@ make[4]: Nothing to be done for `all'.
   ELC      erc/erc-stamp.elc
   ELC      erc/erc-status-sidebar.elc
   ELC      erc/erc-track.elc
-  ELC      erc/erc-truncate.elc
   ELC      erc/erc-xdcc.elc
+  ELC      erc/erc-truncate.elc
   ELC      erc/erc.elc
   ELC      eshell/em-alias.elc
   ELC      eshell/em-banner.elc
@@ -1962,8 +1962,8 @@ make[4]: Nothing to be done for `all'.
   ELC      eshell/em-elecslash.elc
   ELC      eshell/em-extpipe.elc
   ELC      eshell/em-glob.elc
-  ELC      eshell/em-hist.elc
   ELC      eshell/em-ls.elc
+  ELC      eshell/em-hist.elc
   ELC      eshell/em-pred.elc
   ELC      eshell/em-prompt.elc
   ELC      eshell/em-rebind.elc
@@ -1977,8 +1977,8 @@ make[4]: Nothing to be done for `all'.
   ELC      eshell/esh-cmd.elc
   ELC      eshell/esh-ext.elc
   ELC      eshell/esh-groups.elc
-  ELC      eshell/esh-mode.elc
   ELC      eshell/esh-io.elc
+  ELC      eshell/esh-mode.elc
   ELC      eshell/esh-module.elc
   ELC      eshell/esh-opt.elc
   ELC      eshell/esh-proc.elc
@@ -2000,8 +2000,8 @@ make[4]: Nothing to be done for `all'.
   ELC      gnus/gnus-dbus.elc
   ELC      gnus/gnus-delay.elc
   ELC      gnus/gnus-demon.elc
-  ELC      gnus/gnus-dired.elc
   ELC      gnus/gnus-diary.elc
+  ELC      gnus/gnus-dired.elc
   ELC      gnus/gnus-draft.elc
   ELC      gnus/gnus-dup.elc
   ELC      gnus/gnus-eform.elc
@@ -2017,16 +2017,16 @@ make[4]: Nothing to be done for `all'.
   ELC      gnus/gnus-ml.elc
   ELC      gnus/gnus-mlspl.elc
   ELC      gnus/gnus-msg.elc
-  ELC      gnus/gnus-picon.elc
   ELC      gnus/gnus-notifications.elc
+  ELC      gnus/gnus-picon.elc
   ELC      gnus/gnus-range.elc
   ELC      gnus/gnus-registry.elc
   ELC      gnus/gnus-rfc1843.elc
   ELC      gnus/gnus-rmail.elc
   ELC      gnus/gnus-salt.elc
   ELC      gnus/gnus-score.elc
-  ELC      gnus/gnus-search.elc
   ELC      gnus/gnus-sieve.elc
+  ELC      gnus/gnus-search.elc
   ELC      gnus/gnus-spec.elc
   ELC      gnus/gnus-srvr.elc
   ELC      gnus/gnus-start.elc
@@ -2104,8 +2104,8 @@ make[4]: Nothing to be done for `all'.
   ELC      international/ccl.elc
   ELC      international/emoji.elc
   ELC      international/isearch-x.elc
-  ELC      international/iso-cvt.elc
   ELC      international/iso-ascii.elc
+  ELC      international/iso-cvt.elc
   ELC      international/ja-dic-utl.elc
   ELC      international/kinsoku.elc
   ELC      international/kkc.elc
@@ -2132,8 +2132,8 @@ make[4]: Nothing to be done for `all'.
   ELC      language/thai-util.elc
   ELC      language/thai-word.elc
   ELC      language/tibet-util.elc
-  ELC      language/viet-util.elc
   ELC      language/tv-util.elc
+  ELC      language/viet-util.elc
   ELC      leim/quail/4Corner.elc
   ELC      leim/quail/ARRAY30.elc
   ELC      leim/quail/CCDOSPY.elc
@@ -2151,8 +2151,8 @@ make[4]: Nothing to be done for `all'.
   ELC      leim/quail/TONEPY.elc
   ELC      leim/quail/ZIRANMA.elc
   ELC      leim/quail/ZOZY.elc
-  ELC      leim/quail/cham.elc
   ELC      leim/quail/arabic.elc
+  ELC      leim/quail/cham.elc
   ELC      leim/quail/compose.elc
   ELC      leim/quail/croatian.elc
   ELC      leim/quail/cyril-jis.elc
@@ -2184,8 +2184,8 @@ make[4]: Nothing to be done for `all'.
   ELC      leim/quail/programmer-dvorak.elc
   ELC      leim/quail/py-punct.elc
   ELC      leim/quail/pypunct-b5.elc
-  ELC      leim/quail/quick-b5.elc
   ELC      leim/quail/quick-cns.elc
+  ELC      leim/quail/quick-b5.elc
   ELC      leim/quail/rfc1345.elc
   ELC      leim/quail/sami.elc
   ELC      leim/quail/sgml-input.elc
@@ -2193,15 +2193,15 @@ make[4]: Nothing to be done for `all'.
   ELC      leim/quail/slovak.elc
   ELC      leim/quail/symbol-ksc.elc
   ELC      leim/quail/tamil-dvorak.elc
-  ELC      leim/quail/thai.elc
   ELC      leim/quail/tibetan.elc
+  ELC      leim/quail/thai.elc
   ELC      leim/quail/tsang-b5.elc
   ELC      leim/quail/tsang-cns.elc
   ELC      leim/quail/uni-input.elc
   ELC      leim/quail/viqr.elc
   ELC      leim/quail/vntelex.elc
-  ELC      leim/quail/welsh.elc
   ELC      leim/quail/vnvni.elc
+  ELC      leim/quail/welsh.elc
   ELC      mail/binhex.elc
   ELC      mail/emacsbug.elc
   ELC      mail/feedmail.elc
@@ -2213,8 +2213,8 @@ make[4]: Nothing to be done for `all'.
   ELC      mail/mail-extr.elc
   ELC      mail/mail-hist.elc
   ELC      mail/mail-parse.elc
-  ELC      mail/mail-utils.elc
   ELC      mail/mail-prsvr.elc
+  ELC      mail/mail-utils.elc
   ELC      mail/mailabbrev.elc
   ELC      mail/mailalias.elc
   ELC      mail/mailclient.elc
@@ -2239,24 +2239,24 @@ make[4]: Nothing to be done for `all'.
   ELC      mail/sendmail.elc
   ELC      mail/smtpmail.elc
   ELC      mail/supercite.elc
-  ELC      mail/unrmail.elc
   ELC      mail/undigest.elc
+  ELC      mail/unrmail.elc
   ELC      mail/uudecode.elc
   ELC      mail/yenc.elc
   ELC      mh-e/mh-acros.elc
-  ELC      mh-e/mh-alias.elc
   ELC      mh-e/mh-buffers.elc
-  ELC      mh-e/mh-e.elc
   ELC      mh-e/mh-comp.elc
+  ELC      mh-e/mh-alias.elc
+  ELC      mh-e/mh-e.elc
   ELC      mh-e/mh-folder.elc
   ELC      mh-e/mh-funcs.elc
   ELC      mh-e/mh-gnus.elc
   ELC      mh-e/mh-identity.elc
   ELC      mh-e/mh-inc.elc
   ELC      mh-e/mh-junk.elc
+  ELC      mh-e/mh-limit.elc
   ELC      mh-e/mh-letter.elc
   ELC      mh-e/mh-loaddefs.elc
-  ELC      mh-e/mh-limit.elc
   ELC      mh-e/mh-mime.elc
   ELC      mh-e/mh-print.elc
   ELC      mh-e/mh-scan.elc
@@ -2277,16 +2277,16 @@ make[4]: Nothing to be done for `all'.
   ELC      net/dns.elc
   ELC      net/eudc-bob.elc
   ELC      net/eudc-capf.elc
-  ELC      net/eudc-hotlist.elc
   ELC      net/eudc-export.elc
+  ELC      net/eudc-hotlist.elc
   ELC      net/eudc-vars.elc
   ELC      net/eudc.elc
   ELC      net/eudcb-bbdb.elc
   ELC      net/eudcb-ecomplete.elc
   ELC      net/eudcb-ldap.elc
   ELC      net/eudcb-mab.elc
-  ELC      net/eudcb-mailabbrev.elc
   ELC      net/eudcb-macos-contacts.elc
+  ELC      net/eudcb-mailabbrev.elc
   ELC      net/eww.elc
   ELC      net/gnutls.elc
   ELC      net/goto-addr.elc
@@ -2315,8 +2315,8 @@ make[4]: Nothing to be done for `all'.
   ELC      net/sasl-ntlm.elc
   ELC      net/sasl-scram-rfc.elc
   ELC      net/sasl-scram-sha256.elc
-  ELC      net/secrets.elc
   ELC      net/sasl.elc
+  ELC      net/secrets.elc
   ELC      net/shr-color.elc
   ELC      net/shr.elc
   ELC      net/sieve-manage.elc
@@ -2344,15 +2344,15 @@ make[4]: Nothing to be done for `all'.
   ELC      net/tramp-smb.elc
   ELC      net/tramp-sshfs.elc
   ELC      net/tramp-sudoedit.elc
-  ELC      net/tramp.elc
   ELC      net/tramp-uu.elc
+  ELC      net/tramp.elc
   ELC      net/trampver.elc
   ELC      net/webjump.elc
   ELC      net/zeroconf.elc
   ELC      nxml/nxml-enc.elc
   ELC      nxml/nxml-maint.elc
-  ELC      nxml/nxml-mode.elc
   ELC      nxml/nxml-ns.elc
+  ELC      nxml/nxml-mode.elc
   ELC      nxml/nxml-outln.elc
   ELC      nxml/nxml-parse.elc
   ELC      nxml/nxml-rap.elc
@@ -2362,8 +2362,8 @@ make[4]: Nothing to be done for `all'.
   ELC      nxml/rng-loc.elc
   ELC      nxml/rng-maint.elc
   ELC      nxml/rng-match.elc
-  ELC      nxml/rng-nxml.elc
   ELC      nxml/rng-parse.elc
+  ELC      nxml/rng-nxml.elc
   ELC      nxml/rng-pttrn.elc
   ELC      nxml/rng-uri.elc
   ELC      nxml/rng-util.elc
@@ -2371,8 +2371,8 @@ make[4]: Nothing to be done for `all'.
   ELC      nxml/rng-xsd.elc
   ELC      nxml/xmltok.elc
   ELC      nxml/xsd-regexp.elc
-  ELC      obsolete/autoload.elc
   ELC      obsolete/autoarg.elc
+  ELC      obsolete/autoload.elc
   ELC      obsolete/bruce.elc
   ELC      obsolete/cc-compat.elc
   ELC      obsolete/cl-compat.elc
@@ -2385,8 +2385,8 @@ make[4]: Nothing to be done for `all'.
   ELC      obsolete/html2text.elc
   ELC      obsolete/info-edit.elc
   ELC      obsolete/inversion.elc
-  ELC      obsolete/iswitchb.elc
   ELC      obsolete/landmark.elc
+  ELC      obsolete/iswitchb.elc
   ELC      obsolete/linum.elc
   ELC      obsolete/longlines.elc
   ELC      obsolete/makesum.elc
@@ -2399,8 +2399,8 @@ make[4]: Nothing to be done for `all'.
   ELC      obsolete/otodo-mode.elc
   ELC      obsolete/pgg-def.elc
   ELC      obsolete/pgg-gpg.elc
-  ELC      obsolete/pgg-pgp.elc
   ELC      obsolete/pgg-parse.elc
+  ELC      obsolete/pgg-pgp.elc
   ELC      obsolete/pgg-pgp5.elc
   ELC      obsolete/pgg.elc
   ELC      obsolete/ps-def.elc
@@ -2409,22 +2409,22 @@ make[4]: Nothing to be done for `all'.
   ELC      obsolete/rfc2368.elc
   ELC      obsolete/rlogin.elc
   ELC      obsolete/sb-image.elc
-  ELC      obsolete/starttls.elc
   ELC      obsolete/sup-mouse.elc
+  ELC      obsolete/starttls.elc
   ELC      obsolete/terminal.elc
   ELC      obsolete/thumbs.elc
   ELC      obsolete/tls.elc
   ELC      obsolete/tpu-edt.elc
   ELC      obsolete/tpu-extras.elc
-  ELC      obsolete/uce.elc
   ELC      obsolete/tpu-mapper.elc
+  ELC      obsolete/uce.elc
   ELC      obsolete/url-about.elc
   ELC      obsolete/url-dired.elc
   ELC      obsolete/url-ns.elc
   ELC      obsolete/vc-arch.elc
   ELC      obsolete/vc-mtn.elc
-  ELC      obsolete/vip.elc
   ELC      obsolete/vi.elc
+  ELC      obsolete/vip.elc
   ELC      obsolete/vt-control.elc
   ELC      obsolete/vt100-led.elc
   ELC      obsolete/ws-mode.elc
@@ -2441,20 +2441,20 @@ make[4]: Nothing to be done for `all'.
   ELC      org/ob-dot.elc
   ELC      org/ob-emacs-lisp.elc
   ELC      org/ob-eshell.elc
-  ELC      org/ob-eval.elc
   ELC      org/ob-exp.elc
+  ELC      org/ob-eval.elc
   ELC      org/ob-forth.elc
   ELC      org/ob-fortran.elc
   ELC      org/ob-gnuplot.elc
-  ELC      org/ob-haskell.elc
   ELC      org/ob-groovy.elc
+  ELC      org/ob-haskell.elc
   ELC      org/ob-java.elc
   ELC      org/ob-js.elc
   ELC      org/ob-julia.elc
   ELC      org/ob-latex.elc
   ELC      org/ob-lilypond.elc
-  ELC      org/ob-lob.elc
   ELC      org/ob-lisp.elc
+  ELC      org/ob-lob.elc
   ELC      org/ob-lua.elc
   ELC      org/ob-makefile.elc
   ELC      org/ob-matlab.elc
@@ -2490,8 +2490,8 @@ make[4]: Nothing to be done for `all'.
   ELC      org/ol-eshell.elc
   ELC      org/ol-eww.elc
   ELC      org/ol-gnus.elc
-  ELC      org/ol-info.elc
   ELC      org/ol-irc.elc
+  ELC      org/ol-info.elc
   ELC      org/ol-man.elc
   ELC      org/ol-mhe.elc
   ELC      org/ol-rmail.elc
@@ -2575,8 +2575,8 @@ make[4]: Nothing to be done for `all'.
   ELC      play/tetris.elc
   ELC      play/zone.elc
   ELC      progmodes/antlr-mode.elc
-  ELC      progmodes/autoconf.elc
   ELC      progmodes/asm-mode.elc
+  ELC      progmodes/autoconf.elc
   ELC      progmodes/bat-mode.elc
   ELC      progmodes/bug-reference.elc
   ELC      progmodes/c-ts-mode.elc
@@ -2605,8 +2605,8 @@ make[4]: Nothing to be done for `all'.
   ELC      progmodes/ebrowse.elc
   ELC      progmodes/eglot.elc
   ELC      progmodes/erts-mode.elc
-  ELC      progmodes/etags.elc
   ELC      progmodes/executable.elc
+  ELC      progmodes/etags.elc
   ELC      progmodes/f90.elc
   ELC      progmodes/flymake-cc.elc
   ELC      progmodes/flymake-proc.elc
@@ -2646,8 +2646,8 @@ make[4]: Nothing to be done for `all'.
   ELC      progmodes/ruby-ts-mode.elc
   ELC      progmodes/rust-ts-mode.elc
   ELC      progmodes/scheme.elc
-  ELC      progmodes/simula.elc
   ELC      progmodes/sh-script.elc
+  ELC      progmodes/simula.elc
   ELC      progmodes/sql.elc
   ELC      progmodes/subword.elc
   ELC      progmodes/tcl.elc
@@ -2667,9 +2667,9 @@ make[4]: Nothing to be done for `all'.
   ELC      term/linux.elc
   ELC      term/lk201.elc
   ELC      term/news.elc
-  ELC      term/st.elc
   ELC      term/rxvt.elc
   ELC      term/screen.elc
+  ELC      term/st.elc
   ELC      term/sun.elc
   ELC      term/tmux.elc
   ELC      term/tvi970.elc
@@ -2716,13 +2716,13 @@ make[4]: Nothing to be done for `all'.
   ELC      textmodes/reftex.elc
   ELC      textmodes/remember.elc
   ELC      textmodes/rst.elc
-  ELC      textmodes/string-edit.elc
   ELC      textmodes/sgml-mode.elc
+  ELC      textmodes/string-edit.elc
   ELC      textmodes/table.elc
   ELC      textmodes/tex-mode.elc
   ELC      textmodes/texinfmt.elc
-  ELC      textmodes/texinfo.elc
   ELC      textmodes/texinfo-loaddefs.elc
+  ELC      textmodes/texinfo.elc
   ELC      textmodes/texnfo-upd.elc
   ELC      textmodes/tildify.elc
   ELC      textmodes/toml-ts-mode.elc
@@ -2744,8 +2744,8 @@ make[4]: Nothing to be done for `all'.
   ELC      url/url-handlers.elc
   ELC      url/url-history.elc
   ELC      url/url-http.elc
-  ELC      url/url-imap.elc
   ELC      url/url-irc.elc
+  ELC      url/url-imap.elc
   ELC      url/url-ldap.elc
   ELC      url/url-mailto.elc
   ELC      url/url-methods.elc
@@ -2780,11 +2780,11 @@ make[4]: Nothing to be done for `all'.
   ELC      vc/ediff-init.elc
   ELC      vc/ediff-merg.elc
   ELC      vc/ediff-mult.elc
-  ELC      vc/ediff-ptch.elc
   ELC      vc/ediff-util.elc
+  ELC      vc/ediff-ptch.elc
   ELC      vc/ediff-vers.elc
-  ELC      vc/ediff.elc
   ELC      vc/ediff-wind.elc
+  ELC      vc/ediff.elc
   ELC      vc/emerge.elc
   ELC      vc/log-edit.elc
   ELC      vc/log-view.elc
@@ -2854,8 +2854,8 @@ make[6]: Nothing to be done for `cp51932.el'.
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C ../admin/charsets eucjp-ms.el
 make[6]: Nothing to be done for `eucjp-ms.el'.
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C ../admin/unidata all EMACS="../../src/bootstrap-emacs"
-  GEN      ../../info/ebrowse.info
 make[6]: Nothing to be done for `all'.
+  GEN      ../../info/ebrowse.info
   GEN      ../../info/ede.info
   GEN      ../../info/ediff.info
   GEN      ../../info/edt.info
