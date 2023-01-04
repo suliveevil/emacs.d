@@ -1,3 +1,4 @@
+;; -*- coding: utf-8; lexical-binding: t; -*-
 ;; -*- origami-fold-style: triple-braces -*-
 ;; early-init.el --- Emacs 27+ pre-initialisation config
 ;; Code loaded before the package system and GUI is initialized.
