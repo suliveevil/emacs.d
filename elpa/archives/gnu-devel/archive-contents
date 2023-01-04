@@ -543,18 +543,18 @@
 			("Ingo Lohmar" . "i.lohmar@gmail.com"))
 		       (:keywords "abbrev" "convenience" "matching"))])
  (compat .
-	 [(28 1 2 2 0 20221122 225006)
+	 [(29 1 0 0 -4 0 20230104 14355)
 	  ((emacs
-	    (24 3))
+	    (24 4))
 	   (nadvice
 	    (0 3)))
 	  "Emacs Lisp Compatibility Library" tar
-	  ((:url . "https://sr.ht/~pkal/compat")
+	  ((:url . "https://github.com/emacs-compat/compat")
 	   (:keywords "lisp")
-	   (:maintainer "Compat Development" . "~pkal/compat-devel@lists.sr.ht")
+	   (:maintainer "Daniel Mendler <mail@daniel-mendler.de>, Compat Development" . "~pkal/compat-devel@lists.sr.ht")
 	   (:authors
-	    ("Philip Kaludercic" . "philipk@posteo.net"))
-	   (:commit . "1573aa2e6d478c30cc7f394b72cbaa4db77ef811"))])
+	    ("Philip Kaludercic <philipk@posteo.net>, Daniel Mendler" . "mail@daniel-mendler.de"))
+	   (:commit . "3ee973db10e7c52fe4d2dbcc871725162d7f0b3c"))])
  (consult .
 	  [(0 30 0 20230102 164558)
 	   ((emacs
@@ -999,7 +999,7 @@
 	       ("Markus Triska" . "triska@metalevel.at"))
 	      (:commit . "cfcdf9e42821d246b7fbc84877aa4ecacc184a1c"))])
  (eev .
-      [(20230102 0 20230102 23401)
+      [(20230102 0 20230104 12304)
        ((emacs
 	 (24 4)))
        "Support for e-scripts (eepitch blocks, elisp hyperlinks, etc)" tar
@@ -1008,7 +1008,7 @@
 	(:maintainer "Eduardo Ochs" . "eduardoochs@gmail.com")
 	(:authors
 	 ("Eduardo Ochs" . "eduardoochs@gmail.com"))
-	(:commit . "0df1fb2a0ae9fbffb5f507ab84810bf561710dd7"))])
+	(:commit . "2ff4bf56e8fd789dfcfd7000d510bc7216b94d86"))])
  (ef-themes .
 	    [(0 10 0 0 20230101 153029)
 	     ((emacs
@@ -1096,7 +1096,7 @@
 		     (:url . "https://elpa.gnu.org/packages/elisp-benchmarks.html")
 		     (:commit . "7122da523a9d23900f8ee7581cdc0f06e1b7a401"))])
  (embark .
-	 [(0 18 0 20221227 132104)
+	 [(0 19 0 20230103 132429)
 	  ((emacs
 	    (26 1)))
 	  "Conveniently act on minibuffer completions" tar
@@ -1105,9 +1105,9 @@
 	   (:maintainer "Omar Antolín Camarena" . "omar@matem.unam.mx")
 	   (:authors
 	    ("Omar Antolín Camarena" . "omar@matem.unam.mx"))
-	   (:commit . "629cce948c562361ddd6136d7cc49c5c981bb610"))])
+	   (:commit . "0908eea9c6708605fe3a9718c8274a6711b6acb0"))])
  (embark-consult .
-		 [(0 6 0 20221227 132104)
+		 [(0 6 0 20230103 132429)
 		  ((emacs
 		    (27 1))
 		   (embark
@@ -1120,7 +1120,7 @@
 		   (:maintainer "Omar Antolín Camarena" . "omar@matem.unam.mx")
 		   (:authors
 		    ("Omar Antolín Camarena" . "omar@matem.unam.mx"))
-		   (:commit . "629cce948c562361ddd6136d7cc49c5c981bb610"))])
+		   (:commit . "0908eea9c6708605fe3a9718c8274a6711b6acb0"))])
  (ement .
 	[(0 6 -1 0 20221223 123705)
 	 ((emacs
@@ -1447,7 +1447,7 @@
 	     (:url . "https://elpa.gnu.org/packages/gle-mode.html")
 	     (:commit . "ff6e97819b525cbc1fea07f78e5b93eb5814eeb1"))])
  (gnat-compiler .
-		[(1 0 0 0 20221228 92523)
+		[(1 0 0 0 20230103 94118)
 		 ((emacs
 		   (25 3))
 		  (wisi
@@ -1457,7 +1457,7 @@
 		  (:authors
 		   ("Stephen Leake" . "stephen_leake@member.fsf.org"))
 		  (:url . "https://elpa.gnu.org/packages/gnat-compiler.html")
-		  (:commit . "8ca2e5bcd244c8d191035c3c4e011e31e534738e"))])
+		  (:commit . "d330e13e650a153fd1481ab68664039c3155234a"))])
  (gnome-c-style .
 		[(0 1 0 20160130 1526)
 		 nil "minor mode for editing GNOME-style C source code" tar
@@ -1703,7 +1703,7 @@
 	  (:url . "https://elpa.gnu.org/packages/ilist.html")
 	  (:commit . "c8edbb4ba109186ee5371310a2ac0f9ccbca77cd"))])
  (inspector .
-	    [(0 9 0 20230102 141221)
+	    [(0 9 0 20230103 181948)
 	     ((emacs
 	       (27 1)))
 	     "Tool for inspection of Emacs Lisp objects" tar
@@ -1712,7 +1712,7 @@
 	      (:maintainer "Mariano Montone" . "marianomontone@gmail.com")
 	      (:authors
 	       ("Mariano Montone" . "marianomontone@gmail.com"))
-	      (:commit . "83db8f170b1760bfeae0f86fd26701c40360bfcc"))])
+	      (:commit . "c6635609d5e3f713ce9e52f4532aa4e30d8176af"))])
  (ioccur .
 	 [(2 6 0 20211231 163129)
 	  ((emacs
@@ -2416,7 +2416,7 @@
 	       ("Omar Antolín Camarena" . "omar@matem.unam.mx"))
 	      (:commit . "847694e78c12d903d5e3f6cb365a5d3b984db537"))])
  (org .
-      [(9 6 0 20230103 75859)
+      [(9 6 0 20230103 233638)
        ((emacs
 	 (25 1)))
        "Outline-based notes management and organizer" tar
@@ -2425,7 +2425,7 @@
 	(:maintainer "Bastien Guerry" . "bzg@gnu.org")
 	(:authors
 	 ("Carsten Dominik" . "carsten.dominik@gmail.com"))
-	(:commit . "30314c60385148de2e44bb6b3319c02d296de170"))])
+	(:commit . "001e1149366cacdf314f86d7088e75ae83a35a7b"))])
  (org-contacts .
 	       [(1 1 0 20221221 43108)
 		((emacs
@@ -3749,7 +3749,7 @@
 		   ("Tom Schutzer-Weissmann" . "tom.weissmann@gmail.com"))
 		  (:commit . "ddffee7338136b46c8f1f544872045e991312ba2"))])
  (url-scgi .
-	   [(0 8 0 20221224 42354)
+	   [(0 8 0 20230103 114212)
 	    ((emacs
 	      (24 3)))
 	    "SCGI support for url.el" tar
@@ -3758,7 +3758,7 @@
 	     (:maintainer "Stefan Kangas" . "stefankangas@gmail.com")
 	     (:authors
 	      ("Stefan Kangas" . "stefankangas@gmail.com"))
-	     (:commit . "cf05aac1cd901247f0af1be14bd970465b76844c"))])
+	     (:commit . "cd479f77173fe9671e04e467ca2c279e4faea3d9"))])
  (use-package .
 	      [(2 4 4 0 20230101 53112)
 	       ((emacs

@@ -53,7 +53,15 @@
 (setq inhibit-startup-echo-area-message (user-login-name))
 ;; }}}
 
+;; debug warning and error
+;; {{{
+;; debug
 (setq debug-on-error t)
+;; warning
+(setq byte-compile-warnings nil)
+;; (setq native-comp-async-report-warnings-errors nil)
+;; error
+;; }}}
 
 (setq use-short-answers t) ;; use y/n instead of yes/no
 (setq confirm-kill-emacs (lambda (prompt) (y-or-n-p-with-timeout "确认退出？" 10 "y")))
@@ -133,6 +141,42 @@
 ;; package: package-enable-at-startup is before init but after early-init
 ;; {{{
 (setq package-enable-at-startup nil) ;; don't enable at startup, pair with (package-initialize)
+;; }}}
+
+;; package
+;; {{{
+(setq package-archives '(
+                         ("elpa"                . "https://elpa.gnu.org/packages/")
+                         ;; ("elpa-devel"          . "https://elpa.gnu.org/devel/")
+                         ;; ("jcs-elpa"            . "https://jcs-emacs.github.io/jcs-elpa/packages/")
+                         ;; ("gnu"                 . "http://elpa.gnu.org/packages/")
+                         ;; ("gnu-devel"           . "https://elpa.gnu.org/devel/")
+                         ;; ("gnu-tsinghua"        . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                         ;; ("gnu-ustc"            . "http://mirrors.ustc.edu.cn/elpa/gnu/")
+                         ("melpa"               . "http://melpa.org/packages/")
+                         ;; ("melpa-stable"        . "https://stable.melpa.org/packages/")
+                         ;; ("melpa-tsinghua"      . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+                         ;; ("melpa-ustc"          . "http://mirrors.ustc.edu.cn/elpa/melpa/")
+                         ;; ("nongnu"              . "https://elpa.nongnu.org/nongnu/")
+                         ;; ("nongnu-devel"        . "https://elpa.nongnu.org/devel/")
+                         ;; ("nongnu-ustc"         . "http://mirrors.ustc.edu.cn/elpa/nongnu/")
+                         ))
+;; (setq package-archive-priorities '(
+;;                                    ("elpa"                       . 22)
+;;                                    ("nongnu"                     . 21)
+;;                                    ("gnu"                        . 17)
+;;                                    ("gnu-devel"                  . 18)
+;;                                    ("gnu-tsinghua"               . 50)
+;;                                    ("gnu-ustc"                   . 49)
+;;                                    ("melpa"                      . 51)
+;;                                    ("melpa-stable"               . 14)
+;;                                    ("melpa-tsinghua"             . 48)
+;;                                    ("melpa-ustc"                 . 47)
+;;                                    ("nongnu"                     . 10)
+;;                                    ("nongnu-devel"               . 11)
+;;                                    ("nongnu-ustc"                . 46)
+;;                                    ("jcs-elpa"                   . 7)
+;;                                    ))
 ;; }}}
 
 ;; package: add other source packages to load path
