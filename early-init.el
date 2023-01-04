@@ -108,8 +108,9 @@
 (tool-bar-mode -1)          ;; 工具栏
 (set-fringe-mode 10)        ;;
 (global-visual-line-mode 1) ;;
-(context-menu-mode 1)       ;; 鼠标右键菜单
 (setq visible-bell t)       ;; 关闭提示声音
+(context-menu-mode 1)       ;; 鼠标右键菜单
+(setq use-dialog-box nil)   ;; 鼠标点击不触发弹窗
 ;; }}}
 
 

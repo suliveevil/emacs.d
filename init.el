@@ -18,9 +18,6 @@
 
 ;; buffer
 ;; {{{
-;; ibuffer
-(keymap-global-set "C-x C-b" #'ibuffer)
-
 (defun my/side-buffer ()
   (interactive)
   (let ((other (buffer-name (window-buffer (next-window)))))
@@ -738,6 +735,26 @@ Version 2018-06-18 2021-09-30"
   (exec-path-from-shell-initialize))
 ;; }}}
 
+;; ibuffer
+;; {{{
+(use-package ibuffer
+  :bind ("C-x C-b" . ibuffer)
+  :custom
+  (ibuffer-formats
+   '((mark modified read-only locked " "
+           (name 35 35 :left :elide)
+           " "
+           (size 9 -1 :right)
+           " "
+           (mode 16 16 :left :elide)
+           " " filename-and-process)
+     (mark " "
+           (name 16 -1)
+           " " filename)))
+  )
+;; }}}
+
+
 ;; elisp-demos
 ;; {{{
 (advice-add 'helpful-update :after #'elisp-demos-advice-helpful-update)
@@ -1016,15 +1033,18 @@ Version 2018-06-18 2021-09-30"
 
 ;; moom
 ;; {{{
-(add-hook 'after-init-hook 'moom-mode)
-;; moom + transient
-(with-eval-after-load "moom"
-  (setq moom-use-font-module nil)
-  (when (require 'moom-transient nil t)
-    (moom-transient-hide-cursor) ;; if needed
-    (define-key moom-mode-map (kbd "C-c o") #'moom-transient-dispatch)
+(unless (and (display-graphic-p) (eq system-type 'darwin))
+  (add-hook 'after-init-hook 'moom-mode)
+  ;; moom + transient
+  (with-eval-after-load "moom"
+    (setq moom-use-font-module nil)
+    (when (require 'moom-transient nil t)
+      (moom-transient-hide-cursor) ;; if needed
+      (define-key moom-mode-map (kbd "C-c o") #'moom-transient-dispatch)
+      )
     )
   )
+
 ;; }}}
 
 ;; {{{ ace-window
@@ -1213,24 +1233,24 @@ Version 2018-06-18 2021-09-30"
          ("C-c m c" . consult-mode-command)
          ("C-c k" . consult-kmacro)
          ;; C-x bindings (ctl-x-map)
-         ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
-         ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+         ("C-x M-:" . consult-complex-command) ;; orig. repeat-complex-command
+         ("C-x b" . consult-buffer)	       ;; orig. switch-to-buffer
          ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
-         ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
-         ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
-         ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+         ("C-x 5 b" . consult-buffer-other-frame) ;; orig. switch-to-buffer-other-frame
+         ("C-x r b" . consult-bookmark)		  ;; orig. bookmark-jump
+         ("C-x p b" . consult-project-buffer) ;; orig. project-switch-to-buffer
          ;; Custom M-# bindings for fast register access
          ("M-#" . consult-register-load)
-         ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+         ("M-'" . consult-register-store) ;; orig. abbrev-prefix-mark (unrelated)
          ("C-M-#" . consult-register)
          ;; Other custom bindings
-         ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+         ("M-y" . consult-yank-pop) ;; orig. yank-pop
          ;; M-g bindings (goto-map)
          ("M-g e" . consult-compile-error)
-         ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
-         ("M-g g" . consult-goto-line)             ;; orig. goto-line
-         ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
-         ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+         ("M-g f" . consult-flymake)	 ;; Alternative: consult-flycheck
+         ("M-g g" . consult-goto-line)	 ;; orig. goto-line
+         ("M-g M-g" . consult-goto-line) ;; orig. goto-line
+         ("M-g o" . consult-outline)	 ;; Alternative: consult-org-heading
          ("M-g m" . consult-mark)
          ("M-g k" . consult-global-mark)
          ("M-g i" . consult-imenu)
@@ -1248,14 +1268,14 @@ Version 2018-06-18 2021-09-30"
          ;; Isearch integration
          ("M-s e" . consult-isearch-history)
          :map isearch-mode-map
-         ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
-         ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
-         ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
-         ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+         ("M-e" . consult-isearch-history)   ;; orig. isearch-edit-string
+         ("M-s e" . consult-isearch-history) ;; orig. isearch-edit-string
+         ("M-s l" . consult-line) ;; needed by consult-line to detect isearch
+         ("M-s L" . consult-line-multi)	;; needed by consult-line to detect isearch
          ;; Minibuffer history
          :map minibuffer-local-map
-         ("M-s" . consult-history)                 ;; orig. next-matching-history-element
-         ("M-r" . consult-history))                ;; orig. previous-matching-history-element
+         ("M-s" . consult-history)  ;; orig. next-matching-history-element
+         ("M-r" . consult-history)) ;; orig. previous-matching-history-element
 
   ;; Enable automatic preview at point in the *Completions* buffer. This is
   ;; relevant when you use the default completion UI.
@@ -1309,14 +1329,14 @@ Version 2018-06-18 2021-09-30"
   ;; By default `consult-project-function' uses `project-root' from project.el.
   ;; Optionally configure a different project root function.
   ;; There are multiple reasonable alternatives to chose from.
-  ;;;; 1. project.el (the default)
+;;;; 1. project.el (the default)
   ;; (setq consult-project-function #'consult--default-project--function)
-  ;;;; 2. projectile.el (projectile-project-root)
+;;;; 2. projectile.el (projectile-project-root)
   ;; (autoload 'projectile-project-root "projectile")
   ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
-  ;;;; 3. vc.el (vc-root-dir)
+;;;; 3. vc.el (vc-root-dir)
   ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
-  ;;;; 4. locate-dominating-file
+;;;; 4. locate-dominating-file
   ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
   )
 ;; }}}
@@ -1867,8 +1887,18 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 
 ;; doom-modeline
 ;; {{{
-(add-hook 'after-init-hook #'doom-modeline-mode)
-(setq doom-modeline-support-imenu t)
+;; (add-hook 'after-init-hook #'doom-modeline-mode)
+;; (setq doom-modeline-support-imenu t)
+(use-package doom-modeline
+  :custom
+  ;; Don't compact font caches during GC. Windows Laggy Issue
+  (inhibit-compacting-font-caches t)
+  (doom-modeline-minor-modes t)
+  (doom-modeline-icon t)
+  (doom-modeline-major-mode-color-icon t)
+  (doom-modeline-height 18)
+  :config
+  (doom-modeline-mode))
 ;; }}}
 
 ;; package out of package.el :FIXME:
@@ -2106,6 +2136,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 
 ;; all-the-icons
 ;; {{{
+;; (use-package all-the-icons :if (display-graphic-p))
 (when (display-graphic-p)
   (require 'all-the-icons))
 (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
