@@ -1210,6 +1210,29 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
     (require 'osm-ol)))
 ;; }}}
 
+;; elfeed
+;; {{{
+;; reference: https://github.com/jiacai2050/jiacai2050.github.io/blob/hugo/playground/mu4e-elfeed-config.el
+(use-package elfeed
+  :ensure nil
+  :custom((elfeed-use-curl t)
+	  (elfeed-db-directory "~/Downloads/elfeed/")
+	  (elfeed-curl-timeout 20)
+	  )
+  )
+
+;; elfeed-dashboard
+(use-package elfeed-dashboard
+  :ensure nil
+  )
+
+;;elfeed-org
+(use-package elfeed-org
+  :ensure nil
+  :hook (elfeed-dashboard-mode . elfeed-org)
+  )
+;; }}}
+
 (provide 'init-package)
 
 ;;; init-package.el ends here

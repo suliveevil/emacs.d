@@ -9,6 +9,7 @@
 
 ;; test
 ;; {{{
+(require 'treesit)
 (add-to-list 'load-path (expand-file-name "~/.config/emacs/bisec"))
 ;; }}}
 
@@ -531,7 +532,7 @@ Version 2018-06-18 2021-09-30"
         ("ditaa" . artist)
         ("dot"  . graphviz-dot)
         ("elisp" . emacs-lisp)
-        ;; ("json"  . json-ts)
+        ("json"  . json-ts)
         ("ocaml" . tuareg)
         ("screen" . shell-script)
         ("shell" . sh)
