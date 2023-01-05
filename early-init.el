@@ -47,6 +47,17 @@
 (add-hook 'after-init-hook #'my/emacs-init-time)
 ;; }}}
 
+;; Emacs
+;; {{{
+(let* ((emacs-Res "/Applications/Emacs.app/Contents/Resources/")
+       (emacs-git "~/Documents/emacs/") ; emacs-git /src/ source
+       (emacs-src (if (file-exists-p (concat emacs-Res "src/"))
+                      emacs-Res
+                    emacs-git)))
+  (setq source-directory emacs-src)
+  (setq find-function-C-source-directory (concat emacs-src "src/")))
+;; }}}
+
 ;; startup
 ;; {{{
 (setq initial-major-mode 'fundamental-mode)
@@ -131,14 +142,14 @@
 ;; {{{
 ;; (push '(fullscreen . maximized) default-frame-alist)
 (setq default-frame-alist
-       '((height . 46)
-         (width . 97)
-         (left . 700)
-         (top . 20)
-         ;; (vertical-scroll-bars . nil)
-         ;; (horizontal-scroll-bars . nil)
-	 ;; (tool-bar-lines . 0)
-         ))
+      '((height . 46)
+        (width . 97)
+        (left . 700)
+        (top . 20)
+        ;; (vertical-scroll-bars . nil)
+        ;; (horizontal-scroll-bars . nil)
+        ;; (tool-bar-lines . 0)
+        ))
 (setq inhibit-splash-screen t)        ;; 禁用欢迎界面
 (tool-bar-mode -1)          ;; 工具栏
 (set-fringe-mode 10)        ;;
@@ -151,8 +162,8 @@
         context-menu-region
         context-menu-undo
         context-menu-minor
-	context-menu-local
-	))
+        context-menu-local
+        ))
 (setq use-dialog-box nil)   ;; 鼠标点击不触发弹窗
 ;; }}}
 

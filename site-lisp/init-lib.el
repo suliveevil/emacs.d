@@ -129,9 +129,8 @@
 
 ;; fuck
 ;; {{{
-(use-package fuck
-  ;; :defer 2
-  )
+(require 'fuck)
+(keymap-global-set "H-k" #'fuck)
 ;; }}}
 
 ;; unicode
@@ -144,29 +143,43 @@
 ;; org-auto-tangle
 ;; {{{
 (use-package org-auto-tangle
+  :ensure nil  
   :hook (org-mode . org-auto-tangle-mode)
   )
 ;; }}}
 
-
 ;; lsp-bridge
 ;; {{{
-;; (use-package lsp-bridge
-;;   :after (yasnippet)
-;;   ;; :hook (prog-mode . lsp-bridge-mode)
-;;   :config
-;;   (global-lsp-bridge-mode)
-;;   (add-to-list 'lsp-bridge-org-babel-lang-list "emacs-lisp")
-;;   (add-to-list 'lsp-bridge-org-babel-lang-list "shell")
-;;   )
-(run-with-idle-timer
- 1 nil
- #'(lambda ()
-     (require 'yasnippet)
-     (yas-global-mode 1)
-     (require 'lsp-bridge)
-     (global-lsp-bridge-mode)
-     ))
+(use-package lsp-bridge
+  :ensure nil  
+  :after (yasnippet)
+  ;; :bind
+  :hook (prog-mode . lsp-bridge-mode)
+  :config
+  ;; (keymap-set lsp-bridge-mode-map "H-;" 'lsp-bridge-toggle-sdcv-helper)
+  ;; (keymap-set lsp-bridge-mode-map "TAB" 'acm-select-next)
+  ;; (keymap-set lsp-bridge-mode-map "<backtab>" 'acm-select-prev)
+  ;; (keymap-set lsp-bridge-mode-map "SPC" 'acm-insert-common)
+  ;; (keymap-set lsp-bridge-mode-map "RET" 'acm-complete)
+  ;; (keymap-set lsp-bridge-mode-map "ESC" 'acm-hide )
+  ;; (setq acm-quick-access-modifier 'meta)
+  (setq acm-enable-quick-access t)
+  (setq lsp-bridge-enable-mode-line nil)
+  (setq lsp-bridge-use-wenls-in-org-mode t)
+  ;; (global-lsp-bridge-mode)
+  (add-to-list 'lsp-bridge-org-babel-lang-list "emacs-lisp")
+  (add-to-list 'lsp-bridge-org-babel-lang-list "shell")
+  )
+;; (setq lsp-bridge-enable-mode-line nil)
+;; (setq lsp-bridge-use-wenls-in-org-mode t)
+;; (run-with-idle-timer
+;;  1 nil
+;;  #'(lambda ()
+;;      (require 'yasnippet)
+;;      (yas-global-mode 1)
+;;      (require 'lsp-bridge)
+;;      (global-lsp-bridge-mode)
+;;      ))
 ;; }}}
 
 ;; D2 Mode
@@ -196,7 +209,7 @@
 ;; subed: subtitle edit
 ;; {{{
 (use-package subed
-  ;; :ensure t
+  :ensure nil
   :config
   ;; Disable automatic movement of point by default
   (add-hook 'subed-mode-hook 'subed-disable-sync-point-to-player)
@@ -204,7 +217,7 @@
   (add-hook 'subed-mode-hook 'save-place-local-mode)
   ;; Break lines automatically while typing
   (add-hook 'subed-mode-hook 'turn-on-auto-fill)
-   ;; Break lines at 40 characters
+  ;; Break lines at 40 characters
   (add-hook 'subed-mode-hook (lambda () (setq-local fill-column 40))))
 ;; }}}
 

@@ -85,6 +85,7 @@ digraph G {"epkg" -> "emacs";
 "f" -> "emacs";
 "f" -> "s";
 "f" -> "dash";
+"goto-line-preview" -> "emacs";
 "closql" -> "emacs";
 "closql" -> "compat";
 "closql" -> "emacsql-sqlite";
