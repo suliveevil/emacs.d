@@ -492,7 +492,13 @@ Version 2018-06-18 2021-09-30"
 ;; {{{
 ;; M-<: first match
 ;; M->: last  match
-(setq isearch-lazy-count t) ;; anzu
+(use-package isearch
+  :bind
+  ([remap yank] . isearch-yank-kill)
+  :config
+  (setq isearch-lazy-count t) ;; anzu
+  )
+
 ;; }}}
 
 ;; org-mode

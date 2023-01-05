@@ -933,13 +933,21 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
         ;; F
         ;; g:
         ;; G
-        ;; h: human
+        ("h" "人物" plain "%?"
+         :target (file+head "topics/人物/${slug}.org"
+                            "#+title: ${title}\n")
+         :immediate-finish t
+         :unnarrowed t)
         ;; H
         ;; i:
         ;; I
         ;; j:
         ;; J
-        ;; k:
+        ("k" "Emacs keymap" plain "%?"
+         :target (file+head "Emacs/keymap/${slug}.org"
+                            "#+title: ${title}\n")
+         :immediate-finish t
+         :unnarrowed t)
         ;; K
         ;; l:
         ;; L
