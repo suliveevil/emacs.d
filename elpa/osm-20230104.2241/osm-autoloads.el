@@ -19,8 +19,9 @@ Go to LAT/LON/ZOOM.
 (fn LAT LON ZOOM)" t)
 (autoload 'osm "osm" "\
 Go to LINK.
+When called interactively, call `osm-home'.
 
-(fn &rest LINK)" nil t)
+(fn &rest LINK)" t)
 (autoload 'osm-bookmark-jump "osm" "\
 Jump to osm bookmark BM.
 
