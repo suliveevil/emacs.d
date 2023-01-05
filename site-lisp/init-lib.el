@@ -156,6 +156,7 @@
   ;; :bind
   :hook (prog-mode . lsp-bridge-mode)
   :config
+  ;; DON'T setup any of acm keymap                       ; FIXME
   ;; (keymap-set lsp-bridge-mode-map "H-;" 'lsp-bridge-toggle-sdcv-helper)
   ;; (keymap-set lsp-bridge-mode-map "TAB" 'acm-select-next)
   ;; (keymap-set lsp-bridge-mode-map "<backtab>" 'acm-select-prev)
@@ -163,7 +164,7 @@
   ;; (keymap-set lsp-bridge-mode-map "RET" 'acm-complete)
   ;; (keymap-set lsp-bridge-mode-map "ESC" 'acm-hide )
   ;; (setq acm-quick-access-modifier 'meta)
-  (setq acm-enable-quick-access t)
+  ;; (setq acm-enable-quick-access t)
   (setq lsp-bridge-enable-mode-line nil)
   (setq lsp-bridge-use-wenls-in-org-mode t)
   ;; (global-lsp-bridge-mode)
