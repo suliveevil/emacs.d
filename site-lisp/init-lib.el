@@ -143,7 +143,7 @@
 ;; org-auto-tangle
 ;; {{{
 (use-package org-auto-tangle
-  :ensure nil  
+  :ensure nil
   :hook (org-mode . org-auto-tangle-mode)
   )
 ;; }}}
@@ -151,7 +151,7 @@
 ;; lsp-bridge
 ;; {{{
 (use-package lsp-bridge
-  :ensure nil  
+  :ensure nil
   :after (yasnippet)
   ;; :bind
   :hook (prog-mode . lsp-bridge-mode)
@@ -220,6 +220,14 @@
   (add-hook 'subed-mode-hook 'turn-on-auto-fill)
   ;; Break lines at 40 characters
   (add-hook 'subed-mode-hook (lambda () (setq-local fill-column 40))))
+;; }}}
+
+;; ts-fold
+;; {{{
+;; (use-package ts-fold
+;;   :ensure nil
+;;   )
+;; (add-hook 'tree-sitter-after-on-hook #'ts-fold-indicators-mode)
 ;; }}}
 
 (provide 'init-lib)

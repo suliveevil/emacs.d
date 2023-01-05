@@ -9,8 +9,18 @@
 
 ;; test
 ;; {{{
-(require 'treesit)
+(show-paren-mode)
+(setq show-paren-style 'parenthesis
+      show-paren-context-when-offscreen 'overlay)
+;;
 (add-to-list 'load-path (expand-file-name "~/.config/emacs/bisec"))
+;; }}}
+
+;; tree-sitter
+;; {{{
+(require 'treesit)
+;; (tree-sitter-load 'elisp "elisp")
+;; (add-to-list 'tree-sitter-major-mode-language-alist '(emacs-lisp-mode . elisp))
 ;; }}}
 
 ;; warning
@@ -492,13 +502,8 @@ Version 2018-06-18 2021-09-30"
 ;; {{{
 ;; M-<: first match
 ;; M->: last  match
-(use-package isearch
-  :bind
-  ([remap yank] . isearch-yank-kill)
-  :config
-  (setq isearch-lazy-count t) ;; anzu
-  )
-
+(keymap-set isearch-mode-map "s-v" 'isearch-yank-kill)
+(setq isearch-lazy-count t) ;; anzu
 ;; }}}
 
 ;; org-mode

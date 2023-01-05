@@ -37,3 +37,6 @@
 [submodule "lib/subed"]
 	path = lib/subed
 	url = git@github.com:sachac/subed.git
+[submodule "lib/ts-fold"]
+	path = lib/ts-fold
+	url = git@github.com:emacs-tree-sitter/ts-fold.git

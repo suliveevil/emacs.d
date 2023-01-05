@@ -196,18 +196,18 @@
                             ;; "A-M"
                             ;; "A-S"
                             ;; "A-s"
-                            ;; "C-H"
+                            "C-H"
                             "C-M"
                             ;; "C-S"
-                            ;; "C-s"
+                            "C-s"
                             ;; "M-S"
                             ;; "M-s"
-                            ;; "s-H"
+                            "s-H"
                             ;; "S-s"
                             ;; "C-M-S"
                             ;; "C-M-s"
-                            "C-c C"
-                            "C-x C" ))
+                            "C-c"
+                            "C-x" ))
 ;; }}}
 
 ;; helpful
@@ -277,6 +277,81 @@
 ;;       show-paren-when-point-in-periphery t)
 ;; }}}
 
+;; multiple-cursors
+;; {{{
+;; multiple-cursors-mode-enabled-hook
+;; multiple-cursors-mode-disabled-hook
+(use-package multiple-cursors
+  :bind (
+         ("H-c H-a" . mc/edit-beginnings-of-lines)
+         ("H-c H-e" . mc/edit-ends-of-lines)
+         ("H-c H-c" . mc/edit-lines)
+         ("H-c H-n" . mc/mark-next-like-this)
+         ("H-c H-p" . mc/mark-previous-like-this)
+         ("H-c H-h" . mc/mark-all-like-this)
+         ("H-c H-r" . set-rectangular-region-anchor)
+         )
+  )
+;; }}}
+
+(add-hook 'activate-mark-hook '(lambda ()
+                                 (local-set-key
+                                  (kbd "C-@")
+                                  'set-rectangular-region-anchor)
+                                 ))
+(add-hook 'deactivate-mark-hook '(lambda ()
+                                   (local-unset-key
+                                    (kbd "C-@"))
+                                   ))
+
+;; expand-region
+;; {{{
+(keymap-global-unset "C-=")
+(keymap-global-unset "C--")
+(use-package expand-region
+  :bind (("C-=" . er/expand-region)
+         ("C--" . er/contract-region))
+  )
+;; }}}
+
+;; symbol-overlay
+;; {{{
+(use-package symbol-overlay
+  :bind(("M-i"  . symbol-overlay-put)
+        ("M-n"  . symbol-overlay-switch-forward)
+        ("M-p"  . symbol-overlay-switch-backward)
+        ("<f7>" . symbol-overlay-mode)
+        ("<f8>" . symbol-overlay-remove-all)
+        :map symbol-overlay-map
+        ("d" . symbol-overlay-jump-to-definition)
+        ("e" . symbol-overlay-echo-mark)
+        ("i" . symbol-overlay-put)
+        ("n" . symbol-overlay-jump-next)
+        ("p" . symbol-overlay-put)
+        ("q" . symbol-overlay-query-replace)
+        ("r" . symbol-overlay-rename)
+        ("s" . symbol-overlay-isearch-literally)
+        ("t" . symbol-overlay-toggle-in-scope)
+        ("w" . symbol-overlay-save-symbol)
+        )
+  )
+;; (require 'symbol-overlay)
+;; (keymap-global-set "M-i"  #'symbol-overlay-put)
+;; (keymap-global-set "M-n"  #'symbol-overlay-switch-forward)
+;; (keymap-global-set "M-p"  #'symbol-overlay-switch-backward)
+;; (keymap-global-set "<f7>" #'symbol-overlay-mode)
+;; (keymap-global-set "<f8>" #'symbol-overlay-remove-all)
+;; (keymap-set symbol-overlay-mode "d" symbol-overlay-jump-to-definition)
+;; (keymap-set symbol-overlay-mode "e" symbol-overlay-echo-mark)
+;; (keymap-set symbol-overlay-mode "i" symbol-overlay-put)
+;; (keymap-set symbol-overlay-mode "n" symbol-overlay-jump-next)
+;; (keymap-set symbol-overlay-mode "p" symbol-overlay-jump-prev)
+;; (keymap-set symbol-overlay-mode "q" symbol-overlay-query-replace)
+;; (keymap-set symbol-overlay-mode "r" symbol-overlay-rename)
+;; (keymap-set symbol-overlay-mode "s" symbol-overlay-isearch-literally)
+;; (keymap-set symbol-overlay-mode "t" symbol-overlay-toggle-in-scope)
+;; (keymap-set symbol-overlay-mode "w" symbol-overlay-save-symbol)
+;; }}}
 
 ;; diff-hl
 ;; {{{
@@ -396,6 +471,10 @@
 
 ;; delta + magit + magit-delta
 ;; {{{
+;; https://scripter.co/using-git-delta-with-magit/
+(use-package magit-delta
+ :hook (magit-mode . magit-delta-mode)
+  )
 ;; (add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1)))
 ;; }}}
 
@@ -1163,10 +1242,10 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; goto-line-preview
 ;; {{{
 (use-package goto-line-preview
- :bind
- ;; ([remap goto-line] . goto-line-preview)
- ("H-l" . goto-line-preview)
- )
+  :bind
+  ;; ([remap goto-line] . goto-line-preview)
+  ("H-l" . goto-line-preview)
+  )
 ;; }}}
 
 ;; olivetti
@@ -1224,9 +1303,9 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 (use-package elfeed
   :ensure nil
   :custom((elfeed-use-curl t)
-	  (elfeed-db-directory "~/Downloads/elfeed/")
-	  (elfeed-curl-timeout 20)
-	  )
+          (elfeed-db-directory "~/Downloads/elfeed/")
+          (elfeed-curl-timeout 20)
+          )
   )
 
 ;; elfeed-dashboard

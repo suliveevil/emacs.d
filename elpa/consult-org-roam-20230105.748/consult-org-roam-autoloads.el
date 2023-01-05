@@ -27,7 +27,9 @@ If OTHER-WINDOW, visit the NODE in another window.
 
 (fn &optional OTHER-WINDOW)" t)
 (autoload 'consult-org-roam-file-find "consult-org-roam" "\
-Find org-roam node with preview." t)
+Find org-roam node with preview, if ARG open in other window.
+
+(fn ARG)" t)
 (defvar consult-org-roam-mode nil "\
 Non-nil if Consult-Org-Roam mode is enabled.
 See the `consult-org-roam-mode' command

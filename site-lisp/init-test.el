@@ -30,5 +30,10 @@
 
 ;; test my little functions
 
+;; test emacs config
+;; (require semantic-mode)
+;; (semantic-mode 1)
+;; (semantic-stickyfunc-mode 1)
+
 (provide 'init-test)
 ;;; init-test.el ends here
