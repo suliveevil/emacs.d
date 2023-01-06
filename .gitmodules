@@ -49,3 +49,6 @@
 [submodule "lib/nov-xwidget"]
 	path = lib/nov-xwidget
 	url = git@github.com:chenyanming/nov-xwidget.git
+[submodule "lib/explain-pause-mode"]
+	path = lib/explain-pause-mode
+	url = https://github.com/lastquestion/explain-pause-mode

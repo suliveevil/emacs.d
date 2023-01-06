@@ -5,6 +5,15 @@
 
 ;; Date: 2023-01-06 07:23:09 +0800
 
+;; Profile emacs startup
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (message "*** Emacs loaded in %s with %d garbage collections."
+                     (format "%.2f seconds"
+                             (float-time
+                              (time-subtract after-init-time before-init-time)))
+                     gcs-done)))
+
 ;; startup
 ;; {{{
 (setq initial-major-mode 'fundamental-mode)
@@ -44,16 +53,16 @@
 (prefer-coding-system                   'utf-8)      ;; prefer
 (set-buffer-file-coding-system          'utf-8-unix) ;;
 (set-charset-priority                   'unicode)    ;;
-(set-clipboard-coding-system            'utf-8-unix) ;; clipboard
-(set-default-coding-systems             'utf-8) ;; buffer/file: 打开文件时的默认编码
-(set-file-name-coding-system            'utf-8-unix)    ;; unix/linux/macos
-(set-keyboard-coding-system             'utf-8-unix)    ;; keyboard
-(set-next-selection-coding-system       'utf-8-unix)    ;; selection
-(set-selection-coding-system            'utf-8)         ;; selection
-(set-terminal-coding-system             'utf-8-unix)            ;; terminal
-(setq coding-system-for-read            'utf-8)                 ;;
-(setq default-buffer-file-coding-system 'utf-8)                         ;;
-(setq locale-coding-system              'utf-8) ;; local
+(set-clipboard-coding-system            'utf-8)      ;; clipboard
+(set-default-coding-systems             'utf-8)      ;; buffer/file: 打开文件时的默认编码
+(set-file-name-coding-system            'utf-8-unix) ;; unix/linux/macos
+(set-keyboard-coding-system             'utf-8-unix) ;; keyboard
+(set-next-selection-coding-system       'utf-8-unix) ;; selection
+(set-selection-coding-system            'utf-8)      ;; selection
+(set-terminal-coding-system             'utf-8-unix) ;; terminal
+(setq coding-system-for-read            'utf-8)      ;;
+(setq default-buffer-file-coding-system 'utf-8)      ;;
+(setq locale-coding-system              'utf-8)      ;; local
 ;; }}}
 
 ;; locale
@@ -125,11 +134,6 @@
         context-menu-local
         ))
 (setq use-dialog-box nil)   ;; 鼠标点击不触发弹窗
-;; }}}
-
-;; minibuffer
-;; {{{
-(setq enable-recursive-minibuffers t)
 ;; }}}
 
 ;; email

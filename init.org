@@ -5,9 +5,13 @@
 #+title: init.el config
 #+auto_tangle: t
 
+sibling file: [[file:early-init.org][early-init.el config]]
+
+https://www.bing.com
+
 * init
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 ;; test
 ;; {{{
 (show-paren-mode)
@@ -15,11 +19,11 @@
       show-paren-context-when-offscreen 'overlay)
 ;;
 (add-to-list 'load-path
-	     (expand-file-name
-	      "bisec"
-	      (concat user-emacs-directory)
-	      )
-	     )
+             (expand-file-name
+              "bisec"
+              (concat user-emacs-directory)
+              )
+             )
 ;; }}}
 #+end_src
 
@@ -53,6 +57,22 @@
   )
 #+end_src
 
+** Emacs Lisp
+
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'emacs-lisp-mode-hook 'turn-off-auto-fill)
+#+end_src
+
+** use-package
+
+#+begin_src emacs-lisp :tangle yes
+;; use-package
+;; {{{
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
+(setq use-package-verbose t)
+;; }}}
+#+end_src
 
 ** 时间 date & time
 
@@ -68,6 +88,28 @@
 ;; }}}
 #+end_src
 
+** 图表与 PDF
+
+#+begin_src emacs-lisp :tangle yes
+(defun my/webkit-open-local-file (fpath)
+  (interactive "fEnter file path: ")
+  (when (member (substring fpath -4 nil) '("html" ".pdf" ".mp4"))
+    (xwidget-webkit-browse-url
+     (concat "file://" (expand-file-name fpath)))
+    )
+  )
+#+end_src
+
+** 网络搜索
+#+begin_src emacs-lisp :tangle yes
+(defun my/open-microsoft-bing ()
+  (interactive)
+  (xwidget-webkit-browse-url "https://www.bing.com" t)
+  )
+#+end_src
+
+#+RESULTS:
+: my/open-microsoft-bing
 
 ** 字体和语法高亮 font & syntax
 
@@ -130,6 +172,16 @@
 ;; }}}
 #+end_src
 
+** 书签 Bookmark
+
+#+begin_src emacs-lisp :tangle no
+;; bookmark
+;; {{{
+;; https://www.youtube.com/watch?v=ajiEBK2swKo
+
+;; }}}
+#+end_src
+
 ** 剪贴板 clipboard
 
 #+begin_src emacs-lisp :tangle yes
@@ -137,7 +189,7 @@
 (keymap-global-set "M-z" #'zap-up-to-char)
 #+end_src
 
-** comment
+** 注释 comment
 
 #+begin_src emacs-lisp :tangle yes
 ;; comment
@@ -158,14 +210,18 @@
 ;; }}}
 #+end_src
 
+
 ** 文件和缓冲区 file/buffer
 
 #+begin_src emacs-lisp :tangle yes
 ;; warn when opening files bigger than 100 MB
-(setq large-file-warning-threshold 100000000)
+(setq large-file-warning-threshold (* 100 1000 1000))
 
 ;; 使 Emacs 自动加载外部修改过的文件
 (global-auto-revert-mode 1)
+
+;; Open file system read-only files as read-only in Emacs as well.
+(setq view-read-only t)
 #+end_src
 
 *** ibuffer
@@ -175,22 +231,65 @@
 ;; {{{
 (use-package ibuffer
   :bind ("C-x C-b" . ibuffer)
-  :custom
-  (ibuffer-formats
-   '((mark modified read-only locked " "
-           (name 35 35 :left :elide)
-           " "
-           (size 9 -1 :right)
-           " "
-           (mode 16 16 :left :elide)
-           " " filename-and-process)
-     (mark " "
-           (name 16 -1)
-           " " filename)))
+  ;; :custom
+  ;; (ibuffer-formats
+  ;;  '((mark modified read-only locked " "
+  ;;          (name 35 35 :left :elide)
+  ;;          " "
+  ;;          (size 9 -1 :right)
+  ;;          " "
+  ;;          (mode 16 16 :left :elide)
+  ;;          " " filename-and-process)
+  ;;    (mark " "
+  ;;          (name 16 -1)
+  ;;          " " filename)))
+  :config
+  (setq ibuffer-saved-filter-groups
+        (quote (("default"
+                 ("dired" (mode . dired-mode))
+                 ("emacs" (or
+                           (mode . emacs-lisp-mode)
+                           (name . "^\\*scratch\\*$")
+                           (name . "^\\*Messages\\*$")
+                           ))
+                 ("org" (or (mode . org-mode)
+                            (mode . org-agenda-mode)
+                            (mode . org-src-mode)
+                            ))
+                 ;;               ("erc" (mode . erc-mode))
+
+                 ("planner" (or
+                             (name . "^\\*Calendar\\*$")
+                             (name . "^diary$")
+                             (mode . muse-mode)))
+                 ("PDF"    (mode . pdf-view-mode))
+                 ("python" (mode . python-mode))
+                 ;; ("gnus" (or
+                 ;;          (mode . message-mode)
+                 ;;          (mode . bbdb-mode)
+                 ;;          (mode . mail-mode)
+                 ;;          (mode . gnus-group-mode)
+                 ;;          (mode . gnus-summary-mode)
+                 ;;          (mode . gnus-article-mode)
+                 ;;          (name . "^\\.bbdb$")
+                 ;;          (name . "^\\.newsrc-dribble")))
+                 ))))
+
+  (add-hook 'ibuffer-mode-hook
+            (lambda ()
+              (ibuffer-switch-to-saved-filter-groups "default")))
   )
+
 ;; }}}
 #+end_src
 
+*** recentf
+
+#+begin_src emacs-lisp :tangle yes
+(recentf-mode 1)
+(setq recentf-max-menu-items 50)
+(setq recentf-max-saved-items 50)
+#+end_src
 
 *** auto-save
 
@@ -202,9 +301,9 @@
 
 (add-hook 'after-init-hook 'auto-save-visited-mode) ;; save file when buffer/focus change 自动保存
 (setq
-      auto-save-default t ; auto-save every buffer that visits a file
-      auto-save-timeout 20 ; number of seconds idle time before auto-save (default: 30)
-      auto-save-interval 200 ; number of keystrokes between auto-saves (default: 300)
+ auto-save-default t ; auto-save every buffer that visits a file
+ auto-save-timeout 20 ; number of seconds idle time before auto-save (default: 30)
+ auto-save-interval 200 ; number of keystrokes between auto-saves (default: 300)
  )
 ;; }}}
 #+end_src
@@ -281,7 +380,7 @@
 (defun my/open-init-file() ;; Emacs init
   (interactive)
   (find-file-other-window user-init-file))
-(keymap-global-set "C-c I" #'my/open-init-file)
+(keymap-global-set "C-c E" #'my/open-init-file)
 
 (defun my/open-init-org() ;; Emacs init
   (interactive)
@@ -292,7 +391,7 @@
     )
    )
   )
-(keymap-global-set "C-c H-i" #'my/open-init-org)
+(keymap-global-set "C-c H-e" #'my/open-init-org)
 ;; (defun open-goku-file()      ;; Emacs early-init
 ;;   (interactive)
 ;;   (find-file "~/.config/karabiner.edn")
@@ -451,7 +550,50 @@ Version 2018-06-18 2021-09-30"
 ;; }}}
 #+end_src
 
+*** frame size
+
+#+begin_src emacs-lisp :tangle no
+;; Set initial frame size and position
+;; https://www.reddit.com/r/emacs/comments/9c0a4d/tip_setting_initial_frame_size_and_position/
+(defun my/set-initial-frame ()
+  (let* ((base-factor 0.70)
+         (a-width (* (display-pixel-width) base-factor))
+         (a-height (* (display-pixel-height) base-factor))
+         (a-left (truncate (/ (- (display-pixel-width) a-width) 2)))
+         (a-top (truncate (/ (- (display-pixel-height) a-height) 2))))
+    (set-frame-position (selected-frame) a-left a-top)
+    (set-frame-size (selected-frame) (truncate a-width)  (truncate a-height) t)))
+(setq frame-resize-pixelwise t)
+(my/set-initial-frame)
+#+end_src
+
+
+#+begin_src emacs-lisp :tangle no
+(frame-height)
+(frame-width)
+#+end_src
+
+#+RESULTS:
+: 97
+
+*** frame screenshot                                                  :FIXME:
+
+#+begin_src emacs-lisp :tangle no
+(defun my/screenshot-svg ()
+  "Save a screenshot of the current frame as an SVG image.
+Saves to a temp file to /tmp/ and puts the filename in the kill ring."
+  (interactive)
+  (let* ((filename (make-temp-file "Emacs" nil ".svg"))
+         (data (x-export-frames nil 'svg)))
+    (with-temp-file filename
+      (insert data))
+    (kill-new filename)
+    (message filename)))
+#+end_src
+
 ** window
+
+*** toggle one window
 
 #+begin_src emacs-lisp :tangle yes
 ;; window
@@ -476,6 +618,37 @@ Version 2018-06-18 2021-09-30"
 ;; }}}
 #+end_src
 
+*** toggle vertical horizontal split
+
+#+begin_src emacs-lisp :tangle yes
+(defun my-toggle-vertical-horizontal-split ()
+  "Switch window split from horizontally to vertically, or vice versa.
+
+i.e. change right window to bottom, or change bottom window to right."
+  (interactive)
+  (require 'windmove)
+  (let ((done))
+    (dolist (dirs '((right . down) (down . right)))
+      (unless done
+        (let* ((win (selected-window))
+               (nextdir (car dirs))
+               (neighbour-dir (cdr dirs))
+               (next-win (windmove-find-other-window nextdir win))
+               (neighbour1 (windmove-find-other-window neighbour-dir win))
+               (neighbour2 (if next-win (with-selected-window next-win
+                                          (windmove-find-other-window neighbour-dir next-win)))))
+          ;;(message "win: %s\nnext-win: %s\nneighbour1: %s\nneighbour2:%s" win next-win neighbour1 neighbour2)
+          (setq done (and (eq neighbour1 neighbour2)
+                          (not (eq (minibuffer-window) next-win))))
+          (if done
+              (let* ((other-buf (window-buffer next-win)))
+                (delete-window next-win)
+                (if (eq nextdir 'right)
+                    (split-window-vertically)
+                  (split-window-horizontally))
+                (set-window-buffer (windmove-find-other-window neighbour-dir) other-buf))))))))
+(keymap-global-set "C-c H-w" #'my-toggle-vertical-horizontal-split)
+#+end_src
 
 ** 折叠 fold
 
@@ -490,7 +663,7 @@ Version 2018-06-18 2021-09-30"
 ;; }}}
 #+end_src
 
-** 光标和选区 cursor/region
+** 光标和选区 cursor/region/selection
 
 #+begin_src emacs-lisp :tangle yes
 ;; cursor
@@ -525,8 +698,12 @@ Version 2018-06-18 2021-09-30"
               (pcase char
                 (?\" (string ?\\ ?\"))
                 (?\\ (string ?\\ ?\\))
-                (_   (string char))))
-            (buffer-substring b e) ""))))
+                (_   (string char)))
+              )
+            (buffer-substring b e) "")
+           )
+   )
+  )
 ;; }}}
 #+end_src
 
@@ -551,7 +728,7 @@ Version 2018-06-18 2021-09-30"
 ;; }}}
 #+end_src
 
-** 字符
+** 字符 Character & string
 
 #+begin_src emacs-lisp :tangle yes
 ;; goto-char by Oliver Scholz
@@ -575,12 +752,139 @@ occurence of CHAR."
 ;; }}}
 #+end_src
 
+*** 数字
+
+#+begin_src emacs-lisp :tangle no
+(defun my-thousands-separate (num)
+  "Formats the (possibly floating point) number with a thousands
+separator."
+  (let* ((nstr (number-to-string num))
+         (dot-ind (string-match "\\." nstr))
+         (nstr-no-decimal (if dot-ind
+                              (substring nstr 0 dot-ind)
+                            nstr))
+         (nrest (if dot-ind
+                    (substring nstr dot-ind)
+                  nil))
+         (pretty nil)
+         (cnt 0))
+    (dolist (c (reverse (append nstr-no-decimal nil)))
+      (if (and (zerop (% cnt 3)) (> cnt 0))
+          (setq pretty (cons ?, pretty)))
+      (setq pretty (cons c pretty))
+      (setq cnt (1+ cnt)))
+    (concat pretty nrest))
+  )
+#+end_src
+
+
+*** 空白字符
+
+#+begin_src emacs-lisp :tangle no
+;;(when (or (my-system-type-is-gnu) (my-system-is-blanche))
+(whitespace-mode)
+;; only show bad whitespace
+(setq whitespace-style '(
+                         trailing
+                         space-before-tab
+                         indentation
+                         empty
+                         space-after-tab
+                         )
+      )
+;;(face trailing lines-tail) whitespace-line-column 80) ;; highlight long lines tails (setq whitespace-style
+;;  )
+#+end_src
+
+** 单词 Word
+
+*** Title Capitalization
+
+#+begin_src emacs-lisp :tangle no
+;; additionally to the list defined in title-capitalization:
+(defvar my-do-not-capitalize-words '("suliveevil")
+  "Personal list of words that doesn't get capitalized in titles.")
+
+(defun title-capitalization (beg end)
+  "Proper English title capitalization of a marked region"
+  ;; - before: the presentation of this heading of my own from my keyboard and yet
+  ;; - after:  The Presentation of This Heading of My Own from My Keyboard and Yet
+  ;; - before: a a a a a a a a
+  ;; - after:  A a a a a a a A
+  (interactive "r")
+  (save-excursion
+    (let* (
+           ;; basic list of words which don't get capitalized according to simplified rules:
+           ;; http://karl-voit.at/2015/05/25/elisp-title-capitalization/
+           (do-not-capitalize-basic-words '(
+                                            "a"
+                                            "ago"
+                                            "an"
+                                            "and"
+                                            "as"
+                                            "at"
+                                            "but"
+                                            "by"
+                                            "es"
+                                            "for"
+                                            "from"
+                                            "in"
+                                            "into"
+                                            "it"
+                                            "n"
+                                            "next"
+                                            "nor"
+                                            "of"
+                                            "off"
+                                            "on"
+                                            "onto"
+                                            "or"
+                                            "over"
+                                            "past"
+                                            "s"
+                                            "so"
+                                            "t"
+                                            "the"
+                                            "till"
+                                            "to"
+                                            "up"
+                                            "yet"))
+           ;; if user has defined 'my-do-not-capitalize-words, append to basic list:
+           (do-not-capitalize-words (if (boundp 'my-do-not-capitalize-words)
+                                        (append do-not-capitalize-basic-words my-do-not-capitalize-words )
+                                      do-not-capitalize-basic-words
+                                      )
+                                    )
+           )
+      ;; go to begin of first word:
+      (goto-char beg)
+      (capitalize-word 1)
+      ;; go through the region, word by word:
+      (while (< (point) end)
+        (skip-syntax-forward "^w" end)
+        (let ((word (thing-at-point 'word)))
+          (if (stringp word)
+              ;; capitalize current word except it is list member:
+              (if (member (downcase word) do-not-capitalize-words)
+                  (downcase-word 1)
+                (capitalize-word 1)))))
+      ;; capitalize last word in any case:
+      (backward-word 1)
+      (if (and (>= (point) beg)
+               (not (member (or (thing-at-point 'word) "s")
+                            '("n" "t" "es" "s"))))
+          (capitalize-word 1))))
+  )
+#+end_src
+
+
 ** 行 line
 
 #+begin_src emacs-lisp :tangle yes
 ;; line
 ;; {{{
 ;; wrap/truncate
+(setq-default truncate-lines t)
 (setq word-wrap-by-category t) ;; improves CJK + Latin word-wrapping
 (setq scroll-margin 5)
 (global-display-line-numbers-mode 1)
@@ -631,6 +935,24 @@ occurence of CHAR."
 ;; }}}
 #+end_src
 
+** 段落 paragraph
+
+#+begin_src emacs-lisp :tangle yes
+(defun my-fill-or-unfill ()
+  "Like `fill-paragraph', but unfill if used twice."
+  (interactive)
+  (let ((fill-column
+         (if (eq last-command 'my-fill-or-unfill)
+             (progn (setq this-command nil)
+                    (point-max))
+           fill-column)))
+    (call-interactively 'fill-paragraph nil (vector nil t))))
+
+(global-set-key [remap fill-paragraph]
+                'my-fill-or-unfill)
+#+end_src
+
+
 ** ido & fido-vertical-mode
 
 #+begin_src emacs-lisp :tangle yes
@@ -656,7 +978,80 @@ occurence of CHAR."
 ;; }}}
 #+end_src
 
-** basic completion
+** Snippet
+
+*** abbrev
+
+#+begin_src emacs-lisp :tangle no
+
+#+end_src
+
+*** skeleton
+
+
+*** tempo
+
+** minibuffer                                                         :FIXME:
+
+[[https://robbmann.io/posts/emacs-29-completions/][The *Completions* Buffer Gets a Big Upgrade in Emacs 29 · robbmann]]
+
+[[https://robbmann.io/emacsd/][My Literate .emacs.d · robbmann]] [[https://github.com/renzmann/.emacs.d][renzmann/.emacs.d]]
+
+#+begin_src emacs-lisp :tangle no
+;; minibuffer
+;; {{{
+(setq enable-recursive-minibuffers t)
+(setq completion-auto-help 'always)
+(setq completion-auto-select 'second-tab)
+
+;; Up/down when completing in the minibuffer
+(define-key minibuffer-local-map (kbd "C-p") #'minibuffer-previous-completion)
+(define-key minibuffer-local-map (kbd "C-n") #'minibuffer-next-completion)
+
+;; Up/down when competing in a normal buffer
+(define-key completion-in-region-mode-map (kbd "C-p") #'minibuffer-previous-completion)
+(define-key completion-in-region-mode-map (kbd "C-n") #'minibuffer-next-completion)
+
+(defun my/sort-by-alpha-length (elems)
+  "Sort ELEMS first alphabetically, then by length."
+  (sort elems (lambda (c1 c2)
+                (or (string-version-lessp c1 c2)
+                    (< (length c1) (length c2))))))
+
+(defun my/sort-by-history (elems)
+  "Sort ELEMS by minibuffer history.
+Use `mct-sort-sort-by-alpha-length' if no history is available."
+  (if-let ((hist (and (not (eq minibuffer-history-variable t))
+                      (symbol-value minibuffer-history-variable))))
+      (minibuffer--sort-by-position hist elems)
+    (my/sort-by-alpha-length elems)))
+
+(defun my/completion-category ()
+  "Return completion category."
+  (when-let ((window (active-minibuffer-window)))
+    (with-current-buffer (window-buffer window)
+      (completion-metadata-get
+       (completion-metadata (buffer-substring-no-properties
+                             (minibuffer-prompt-end)
+                             (max (minibuffer-prompt-end) (point)))
+                            minibuffer-completion-table
+                            minibuffer-completion-predicate)
+       'category))))
+
+(defun my/sort-multi-category (elems)
+  "Sort ELEMS per completion category."
+  (pcase (my/completion-category)
+    ('nil elems) ; no sorting
+    ('kill-ring elems)
+    ('project-file (my/sort-by-alpha-length elems))
+    (_ (my/sort-by-history elems))))
+
+(setq completions-sort #'my/sort-multi-category)
+;; }}}
+#+end_src
+
+
+** Completion
 
 #+begin_src emacs-lisp :tangle yes
 ;; completion: buffer and minibuffer
@@ -744,6 +1139,60 @@ occurence of CHAR."
 
 ** org-mode
 
+#+begin_src emacs-lisp :tangle yes
+(use-package org
+  ;; :init (setq org-fold-core-style "overlays")
+  :config
+  (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
+  (add-to-list 'org-file-apps '("\\.odp" . "open %s"))
+  )
+#+end_src
+
+*** 标签 tag
+
+#+begin_src emacs-lisp :tangle yes
+(defun my/sparse-tree-with-tag-filter()
+  "asks for a tag and generates sparse tree for all open tasks in current Org buffer
+  that are associated with this tag"
+  (interactive "*")
+  (setq tag-for-filter
+        (org-trim
+         (org-icompleting-read "Tags: "
+                               'org-tags-completion-function
+                               nil nil nil 'org-tags-history))
+        )
+  (org-occur
+   (concat "^\\*+ \\(NEXT\\|TODO\\|WAITING\\|STARTED\\) .+:"
+           tag-for-filter
+           ":")
+   )
+  )
+(keymap-global-set "C-c H-t" #'my/sparse-tree-with-tag-filter)
+
+#+end_src
+
+*** UI
+
+#+begin_src emacs-lisp :tangle yes
+;; (setq org-hide-leading-stars t)   ; Omit headline-asterisks except the last one
+(setq org-src-fontify-natively t) ; code block syntax highlight
+#+end_src
+
+*** org modules
+
+#+begin_src emacs-lisp :tangle no
+(setq org-modules (quote
+                   (org-crypt
+                    org-id
+                    org-info
+                    org-habit
+                    org-inlinetask
+                    org-protocol
+                    )
+                   )
+      )
+#+end_src
+
 *** keymap
 
 #+begin_src emacs-lisp :tangle yes
@@ -752,18 +1201,30 @@ occurence of CHAR."
 ;; (setq org-startup-indented t)
 ;; (keymap-global-set "C-c l"   #'org-store-link) ; C-c C-l org-insert-link
 (keymap-global-set "C-c n o" #'org-id-get-create)
-;; (keymap-set org-mode-map "C-c n o" #'org-id-get-create) ;FIXME
+(keymap-global-set "C-c H-i" #'org-insert-structure-template)
 ;; }}}
 #+end_src
 
-*** head/title
+*** narrow
+
+
+光标位置：在代码块内 (org-in-src-block-p)，在代码块外
+当前状态：org-mode, org-src-mode (org-src-mode)
+
+
+| 光标位置 | mode         | 切换                |
+| 代码块内 | org-src-mode | org-edit-src-exit   |
+| 代码块外 |              | show-heading-tidily |
+| 代码块内 |              | org-edit-special    |
+
 
 #+begin_src emacs-lisp :tangle yes
 ;; org-mode: head/title
+;; (org-in-src-block-p)
 ;; {{{
 ;; 显示当前 heading 内容并折叠其他
 ;; https://emacstil.com/til/2021/09/09/fold-heading/
-(defun org-show-current-heading-tidily ()
+(defun my/org-show-current-heading-tidily ()
   (interactive)
   "Show next entry, keeping other entries closed."
   (if (save-excursion (end-of-line) (outline-invisible-p))
@@ -778,9 +1239,36 @@ occurence of CHAR."
       (org-reveal t)
       (org-show-entry)
       (show-children))
-    ))
+    )
+  )
+
+(keymap-global-set "C-c H-n" #'my/org-show-current-heading-tidily)
+
+;; (defun my/org-narrow-heading-or-code-block ()
+;;   (interactive)
+;;   (cond ((org-in-src-block-p)
+;;               (org-src-mode)
+;;                t)
+;;         (org-edit-src-exit)
+;;         (org-show-current-heading-tidily)
+;;         )
+;;   (cond (eq (progn (eq (org-in-src-block-p) t)
+;;                    (eq (org-src-mode) nil)) t)
+;;         (org-edit-special)
+;;         (delete-other-windows)
+;;         )
+
+;;   (cond (eq (progn  (eq (org-in-src-block-p) nil)
+;;                     (eq (org-src-mode) nil)) t)
+;;         (org-show-current-heading-tidily)
+;;         )
+;;   nil
+;;   )
+;; (keymap-global-set "C-c H-n" #'my/org-narrow-heading-or-code-block)
 ;; }}}
 #+end_src
+
+*** head/title
 
 *** code block
 
@@ -814,14 +1302,15 @@ occurence of CHAR."
    (calc        .       t)
    (comint      .       t)
    (css         .       t)
-   (dot         .       t)
+   (dot         .       t) ; Graphviz
    (emacs-lisp  .       t)
    (eshell      .       t)
+   (gnuplot     .       t)
    (haskell     .       t)
    (js          .       t)
    (latex       .       t)
    (lua         .       t)
-   (org         .       t)
+   (org         .       t) ; 跨文件调用 src block
    (perl        .       t)
    (plantuml    .       t)
    (python      .       t)
@@ -854,6 +1343,228 @@ occurence of CHAR."
 ;; }}}
 #+end_src
 
+*** Link
+
+#+begin_src emacs-lisp :tangle yes
+(setq my-linkcolor-org "wheat3")
+(setq my-linkcolor-file "MediumSeaGreen")
+(setq my-linkcolor-web "DeepSkyBlue")
+
+(defun my-set-linkcolors ()
+  "Defines the colors of various link colors"
+  (interactive)
+
+  ;; Org links --------------------------------------------------------------------------
+
+  (org-link-set-parameters "id" :face `(:foreground ,my-linkcolor-org :underline t))
+  (org-link-set-parameters "contact" :face `(:foreground ,my-linkcolor-org :underline t))
+
+  ;; File links --------------------------------------------------------------------------
+
+  (org-link-set-parameters "file" :face `(:foreground ,my-linkcolor-file :underline t))
+  ;; defined elsewhere;; (org-link-set-parameters "tsfile" :face '`(:foreground "DarkSeaGreen" :underline t))
+  (org-link-set-parameters "pdf" :face `(:foreground ,my-linkcolor-file :underline t))
+
+  (org-link-set-parameters "EPA" :face `(:foreground ,my-linkcolor-file :underline t))
+  (org-link-set-parameters "EPAAFO" :face `(:foreground ,my-linkcolor-file :underline t))
+  (org-link-set-parameters "JAFO" :face `(:foreground ,my-linkcolor-file :underline t))
+  (org-link-set-parameters "DAKEPA" :face `(:foreground ,my-linkcolor-file :underline t))
+  (org-link-set-parameters "BMTSK" :face `(:foreground ,my-linkcolor-file :underline t))
+  (org-link-set-parameters "ISO" :face `(:foreground ,my-linkcolor-file :underline t))
+
+  (org-link-set-parameters "gemSpec_DS_Anbieter"
+                           :face `(:foreground ,my-linkcolor-file :underline t))
+  (org-link-set-parameters "gemSpec_Net"
+                           :face `(:foreground ,my-linkcolor-file :underline t))
+  (org-link-set-parameters "gemSpec_PKI"
+                           :face `(:foreground ,my-linkcolor-file :underline t))
+  (org-link-set-parameters "gemSpec_IDP_Dienst"
+                           :face `(:foreground ,my-linkcolor-file :underline t))
+
+  (org-link-set-parameters "messageid"
+                           :face `(:foreground ,my-linkcolor-file :underline t))
+
+  ;; Web links --------------------------------------------------------------------------
+
+  (org-link-set-parameters "http" :face `(:foreground ,my-linkcolor-web :underline t))
+  (org-link-set-parameters "https" :face `(:foreground ,my-linkcolor-web :underline t))
+
+  )
+
+(defun my-set-linkcolors ()
+  "Defines the colors of various link colors"
+  (interactive)
+
+  ;; Org links --------------------------------------------------------------------------
+
+  (org-link-set-parameters "id" :face '(:foreground "wheat3" :underline t))
+  (org-link-set-parameters "contact" :face '(:foreground "wheat3" :underline t))
+
+  ;; File links --------------------------------------------------------------------------
+
+  (org-link-set-parameters "file" :face '(:foreground "MediumSeaGreen" :underline t))
+  ;; defined elsewhere;; (org-link-set-parameters "tsfile" :face ''(:foreground "DarkSeaGreen" :underline t))
+  (org-link-set-parameters "pdf" :face '(:foreground "MediumSeaGreen" :underline t))
+
+  (org-link-set-parameters "EPA" :face '(:foreground "MediumSeaGreen" :underline t))
+  (org-link-set-parameters "EPAAFO" :face '(:foreground "MediumSeaGreen" :underline t))
+  (org-link-set-parameters "JAFO" :face '(:foreground "MediumSeaGreen" :underline t))
+  (org-link-set-parameters "DAKEPA" :face '(:foreground "MediumSeaGreen" :underline t))
+  (org-link-set-parameters "BMTSK" :face '(:foreground "MediumSeaGreen" :underline t))
+
+  (org-link-set-parameters "gemSpec_DS_Anbieter"
+                           :face '(:foreground "MediumSeaGreen" :underline t))
+  (org-link-set-parameters "gemSpec_Net"
+                           :face '(:foreground "MediumSeaGreen" :underline t))
+  (org-link-set-parameters "gemSpec_PKI"
+                           :face '(:foreground "MediumSeaGreen" :underline t))
+  (org-link-set-parameters "gemSpec_IDP_Dienst"
+                           :face '(:foreground "MediumSeaGreen" :underline t))
+
+  (org-link-set-parameters "messageid"
+                           :face '(:foreground "MediumSeaGreen" :underline t))
+
+  ;; Web links --------------------------------------------------------------------------
+
+  (org-link-set-parameters "http" :face '(:foreground "DeepSkyBlue" :underline t))
+  (org-link-set-parameters "https" :face '(:foreground "DeepSkyBlue" :underline t))
+
+  )
+
+(my-set-linkcolors) ;; set colors when loading
+#+end_src
+
+*** URL
+
+**** URL Title                                                        :FIXME:
+
+#+begin_src emacs-lisp :tangle no
+(defun my/org-get-url-page-title (url)
+  "retrieve title of web page.
+from: http://www.opensubscriber.com/message/help-gnu-emacs@gnu.org/14332449.html"
+  (interactive)
+  (let ((title))
+    (with-current-buffer (url-retrieve-synchronously url)
+      (goto-char (point-min))
+      (re-search-forward "<title>\\([^<]*\\)</title>" nil t 1)
+      (setq title (match-string 1))
+      (goto-char (point-min))
+      (re-search-forward "charset=\\([-0-9a-zA-Z]*\\)" nil t 1)
+      (string-replace "&nbsp;" " "
+                      ;;(decode-coding-string title (intern (match-string 1)))
+                      ;; following line fixes charset issues from
+                      ;; previous line:
+                      (decode-coding-string title 'utf-8)
+                      ))
+    )
+  )
+#+end_src
+
+**** Linkify                                                          :FIXME:
+
+#+begin_src emacs-lisp :tangle no
+(defun my/org-url-linkify ()
+  "Make URL at cursor point into an Org-mode link.
+If there's a text selection, use the text selection as input.
+
+Example: http://example.com/xyz.htm
+becomes
+\[\[http://example.com/xyz.htm\]\[Source example.com\]\]
+
+Adapted code from: http://ergoemacs.org/emacs/elisp_html-linkify.html"
+  (interactive)
+  (let (resultLinkStr bds p1 p2 domainName)
+    ;; get the boundary of URL or text selection
+    (if (region-active-p)
+        (setq bds (cons (region-beginning) (region-end)) )
+      (setq bds (bounds-of-thing-at-point 'url))
+      )
+    ;; set URL
+    (setq p1 (car bds))
+    (setq p2 (cdr bds))
+    (let (
+          (url (buffer-substring-no-properties p1 p2))
+          )
+      ;; retrieve title
+      (let ((title (my-cliplink-format-and-trim-title (replace-regexp-in-string "\n" " • " (my-www-get-page-title url)))))
+        ;;(message (concat "title is: " title))
+        ;;(setq url (replace-regexp-in-string "&" "&amp;" url))
+        (let ((resultLinkStr (concat "[[" url "][" title "]]")))
+          ;; delete url and insert the link
+          (delete-region p1 p2)
+          (insert resultLinkStr)
+          )
+        )
+      )
+    )
+  )
+
+#+end_src
+
+*** 图像
+
+#+begin_src emacs-lisp :tangle no
+(if (not (eq window-system 'x))
+    (add-hook 'org-mode-hook
+              '(lambda ()
+                 (setq org-file-apps
+                       (append '(
+                                 ("\\.png\\'" . default)
+                                 ("\\.jpg\\'" . default)
+                                 ("\\.jpeg\\'" . default)
+                                 ("\\.tiff\\'" . default)
+                                 ("\\.doc\\'" . default)
+                                 ("\\.docx\\'" . default)
+                                 ("\\.xlsx\\'" . default)
+                                 ("\\.pptx\\'" . default)
+                                 ) org-file-apps )))))
+#+end_src
+
+*** todo
+
+#+begin_src emacs-lisp :tangle no
+(setq org-use-fast-todo-selection t)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(add-hook 'org-mode-hook
+          (lambda ()
+            (push '("TODO"  . ?█) prettify-symbols-alist)
+            (push '("DONE"  . ?✓) prettify-symbols-alist)
+            (push '("WAITING"  . ?…) prettify-symbols-alist)
+            (push '("CANCELLED"  . ?×) prettify-symbols-alist)
+            (push '("SOMEDAY"  . ??) prettify-symbols-alist)))
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(setq org-todo-keywords (quote
+                         (
+                          (sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "WAITING(w@/!)" "SOMEDAY(S!)" "|" "DONE(d!/!)" "CANCELLED(c@/!)")
+                          )
+                         )
+      )
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(setq org-todo-keyword-faces
+      (quote (("TODO"      :foreground "lightblue"    :weight bold)
+              ("NEXT"      :foreground "red"          :weight bold)
+              ("STARTED"   :foreground "red"          :weight bold)
+              ("DONE"      :foreground "forest green" :weight bold)
+              ("WAITING"   :foreground "orange"       :weight bold)
+              ("TEAM"      :foreground "orange"       :weight bold)
+              ("SOMEDAY"   :foreground "magenta"      :weight bold)
+              ("CANCELLED" :foreground "forest green" :weight bold)
+              ("QUOTE"     :foreground "red"          :weight bold)
+              ("QUOTED"    :foreground "magenta"      :weight bold)
+              ("APPROVED"  :foreground "forest green" :weight bold)
+              ("EXPIRED"   :foreground "forest green" :weight bold)
+              ("REJECTED"  :foreground "forest green" :weight bold)
+              ("OPEN"      :foreground "blue"         :weight bold)
+              ("CLOSED"    :foreground "forest green" :weight bold)
+              ("PHONE"     :foreground "forest green" :weight bold))))
+#+end_src
+
 ** mode-line
 
 #+begin_src emacs-lisp :tangle yes
@@ -864,7 +1575,7 @@ occurence of CHAR."
 ;; }}}
 #+end_src
 
-** open app
+** Open App
 
 #+begin_src emacs-lisp :tangle yes
 ;; open app
@@ -894,10 +1605,12 @@ occurence of CHAR."
 ;; }}}
 #+end_src
 
-** open with default app
+** Open in App
+
+*** open in default app
 
 #+begin_src emacs-lisp :tangle yes
-;; open with default app
+;; open in default app
 ;; {{{
 ;; https://emacs-china.org/t/pdf/14954/5
 (defun my/open-with (arg)
@@ -921,7 +1634,185 @@ occurence of CHAR."
 ;; }}}
 #+end_src
 
-** package initialize
+#+begin_src emacs-lisp :tangle no
+(defun my-open-in-external-app (&optional file)
+  "Open the current FILE or dired marked files in external app.
+   The app is chosen from your OS's preference."
+  (interactive)
+  (message "%s" (concat "my-open-in-external-app called with \"" file "\" as argument"))
+  ;; FIXXME: add check if FILE is an existing file; show error message if not
+  (let ( doIt
+         (myFileList
+          (cond
+           ((string-equal major-mode "dired-mode") (dired-get-marked-files))
+           ((not file) (list (buffer-file-name)))
+           (file (list file)))))
+
+    (setq doIt (if (<= (length myFileList) 5)
+                   t
+                 (y-or-n-p "Open more than 5 files? ") ) )
+
+    (when doIt
+      (cond
+       ((my-system-type-is-windows)
+        (mapc (lambda (fPath) (w32-shell-execute "open" (replace-regexp-in-string "/" "\\" fPath t t)) ) myFileList))
+       ((string-equal system-type "darwin")
+        (mapc (lambda (fPath) (shell-command (format "open \"%s\"" fPath)) )  myFileList) )
+       ((my-system-type-is-gnu)
+        (mapc (lambda (fPath) (let ((process-connection-type nil)) (start-process "" nil "xdg-open" fPath)) ) myFileList)
+        ) ) ) ) )
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(defun my-dired-open-in-external-app ()
+  "Open the current file or dired marked files in external app.
+The app is chosen from your OS's preference.
+URL `http://ergoemacs.org/emacs/emacs_dired_open_file_in_ext_apps.html'
+Version 2016-10-15"
+  (interactive)
+  (let* (
+         ($file-list
+          (if (string-equal major-mode "dired-mode")
+              (dired-get-marked-files)
+            (list (buffer-file-name))))
+         ($do-it-p (if (<= (length $file-list) 5)
+                       t
+                     (y-or-n-p "Open more than 5 files? "))))
+    (when $do-it-p
+      (cond
+       ((string-equal system-type "windows-nt")
+        (mapc
+         (lambda ($fpath)
+           (w32-shell-execute "open" (replace-regexp-in-string "/" "\\" $fpath t t))) $file-list))
+       ((string-equal system-type "darwin")
+        (mapc
+         (lambda ($fpath)
+           (shell-command
+            (concat "open " (shell-quote-argument $fpath))))  $file-list))
+       ((string-equal system-type "gnu/linux")
+        (mapc
+         (lambda ($fpath) (let ((process-connection-type nil))
+                            (start-process "" nil "xdg-open" $fpath))) $file-list))))))
+#+end_src
+
+*** open in system file manager
+
+#+begin_src emacs-lisp :tangle yes
+(defun my/dired-open-in-file-manager ()
+  "Show current file in desktop.
+ (Mac Finder, Windows Explorer, Linux file manager)
+ This command can be called when in a file or in `dired'.
+URL `http://ergoemacs.org/emacs/emacs_dired_open_file_in_ext_apps.html'
+Version 2018-01-13 adapted by Karl Voit 2018-07-01"
+  (interactive)
+  (let (($path (file-truename (if (buffer-file-name) (buffer-file-name) default-directory ))))
+    (cond
+     ((string-equal system-type "windows-nt")
+      (w32-shell-execute "explore" (replace-regexp-in-string "/" "\\" $path t t)))
+     ((string-equal system-type "darwin")
+      (if (eq major-mode 'dired-mode)
+          (let (($files (dired-get-marked-files )))
+            (if (eq (length $files) 0)
+                (shell-command
+                 (concat "open " (shell-quote-argument default-directory)))
+              (shell-command
+               (concat "open -R " (shell-quote-argument (car (dired-get-marked-files )))))))
+        (shell-command
+         (concat "open -R " $path))))
+     ((string-equal system-type "gnu/linux")
+      (let (
+            (process-connection-type nil)
+            (openFileProgram (if (file-exists-p "/usr/bin/thunar")
+                                 "/usr/bin/thunar"
+                               "/usr/bin/xdg-open")))
+        (start-process "" nil openFileProgram $path))
+      ;; (shell-command "xdg-open .") ;; 2013-02-10 this sometimes froze emacs till the folder is closed. eg with nautilus
+      ))))
+#+end_src
+
+** package
+
+#+begin_src text :tangle no
+
+#+end_src
+
+*** package list                                                      :FIXME:
+
+#+begin_src emacs-lisp :tangle no
+(add-to-list 'package-selected-packages
+             '(
+               all-the-icons-completion
+               auto-dark
+               color-theme-sanityinc-solarized
+               color-theme-sanityinc-tomorrow
+               consult
+               consult-org-roam
+               csv-mode
+               d2-mode
+               elfeed
+               elfeed-dashboard
+               elfeed-org
+               elisp-demos
+               epkg
+               expand-region
+               fuck
+               goto-line-preview
+               keycast
+               lsp-bridge
+               magit-delta
+               magit-section
+               mermaid-mode
+               multiple-cursors
+               nov
+               nov-xwidget
+               olivetti
+               org-similarity
+               origami
+               pangu-spacing
+               rfc-mode
+               semantic-mode
+               shrface
+               sis
+               solarized-theme
+               subed
+               symbol-overlay
+               ts-fold
+               wucuo
+               all-the-icons-dired
+               doom-modeline
+               ace-window
+               moom
+               el-fetch
+               exec-path-from-shell
+               applescript-mode
+               yasnippet
+               osx-dictionary
+               free-keys
+               graphviz-dot-mode
+               org-sticky-header
+               topsy
+               highlight-parentheses
+               goggles
+               pyim-basedict
+               pyim
+               deadgrep
+               helpful
+               markdown-mode
+               embark
+               ace-pinyin
+               vertico-posframe
+               org-auto-tangle
+               benchmark-init
+               org-roam-ui
+               org-roam
+               marginalia
+               orderless
+               vertico
+               )
+             )
+#+end_src
+
+*** initialize
 
 #+begin_src emacs-lisp :tangle yes
 ;; package.el: mirror 插件镜像
@@ -984,9 +1875,9 @@ occurence of CHAR."
 
 ;; (with-temp-file "/tmp/g.dot"
 (with-temp-file (expand-file-name
-                       "assets/emacs-package-dependency.dot"
-                       (concat user-emacs-directory)
-                       )
+                 "assets/emacs-package-dependency.dot"
+                 (concat user-emacs-directory)
+                 )
   (insert "digraph G {")
   (insert (mapconcat #'identity
                      (cl-loop for pkg-reqs in info
@@ -1249,14 +2140,24 @@ occurence of CHAR."
 
 * Package (ELPA/MELPA)
 
-** use-package
+
+** package database
 
 #+begin_src emacs-lisp :tangle yes
-;; use-package
+;; package database: epkg + epkgs
 ;; {{{
-(require 'use-package-ensure)
-(setq use-package-always-ensure t)
-(setq use-package-verbose t)
+(setq epkg-repository "~/Documents/GitHub/epkgs")
+(setq package-list-unversioned t) ;; unversioned packages(ibuffer and so on)
+;; 怎样快速找到 elpa 目录下那些重复的包 - Emacs China
+;; https://emacs-china.org/t/topic/4244
+(defun list-packages-and-versions ()
+  "Returns a list of all installed packages and their versions"
+  (interactive)
+  (mapcar
+   (lambda (pkg)
+     `(,pkg ,(package-desc-version
+              (cadr (assq pkg package-alist)))))
+   package-activated-list))
 ;; }}}
 #+end_src
 
@@ -1269,6 +2170,286 @@ occurence of CHAR."
   (exec-path-from-shell-initialize))
 (when (daemonp)
   (exec-path-from-shell-initialize))
+;; }}}
+#+end_src
+
+** 快捷键
+
+*** which-key + posframe
+
+#+begin_src emacs-lisp :tangle yes
+(use-package which-key
+  :defer 1
+  :config
+  (which-key-mode)
+  (setq which-key-idle-secondary-delay 0.5)
+  )
+#+end_src
+
+*** free-keys
+
+#+begin_src emacs-lisp :tangle yes
+;; free-keys
+;; {{{
+(require 'free-keys)
+(setq free-keys-modifiers '(
+                            ""
+                            ;; "A"
+                            "C"
+                            "H"
+                            "M"
+                            "S"
+                            "s"
+                            ;; "A-C"
+                            ;; "A-H"
+                            ;; "A-M"
+                            ;; "A-S"
+                            ;; "A-s"
+                            "C-c H"
+                            "C-H"
+                            "C-M"
+                            ;; "C-S"
+                            "C-s"
+                            ;; "M-S"
+                            ;; "M-s"
+                            "s-H"
+                            ;; "S-s"
+                            ;; "C-M-S"
+                            ;; "C-M-s"
+                            "C-c"
+                            "C-x" ))
+;; }}}
+#+end_src
+
+** Macro & 多光标
+
+*** multiple-cursors
+
+#+begin_src emacs-lisp :tangle yes
+;; multiple-cursors
+;; {{{
+;; multiple-cursors-mode-enabled-hook
+;; multiple-cursors-mode-disabled-hook
+(use-package multiple-cursors
+  :bind (
+         ("H-c H-a" . mc/edit-beginnings-of-lines)
+         ("H-c H-e" . mc/edit-ends-of-lines)
+         ("H-c H-c" . mc/edit-lines)
+         ("H-c H-n" . mc/mark-next-like-this)
+         ("H-c H-p" . mc/mark-previous-like-this)
+         ("H-c H-h" . mc/mark-all-like-this)
+         ("H-c H-r" . set-rectangular-region-anchor)
+         )
+  )
+
+(add-hook 'activate-mark-hook '(lambda ()
+                                 (local-set-key
+                                  (kbd "C-@")
+                                  'set-rectangular-region-anchor)
+                                 ))
+(add-hook 'deactivate-mark-hook '(lambda ()
+                                   (local-unset-key
+                                    (kbd "C-@"))
+                                   ))
+;; }}}
+#+end_src
+
+*** macrostep
+
+https://github.com/joddie/macrostep
+
+*** markmacro
+
+** 光标跳转
+
+#+begin_src emacs-lisp :tangle yes
+;; avy
+;; {{{
+;; https://karthinks.com/software/avy-can-do-anything
+(keymap-global-set "C-;"     #'avy-goto-char)
+(keymap-global-set "C-'"     #'avy-goto-char-2)
+(keymap-global-set "M-g f"   #'avy-goto-line)
+(keymap-global-set "M-g w"   #'avy-goto-word-1)
+(keymap-global-set "M-g e"   #'avy-goto-word-0)
+(keymap-global-set "C-c C-j" #'avy-resume)
+;; }}}
+#+end_src
+
+
+** 文件管理
+
+*** dired-hacks
+
+https://github.com/Fuco1/dired-hacks
+
+*** dired-recent
+
+*** dired-narrow
+
+*** dired-isearch
+
+** git: Magit
+
+#+begin_src emacs-lisp :tangle yes
+;; difftastic + magit
+;; {{{
+;; (with-eval-after-load 'magit
+(use-package magit
+  ;; :defer 2
+  :bind (("C-c v g" . magit-status)
+         ("H-m H-m" . magit-status))
+  :config
+  (defun my/magit--with-difftastic (buffer command)
+    "Run COMMAND with GIT_EXTERNAL_DIFF=difft then show result in BUFFER."
+    (let ((process-environment
+           (cons (concat "GIT_EXTERNAL_DIFF=difft --width="
+                         (number-to-string (frame-width)))
+                 process-environment)))
+      ;; Clear the result buffer (we might regenerate a diff, e.g., for
+      ;; the current changes in our working directory).
+      (with-current-buffer buffer
+        (setq buffer-read-only nil)
+        (erase-buffer))
+      ;; Now spawn a process calling the git COMMAND.
+      (make-process
+       :name (buffer-name buffer)
+       :buffer buffer
+       :command command
+       ;; Don't query for running processes when emacs is quit.
+       :noquery t
+       ;; Show the result buffer once the process has finished.
+       :sentinel (lambda (proc event)
+                   (when (eq (process-status proc) 'exit)
+                     (with-current-buffer (process-buffer proc)
+                       (goto-char (point-min))
+                       (ansi-color-apply-on-region (point-min) (point-max))
+                       (setq buffer-read-only t)
+                       (view-mode)
+                       (end-of-line)
+                       ;; difftastic diffs are usually 2-column side-by-side,
+                       ;; so ensure our window is wide enough.
+                       (let ((width (current-column)))
+                         (while (zerop (forward-line 1))
+                           (end-of-line)
+                           (setq width (max (current-column) width)))
+                         ;; Add column size of fringes
+                         (setq width (+ width
+                                        (fringe-columns 'left)
+                                        (fringe-columns 'right)))
+                         (goto-char (point-min))
+                         (pop-to-buffer
+                          (current-buffer)
+                          `(;; If the buffer is that wide that splitting the frame in
+                            ;; two side-by-side windows would result in less than
+                            ;; 80 columns left, ensure it's shown at the bottom.
+                            ,(when (> 80 (- (frame-width) width))
+                               #'display-buffer-at-bottom)
+                            (window-width
+                             . ,(min width (frame-width))))))))))))
+  (defun my/magit-show-with-difftastic (rev)
+    "Show the result of \"git show REV\" with GIT_EXTERNAL_DIFF=difft."
+    (interactive
+     (list (or
+            ;; If REV is given, just use it.
+            (when (boundp 'rev) rev)
+            ;; If not invoked with prefix arg, try to guess the REV from
+            ;; point's position.
+            (and (not current-prefix-arg)
+                 (or (magit-thing-at-point 'git-revision t)
+                     (magit-branch-or-commit-at-point)))
+            ;; Otherwise, query the user.
+            (magit-read-branch-or-commit "Revision"))))
+    (if (not rev)
+        (error "No revision specified")
+      (my/magit--with-difftastic
+       (get-buffer-create (concat "*git show difftastic " rev "*"))
+       (list "git" "--no-pager" "show" "--ext-diff" rev))))
+  (defun my/magit-diff-with-difftastic (arg)
+    "Show the result of \"git diff ARG\" with GIT_EXTERNAL_DIFF=difft."
+    (interactive
+     (list (or
+            ;; If RANGE is given, just use it.
+            (when (boundp 'range) range)
+            ;; If prefix arg is given, query the user.
+            (and current-prefix-arg
+                 (magit-diff-read-range-or-commit "Range"))
+            ;; Otherwise, auto-guess based on position of point, e.g., based on
+            ;; if we are in the Staged or Unstaged section.
+            (pcase (magit-diff--dwim)
+              ('unmerged (error "unmerged is not yet implemented"))
+              ('unstaged nil)
+              ('staged "--cached")
+              (`(stash . ,value) (error "stash is not yet implemented"))
+              (`(commit . ,value) (format "%s^..%s" value value))
+              ((and range (pred stringp)) range)
+              (_ (magit-diff-read-range-or-commit "Range/Commit"))))))
+    (let ((name (concat "*git diff difftastic"
+                        (if arg (concat " " arg) "")
+                        "*")))
+      (my/magit--with-difftastic
+       (get-buffer-create name)
+       `("git" "--no-pager" "diff" "--ext-diff" ,@(when arg (list arg))))))
+  (transient-define-prefix my/magit-aux-commands ()
+    "My personal auxiliary magit commands."
+    ["Auxiliary commands"
+     ("d" "Difftastic Diff (dwim)" my/magit-diff-with-difftastic)
+     ("s" "Difftastic Show" my/magit-show-with-difftastic)])
+  (transient-append-suffix 'magit-dispatch "!"
+    '("#" "My Magit Cmds" my/magit-aux-commands))
+
+  (define-key magit-status-mode-map (kbd "#") #'my/magit-aux-commands)
+  )
+;; }}}
+
+;; ;; delta + magit + magit-delta
+;; ;; {{{
+;; ;; https://scripter.co/using-git-delta-with-magit/
+;; (use-package magit-delta
+;;  :hook (magit-mode . magit-delta-mode)
+;;   )
+;; (add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1)))
+;; ;; }}}
+#+end_src
+
+** 搜索工具
+
+*** ripgrep: deadgrep
+
+#+begin_src emacs-lisp :tangle yes
+;; deadgrep
+;; {{{
+(use-package deadgrep
+  :defer t
+  :bind*
+  (("C-c r" . deadgrep)
+   ("C-c f" . grep-org-files))
+  :config
+  (defun grep-org-files (words)
+    (interactive "sSearch org files: ")
+    (let ((default-directory org-roam-directory)
+          (deadgrep--file-type '(glob . "*.org"))
+          (deadgrep--context '(1 . 1))
+          (deadgrep--search-type 'regexp))
+      (deadgrep words)
+      )
+    )
+  )
+;; }}}
+#+end_src
+
+
+
+*** khoj
+
+Natural Language Search
+
+#+begin_src emacs-lisp :tangle yes
+;; khoj
+;; {{{
+;; Install Khoj Package from MELPA Stable
+(use-package khoj
+  :defer t
+  :bind ("C-c n s" . 'khoj))
 ;; }}}
 #+end_src
 
@@ -1288,7 +2469,7 @@ occurence of CHAR."
 ;; ace-pinyin
 ;; {{{
 (use-package ace-pinyin
-  ;; :defer 1
+  :defer 1
   :config
   (setq ace-pinyin-use-avy t)
   (ace-pinyin-global-mode +1)
@@ -1319,8 +2500,8 @@ occurence of CHAR."
 (keymap-set pyim-mode-map "+" 'pyim-page-next-page)
 (keymap-global-set "H-e" 'toggle-input-method)
 (keymap-global-set "H-b" 'pyim-backward-word)
-;; (keymap-set [remap forward-word] 'pyim-forward-word)
-;; (keymap-set [remap backward-word] 'pyim-backward-word)
+;; (keymap-global-set [remap forward-word] #'pyim-forward-word)
+;; (keymap-global-set [remap backward-word] #'pyim-backward-word)
 (keymap-global-set "H-f" 'pyim-forward-word)
 ;; 金手指设置，可以将光标处的编码，比如：拼音字符串，转换为中文。
 (keymap-global-set "H-j" #'pyim-convert-string-at-point)
@@ -1328,7 +2509,8 @@ occurence of CHAR."
 (keymap-set minibuffer-local-map "H-c" #'pyim-cregexp-convert-at-point)
 (pyim-default-scheme 'quanpin)
 ;; (pyim-isearch-mode 1) ;; 开启代码搜索中文功能（比如拼音，五笔码等）
-;; cursor
+;; ;
+                                        ; cursor
 (setq pyim-indicator-list (list #'my-pyim-indicator-with-cursor-color #'pyim-indicator-with-modeline))
 
 (defun my-pyim-indicator-with-cursor-color (input-method chinese-input-p)
@@ -1416,7 +2598,7 @@ occurence of CHAR."
 ;; pangu-spacing
 ;; {{{
 (use-package pangu-spacing
-  ;; :defer 1
+  :defer 1
   :config
   (global-pangu-spacing-mode 1)
   (setq pangu-spacing-real-insert-separtor t)
@@ -1663,7 +2845,26 @@ binky-mode
 ;; }}}
 #+end_src
 
+** 剪贴板 kill-ring/clipboard
+
+#+begin_src emacs-lisp :tangle no
+(use-package browse-kill-ring
+  :load-path  (lambda ()
+                (expand-file-name
+                 (concat
+                  my-user-emacs-directory
+                  "contrib/")
+                 )
+                )
+                                        ;:load-path (concat my-user-emacs-directory "contrib/")
+  :config
+  (browse-kill-ring-default-keybindings); map M-y to browse-kill-ring
+  )
+#+end_src
+
 ** snippet
+
+*** YASnippet
 
 #+begin_src emacs-lisp :tangle yes
 ;; yasnippet
@@ -1675,79 +2876,27 @@ binky-mode
 ;; }}}
 #+end_src
 
-** 搜索工具
+*** yankpad
 
-*** ripgrep: deadgrep
-
-#+begin_src emacs-lisp :tangle yes
-;; deadgrep
-;; {{{
-(use-package deadgrep
-  :bind*
-  (("C-c r" . deadgrep)
-   ("C-c f" . grep-org-files))
+#+begin_src emacs-lisp :tangle no
+(use-package yankpad
+  :ensure t
+  ;; :defer 10
+  :init
+  (setq yankpad-file (concat user-emacs-directory "yankpad.org"))
+  :bind (:map my-map ("SPC" . yankpad-insert)
+              ("y" . yankpad-expand)
+              )
   :config
-  (defun grep-org-files (words)
-    (interactive "sSearch org files: ")
-    (let ((default-directory org-roam-directory)
-          (deadgrep--file-type '(glob . "*.org"))
-          (deadgrep--context '(1 . 1))
-          (deadgrep--search-type 'regexp))
-      (deadgrep words)
-      )
-    )
-  )
-;; }}}
+  (bind-key "<f7>" 'yankpad-map)
+  (bind-key "<f12>" 'yankpad-expand)
+  ;; If you want to complete snippets using company-mode
+  (add-to-list 'company-backends #'company-yankpad)
+  ;; If you want to expand snippets with hippie-expand
+  (add-to-list 'hippie-expand-try-functions-list #'yankpad-expand))
 #+end_src
 
-
-
-*** khoj
-
-Natural Language Search
-
-#+begin_src emacs-lisp :tangle yes
-;; khoj
-;; {{{
-;; Install Khoj Package from MELPA Stable
-(use-package khoj
-  :bind ("C-c n s" . 'khoj))
-;; }}}
-#+end_src
-
-** 快捷键
-
-#+begin_src emacs-lisp :tangle yes
-;; free-keys
-;; {{{
-(require 'free-keys)
-(setq free-keys-modifiers '(
-                            ""
-                            ;; "A"
-                            "C"
-                            "H"
-                            "M"
-                            "S"
-                            "s"
-                            ;; "A-C"
-                            ;; "A-H"
-                            ;; "A-M"
-                            ;; "A-S"
-                            ;; "A-s"
-                            "C-H"
-                            "C-M"
-                            ;; "C-S"
-                            "C-s"
-                            ;; "M-S"
-                            ;; "M-s"
-                            "s-H"
-                            ;; "S-s"
-                            ;; "C-M-S"
-                            ;; "C-M-s"
-                            "C-c"
-                            "C-x" ))
-;; }}}
-#+end_src
+*** Tempel
 
 ** 帮助※文档
 
@@ -1814,7 +2963,11 @@ Natural Language Search
 #+begin_src emacs-lisp :tangle yes
 ;; diff-hl
 ;; {{{
-(global-diff-hl-mode)
+(use-package diff-hl
+  :defer 2
+  :config
+  (global-diff-hl-mode)
+  )
 ;; (global-git-gutter-mode +1) ; BUG when deleting folded 17000+lines
 
 ;; }}}
@@ -1878,6 +3031,7 @@ Natural Language Search
   (doom-modeline-mode)
   (setq doom-modeline-height 18)
   (setq doom-modeline-window-width-limit 85)
+  (setq doom-modeline-icon (display-graphic-p))
   (setq find-file-visit-truename t)
   (setq doom-modeline-highlight-modified-buffer-name t)
   (setq doom-modeline-project-detection 'auto) ;auto/project
@@ -1901,6 +3055,8 @@ Natural Language Search
 
 ** 折叠
 
+*** origami
+
 #+begin_src emacs-lisp :tangle yes
 ;; fold: origami
 ;; {{{
@@ -1912,36 +3068,9 @@ Natural Language Search
 ;; }}}
 #+end_src
 
-** 多光标
+*** hideshow-orgmode
 
-#+begin_src emacs-lisp :tangle yes
-;; multiple-cursors
-;; {{{
-;; multiple-cursors-mode-enabled-hook
-;; multiple-cursors-mode-disabled-hook
-(use-package multiple-cursors
-  :bind (
-         ("H-c H-a" . mc/edit-beginnings-of-lines)
-         ("H-c H-e" . mc/edit-ends-of-lines)
-         ("H-c H-c" . mc/edit-lines)
-         ("H-c H-n" . mc/mark-next-like-this)
-         ("H-c H-p" . mc/mark-previous-like-this)
-         ("H-c H-h" . mc/mark-all-like-this)
-         ("H-c H-r" . set-rectangular-region-anchor)
-         )
-  )
-
-(add-hook 'activate-mark-hook '(lambda ()
-                                 (local-set-key
-                                  (kbd "C-@")
-                                  'set-rectangular-region-anchor)
-                                 ))
-(add-hook 'deactivate-mark-hook '(lambda ()
-                                   (local-unset-key
-                                    (kbd "C-@"))
-                                   ))
-;; }}}
-#+end_src
+https://github.com/logangrado/hideshow-orgmode
 
 ** 选择
 
@@ -2002,163 +3131,6 @@ Natural Language Search
 ;; }}}
 #+end_src
 
-** git: Magit
-
-#+begin_src emacs-lisp :tangle yes
-;; difftastic + magit
-;; {{{
-;; (with-eval-after-load 'magit
-(use-package magit
-  ;; :defer 2
-  :bind ("C-c v g" . magit-status)
-  :config
-  (defun my/magit--with-difftastic (buffer command)
-    "Run COMMAND with GIT_EXTERNAL_DIFF=difft then show result in BUFFER."
-    (let ((process-environment
-           (cons (concat "GIT_EXTERNAL_DIFF=difft --width="
-                         (number-to-string (frame-width)))
-                 process-environment)))
-      ;; Clear the result buffer (we might regenerate a diff, e.g., for
-      ;; the current changes in our working directory).
-      (with-current-buffer buffer
-        (setq buffer-read-only nil)
-        (erase-buffer))
-      ;; Now spawn a process calling the git COMMAND.
-      (make-process
-       :name (buffer-name buffer)
-       :buffer buffer
-       :command command
-       ;; Don't query for running processes when emacs is quit.
-       :noquery t
-       ;; Show the result buffer once the process has finished.
-       :sentinel (lambda (proc event)
-                   (when (eq (process-status proc) 'exit)
-                     (with-current-buffer (process-buffer proc)
-                       (goto-char (point-min))
-                       (ansi-color-apply-on-region (point-min) (point-max))
-                       (setq buffer-read-only t)
-                       (view-mode)
-                       (end-of-line)
-                       ;; difftastic diffs are usually 2-column side-by-side,
-                       ;; so ensure our window is wide enough.
-                       (let ((width (current-column)))
-                         (while (zerop (forward-line 1))
-                           (end-of-line)
-                           (setq width (max (current-column) width)))
-                         ;; Add column size of fringes
-                         (setq width (+ width
-                                        (fringe-columns 'left)
-                                        (fringe-columns 'right)))
-                         (goto-char (point-min))
-                         (pop-to-buffer
-                          (current-buffer)
-                          `(;; If the buffer is that wide that splitting the frame in
-                            ;; two side-by-side windows would result in less than
-                            ;; 80 columns left, ensure it's shown at the bottom.
-                            ,(when (> 80 (- (frame-width) width))
-                               #'display-buffer-at-bottom)
-                            (window-width
-                             . ,(min width (frame-width))))))))))))
-  (defun my/magit-show-with-difftastic (rev)
-    "Show the result of \"git show REV\" with GIT_EXTERNAL_DIFF=difft."
-    (interactive
-     (list (or
-            ;; If REV is given, just use it.
-            (when (boundp 'rev) rev)
-            ;; If not invoked with prefix arg, try to guess the REV from
-            ;; point's position.
-            (and (not current-prefix-arg)
-                 (or (magit-thing-at-point 'git-revision t)
-                     (magit-branch-or-commit-at-point)))
-            ;; Otherwise, query the user.
-            (magit-read-branch-or-commit "Revision"))))
-    (if (not rev)
-        (error "No revision specified")
-      (my/magit--with-difftastic
-       (get-buffer-create (concat "*git show difftastic " rev "*"))
-       (list "git" "--no-pager" "show" "--ext-diff" rev))))
-  (defun my/magit-diff-with-difftastic (arg)
-    "Show the result of \"git diff ARG\" with GIT_EXTERNAL_DIFF=difft."
-    (interactive
-     (list (or
-            ;; If RANGE is given, just use it.
-            (when (boundp 'range) range)
-            ;; If prefix arg is given, query the user.
-            (and current-prefix-arg
-                 (magit-diff-read-range-or-commit "Range"))
-            ;; Otherwise, auto-guess based on position of point, e.g., based on
-            ;; if we are in the Staged or Unstaged section.
-            (pcase (magit-diff--dwim)
-              ('unmerged (error "unmerged is not yet implemented"))
-              ('unstaged nil)
-              ('staged "--cached")
-              (`(stash . ,value) (error "stash is not yet implemented"))
-              (`(commit . ,value) (format "%s^..%s" value value))
-              ((and range (pred stringp)) range)
-              (_ (magit-diff-read-range-or-commit "Range/Commit"))))))
-    (let ((name (concat "*git diff difftastic"
-                        (if arg (concat " " arg) "")
-                        "*")))
-      (my/magit--with-difftastic
-       (get-buffer-create name)
-       `("git" "--no-pager" "diff" "--ext-diff" ,@(when arg (list arg))))))
-  (transient-define-prefix my/magit-aux-commands ()
-    "My personal auxiliary magit commands."
-    ["Auxiliary commands"
-     ("d" "Difftastic Diff (dwim)" my/magit-diff-with-difftastic)
-     ("s" "Difftastic Show" my/magit-show-with-difftastic)])
-  (transient-append-suffix 'magit-dispatch "!"
-    '("#" "My Magit Cmds" my/magit-aux-commands))
-
-  (define-key magit-status-mode-map (kbd "#") #'my/magit-aux-commands)
-  )
-;; }}}
-
-;; ;; delta + magit + magit-delta
-;; ;; {{{
-;; ;; https://scripter.co/using-git-delta-with-magit/
-;; (use-package magit-delta
-;;  :hook (magit-mode . magit-delta-mode)
-;;   )
-;; (add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1)))
-;; ;; }}}
-#+end_src
-
-** package database
-
-#+begin_src emacs-lisp :tangle yes
-;; package database: epkg + epkgs
-;; {{{
-(setq epkg-repository "~/Documents/GitHub/epkgs")
-(setq package-list-unversioned t) ;; unversioned packages(ibuffer and so on)
-;; 怎样快速找到 elpa 目录下那些重复的包 - Emacs China
-;; https://emacs-china.org/t/topic/4244
-(defun list-packages-and-versions ()
-  "Returns a list of all installed packages and their versions"
-  (interactive)
-  (mapcar
-   (lambda (pkg)
-     `(,pkg ,(package-desc-version
-              (cadr (assq pkg package-alist)))))
-   package-activated-list))
-;; }}}
-#+end_src
-
-** 光标跳转
-
-#+begin_src emacs-lisp :tangle yes
-;; avy
-;; {{{
-;; https://karthinks.com/software/avy-can-do-anything
-(keymap-global-set "C-;"     #'avy-goto-char)
-(keymap-global-set "C-'"     #'avy-goto-char-2)
-(keymap-global-set "M-g f"   #'avy-goto-line)
-(keymap-global-set "M-g w"   #'avy-goto-word-1)
-(keymap-global-set "M-g e"   #'avy-goto-word-0)
-(keymap-global-set "C-c C-j" #'avy-resume)
-;; }}}
-#+end_src
-
 ** consult
 
 #+begin_src emacs-lisp :tangle yes
@@ -2173,7 +3145,7 @@ Natural Language Search
          ("C-c k" . consult-kmacro)
          ;; C-x bindings (ctl-x-map)
          ("C-x M-:" . consult-complex-command) ;; orig. repeat-complex-command
-         ("C-x b" . consult-buffer)            ;; orig. switch-to-buffer
+         ;; ("C-x b" . consult-buffer)            ;; orig. switch-to-buffer
          ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
          ("C-x 5 b" . consult-buffer-other-frame) ;; orig. switch-to-buffer-other-frame
          ("C-x r b" . consult-bookmark)           ;; orig. bookmark-jump
@@ -2419,6 +3391,55 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 
 
 
+** org-modern
+
+#+begin_src emacs-lisp :tangle yes
+(use-package org-modern
+  :after org
+  ;; :hook (org-mode . global-org-modern-mode)
+  :config
+  (setq
+   org-auto-align-tags nil
+   org-tags-column 0
+   org-catch-invisible-edits 'show-and-error
+   org-special-ctrl-a/e t
+   org-insert-heading-respect-content t
+
+   ;; Org styling, hide markup etc.
+   org-hide-emphasis-markers t
+   org-pretty-entities t
+   org-ellipsis "…"
+
+   ;; Agenda styling
+   org-agenda-tags-column 0
+   org-agenda-block-separator ?─
+   org-agenda-time-grid
+   '((daily today require-timed)
+     (800 1000 1200 1400 1600 1800 2000)
+     " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+   org-agenda-current-time-string
+   "⭠ now ─────────────────────────────────────────────────")
+
+  (if (display-graphic-p)
+      (setq org-modern-table t)
+    (setq org-modern-table nil)
+    )
+  (global-org-modern-mode)
+  )
+#+end_src
+
+
+** org-crypt
+
+#+begin_src emacs-lisp :tangle no
+(when (my-eval-if-binary-or-warn "gpg")
+  (require 'org-crypt)
+#+end_src
+
+** org-import-calendar
+
+
+
 ** org-roam
 
 *** basic config
@@ -2428,6 +3449,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; {{{
 (use-package org-roam
   ;; :defer 1
+  :after org
   :bind (
          ("C-c n a" . org-roam-alias-add)
          ("C-c n c" . org-roam-capture)
@@ -2794,7 +3816,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; consult-org-roam
 ;; {{{
 (use-package consult-org-roam
-  :after org-roam
+  :after (org-roam consult)
   :init
   (require 'consult-org-roam)
   ;; Activate the minor mode
@@ -2859,6 +3881,13 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; }}}
 #+end_src
 
+
+** org-ref
+
+** org-mind-map
+
+[[https://github.com/the-ted/org-mind-map][the-ted/org-mind-map]]: This is an emacs package that creates graphviz directed graphs.
+
 ** markdown
 
 #+begin_src emacs-lisp :tangle yes
@@ -2886,7 +3915,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; RFC
 ;; {{{
 (use-package rfc-mode
-  ;; :defer t
+  :defer t
   :config
   (setq rfc-mode-directory (expand-file-name "~/Documents/GitHub/RFC-all/txt/"))
   )
@@ -2899,35 +3928,42 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; auto-dark
 ;; {{{
 (use-package auto-dark
-  :init (auto-dark-mode t))
+  :init (auto-dark-mode t)
+  :config
+  (setq auto-dark-allow-osascript t
+        auto-dark-dark-theme 'solarized-dark)
+  )
 ;; }}}
 #+end_src
 
 ** frame 管理
 
+*** moom
+
 #+begin_src emacs-lisp :tangle yes
 ;; moom + transient
 ;; {{{
-;; (with-suppressed-warnings '(void-function transient-prefix)) ;FIXME
-;; (add-to-list 'warning-suppress-types '((void-function transient-prefix)))
-;; (use-package moom
-;;   :ensure nil
-;;   ;; :if (memq window-system '(mac ns x))
-;;   ;; (keymap-global-set "" #'moom-font-increase)
-;;   :commands (moom-transient-dispatch moom-transient-config)
-;;   :config
-;;   (require 'moom-transient)
-;;   (setq moom-use-font-module nil)
-;;   (moom-mode 1)
-;;   (moom-transient-hide-cursor) ;; if needed
-;;   ;; (define-key moom-mode-map (kbd "C-c o") #'moom-transient-dispatch)
-;;   (moom-recommended-keybindings '(move fit expand fill font reset undo))
-;;   )
-;;
+(with-suppressed-warnings '(void-function transient-prefix)) ;FIXME
+(add-to-list 'warning-suppress-types '((void-function transient-prefix)))
+(use-package moom
+  :after transcient
+  :ensure nil
+  ;; :if (memq window-system '(mac ns x))
+  ;; (keymap-global-set "" #'moom-font-increase)
+  :commands (moom-transient-dispatch moom-transient-config)
+  :config
+  (require 'moom-transient)
+  (setq moom-use-font-module nil)
+  (moom-mode 1)
+  (moom-transient-hide-cursor) ;; if needed
+  ;; (define-key moom-mode-map (kbd "C-c o") #'moom-transient-dispatch)
+  (moom-recommended-keybindings '(move fit expand fill font reset undo))
+  )
+
 ;; (unless (and (display-graphic-p) (eq system-type 'darwin))
 ;;   (add-hook 'after-init-hook 'moom-mode)
 ;;   )
-;;
+
 ;; (with-eval-after-load "moom"
 
 ;;   (when (require 'moom-transient nil t)
@@ -2935,7 +3971,6 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;;     (define-key moom-mode-map (kbd "C-c o") #'moom-transient-dispatch)
 ;;     )
 ;;   )
-;; )
 ;; }}}
 #+end_src
 
@@ -2944,8 +3979,13 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 #+begin_src emacs-lisp :tangle yes
 ;; {{{ ace-window
 ;; (require 'ace-window)
-(keymap-global-set "H-o" #'ace-window)
-(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+;; (keymap-global-set "H-o" #'ace-window)
+(use-package ace-window
+  :bind
+  ("H-o" . ace-window)
+  :config
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+  )
 ;; }}}
 #+end_src
 
@@ -2957,7 +3997,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 (use-package goto-line-preview
   :bind
   ;; ([remap goto-line] . goto-line-preview)
-  ("H-l" . goto-line-preview)
+  ("C-c H-l" . goto-line-preview)
   )
 ;; }}}
 #+end_src
@@ -3010,6 +4050,8 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; osm: OpenStreetMap
 ;; {{{
 (use-package osm
+  :defer t
+  :after org
   :bind (("C-c m h" . osm-home)
          ("C-c m s" . osm-search)
          ("C-c m v" . osm-server)
@@ -3030,6 +4072,28 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 #+end_src
 
 ** 网页浏览、信息订阅、阅读
+
+*** mybigword
+
+#+begin_src emacs-lisp :tangle yes
+;; mybigword
+;; {{{
+(use-package mybigword
+  :defer t
+  :config
+  (setq mybigword-excluded-words
+        (split-string (with-temp-buffer
+                        (insert-file-contents  (expand-file-name
+                                                "assets/mybigword.txt"
+                                                (concat user-emacs-directory)
+                                                ))
+                        (buffer-string)) "[\r\n]+"))
+  )
+;; mybigword-excluded-words
+;; mybigword-personal-excluded-words
+;; mybigword-upper-limit
+;; }}}
+#+end_src
 
 *** elfeed
 
@@ -3143,7 +4207,53 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 #+end_src
 
 
+*** 速读 speed-reading
+
+https://github.com/zk-phi/spray
+
+#+begin_src emacs-lisp :tangle no
+(use-package spray
+  :ensure nil
+  :defer 110
+  :config ;; executed after loading package
+  :bind (:map my-map ("s" . spray-mode))
+  )
+#+end_src
+
+** 邮件/邮箱
+
+*** notmuch
+
+
+** emacs-everywhere
+
+#+begin_src emacs-lisp :tangle no
+(use-package emacs-everywhere
+  :ensure nil
+  :defer 110
+  :after org
+  :config
+  ;;2022-10-17 "Reddit" is causing an error?;  (setq emacs-everywhere-markdown-windows ("Reddit" "Stack Exchange" "Stack Overflow" "Discord" "Element" "Slack" "HedgeDoc" "HackMD" "Zulip" "Pull Request" "Issue" "Comparing .*\\.\\.\\."))
+  (setq emacs-everywhere-frame-name-format "Emacs Everywhere • C-c C-c • %s — %s")
+  (setq emacs-everywhere-frame-parameters `((name . "emacs-everywhere")
+                                            (width . 100)
+                                            (height . 30)))
+  )
+#+end_src
+
 * Package (Git and elsewhere)
+
+** explain-pause-mode
+
+[[https://github.com/lastquestion/explain-pause-mode][lastquestion/explain-pause-mode: top, but for Emacs.]]
+
+#+begin_src emacs-lisp :tangle yes
+(run-with-idle-timer
+ 1 nil
+ #'(lambda ()
+     (require 'explain-pause-mode)
+     ))
+#+end_src
 
 ** macOS App 交互                                                     :macOS:
 
@@ -3153,11 +4263,13 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 (use-package org-mac-link
   :ensure nil
   :bind (
-         ("H-i" . org-mac-link-get-link)
+         ("H-i H-i" . org-mac-link-get-link)
          )
   )
 ;; }}}
 #+end_src
+
+
 
 ** 快捷键历史记录
 
@@ -3174,10 +4286,10 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 (keyfreq-mode 1)          ;; 启动插件包
 (keyfreq-autosave-mode 1) ;; 自动保存模式
 (setq-default keyfreq-file (expand-file-name
-                       "assets/keyfreq-log"
-                       (concat user-emacs-directory)
-                       )
-	      )
+                            "assets/keyfreq-log"
+                            (concat user-emacs-directory)
+                            )
+              )
 ;; (defun turnon-keyfreq-mode ()
 ;;   "Turn on keyfreq."
 ;;   (interactive)
@@ -3301,6 +4413,95 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; }}}
 #+end_src
 
+** Minibuffer
+
+#+begin_src emacs-lisp :tangle no
+;; minibuffer + aggressive-completion
+;; https://emacs-china.org/t/helm-ivy-selectrum-completions-buffer/17148/44
+;; {{{
+(use-package minibuffer
+  :init
+  (keymap-unset minibuffer-local-completion-map "SPC")
+  :bind
+  (:map completion-list-mode-map
+        ("z" . switch-to-minibuffer))
+  :custom
+  (isearch-allow-scroll t)
+                                        ;(enable-recursive-minibuffers t)
+  (minibuffer-depth-indicate-mode t)
+  (minibuffer-electric-default-mode t)
+  ;; Don't insert completion at point into minibuffer
+  (minibuffer-completion-auto-choose nil)
+  ;; One frame one minibuffer.
+  (minibuffer-follows-selected-frame nil)
+  (read-buffer-completion-ignore-case t)
+  (read-file-name-completion-ignore-case t)
+  (minibuffer-default-prompt-format " [%s]")
+  (minibuffer-prompt-properties
+   '(read-only t cursor-intangible t face minibuffer-prompt))
+  (resize-mini-windows t)
+  (completion-auto-help t)
+  (completion-show-help nil)
+                                        ;(completion-show-inline-help nil)
+  (completion-cycle-threshold nil)
+  ;; `t' `second-tab' `nil'
+  (completion-auto-select 'seond-tab)
+  (completions-detailed t)
+  ;; Ignore cases when complete
+  (completion-ignore-case t)
+  ;; vertical display
+  (completions-format 'one-column)
+  (completions-max-height 7)
+  (completions-sort #'completion:list-sort)
+  :config
+  ;; Hide the mode line of the Completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Completions\\*"
+                 nil
+                 (window-parameters (mode-line-format . none))))
+
+  (defun completion:list-sort (all)
+    "对 `Completions-buffer' 中的补全项进行排序"
+    (let ((hist (minibuffer-history-value)))
+      (thread-first all
+                    (sort (lambda (c1 c2) (< (length c1) (length c2))))
+                    (sort (lambda (c1 c2) (> (length (member c1 hist))
+                                             (length (member c2 hist)))))))))
+
+(use-package all-the-icons-completion
+  :straight t
+  :hook (after-init-hook . all-the-icons-completion-mode))
+
+(use-package aggressive-completion
+  :straight t
+  :bind
+  (:map aggressive-completion-minibuffer-map
+        ("TAB" . completion:auto-select))
+  :hook
+  (after-init-hook . aggressive-completion-mode)
+  :config
+  (add-hook 'aggressive-completion-mode-hook #'completion:disable-auto-select)
+  (defun completion:disable-auto-select ()
+    ;; 避免自动切换至 `Completions-buffer' 中的补全项
+    (setq completion-auto-select nil
+          ;; 禁止 `minibuffer' 中的补全
+          completion-cycle-threshold nil))
+
+  (defun completion:auto-select ()
+    "`TAB' 键可切换至 `Completions-buffer' 中的补全项"
+    (interactive)
+    (let ((completion-auto-select t))
+      (minibuffer-complete))))
+
+(use-package orderless
+  :straight t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-defaults nil)
+  (completion-category-overrides '((file (styles basic partial-completion)))))
+;; }}}
+#+end_src
+
 ** LSP
 
 #+begin_src emacs-lisp :tangle yes
@@ -3374,6 +4575,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 
 ** 折叠
 
+
 #+begin_src emacs-lisp :tangle yes
 ;; ts-fold
 ;; {{{
@@ -3392,6 +4594,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; subed: subtitle edit
 ;; {{{
 (use-package subed
+  :defer t
   :ensure nil
   :config
   ;; Disable automatic movement of point by default
@@ -3477,4 +4680,20 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 #+end_src
 
 
+* Software
+
+** 快捷指令
+
+** Alfred
+
+
+
 * Misc
+
+[[https://github.com/HerculeWu/HubbleEmacs/blob/main/Emacs.org][HerculeWu/HubbleEmacs/Emacs.org]]
+
+[[https://github.com/novoid/dot-emacs/blob/master/config.org][novoid/dot-emacs/config.org]]
+
+[[https://karl-voit.at/2017/06/03/emacs-org/][My Emacs Configuration In Org-mode]]
+
+[[https://emacs-china.org/t/org-mode-python/16834][org-mode 记录学习时间，用python数据可视化 - Emacs China]]

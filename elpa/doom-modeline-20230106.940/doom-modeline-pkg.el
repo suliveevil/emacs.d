@@ -1,8 +1,8 @@
-(define-package "doom-modeline" "20230103.643" "A minimal and modern mode-line"
+(define-package "doom-modeline" "20230106.940" "A minimal and modern mode-line"
   '((emacs "25.1")
     (compat "28.1.1.1")
     (shrink-path "0.2.0"))
-  :commit "90f79647260e1f81d334ab2d276cf7444e6e320c" :authors
+  :commit "a3f65d25b5a9002d455ab3577451eca798f167e5" :authors
   '(("Vincent Zhang" . "seagle0128@gmail.com"))
   :maintainer
   '("Vincent Zhang" . "seagle0128@gmail.com")

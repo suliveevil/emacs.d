@@ -5,11 +5,13 @@
 #+title: early-init.el config
 #+auto_tangle: t
 
+sibling file: [[file:init.org][init.el config]]
+
 * early-init
 
 每个代码块都需要单独声明才能 tangle 成功
 
-** file header
+** File header
 
 #+begin_src emacs-lisp :tangle yes
   ;; -*- coding: utf-8; lexical-binding: t; -*-
@@ -25,7 +27,7 @@
 #+begin_src emacs-lisp :tangle no
   ;; Increase the GC threshold for faster startup
   ;; The default is 800 kilobytes.  Measured in bytes.
-  (setq gc-cons-threshold (* 1024 1024 500)) ;; 500 MiB
+  (setq gc-cons-threshold (* 500 1024 1024)) ;; 500 MiB
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
@@ -38,9 +40,9 @@
 #+end_src
 
 
-** profile
+** Profile
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   ;; Profile emacs startup
   (add-hook 'emacs-startup-hook
             (lambda ()
@@ -112,7 +114,7 @@
   ;; }}}
 #+end_src
 
-** startup
+** Startup
 
 #+begin_src emacs-lisp :tangle yes
   ;; startup
@@ -132,7 +134,7 @@
 #+end_src
 
 
-** backtrace & debug: warning error
+** Backtrace & debug: warning error
 
 #+begin_src emacs-lisp :tangle yes
   ;; debug warning and error
@@ -172,30 +174,30 @@
 ** encoding and locale
 
 #+begin_src emacs-lisp :tangle yes
-  ;; encoding: prefer UTF-8 everywhere
-  ;; {{{
-  ;; [hick/emacs-chinese: Emacs 相关中文问题以及解决方案](https://github.com/hick/emacs-chinese)
-  (set-charset-priority 'unicode)
-  (set-language-environment               "UTF-8")     ;; System default coding
-  (prefer-coding-system                   'utf-8)      ;; prefer
-  (set-buffer-file-coding-system          'utf-8-unix) ;;
-  (set-charset-priority                   'unicode)    ;;
-  (set-clipboard-coding-system            'utf-8-unix) ;; clipboard
-  (set-default-coding-systems             'utf-8) ;; buffer/file: 打开文件时的默认编码
-  (set-file-name-coding-system            'utf-8-unix)    ;; unix/linux/macos
-  (set-keyboard-coding-system             'utf-8-unix)    ;; keyboard
-  (set-next-selection-coding-system       'utf-8-unix)    ;; selection
-  (set-selection-coding-system            'utf-8)         ;; selection
-  (set-terminal-coding-system             'utf-8-unix)            ;; terminal
-  (setq coding-system-for-read            'utf-8)                 ;;
-  (setq default-buffer-file-coding-system 'utf-8)                         ;;
-  (setq locale-coding-system              'utf-8) ;; local
-  ;; }}}
+;; encoding: prefer UTF-8 everywhere
+;; {{{
+;; [hick/emacs-chinese: Emacs 相关中文问题以及解决方案](https://github.com/hick/emacs-chinese)
+(set-charset-priority 'unicode)
+(set-language-environment               "UTF-8")     ;; System default coding
+(prefer-coding-system                   'utf-8)      ;; prefer
+(set-buffer-file-coding-system          'utf-8-unix) ;;
+(set-charset-priority                   'unicode)    ;;
+(set-clipboard-coding-system            'utf-8)      ;; clipboard
+(set-default-coding-systems             'utf-8)      ;; buffer/file: 打开文件时的默认编码
+(set-file-name-coding-system            'utf-8-unix) ;; unix/linux/macos
+(set-keyboard-coding-system             'utf-8-unix) ;; keyboard
+(set-next-selection-coding-system       'utf-8-unix) ;; selection
+(set-selection-coding-system            'utf-8)      ;; selection
+(set-terminal-coding-system             'utf-8-unix) ;; terminal
+(setq coding-system-for-read            'utf-8)      ;;
+(setq default-buffer-file-coding-system 'utf-8)      ;;
+(setq locale-coding-system              'utf-8)      ;; local
+;; }}}
 
-  ;; locale
-  ;; {{{
-  (setq system-time-locale "C")
-  ;; }}}
+;; locale
+;; {{{
+(setq system-time-locale "C")
+;; }}}
 #+end_src
 
 ** Version Control & symlink
@@ -206,6 +208,15 @@
 
 
 ** keymap & keybinding
+
+*** unset default keymap
+
+#+begin_src emacs-lisp :tangle no
+;;   \C-v   scroll up
+;;   \C-t   transpose-chars
+(dolist (key '("\C-v" "\C-t"))
+    (global-unset-key key))
+#+end_src
 
 *** remap Physical keys
 
@@ -231,7 +242,7 @@
 
 *** basic keybinding
 
-| Emacs 命令              | Emacs 键 | 重映射       | 物理按键             | 备注 |
+| Emacs 命令              | Emacs 键  | 重映射       | 物理按键             | 备注 |
 |-------------------------+----------+--------------+----------------------+------|
 | mark-whole-buffer       |          | s-a          | Command+A            | 全选 |
 | kill-ring-save          | M-w      | s-c          | Command+C            | 复制 |
@@ -330,15 +341,6 @@
   ;; }}}
 #+end_src
 
-
-** minibuffer
-
-#+begin_src emacs-lisp :tangle yes
-  ;; minibuffer
-  ;; {{{
-  (setq enable-recursive-minibuffers t)
-  ;; }}}
-#+end_src
 
 ** user name & email
 
@@ -457,6 +459,13 @@
 
   ;; (add-files-to-load-path (expand-file-name "site-lisp" user-emacs-directory))
   ;; }}}
+#+end_src
+
+
+** Emacs Server and Client
+
+#+begin_src emacs-lisp :tangle no
+
 #+end_src
 
 * File End

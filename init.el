@@ -10,6 +10,15 @@
       )
   )
 
+(add-hook 'emacs-lisp-mode-hook 'turn-off-auto-fill)
+
+;; use-package
+;; {{{
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
+(setq use-package-verbose t)
+;; }}}
+
 ;; time
 ;; {{{
 (defun my/date-and-time-iso8601 ()
@@ -19,6 +28,19 @@
 
 (keymap-global-set "C-c D" #'my/date-and-time-iso8601)
 ;; }}}
+
+(defun my/webkit-open-local-file (fpath)
+  (interactive "fEnter file path: ")
+  (when (member (substring fpath -4 nil) '("html" ".pdf" ".mp4"))
+    (xwidget-webkit-browse-url
+     (concat "file://" (expand-file-name fpath)))
+    )
+  )
+
+(defun my/open-microsoft-bing ()
+  (interactive)
+  (xwidget-webkit-browse-url "https://www.bing.com" t)
+  )
 
 ;; font and syntax
 ;; {{{
@@ -86,29 +108,72 @@
 ;; }}}
 
 ;; warn when opening files bigger than 100 MB
-(setq large-file-warning-threshold 100000000)
+(setq large-file-warning-threshold (* 100 1000 1000))
 
 ;; 使 Emacs 自动加载外部修改过的文件
 (global-auto-revert-mode 1)
+
+;; Open file system read-only files as read-only in Emacs as well.
+(setq view-read-only t)
 
 ;; ibuffer
 ;; {{{
 (use-package ibuffer
   :bind ("C-x C-b" . ibuffer)
-  :custom
-  (ibuffer-formats
-   '((mark modified read-only locked " "
-           (name 35 35 :left :elide)
-           " "
-           (size 9 -1 :right)
-           " "
-           (mode 16 16 :left :elide)
-           " " filename-and-process)
-     (mark " "
-           (name 16 -1)
-           " " filename)))
+  ;; :custom
+  ;; (ibuffer-formats
+  ;;  '((mark modified read-only locked " "
+  ;;          (name 35 35 :left :elide)
+  ;;          " "
+  ;;          (size 9 -1 :right)
+  ;;          " "
+  ;;          (mode 16 16 :left :elide)
+  ;;          " " filename-and-process)
+  ;;    (mark " "
+  ;;          (name 16 -1)
+  ;;          " " filename)))
+  :config
+  (setq ibuffer-saved-filter-groups
+        (quote (("default"
+                 ("dired" (mode . dired-mode))
+                 ("emacs" (or
+                           (mode . emacs-lisp-mode)
+                           (name . "^\\*scratch\\*$")
+                           (name . "^\\*Messages\\*$")
+                           ))
+                 ("org" (or (mode . org-mode)
+                            (mode . org-agenda-mode)
+                            (mode . org-src-mode)
+                            ))
+                 ;;               ("erc" (mode . erc-mode))
+
+                 ("planner" (or
+                             (name . "^\\*Calendar\\*$")
+                             (name . "^diary$")
+                             (mode . muse-mode)))
+                 ("PDF"    (mode . pdf-view-mode))
+                 ("python" (mode . python-mode))
+                 ;; ("gnus" (or
+                 ;;          (mode . message-mode)
+                 ;;          (mode . bbdb-mode)
+                 ;;          (mode . mail-mode)
+                 ;;          (mode . gnus-group-mode)
+                 ;;          (mode . gnus-summary-mode)
+                 ;;          (mode . gnus-article-mode)
+                 ;;          (name . "^\\.bbdb$")
+                 ;;          (name . "^\\.newsrc-dribble")))
+                 ))))
+
+  (add-hook 'ibuffer-mode-hook
+            (lambda ()
+              (ibuffer-switch-to-saved-filter-groups "default")))
   )
+
 ;; }}}
+
+(recentf-mode 1)
+(setq recentf-max-menu-items 50)
+(setq recentf-max-saved-items 50)
 
 ;; auto-save: 定期预存，防止停电、系统崩溃等原因造成的数据损失
 ;; {{{
@@ -117,9 +182,9 @@
 
 (add-hook 'after-init-hook 'auto-save-visited-mode) ;; save file when buffer/focus change 自动保存
 (setq
-      auto-save-default t ; auto-save every buffer that visits a file
-      auto-save-timeout 20 ; number of seconds idle time before auto-save (default: 30)
-      auto-save-interval 200 ; number of keystrokes between auto-saves (default: 300)
+ auto-save-default t ; auto-save every buffer that visits a file
+ auto-save-timeout 20 ; number of seconds idle time before auto-save (default: 30)
+ auto-save-interval 200 ; number of keystrokes between auto-saves (default: 300)
  )
 ;; }}}
 
@@ -165,7 +230,7 @@
 (defun my/open-init-file() ;; Emacs init
   (interactive)
   (find-file-other-window user-init-file))
-(keymap-global-set "C-c I" #'my/open-init-file)
+(keymap-global-set "C-c E" #'my/open-init-file)
 
 (defun my/open-init-org() ;; Emacs init
   (interactive)
@@ -176,7 +241,7 @@
     )
    )
   )
-(keymap-global-set "C-c H-i" #'my/open-init-org)
+(keymap-global-set "C-c H-e" #'my/open-init-org)
 ;; (defun open-goku-file()      ;; Emacs early-init
 ;;   (interactive)
 ;;   (find-file "~/.config/karabiner.edn")
@@ -331,6 +396,34 @@ Version 2018-06-18 2021-09-30"
 (keymap-global-set "C-c C-w" #'my/toggle-one-window)
 ;; }}}
 
+(defun my-toggle-vertical-horizontal-split ()
+  "Switch window split from horizontally to vertically, or vice versa.
+
+i.e. change right window to bottom, or change bottom window to right."
+  (interactive)
+  (require 'windmove)
+  (let ((done))
+    (dolist (dirs '((right . down) (down . right)))
+      (unless done
+        (let* ((win (selected-window))
+               (nextdir (car dirs))
+               (neighbour-dir (cdr dirs))
+               (next-win (windmove-find-other-window nextdir win))
+               (neighbour1 (windmove-find-other-window neighbour-dir win))
+               (neighbour2 (if next-win (with-selected-window next-win
+                                          (windmove-find-other-window neighbour-dir next-win)))))
+          ;;(message "win: %s\nnext-win: %s\nneighbour1: %s\nneighbour2:%s" win next-win neighbour1 neighbour2)
+          (setq done (and (eq neighbour1 neighbour2)
+                          (not (eq (minibuffer-window) next-win))))
+          (if done
+              (let* ((other-buf (window-buffer next-win)))
+                (delete-window next-win)
+                (if (eq nextdir 'right)
+                    (split-window-vertically)
+                  (split-window-horizontally))
+                (set-window-buffer (windmove-find-other-window neighbour-dir) other-buf))))))))
+(keymap-global-set "C-c H-w" #'my-toggle-vertical-horizontal-split)
+
 ;; fold
 ;; {{{
 (add-hook 'prog-mode 'hs-minor-mode)
@@ -366,8 +459,12 @@ Version 2018-06-18 2021-09-30"
               (pcase char
                 (?\" (string ?\\ ?\"))
                 (?\\ (string ?\\ ?\\))
-                (_   (string char))))
-            (buffer-substring b e) ""))))
+                (_   (string char)))
+              )
+            (buffer-substring b e) "")
+           )
+   )
+  )
 ;; }}}
 
 ;; touchpad/trackpad & mouse
@@ -410,6 +507,7 @@ occurence of CHAR."
 ;; line
 ;; {{{
 ;; wrap/truncate
+(setq-default truncate-lines t)
 (setq word-wrap-by-category t) ;; improves CJK + Latin word-wrapping
 (setq scroll-margin 5)
 (global-display-line-numbers-mode 1)
@@ -450,6 +548,19 @@ occurence of CHAR."
 (setq sentence-end "\\([。！？]\\|……\\|[.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*")
 ;; (setq sentence-end-double-space nil)
 ;; }}}
+
+(defun my-fill-or-unfill ()
+  "Like `fill-paragraph', but unfill if used twice."
+  (interactive)
+  (let ((fill-column
+         (if (eq last-command 'my-fill-or-unfill)
+             (progn (setq this-command nil)
+                    (point-max))
+           fill-column)))
+    (call-interactively 'fill-paragraph nil (vector nil t))))
+
+(global-set-key [remap fill-paragraph]
+                'my-fill-or-unfill)
 
 ;; ido
 ;; {{{
@@ -545,19 +656,48 @@ occurence of CHAR."
   )
 ;; }}}
 
+(use-package org
+  ;; :init (setq org-fold-core-style "overlays")
+  :config
+  (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
+  (add-to-list 'org-file-apps '("\\.odp" . "open %s"))
+  )
+
+(defun my/sparse-tree-with-tag-filter()
+  "asks for a tag and generates sparse tree for all open tasks in current Org buffer
+  that are associated with this tag"
+  (interactive "*")
+  (setq tag-for-filter
+        (org-trim
+         (org-icompleting-read "Tags: "
+                               'org-tags-completion-function
+                               nil nil nil 'org-tags-history))
+        )
+  (org-occur
+   (concat "^\\*+ \\(NEXT\\|TODO\\|WAITING\\|STARTED\\) .+:"
+           tag-for-filter
+           ":")
+   )
+  )
+(keymap-global-set "C-c H-t" #'my/sparse-tree-with-tag-filter)
+
+;; (setq org-hide-leading-stars t)   ; Omit headline-asterisks except the last one
+(setq org-src-fontify-natively t) ; code block syntax highlight
+
 ;; org-mode: keymap
 ;; {{{
 ;; (setq org-startup-indented t)
 ;; (keymap-global-set "C-c l"   #'org-store-link) ; C-c C-l org-insert-link
 (keymap-global-set "C-c n o" #'org-id-get-create)
-;; (keymap-set org-mode-map "C-c n o" #'org-id-get-create) ;FIXME
+(keymap-global-set "C-c H-i" #'org-insert-structure-template)
 ;; }}}
 
 ;; org-mode: head/title
+;; (org-in-src-block-p)
 ;; {{{
 ;; 显示当前 heading 内容并折叠其他
 ;; https://emacstil.com/til/2021/09/09/fold-heading/
-(defun org-show-current-heading-tidily ()
+(defun my/org-show-current-heading-tidily ()
   (interactive)
   "Show next entry, keeping other entries closed."
   (if (save-excursion (end-of-line) (outline-invisible-p))
@@ -572,7 +712,32 @@ occurence of CHAR."
       (org-reveal t)
       (org-show-entry)
       (show-children))
-    ))
+    )
+  )
+
+(keymap-global-set "C-c H-n" #'my/org-show-current-heading-tidily)
+
+;; (defun my/org-narrow-heading-or-code-block ()
+;;   (interactive)
+;;   (cond ((org-in-src-block-p)
+;;               (org-src-mode)
+;;                t)
+;;         (org-edit-src-exit)
+;;         (org-show-current-heading-tidily)
+;;         )
+;;   (cond (eq (progn (eq (org-in-src-block-p) t)
+;;                    (eq (org-src-mode) nil)) t)
+;;         (org-edit-special)
+;;         (delete-other-windows)
+;;         )
+
+;;   (cond (eq (progn  (eq (org-in-src-block-p) nil)
+;;                     (eq (org-src-mode) nil)) t)
+;;         (org-show-current-heading-tidily)
+;;         )
+;;   nil
+;;   )
+;; (keymap-global-set "C-c H-n" #'my/org-narrow-heading-or-code-block)
 ;; }}}
 
 (setq org-src-lang-modes
@@ -604,14 +769,15 @@ occurence of CHAR."
    (calc        .       t)
    (comint      .       t)
    (css         .       t)
-   (dot         .       t)
+   (dot         .       t) ; Graphviz
    (emacs-lisp  .       t)
    (eshell      .       t)
+   (gnuplot     .       t)
    (haskell     .       t)
    (js          .       t)
    (latex       .       t)
    (lua         .       t)
-   (org         .       t)
+   (org         .       t) ; 跨文件调用 src block
    (perl        .       t)
    (plantuml    .       t)
    (python      .       t)
@@ -640,6 +806,93 @@ occurence of CHAR."
 ;; (with-eval-after-load 'ol
 ;;   (org-link-set-parameters "id" :face 'my-org-id-link))
 ;; }}}
+
+(setq my-linkcolor-org "wheat3")
+(setq my-linkcolor-file "MediumSeaGreen")
+(setq my-linkcolor-web "DeepSkyBlue")
+
+(defun my-set-linkcolors ()
+  "Defines the colors of various link colors"
+  (interactive)
+
+  ;; Org links --------------------------------------------------------------------------
+
+  (org-link-set-parameters "id" :face `(:foreground ,my-linkcolor-org :underline t))
+  (org-link-set-parameters "contact" :face `(:foreground ,my-linkcolor-org :underline t))
+
+  ;; File links --------------------------------------------------------------------------
+
+  (org-link-set-parameters "file" :face `(:foreground ,my-linkcolor-file :underline t))
+  ;; defined elsewhere;; (org-link-set-parameters "tsfile" :face '`(:foreground "DarkSeaGreen" :underline t))
+  (org-link-set-parameters "pdf" :face `(:foreground ,my-linkcolor-file :underline t))
+
+  (org-link-set-parameters "EPA" :face `(:foreground ,my-linkcolor-file :underline t))
+  (org-link-set-parameters "EPAAFO" :face `(:foreground ,my-linkcolor-file :underline t))
+  (org-link-set-parameters "JAFO" :face `(:foreground ,my-linkcolor-file :underline t))
+  (org-link-set-parameters "DAKEPA" :face `(:foreground ,my-linkcolor-file :underline t))
+  (org-link-set-parameters "BMTSK" :face `(:foreground ,my-linkcolor-file :underline t))
+  (org-link-set-parameters "ISO" :face `(:foreground ,my-linkcolor-file :underline t))
+
+  (org-link-set-parameters "gemSpec_DS_Anbieter"
+                           :face `(:foreground ,my-linkcolor-file :underline t))
+  (org-link-set-parameters "gemSpec_Net"
+                           :face `(:foreground ,my-linkcolor-file :underline t))
+  (org-link-set-parameters "gemSpec_PKI"
+                           :face `(:foreground ,my-linkcolor-file :underline t))
+  (org-link-set-parameters "gemSpec_IDP_Dienst"
+                           :face `(:foreground ,my-linkcolor-file :underline t))
+
+  (org-link-set-parameters "messageid"
+                           :face `(:foreground ,my-linkcolor-file :underline t))
+
+  ;; Web links --------------------------------------------------------------------------
+
+  (org-link-set-parameters "http" :face `(:foreground ,my-linkcolor-web :underline t))
+  (org-link-set-parameters "https" :face `(:foreground ,my-linkcolor-web :underline t))
+
+  )
+
+(defun my-set-linkcolors ()
+  "Defines the colors of various link colors"
+  (interactive)
+
+  ;; Org links --------------------------------------------------------------------------
+
+  (org-link-set-parameters "id" :face '(:foreground "wheat3" :underline t))
+  (org-link-set-parameters "contact" :face '(:foreground "wheat3" :underline t))
+
+  ;; File links --------------------------------------------------------------------------
+
+  (org-link-set-parameters "file" :face '(:foreground "MediumSeaGreen" :underline t))
+  ;; defined elsewhere;; (org-link-set-parameters "tsfile" :face ''(:foreground "DarkSeaGreen" :underline t))
+  (org-link-set-parameters "pdf" :face '(:foreground "MediumSeaGreen" :underline t))
+
+  (org-link-set-parameters "EPA" :face '(:foreground "MediumSeaGreen" :underline t))
+  (org-link-set-parameters "EPAAFO" :face '(:foreground "MediumSeaGreen" :underline t))
+  (org-link-set-parameters "JAFO" :face '(:foreground "MediumSeaGreen" :underline t))
+  (org-link-set-parameters "DAKEPA" :face '(:foreground "MediumSeaGreen" :underline t))
+  (org-link-set-parameters "BMTSK" :face '(:foreground "MediumSeaGreen" :underline t))
+
+  (org-link-set-parameters "gemSpec_DS_Anbieter"
+                           :face '(:foreground "MediumSeaGreen" :underline t))
+  (org-link-set-parameters "gemSpec_Net"
+                           :face '(:foreground "MediumSeaGreen" :underline t))
+  (org-link-set-parameters "gemSpec_PKI"
+                           :face '(:foreground "MediumSeaGreen" :underline t))
+  (org-link-set-parameters "gemSpec_IDP_Dienst"
+                           :face '(:foreground "MediumSeaGreen" :underline t))
+
+  (org-link-set-parameters "messageid"
+                           :face '(:foreground "MediumSeaGreen" :underline t))
+
+  ;; Web links --------------------------------------------------------------------------
+
+  (org-link-set-parameters "http" :face '(:foreground "DeepSkyBlue" :underline t))
+  (org-link-set-parameters "https" :face '(:foreground "DeepSkyBlue" :underline t))
+
+  )
+
+(my-set-linkcolors) ;; set colors when loading
 
 ;; mode-line
 ;; {{{
@@ -673,7 +926,7 @@ occurence of CHAR."
 ;; (keymap-global-set "C-c C-l" #'mac-launchpad)
 ;; }}}
 
-;; open with default app
+;; open in default app
 ;; {{{
 ;; https://emacs-china.org/t/pdf/14954/5
 (defun my/open-with (arg)
@@ -695,6 +948,37 @@ occurence of CHAR."
                    "open")))
     (call-process program nil 0 nil current-file-name)))
 ;; }}}
+
+(defun my/dired-open-in-file-manager ()
+  "Show current file in desktop.
+ (Mac Finder, Windows Explorer, Linux file manager)
+ This command can be called when in a file or in `dired'.
+URL `http://ergoemacs.org/emacs/emacs_dired_open_file_in_ext_apps.html'
+Version 2018-01-13 adapted by Karl Voit 2018-07-01"
+  (interactive)
+  (let (($path (file-truename (if (buffer-file-name) (buffer-file-name) default-directory ))))
+    (cond
+     ((string-equal system-type "windows-nt")
+      (w32-shell-execute "explore" (replace-regexp-in-string "/" "\\" $path t t)))
+     ((string-equal system-type "darwin")
+      (if (eq major-mode 'dired-mode)
+          (let (($files (dired-get-marked-files )))
+            (if (eq (length $files) 0)
+                (shell-command
+                 (concat "open " (shell-quote-argument default-directory)))
+              (shell-command
+               (concat "open -R " (shell-quote-argument (car (dired-get-marked-files )))))))
+        (shell-command
+         (concat "open -R " $path))))
+     ((string-equal system-type "gnu/linux")
+      (let (
+            (process-connection-type nil)
+            (openFileProgram (if (file-exists-p "/usr/bin/thunar")
+                                 "/usr/bin/thunar"
+                               "/usr/bin/xdg-open")))
+        (start-process "" nil openFileProgram $path))
+      ;; (shell-command "xdg-open .") ;; 2013-02-10 this sometimes froze emacs till the folder is closed. eg with nautilus
+      ))))
 
 ;; package.el: mirror 插件镜像
 ;; {{{
@@ -748,9 +1032,9 @@ occurence of CHAR."
 
 ;; (with-temp-file "/tmp/g.dot"
 (with-temp-file (expand-file-name
-                       "assets/emacs-package-dependency.dot"
-                       (concat user-emacs-directory)
-                       )
+                 "assets/emacs-package-dependency.dot"
+                 (concat user-emacs-directory)
+                 )
   (insert "digraph G {")
   (insert (mapconcat #'identity
                      (cl-loop for pkg-reqs in info
@@ -925,11 +1209,20 @@ occurence of CHAR."
 ;; (semantic-mode 1)
 ;; (semantic-stickyfunc-mode 1)
 
-;; use-package
+;; package database: epkg + epkgs
 ;; {{{
-(require 'use-package-ensure)
-(setq use-package-always-ensure t)
-(setq use-package-verbose t)
+(setq epkg-repository "~/Documents/GitHub/epkgs")
+(setq package-list-unversioned t) ;; unversioned packages(ibuffer and so on)
+;; 怎样快速找到 elpa 目录下那些重复的包 - Emacs China
+;; https://emacs-china.org/t/topic/4244
+(defun list-packages-and-versions ()
+  "Returns a list of all installed packages and their versions"
+  (interactive)
+  (mapcar
+   (lambda (pkg)
+     `(,pkg ,(package-desc-version
+              (cadr (assq pkg package-alist)))))
+   package-activated-list))
 ;; }}}
 
 ;; exec-path-from-shell
@@ -938,6 +1231,229 @@ occurence of CHAR."
   (exec-path-from-shell-initialize))
 (when (daemonp)
   (exec-path-from-shell-initialize))
+;; }}}
+
+(use-package which-key
+  :defer 1
+  :config
+  (which-key-mode)
+  (setq which-key-idle-secondary-delay 0.5)
+  )
+
+;; free-keys
+;; {{{
+(require 'free-keys)
+(setq free-keys-modifiers '(
+                            ""
+                            ;; "A"
+                            "C"
+                            "H"
+                            "M"
+                            "S"
+                            "s"
+                            ;; "A-C"
+                            ;; "A-H"
+                            ;; "A-M"
+                            ;; "A-S"
+                            ;; "A-s"
+                            "C-c H"
+                            "C-H"
+                            "C-M"
+                            ;; "C-S"
+                            "C-s"
+                            ;; "M-S"
+                            ;; "M-s"
+                            "s-H"
+                            ;; "S-s"
+                            ;; "C-M-S"
+                            ;; "C-M-s"
+                            "C-c"
+                            "C-x" ))
+;; }}}
+
+;; multiple-cursors
+;; {{{
+;; multiple-cursors-mode-enabled-hook
+;; multiple-cursors-mode-disabled-hook
+(use-package multiple-cursors
+  :bind (
+         ("H-c H-a" . mc/edit-beginnings-of-lines)
+         ("H-c H-e" . mc/edit-ends-of-lines)
+         ("H-c H-c" . mc/edit-lines)
+         ("H-c H-n" . mc/mark-next-like-this)
+         ("H-c H-p" . mc/mark-previous-like-this)
+         ("H-c H-h" . mc/mark-all-like-this)
+         ("H-c H-r" . set-rectangular-region-anchor)
+         )
+  )
+
+(add-hook 'activate-mark-hook '(lambda ()
+                                 (local-set-key
+                                  (kbd "C-@")
+                                  'set-rectangular-region-anchor)
+                                 ))
+(add-hook 'deactivate-mark-hook '(lambda ()
+                                   (local-unset-key
+                                    (kbd "C-@"))
+                                   ))
+;; }}}
+
+;; avy
+;; {{{
+;; https://karthinks.com/software/avy-can-do-anything
+(keymap-global-set "C-;"     #'avy-goto-char)
+(keymap-global-set "C-'"     #'avy-goto-char-2)
+(keymap-global-set "M-g f"   #'avy-goto-line)
+(keymap-global-set "M-g w"   #'avy-goto-word-1)
+(keymap-global-set "M-g e"   #'avy-goto-word-0)
+(keymap-global-set "C-c C-j" #'avy-resume)
+;; }}}
+
+;; difftastic + magit
+;; {{{
+;; (with-eval-after-load 'magit
+(use-package magit
+  ;; :defer 2
+  :bind (("C-c v g" . magit-status)
+         ("H-m H-m" . magit-status))
+  :config
+  (defun my/magit--with-difftastic (buffer command)
+    "Run COMMAND with GIT_EXTERNAL_DIFF=difft then show result in BUFFER."
+    (let ((process-environment
+           (cons (concat "GIT_EXTERNAL_DIFF=difft --width="
+                         (number-to-string (frame-width)))
+                 process-environment)))
+      ;; Clear the result buffer (we might regenerate a diff, e.g., for
+      ;; the current changes in our working directory).
+      (with-current-buffer buffer
+        (setq buffer-read-only nil)
+        (erase-buffer))
+      ;; Now spawn a process calling the git COMMAND.
+      (make-process
+       :name (buffer-name buffer)
+       :buffer buffer
+       :command command
+       ;; Don't query for running processes when emacs is quit.
+       :noquery t
+       ;; Show the result buffer once the process has finished.
+       :sentinel (lambda (proc event)
+                   (when (eq (process-status proc) 'exit)
+                     (with-current-buffer (process-buffer proc)
+                       (goto-char (point-min))
+                       (ansi-color-apply-on-region (point-min) (point-max))
+                       (setq buffer-read-only t)
+                       (view-mode)
+                       (end-of-line)
+                       ;; difftastic diffs are usually 2-column side-by-side,
+                       ;; so ensure our window is wide enough.
+                       (let ((width (current-column)))
+                         (while (zerop (forward-line 1))
+                           (end-of-line)
+                           (setq width (max (current-column) width)))
+                         ;; Add column size of fringes
+                         (setq width (+ width
+                                        (fringe-columns 'left)
+                                        (fringe-columns 'right)))
+                         (goto-char (point-min))
+                         (pop-to-buffer
+                          (current-buffer)
+                          `(;; If the buffer is that wide that splitting the frame in
+                            ;; two side-by-side windows would result in less than
+                            ;; 80 columns left, ensure it's shown at the bottom.
+                            ,(when (> 80 (- (frame-width) width))
+                               #'display-buffer-at-bottom)
+                            (window-width
+                             . ,(min width (frame-width))))))))))))
+  (defun my/magit-show-with-difftastic (rev)
+    "Show the result of \"git show REV\" with GIT_EXTERNAL_DIFF=difft."
+    (interactive
+     (list (or
+            ;; If REV is given, just use it.
+            (when (boundp 'rev) rev)
+            ;; If not invoked with prefix arg, try to guess the REV from
+            ;; point's position.
+            (and (not current-prefix-arg)
+                 (or (magit-thing-at-point 'git-revision t)
+                     (magit-branch-or-commit-at-point)))
+            ;; Otherwise, query the user.
+            (magit-read-branch-or-commit "Revision"))))
+    (if (not rev)
+        (error "No revision specified")
+      (my/magit--with-difftastic
+       (get-buffer-create (concat "*git show difftastic " rev "*"))
+       (list "git" "--no-pager" "show" "--ext-diff" rev))))
+  (defun my/magit-diff-with-difftastic (arg)
+    "Show the result of \"git diff ARG\" with GIT_EXTERNAL_DIFF=difft."
+    (interactive
+     (list (or
+            ;; If RANGE is given, just use it.
+            (when (boundp 'range) range)
+            ;; If prefix arg is given, query the user.
+            (and current-prefix-arg
+                 (magit-diff-read-range-or-commit "Range"))
+            ;; Otherwise, auto-guess based on position of point, e.g., based on
+            ;; if we are in the Staged or Unstaged section.
+            (pcase (magit-diff--dwim)
+              ('unmerged (error "unmerged is not yet implemented"))
+              ('unstaged nil)
+              ('staged "--cached")
+              (`(stash . ,value) (error "stash is not yet implemented"))
+              (`(commit . ,value) (format "%s^..%s" value value))
+              ((and range (pred stringp)) range)
+              (_ (magit-diff-read-range-or-commit "Range/Commit"))))))
+    (let ((name (concat "*git diff difftastic"
+                        (if arg (concat " " arg) "")
+                        "*")))
+      (my/magit--with-difftastic
+       (get-buffer-create name)
+       `("git" "--no-pager" "diff" "--ext-diff" ,@(when arg (list arg))))))
+  (transient-define-prefix my/magit-aux-commands ()
+    "My personal auxiliary magit commands."
+    ["Auxiliary commands"
+     ("d" "Difftastic Diff (dwim)" my/magit-diff-with-difftastic)
+     ("s" "Difftastic Show" my/magit-show-with-difftastic)])
+  (transient-append-suffix 'magit-dispatch "!"
+    '("#" "My Magit Cmds" my/magit-aux-commands))
+
+  (define-key magit-status-mode-map (kbd "#") #'my/magit-aux-commands)
+  )
+;; }}}
+
+;; ;; delta + magit + magit-delta
+;; ;; {{{
+;; ;; https://scripter.co/using-git-delta-with-magit/
+;; (use-package magit-delta
+;;  :hook (magit-mode . magit-delta-mode)
+;;   )
+;; (add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1)))
+;; ;; }}}
+
+;; deadgrep
+;; {{{
+(use-package deadgrep
+  :defer t
+  :bind*
+  (("C-c r" . deadgrep)
+   ("C-c f" . grep-org-files))
+  :config
+  (defun grep-org-files (words)
+    (interactive "sSearch org files: ")
+    (let ((default-directory org-roam-directory)
+          (deadgrep--file-type '(glob . "*.org"))
+          (deadgrep--context '(1 . 1))
+          (deadgrep--search-type 'regexp))
+      (deadgrep words)
+      )
+    )
+  )
+;; }}}
+
+;; khoj
+;; {{{
+;; Install Khoj Package from MELPA Stable
+(use-package khoj
+  :defer t
+  :bind ("C-c n s" . 'khoj))
 ;; }}}
 
 ;; dictionary: Apple 词典: osx-dictionary
@@ -949,7 +1465,7 @@ occurence of CHAR."
 ;; ace-pinyin
 ;; {{{
 (use-package ace-pinyin
-  ;; :defer 1
+  :defer 1
   :config
   (setq ace-pinyin-use-avy t)
   (ace-pinyin-global-mode +1)
@@ -976,8 +1492,8 @@ occurence of CHAR."
 (keymap-set pyim-mode-map "+" 'pyim-page-next-page)
 (keymap-global-set "H-e" 'toggle-input-method)
 (keymap-global-set "H-b" 'pyim-backward-word)
-;; (keymap-set [remap forward-word] 'pyim-forward-word)
-;; (keymap-set [remap backward-word] 'pyim-backward-word)
+;; (keymap-global-set [remap forward-word] #'pyim-forward-word)
+;; (keymap-global-set [remap backward-word] #'pyim-backward-word)
 (keymap-global-set "H-f" 'pyim-forward-word)
 ;; 金手指设置，可以将光标处的编码，比如：拼音字符串，转换为中文。
 (keymap-global-set "H-j" #'pyim-convert-string-at-point)
@@ -985,7 +1501,8 @@ occurence of CHAR."
 (keymap-set minibuffer-local-map "H-c" #'pyim-cregexp-convert-at-point)
 (pyim-default-scheme 'quanpin)
 ;; (pyim-isearch-mode 1) ;; 开启代码搜索中文功能（比如拼音，五笔码等）
-;; cursor
+;; ;
+                                        ; cursor
 (setq pyim-indicator-list (list #'my-pyim-indicator-with-cursor-color #'pyim-indicator-with-modeline))
 
 (defun my-pyim-indicator-with-cursor-color (input-method chinese-input-p)
@@ -1065,7 +1582,7 @@ occurence of CHAR."
 ;; pangu-spacing
 ;; {{{
 (use-package pangu-spacing
-  ;; :defer 1
+  :defer 1
   :config
   (global-pangu-spacing-mode 1)
   (setq pangu-spacing-real-insert-separtor t)
@@ -1307,62 +1824,6 @@ When fixing a typo, avoid pass camel case option to cli program."
   )
 ;; }}}
 
-;; deadgrep
-;; {{{
-(use-package deadgrep
-  :bind*
-  (("C-c r" . deadgrep)
-   ("C-c f" . grep-org-files))
-  :config
-  (defun grep-org-files (words)
-    (interactive "sSearch org files: ")
-    (let ((default-directory org-roam-directory)
-          (deadgrep--file-type '(glob . "*.org"))
-          (deadgrep--context '(1 . 1))
-          (deadgrep--search-type 'regexp))
-      (deadgrep words)
-      )
-    )
-  )
-;; }}}
-
-;; khoj
-;; {{{
-;; Install Khoj Package from MELPA Stable
-(use-package khoj
-  :bind ("C-c n s" . 'khoj))
-;; }}}
-
-;; free-keys
-;; {{{
-(require 'free-keys)
-(setq free-keys-modifiers '(
-                            ""
-                            ;; "A"
-                            "C"
-                            "H"
-                            "M"
-                            "S"
-                            "s"
-                            ;; "A-C"
-                            ;; "A-H"
-                            ;; "A-M"
-                            ;; "A-S"
-                            ;; "A-s"
-                            "C-H"
-                            "C-M"
-                            ;; "C-S"
-                            "C-s"
-                            ;; "M-S"
-                            ;; "M-s"
-                            "s-H"
-                            ;; "S-s"
-                            ;; "C-M-S"
-                            ;; "C-M-s"
-                            "C-c"
-                            "C-x" ))
-;; }}}
-
 ;; helpful
 ;; {{{
 (use-package helpful
@@ -1415,7 +1876,11 @@ When fixing a typo, avoid pass camel case option to cli program."
 
 ;; diff-hl
 ;; {{{
-(global-diff-hl-mode)
+(use-package diff-hl
+  :defer 2
+  :config
+  (global-diff-hl-mode)
+  )
 ;; (global-git-gutter-mode +1) ; BUG when deleting folded 17000+lines
 
 ;; }}}
@@ -1467,6 +1932,7 @@ When fixing a typo, avoid pass camel case option to cli program."
   (doom-modeline-mode)
   (setq doom-modeline-height 18)
   (setq doom-modeline-window-width-limit 85)
+  (setq doom-modeline-icon (display-graphic-p))
   (setq find-file-visit-truename t)
   (setq doom-modeline-highlight-modified-buffer-name t)
   (setq doom-modeline-project-detection 'auto) ;auto/project
@@ -1490,33 +1956,6 @@ When fixing a typo, avoid pass camel case option to cli program."
   (define-key origami-mode-map (kbd "C-c f") 'origami-recursively-toggle-node)
   (define-key origami-mode-map (kbd "C-c F") 'origami-toggle-all-nodes)
   )
-;; }}}
-
-;; multiple-cursors
-;; {{{
-;; multiple-cursors-mode-enabled-hook
-;; multiple-cursors-mode-disabled-hook
-(use-package multiple-cursors
-  :bind (
-         ("H-c H-a" . mc/edit-beginnings-of-lines)
-         ("H-c H-e" . mc/edit-ends-of-lines)
-         ("H-c H-c" . mc/edit-lines)
-         ("H-c H-n" . mc/mark-next-like-this)
-         ("H-c H-p" . mc/mark-previous-like-this)
-         ("H-c H-h" . mc/mark-all-like-this)
-         ("H-c H-r" . set-rectangular-region-anchor)
-         )
-  )
-
-(add-hook 'activate-mark-hook '(lambda ()
-                                 (local-set-key
-                                  (kbd "C-@")
-                                  'set-rectangular-region-anchor)
-                                 ))
-(add-hook 'deactivate-mark-hook '(lambda ()
-                                   (local-unset-key
-                                    (kbd "C-@"))
-                                   ))
 ;; }}}
 
 ;; expand-region
@@ -1568,151 +2007,6 @@ When fixing a typo, avoid pass camel case option to cli program."
 ;; (keymap-set symbol-overlay-mode "w" symbol-overlay-save-symbol)
 ;; }}}
 
-;; difftastic + magit
-;; {{{
-;; (with-eval-after-load 'magit
-(use-package magit
-  ;; :defer 2
-  :bind ("C-c v g" . magit-status)
-  :config
-  (defun my/magit--with-difftastic (buffer command)
-    "Run COMMAND with GIT_EXTERNAL_DIFF=difft then show result in BUFFER."
-    (let ((process-environment
-           (cons (concat "GIT_EXTERNAL_DIFF=difft --width="
-                         (number-to-string (frame-width)))
-                 process-environment)))
-      ;; Clear the result buffer (we might regenerate a diff, e.g., for
-      ;; the current changes in our working directory).
-      (with-current-buffer buffer
-        (setq buffer-read-only nil)
-        (erase-buffer))
-      ;; Now spawn a process calling the git COMMAND.
-      (make-process
-       :name (buffer-name buffer)
-       :buffer buffer
-       :command command
-       ;; Don't query for running processes when emacs is quit.
-       :noquery t
-       ;; Show the result buffer once the process has finished.
-       :sentinel (lambda (proc event)
-                   (when (eq (process-status proc) 'exit)
-                     (with-current-buffer (process-buffer proc)
-                       (goto-char (point-min))
-                       (ansi-color-apply-on-region (point-min) (point-max))
-                       (setq buffer-read-only t)
-                       (view-mode)
-                       (end-of-line)
-                       ;; difftastic diffs are usually 2-column side-by-side,
-                       ;; so ensure our window is wide enough.
-                       (let ((width (current-column)))
-                         (while (zerop (forward-line 1))
-                           (end-of-line)
-                           (setq width (max (current-column) width)))
-                         ;; Add column size of fringes
-                         (setq width (+ width
-                                        (fringe-columns 'left)
-                                        (fringe-columns 'right)))
-                         (goto-char (point-min))
-                         (pop-to-buffer
-                          (current-buffer)
-                          `(;; If the buffer is that wide that splitting the frame in
-                            ;; two side-by-side windows would result in less than
-                            ;; 80 columns left, ensure it's shown at the bottom.
-                            ,(when (> 80 (- (frame-width) width))
-                               #'display-buffer-at-bottom)
-                            (window-width
-                             . ,(min width (frame-width))))))))))))
-  (defun my/magit-show-with-difftastic (rev)
-    "Show the result of \"git show REV\" with GIT_EXTERNAL_DIFF=difft."
-    (interactive
-     (list (or
-            ;; If REV is given, just use it.
-            (when (boundp 'rev) rev)
-            ;; If not invoked with prefix arg, try to guess the REV from
-            ;; point's position.
-            (and (not current-prefix-arg)
-                 (or (magit-thing-at-point 'git-revision t)
-                     (magit-branch-or-commit-at-point)))
-            ;; Otherwise, query the user.
-            (magit-read-branch-or-commit "Revision"))))
-    (if (not rev)
-        (error "No revision specified")
-      (my/magit--with-difftastic
-       (get-buffer-create (concat "*git show difftastic " rev "*"))
-       (list "git" "--no-pager" "show" "--ext-diff" rev))))
-  (defun my/magit-diff-with-difftastic (arg)
-    "Show the result of \"git diff ARG\" with GIT_EXTERNAL_DIFF=difft."
-    (interactive
-     (list (or
-            ;; If RANGE is given, just use it.
-            (when (boundp 'range) range)
-            ;; If prefix arg is given, query the user.
-            (and current-prefix-arg
-                 (magit-diff-read-range-or-commit "Range"))
-            ;; Otherwise, auto-guess based on position of point, e.g., based on
-            ;; if we are in the Staged or Unstaged section.
-            (pcase (magit-diff--dwim)
-              ('unmerged (error "unmerged is not yet implemented"))
-              ('unstaged nil)
-              ('staged "--cached")
-              (`(stash . ,value) (error "stash is not yet implemented"))
-              (`(commit . ,value) (format "%s^..%s" value value))
-              ((and range (pred stringp)) range)
-              (_ (magit-diff-read-range-or-commit "Range/Commit"))))))
-    (let ((name (concat "*git diff difftastic"
-                        (if arg (concat " " arg) "")
-                        "*")))
-      (my/magit--with-difftastic
-       (get-buffer-create name)
-       `("git" "--no-pager" "diff" "--ext-diff" ,@(when arg (list arg))))))
-  (transient-define-prefix my/magit-aux-commands ()
-    "My personal auxiliary magit commands."
-    ["Auxiliary commands"
-     ("d" "Difftastic Diff (dwim)" my/magit-diff-with-difftastic)
-     ("s" "Difftastic Show" my/magit-show-with-difftastic)])
-  (transient-append-suffix 'magit-dispatch "!"
-    '("#" "My Magit Cmds" my/magit-aux-commands))
-
-  (define-key magit-status-mode-map (kbd "#") #'my/magit-aux-commands)
-  )
-;; }}}
-
-;; ;; delta + magit + magit-delta
-;; ;; {{{
-;; ;; https://scripter.co/using-git-delta-with-magit/
-;; (use-package magit-delta
-;;  :hook (magit-mode . magit-delta-mode)
-;;   )
-;; (add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1)))
-;; ;; }}}
-
-;; package database: epkg + epkgs
-;; {{{
-(setq epkg-repository "~/Documents/GitHub/epkgs")
-(setq package-list-unversioned t) ;; unversioned packages(ibuffer and so on)
-;; 怎样快速找到 elpa 目录下那些重复的包 - Emacs China
-;; https://emacs-china.org/t/topic/4244
-(defun list-packages-and-versions ()
-  "Returns a list of all installed packages and their versions"
-  (interactive)
-  (mapcar
-   (lambda (pkg)
-     `(,pkg ,(package-desc-version
-              (cadr (assq pkg package-alist)))))
-   package-activated-list))
-;; }}}
-
-;; avy
-;; {{{
-;; https://karthinks.com/software/avy-can-do-anything
-(keymap-global-set "C-;"     #'avy-goto-char)
-(keymap-global-set "C-'"     #'avy-goto-char-2)
-(keymap-global-set "M-g f"   #'avy-goto-line)
-(keymap-global-set "M-g w"   #'avy-goto-word-1)
-(keymap-global-set "M-g e"   #'avy-goto-word-0)
-(keymap-global-set "C-c C-j" #'avy-resume)
-;; }}}
-
 ;; consult
 ;; {{{
 ;; Example configuration for Consult
@@ -1724,7 +2018,7 @@ When fixing a typo, avoid pass camel case option to cli program."
          ("C-c k" . consult-kmacro)
          ;; C-x bindings (ctl-x-map)
          ("C-x M-:" . consult-complex-command) ;; orig. repeat-complex-command
-         ("C-x b" . consult-buffer)            ;; orig. switch-to-buffer
+         ;; ("C-x b" . consult-buffer)            ;; orig. switch-to-buffer
          ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
          ("C-x 5 b" . consult-buffer-other-frame) ;; orig. switch-to-buffer-other-frame
          ("C-x r b" . consult-bookmark)           ;; orig. bookmark-jump
@@ -1960,10 +2254,44 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
      (marginalia--documentation (marginalia--function-doc sym)))))
 ;; }}}
 
+(use-package org-modern
+  :after org
+  ;; :hook (org-mode . global-org-modern-mode)
+  :config
+  (setq
+   org-auto-align-tags nil
+   org-tags-column 0
+   org-catch-invisible-edits 'show-and-error
+   org-special-ctrl-a/e t
+   org-insert-heading-respect-content t
+
+   ;; Org styling, hide markup etc.
+   org-hide-emphasis-markers t
+   org-pretty-entities t
+   org-ellipsis "…"
+
+   ;; Agenda styling
+   org-agenda-tags-column 0
+   org-agenda-block-separator ?─
+   org-agenda-time-grid
+   '((daily today require-timed)
+     (800 1000 1200 1400 1600 1800 2000)
+     " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+   org-agenda-current-time-string
+   "⭠ now ─────────────────────────────────────────────────")
+
+  (if (display-graphic-p)
+      (setq org-modern-table t)
+    (setq org-modern-table nil)
+    )
+  (global-org-modern-mode)
+  )
+
 ;; org-roam: basic config
 ;; {{{
 (use-package org-roam
   ;; :defer 1
+  :after org
   :bind (
          ("C-c n a" . org-roam-alias-add)
          ("C-c n c" . org-roam-capture)
@@ -2181,7 +2509,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; consult-org-roam
 ;; {{{
 (use-package consult-org-roam
-  :after org-roam
+  :after (org-roam consult)
   :init
   (require 'consult-org-roam)
   ;; Activate the minor mode
@@ -2257,7 +2585,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; RFC
 ;; {{{
 (use-package rfc-mode
-  ;; :defer t
+  :defer t
   :config
   (setq rfc-mode-directory (expand-file-name "~/Documents/GitHub/RFC-all/txt/"))
   )
@@ -2266,31 +2594,36 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; auto-dark
 ;; {{{
 (use-package auto-dark
-  :init (auto-dark-mode t))
+  :init (auto-dark-mode t)
+  :config
+  (setq auto-dark-allow-osascript t
+        auto-dark-dark-theme 'solarized-dark)
+  )
 ;; }}}
 
 ;; moom + transient
 ;; {{{
-;; (with-suppressed-warnings '(void-function transient-prefix)) ;FIXME
-;; (add-to-list 'warning-suppress-types '((void-function transient-prefix)))
-;; (use-package moom
-;;   :ensure nil
-;;   ;; :if (memq window-system '(mac ns x))
-;;   ;; (keymap-global-set "" #'moom-font-increase)
-;;   :commands (moom-transient-dispatch moom-transient-config)
-;;   :config
-;;   (require 'moom-transient)
-;;   (setq moom-use-font-module nil)
-;;   (moom-mode 1)
-;;   (moom-transient-hide-cursor) ;; if needed
-;;   ;; (define-key moom-mode-map (kbd "C-c o") #'moom-transient-dispatch)
-;;   (moom-recommended-keybindings '(move fit expand fill font reset undo))
-;;   )
-;;
+(with-suppressed-warnings '(void-function transient-prefix)) ;FIXME
+(add-to-list 'warning-suppress-types '((void-function transient-prefix)))
+(use-package moom
+  :after transcient
+  :ensure nil
+  ;; :if (memq window-system '(mac ns x))
+  ;; (keymap-global-set "" #'moom-font-increase)
+  :commands (moom-transient-dispatch moom-transient-config)
+  :config
+  (require 'moom-transient)
+  (setq moom-use-font-module nil)
+  (moom-mode 1)
+  (moom-transient-hide-cursor) ;; if needed
+  ;; (define-key moom-mode-map (kbd "C-c o") #'moom-transient-dispatch)
+  (moom-recommended-keybindings '(move fit expand fill font reset undo))
+  )
+
 ;; (unless (and (display-graphic-p) (eq system-type 'darwin))
 ;;   (add-hook 'after-init-hook 'moom-mode)
 ;;   )
-;;
+
 ;; (with-eval-after-load "moom"
 
 ;;   (when (require 'moom-transient nil t)
@@ -2298,13 +2631,17 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;;     (define-key moom-mode-map (kbd "C-c o") #'moom-transient-dispatch)
 ;;     )
 ;;   )
-;; )
 ;; }}}
 
 ;; {{{ ace-window
 ;; (require 'ace-window)
-(keymap-global-set "H-o" #'ace-window)
-(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+;; (keymap-global-set "H-o" #'ace-window)
+(use-package ace-window
+  :bind
+  ("H-o" . ace-window)
+  :config
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+  )
 ;; }}}
 
 ;; goto-line-preview
@@ -2312,7 +2649,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 (use-package goto-line-preview
   :bind
   ;; ([remap goto-line] . goto-line-preview)
-  ("H-l" . goto-line-preview)
+  ("C-c H-l" . goto-line-preview)
   )
 ;; }}}
 
@@ -2325,6 +2662,8 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; osm: OpenStreetMap
 ;; {{{
 (use-package osm
+  :defer t
+  :after org
   :bind (("C-c m h" . osm-home)
          ("C-c m s" . osm-search)
          ("C-c m v" . osm-server)
@@ -2341,6 +2680,24 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   ;; Load Org link support
   (with-eval-after-load 'org
     (require 'osm-ol)))
+;; }}}
+
+;; mybigword
+;; {{{
+(use-package mybigword
+  :defer t
+  :config
+  (setq mybigword-excluded-words
+        (split-string (with-temp-buffer
+                        (insert-file-contents  (expand-file-name
+                                                "assets/mybigword.txt"
+                                                (concat user-emacs-directory)
+                                                ))
+                        (buffer-string)) "[\r\n]+"))
+  )
+;; mybigword-excluded-words
+;; mybigword-personal-excluded-words
+;; mybigword-upper-limit
 ;; }}}
 
 ;; elfeed
@@ -2398,12 +2755,18 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   )
 ;; }}}
 
+(run-with-idle-timer
+ 1 nil
+ #'(lambda ()
+     (require 'explain-pause-mode)
+     ))
+
 ;; org-mac-link
 ;; {{{
 (use-package org-mac-link
   :ensure nil
   :bind (
-         ("H-i" . org-mac-link-get-link)
+         ("H-i H-i" . org-mac-link-get-link)
          )
   )
 ;; }}}
@@ -2420,10 +2783,10 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 (keyfreq-mode 1)          ;; 启动插件包
 (keyfreq-autosave-mode 1) ;; 自动保存模式
 (setq-default keyfreq-file (expand-file-name
-                       "assets/keyfreq-log"
-                       (concat user-emacs-directory)
-                       )
-	      )
+                            "assets/keyfreq-log"
+                            (concat user-emacs-directory)
+                            )
+              )
 ;; (defun turnon-keyfreq-mode ()
 ;;   "Turn on keyfreq."
 ;;   (interactive)
@@ -2608,6 +2971,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; subed: subtitle edit
 ;; {{{
 (use-package subed
+  :defer t
   :ensure nil
   :config
   ;; Disable automatic movement of point by default
