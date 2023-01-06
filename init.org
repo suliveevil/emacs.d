@@ -1,14 +1,46 @@
+# -*- mode: org; coding: utf-8; -*-
+:PROPERTIES: header-args:emacs-lisp :tangle
+:ID:       20BF3D68-6887-4D5C-878D-17C2AD5F97B8
+:END:
+#+title: init.el config
+#+auto_tangle: t
+
+* init
+
+#+begin_src emacs-lisp
+;; test
+;; {{{
+(show-paren-mode)
+(setq show-paren-style 'parenthesis
+      show-paren-context-when-offscreen 'overlay)
+;;
+(add-to-list 'load-path (expand-file-name "~/.config/emacs/bisec"))
+;; }}}
+#+end_src
+
+** file header
+
+#+begin_src emacs-lisp :tangle yes
 ;; -*- coding: utf-8; lexical-binding: t; -*-
 ;; -*- origami-fold-style: triple-braces -*-
 ;;; init.el
 
 ;; Date: 2023-01-06T08:34:05+0800
+#+end_src
 
+** garbage collection & file-name-handler
+
+#+begin_src emacs-lisp :tangle yes
 (let (
       (gc-cons-threshold most-positive-fixnum)
       (file-name-handler-alist nil)
       ))
+#+end_src
 
+
+** 时间 date & time
+
+#+begin_src emacs-lisp :tangle yes
 ;; time
 ;; {{{
 (defun my/date-and-time-iso8601 ()
@@ -18,7 +50,12 @@
 
 (keymap-global-set "C-c D" #'my/date-and-time-iso8601)
 ;; }}}
+#+end_src
 
+
+** 字体和语法高亮 font & syntax
+
+#+begin_src emacs-lisp :tangle yes
 ;; font and syntax
 ;; {{{
 (set-face-attribute 'default nil
@@ -27,7 +64,11 @@
                     )
 (global-font-lock-mode t) ;; turn on syntax highlighting for all buffers
 ;; }}}
+#+end_src
 
+** pretty-symbols
+
+#+begin_src emacs-lisp :tangle yes
 ;; pretty-symbols
 ;; {{{
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
@@ -35,7 +76,11 @@
               '(("lambda" . ?λ)
                 ("function" . ?𝑓)))
 ;; }}}
+#+end_src
 
+** tree-sitter
+
+#+begin_src emacs-lisp :tangle yes
 ;; tree-sitter
 ;; {{{
 (require 'treesit)
@@ -57,16 +102,28 @@
           (ruby-mode       . ruby-ts-mode)
           (sh-mode         . bash-ts-mode))))
 ;; }}}
+#+end_src
 
+** chunk
+
+#+begin_src emacs-lisp :tangle yes
 ;; chunk
 ;; {{{
 ;; Increase how much is read from processes in a single chunk (default is 4kb)
 (setq read-process-output-max #x10000) ;; 64kb
 ;; }}}
+#+end_src
 
+** 剪贴板 clipboard
+
+#+begin_src emacs-lisp :tangle yes
 ;; zap-up-to-char
 (keymap-global-set "M-z" #'zap-up-to-char)
+#+end_src
 
+** comment
+
+#+begin_src emacs-lisp :tangle yes
 ;; comment
 ;; {{{
 (defun comment-current-line-dwim ()
@@ -83,13 +140,21 @@
   )
 (keymap-global-set "H-/" #'comment-current-line-dwim)
 ;; }}}
+#+end_src
 
+** 文件和缓冲区 file/buffer
+
+#+begin_src emacs-lisp :tangle yes
 ;; warn when opening files bigger than 100 MB
 (setq large-file-warning-threshold 100000000)
 
 ;; 使 Emacs 自动加载外部修改过的文件
 (global-auto-revert-mode 1)
+#+end_src
 
+*** ibuffer
+
+#+begin_src emacs-lisp :tangle yes
 ;; ibuffer
 ;; {{{
 (use-package ibuffer
@@ -108,7 +173,12 @@
            " " filename)))
   )
 ;; }}}
+#+end_src
 
+
+*** auto-save
+
+#+begin_src emacs-lisp :tangle yes
 ;; auto-save: 定期预存，防止停电、系统崩溃等原因造成的数据损失
 ;; {{{
 (setq auto-save-file-name-transforms
@@ -121,7 +191,12 @@
       auto-save-interval 200 ; number of keystrokes between auto-saves (default: 300)
  )
 ;; }}}
+#+end_src
 
+
+*** backup
+
+#+begin_src emacs-lisp :tangle yes
 ;; backup file: 备份
 ;; {{{
 ;; https://stackoverflow.com/questions/151945/how-do-i-control-how-emacs-makes-backup-files
@@ -143,14 +218,22 @@
       kept-new-versions 9 ; newest versions to keep when a new numbered backup is made (default: 2)
       )
 ;; }}}
+#+end_src
 
+*** lockfile
+
+#+begin_src emacs-lisp :tangle yes
 ;; lockfile: 不同进程修改同一文件
 ;; {{{
 (setq create-lockfiles t)
 (setq lock-file-name-transforms
       '(("\\`/.*/\\([^/]+\\)\\'" "/var/tmp/\\1" t)))
 ;; }}}
+#+end_src
 
+*** 垃圾筒                                                            :macOS:
+
+#+begin_src emacs-lisp :tangle yes
 ;; move file to trash when delete
 ;; {{{
 ;;; macOS
@@ -158,7 +241,25 @@
   (setq trash-directory "~/.Trash/")
   (setq delete-by-moving-to-trash t))
 ;; }}}
+#+end_src
 
+*** symlink
+
+#+begin_src emacs-lisp :tangle no
+;; symlink
+;; {{{
+(defun read-only-if-symlink ()
+  (if (file-symlink-p buffer-file-name)
+      (progn
+        (setq buffer-read-only t)
+        (message "File is a symlink"))))
+(add-hook 'find-file-hooks 'read-only-if-symlink)
+;; }}}
+#+end_src
+
+*** open file
+
+#+begin_src emacs-lisp :tangle yes
 ;; 快速打开文件
 ;; {{{
 (defun my/open-init-file() ;; Emacs init
@@ -172,7 +273,11 @@
 ;;   (find-file "~/.config/goku/karabiner.edn")
 ;; )
 ;; }}}
+#+end_src
 
+*** side-buffer
+
+#+begin_src emacs-lisp :tangle yes
 ;; side buffer
 ;; {{{
 (defun my/side-buffer ()
@@ -189,7 +294,11 @@
       (set-window-buffer (selected-window) "*Scratch*"))))
 (keymap-global-set "C-c B" #'my/side-buffer)
 ;; }}}
+#+end_src
 
+*** delete file
+
+#+begin_src emacs-lisp :tangle yes
 ;; delete buffer file
 ;; {{{
 (defun my/delete-current-file ()
@@ -203,14 +312,22 @@ If no file is associated, just close buffer without prompt for save."
       (when currentFile
         (delete-file currentFile)))))
 ;; }}}
+#+end_src
 
+*** kill buffer
+
+#+begin_src emacs-lisp :tangle yes
 ;; kill buffer
 ;; {{{
 (defun my/kill-all-other-buffers ()
   (interactive)
   (mapc 'kill-buffer (cdr (buffer-list (current-buffer)))))
 ;; }}}
+#+end_src
 
+** dired
+
+#+begin_src emacs-lisp :tangle yes
 ;; dired
 ;; {{{
 (require 'dired)
@@ -281,7 +398,11 @@ Version 2018-06-18 2021-09-30"
          (message "File path copied: %s" $fpath)
          $fpath )))))
 ;; }}}
+#+end_src
 
+** 项目 project
+
+#+begin_src emacs-lisp :tangle yes
 ;; project
 ;; {{{
 (use-package project
@@ -289,7 +410,11 @@ Version 2018-06-18 2021-09-30"
   ;; (("C-c p" . project-prefix-map))
   )
 ;; }}}
+#+end_src
 
+** frame
+
+#+begin_src emacs-lisp :tangle yes
 ;; frame
 ;; {{{
 (setq frame-size-history t)
@@ -297,7 +422,11 @@ Version 2018-06-18 2021-09-30"
       '(buffer-file-name (:eval (abbreviate-file-name buffer-file-name))
                          (dired-directory dired-directory "%b")))
 ;; }}}
+#+end_src
 
+** window
+
+#+begin_src emacs-lisp :tangle yes
 ;; window
 ;; {{{
 ;; toggle one window
@@ -318,7 +447,12 @@ Version 2018-06-18 2021-09-30"
     (delete-other-windows)))
 (keymap-global-set "C-c C-w" #'my/toggle-one-window)
 ;; }}}
+#+end_src
 
+
+** 折叠 fold
+
+#+begin_src emacs-lisp :tangle yes
 ;; fold
 ;; {{{
 (add-hook 'prog-mode 'hs-minor-mode)
@@ -327,7 +461,11 @@ Version 2018-06-18 2021-09-30"
 (keymap-global-set "C-c TAB" #'hs-toggle-hiding)
 (keymap-global-set "M-+" #'hs-show-all)
 ;; }}}
+#+end_src
 
+** 光标和选区 cursor/region
+
+#+begin_src emacs-lisp :tangle yes
 ;; cursor
 ;; {{{
 ;; cursor move
@@ -341,6 +479,12 @@ Version 2018-06-18 2021-09-30"
 (global-subword-mode)     ;; camelCase and superword-mode
 ;; }}}
 
+
+#+end_src
+
+** Alfred Search                                                      :macOS:
+
+#+begin_src emacs-lisp :tangle yes
 ;; Alfred
 ;; {{{
 ;; https://github.com/xuchunyang/emacs.d/blob/master/lisp/alfred.el
@@ -357,7 +501,11 @@ Version 2018-06-18 2021-09-30"
                 (_   (string char))))
             (buffer-substring b e) ""))))
 ;; }}}
+#+end_src
 
+** 触控板和鼠标 touchpad/trackpad & mouse
+
+#+begin_src emacs-lisp :tangle yes
 ;; touchpad/trackpad & mouse
 ;; {{{
 (setq mouse-wheel-tilt-scroll t)
@@ -374,7 +522,11 @@ Version 2018-06-18 2021-09-30"
 ;;       (push (read-event) unread-command-events)
 ;;     (pos-tip-hide)))
 ;; }}}
+#+end_src
 
+** 字符
+
+#+begin_src emacs-lisp :tangle yes
 ;; goto-char by Oliver Scholz
 ;; {{{
 (defun my/go-to-char (n char)
@@ -394,7 +546,11 @@ occurence of CHAR."
 ;; [joseph-go-to-char - EmacsWiki](https://www.emacswiki.org/emacs/joseph-go-to-char)
 ;; [doitian/iy-go-to-char: Go to next CHAR which is similar to "f" and "t" in vim](https://github.com/doitian/iy-go-to-char)
 ;; }}}
+#+end_src
 
+** 行 line
+
+#+begin_src emacs-lisp :tangle yes
 ;; line
 ;; {{{
 ;; wrap/truncate
@@ -426,19 +582,31 @@ occurence of CHAR."
     (beginning-of-line)))
 (keymap-global-set "C-c C-o" #'open-newline-below)
 ;; }}}
+#+end_src
 
+** 列 column
+
+#+begin_src emacs-lisp :tangle yes
 ;; column
 ;; {{{
 (setq-default fill-column 80) ;; M-x set-fill-column RET
 (add-hook 'after-init-hook 'global-display-fill-column-indicator-mode)
 ;; }}}
+#+end_src
 
+** 句子 sentence
+
+#+begin_src emacs-lisp :tangle yes
 ;; sentence: 断句
 ;; {{{
 (setq sentence-end "\\([。！？]\\|……\\|[.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*")
 ;; (setq sentence-end-double-space nil)
 ;; }}}
+#+end_src
 
+** ido & fido-vertical-mode
+
+#+begin_src emacs-lisp :tangle yes
 ;; ido
 ;; {{{
 (use-package ido
@@ -447,7 +615,11 @@ occurence of CHAR."
   (setq ido-enable-flex-matching t)
   )
 ;; }}}
+#+end_src
 
+** isearch
+
+#+begin_src emacs-lisp :tangle yes
 ;; isearch
 ;; {{{
 ;; M-<: first match
@@ -455,7 +627,11 @@ occurence of CHAR."
 (keymap-set isearch-mode-map "s-v" 'isearch-yank-kill)
 (setq isearch-lazy-count t) ;; anzu
 ;; }}}
+#+end_src
 
+** basic completion
+
+#+begin_src emacs-lisp :tangle yes
 ;; completion: buffer and minibuffer
 ;; {{{
 ;; dabbrev: dynamic abbreviation expand
@@ -481,7 +657,11 @@ occurence of CHAR."
 ;; pair completion
 (electric-pair-mode 1)
 ;; }}}
+#+end_src
 
+** indent
+
+#+begin_src emacs-lisp :tangle yes
 ;; refresh-file: format/indent elisp file
 ;; {{{
 ;; https://github.com/manateelazycat/lazycat-emacs/blob/master/site-lisp/extensions/lazycat/basic-toolkit.el
@@ -532,7 +712,14 @@ occurence of CHAR."
     )
   )
 ;; }}}
+#+end_src
 
+
+** org-mode
+
+*** keymap
+
+#+begin_src emacs-lisp :tangle yes
 ;; org-mode: keymap
 ;; {{{
 ;; (setq org-startup-indented t)
@@ -540,7 +727,11 @@ occurence of CHAR."
 (keymap-global-set "C-c n o" #'org-id-get-create)
 ;; (keymap-set org-mode-map "C-c n o" #'org-id-get-create) ;FIXME
 ;; }}}
+#+end_src
 
+*** head/title
+
+#+begin_src emacs-lisp :tangle yes
 ;; org-mode: head/title
 ;; {{{
 ;; 显示当前 heading 内容并折叠其他
@@ -562,7 +753,11 @@ occurence of CHAR."
       (show-children))
     ))
 ;; }}}
+#+end_src
 
+*** code block
+
+#+begin_src emacs-lisp :tangle yes
 (setq org-src-lang-modes
       '(
         ("C" . c)
@@ -612,7 +807,9 @@ occurence of CHAR."
 (setq org-src-fontify-natively 1)         ;代码块语法高亮
 (setq org-src-tab-acts-natively 1)        ;开启代码块语法缩进/格式化
 (setq org-edit-src-content-indentation 0) ;代码块初始缩进范围
+#+end_src
 
+#+begin_src emacs-lisp :tangle yes
 (setq org-fontify-todo-headline nil)
 (setq org-fontify-done-headline nil)
 
@@ -628,13 +825,21 @@ occurence of CHAR."
 ;; (with-eval-after-load 'ol
 ;;   (org-link-set-parameters "id" :face 'my-org-id-link))
 ;; }}}
+#+end_src
 
+** mode-line
+
+#+begin_src emacs-lisp :tangle yes
 ;; mode-line
 ;; {{{
 (display-battery-mode t)    ;; display battery status
 (setq column-number-mode t) ;; 在 mode line 数字形式显示光标所在列
 ;; }}}
+#+end_src
 
+** open app
+
+#+begin_src emacs-lisp :tangle yes
 ;; open app
 ;; {{{
 (defun mac-launchpad/string-ends-with (s ending)
@@ -660,7 +865,11 @@ occurence of CHAR."
 
 ;; (keymap-global-set "C-c C-l" #'mac-launchpad)
 ;; }}}
+#+end_src
 
+** open with default app
+
+#+begin_src emacs-lisp :tangle yes
 ;; open with default app
 ;; {{{
 ;; https://emacs-china.org/t/pdf/14954/5
@@ -683,7 +892,11 @@ occurence of CHAR."
                    "open")))
     (call-process program nil 0 nil current-file-name)))
 ;; }}}
+#+end_src
 
+** package initialize
+
+#+begin_src emacs-lisp :tangle yes
 ;; package.el: mirror 插件镜像
 ;; {{{
 ;; GitHub connection: https://github.com/hedzr/mirror-list
@@ -708,7 +921,11 @@ occurence of CHAR."
 (when (not package-archive-contents)
   (package-refresh-contents))
 ;; }}}
+#+end_src
 
+** profile
+
+#+begin_src emacs-lisp :tangle yes
 ;; profile: benchmark-init
 ;; {{{
 (require 'benchmark-init-modes)
@@ -717,7 +934,11 @@ occurence of CHAR."
 ;; To disable collection of benchmark data after init is done.
 (add-hook 'after-init-hook 'benchmark-init/deactivate)
 ;; }}}
+#+end_src
 
+** package dependency graph
+
+#+begin_src emacs-lisp :tangle yes
 ;; package dependency graph (Graphviz)
 ;; {{{
 ;; https://emacs-china.org/t/package/22775/2?u=suliveevil
@@ -745,7 +966,13 @@ occurence of CHAR."
                                                 collect (format "\"%s\" -> \"%s\";\n" pkg req)))))
   (insert "}"))
 ;; }}}
+#+end_src
 
+** Siri Shortcuts                                                     :macOS:
+
+*** OCR
+
+#+begin_src emacs-lisp :tangle yes
 ;; Siri Shortcuts: OCR
 ;; {{{
 (defun my/siri-ocr ()
@@ -755,7 +982,11 @@ occurence of CHAR."
   )
 (keymap-global-set "C-c H-o" #'my/siri-ocr)
 ;; }}}
+#+end_src
 
+*** Translate
+
+#+begin_src emacs-lisp :tangle yes
 ;; Siri Shortcuts: Translate
 ;; {{{
 (add-to-list 'display-buffer-alist
@@ -811,7 +1042,13 @@ occurence of CHAR."
 
 (keymap-global-set "H-t H-t" #'language-to-zh-or-zh-to-english)
 ;; }}}
+#+end_src
 
+** open in...
+
+*** Neovide
+
+#+begin_src emacs-lisp :tangle yes
 ;; Neovide
 ;; {{{
 (defun my/open-in-neovide ()
@@ -825,7 +1062,11 @@ occurence of CHAR."
                                        (buffer-file-name)
                                        )))
 ;; }}}
+#+end_src
 
+*** MacVim
+
+#+begin_src emacs-lisp :tangle yes
 ;; MacVim
 ;; {{{
 (defun my/open-in-macvim ()
@@ -841,7 +1082,11 @@ occurence of CHAR."
                                        "|'"
                                        )))
 ;; }}}
+#+end_src
 
+*** VSCode
+
+#+begin_src emacs-lisp :tangle yes
 ;; Visual Studio Code
 ;; {{{
 ;; https://github.com/pietroiusti/.emacs.d/blob/master/custom-functions.el
@@ -866,7 +1111,11 @@ occurence of CHAR."
 ;;     (apply 'call-process "code" nil nil nil (list (concat buffer-file-name ":" line ":" column) "--goto"))))
 ;; (keymap-set global-map "C-c C" #'my/open-in-vscode)
 ;; }}}
+#+end_src
 
+*** Obsidian
+
+#+begin_src emacs-lisp :tangle yes
 ;; Obsidian
 ;; {{{
 ;; https://emacs-china.org/t/emacs-obsidian/22504/11?u=suliveevil
@@ -875,6 +1124,65 @@ occurence of CHAR."
   (browse-url-xdg-open
    (concat "obsidian://open?path=" (url-hexify-string (buffer-file-name)))))
 ;; }}}
+#+end_src
+
+** 游戏 Game
+
+*** 俄罗斯方块 Tetris
+
+** split config
+
+*** require package config
+
+#+begin_src emacs-lisp :tangle no
+;; package config
+;; {{{
+;; (add-to-list 'load-path "~/.config/emacs/init-package.el")
+;; (require 'init-package) ;; packages installed by package.el
+;; }}}
+(add-to-list 'load-path (expand-file-name
+                         "init-pac.el"
+                         (concat user-emacs-directory)
+                         )
+             )
+;; require is based on file name instead of what is `provide'?
+(require 'init-pac) ; packages configuration
+#+end_src
+
+*** require package (in lib/) config
+
+#+begin_src emacs-lisp :tangle no
+;; package out of package.el :FIXME:
+;; {{{
+;; :FIXME:
+;; (add-to-list 'load-path (expand-file-name
+;; "init-lib.el"
+;; user-emacs-directory))
+;; (add-to-list 'load-path "~/.config/emacs/init-lib.el")
+(add-to-list 'load-path (expand-file-name
+                         "init-lib.el"
+                         (concat user-emacs-directory)
+                         )
+             )
+;; }}}
+(require 'init-lib)     ; packages (out of elpa/melpa) configuration
+#+end_src
+
+*** test
+
+#+begin_src emacs-lisp :tangle no
+(add-to-list 'load-path (expand-file-name
+                         "init-test.el"
+                         (concat user-emacs-directory)
+                         )
+             )
+(require 'init-test)    ; test my little functions
+#+end_src
+
+
+* test
+
+#+begin_src emacs-lisp :tangle yes
 
 ;; (defun language-detect-zh ()
 ;;   (interactive)
@@ -910,13 +1218,26 @@ occurence of CHAR."
 ;; (semantic-mode 1)
 ;; (semantic-stickyfunc-mode 1)
 
+#+end_src
+
+
+
+* Package (ELPA/MELPA)
+
+** use-package
+
+#+begin_src emacs-lisp :tangle yes
 ;; use-package
 ;; {{{
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 (setq use-package-verbose t)
 ;; }}}
+#+end_src
 
+** 环境变量
+
+#+begin_src emacs-lisp :tangle yes
 ;; exec-path-from-shell
 ;; {{{
 (when (memq window-system '(mac ns x))
@@ -924,13 +1245,21 @@ occurence of CHAR."
 (when (daemonp)
   (exec-path-from-shell-initialize))
 ;; }}}
+#+end_src
 
+** macOS 词典.app                                                     :macOS:
+
+#+begin_src emacs-lisp :tangle yes
 ;; dictionary: Apple 词典: osx-dictionary
 ;; {{{
 ;; (require 'osx-dictionary)
 (keymap-global-set "C-c d" #'osx-dictionary-search-word-at-point)
 ;; }}}
+#+end_src
 
+** 拼音搜索
+
+#+begin_src emacs-lisp :tangle yes
 ;; ace-pinyin
 ;; {{{
 (use-package ace-pinyin
@@ -940,7 +1269,11 @@ occurence of CHAR."
   (ace-pinyin-global-mode +1)
   )
 ;; }}}
+#+end_src
 
+** pyim                                                              :输入法:
+
+#+begin_src emacs-lisp :tangle yes
 ;; pyim
 ;; {{{
 (require 'pyim)
@@ -1006,7 +1339,11 @@ occurence of CHAR."
     (pyim-cregexp-build result)))
 (advice-add 'orderless-regexp :around #'my-orderless-regexp)
 ;; }}}
+#+end_src
 
+** 系统输入法切换                                                    :输入法:
+
+#+begin_src emacs-lisp :tangle yes
 ;; ;; smart-input-source
 ;; ;; {{{
 ;; (use-package sis
@@ -1046,7 +1383,11 @@ occurence of CHAR."
 ;;                      (not (sis--string-match-p "^\*Scratch" (buffer-name buffer))))))) ; *Scratch*  仍可使用 C-h/C-x/C-c 前缀
 ;;   )
 ;; ;; }}}
+#+end_src
 
+** 中英文空格                                                        :format:
+
+#+begin_src emacs-lisp :tangle yes
 ;; pangu-spacing
 ;; {{{
 (use-package pangu-spacing
@@ -1056,12 +1397,23 @@ occurence of CHAR."
   (setq pangu-spacing-real-insert-separtor t)
   )
 ;; }}}
+#+end_src
 
+
+** Bookmark 书签
+
+binky-mode
+
+#+begin_src emacs-lisp :tangle yes
 ;; binky-mode
 ;; {{{
 
 ;; }}}
+#+end_src
 
+** snippet
+
+#+begin_src emacs-lisp :tangle yes
 ;; yasnippet
 ;; {{{
 (use-package yasnippet
@@ -1069,7 +1421,13 @@ occurence of CHAR."
   (yas-global-mode 1)
   )
 ;; }}}
+#+end_src
 
+** 搜索工具
+
+*** ripgrep: deadgrep
+
+#+begin_src emacs-lisp :tangle yes
 ;; deadgrep
 ;; {{{
 (use-package deadgrep
@@ -1088,14 +1446,26 @@ occurence of CHAR."
     )
   )
 ;; }}}
+#+end_src
 
+
+
+*** khoj
+
+Natural Language Search
+
+#+begin_src emacs-lisp :tangle yes
 ;; khoj
 ;; {{{
 ;; Install Khoj Package from MELPA Stable
 (use-package khoj
   :bind ("C-c n s" . 'khoj))
 ;; }}}
+#+end_src
 
+** 快捷键
+
+#+begin_src emacs-lisp :tangle yes
 ;; free-keys
 ;; {{{
 (require 'free-keys)
@@ -1125,7 +1495,11 @@ occurence of CHAR."
                             "C-c"
                             "C-x" ))
 ;; }}}
+#+end_src
 
+** 帮助※文档
+
+#+begin_src emacs-lisp :tangle yes
 ;; helpful
 ;; {{{
 (use-package helpful
@@ -1161,7 +1535,13 @@ occurence of CHAR."
 ;; (setq counsel-describe-function-function #'helpful-callable)
 ;; (setq counsel-describe-variable-function #'helpful-variable)
 ;; }}}
+#+end_src
 
+** UI 提示
+
+*** header
+
+#+begin_src emacs-lisp :tangle yes
 ;; sticky header: topsy
 ;; {{{
 ;; (add-hook 'prog-mode-hook #'topsy-mode)
@@ -1175,14 +1555,22 @@ occurence of CHAR."
   (setq org-sticky-header-full-path 'full)
   )
 ;; }}}
+#+end_src
 
+*** 版本控制
+
+#+begin_src emacs-lisp :tangle yes
 ;; diff-hl
 ;; {{{
 (global-diff-hl-mode)
 ;; (global-git-gutter-mode +1) ; BUG when deleting folded 17000+lines
 
 ;; }}}
+#+end_src
 
+*** region: goggles
+
+#+begin_src emacs-lisp :tangle yes
 ;; goggles: visual hint for operations
 ;; {{{
 (use-package goggles
@@ -1190,7 +1578,11 @@ occurence of CHAR."
   :config
   (setq-default goggles-pulse t)) ;; set to nil to disable pulsing
 ;; }}}
+#+end_src
 
+*** 括号: highlight-parentheses
+
+#+begin_src emacs-lisp :tangle yes
 ;; highlight-parentheses
 ;; {{{
 (require 'highlight-parentheses)
@@ -1213,7 +1605,11 @@ occurence of CHAR."
 ;; (setq show-paren-when-point-inside-paren t
 ;;       show-paren-when-point-in-periphery t)
 ;; }}}
+#+end_src
 
+*** modeline
+
+#+begin_src emacs-lisp :tangle yes
 ;; doom-modeline
 ;; {{{
 ;; (add-hook 'after-init-hook #'doom-modeline-mode)
@@ -1236,7 +1632,11 @@ occurence of CHAR."
   (setq doom-modeline-buffer-file-name-style 'relative-to-project)
   )
 ;; }}}
+#+end_src
 
+*** ICON 图标
+
+#+begin_src emacs-lisp :tangle yes
 ;; all-the-icons
 ;; {{{
 ;; (use-package all-the-icons :if (display-graphic-p))
@@ -1245,7 +1645,11 @@ occurence of CHAR."
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
   (add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup))
 ;; }}}
+#+end_src
 
+** 折叠
+
+#+begin_src emacs-lisp :tangle yes
 ;; fold: origami
 ;; {{{
 (add-hook 'prog-mode-hook 'origami-mode)
@@ -1254,7 +1658,11 @@ occurence of CHAR."
   (define-key origami-mode-map (kbd "C-c F") 'origami-toggle-all-nodes)
   )
 ;; }}}
+#+end_src
 
+** 多光标
+
+#+begin_src emacs-lisp :tangle yes
 ;; multiple-cursors
 ;; {{{
 ;; multiple-cursors-mode-enabled-hook
@@ -1281,7 +1689,13 @@ occurence of CHAR."
                                     (kbd "C-@"))
                                    ))
 ;; }}}
+#+end_src
 
+** 选择
+
+*** expand-region
+
+#+begin_src emacs-lisp :tangle yes
 ;; expand-region
 ;; {{{
 (keymap-global-unset "C-=")
@@ -1291,7 +1705,11 @@ occurence of CHAR."
          ("C--" . er/contract-region))
   )
 ;; }}}
+#+end_src
 
+*** symbol-overlay
+
+#+begin_src emacs-lisp :tangle yes
 ;; symbol-overlay
 ;; {{{
 (use-package symbol-overlay
@@ -1330,7 +1748,11 @@ occurence of CHAR."
 ;; (keymap-set symbol-overlay-mode "t" symbol-overlay-toggle-in-scope)
 ;; (keymap-set symbol-overlay-mode "w" symbol-overlay-save-symbol)
 ;; }}}
+#+end_src
 
+** git: Magit
+
+#+begin_src emacs-lisp :tangle yes
 ;; difftastic + magit
 ;; {{{
 ;; (with-eval-after-load 'magit
@@ -1448,7 +1870,11 @@ occurence of CHAR."
 ;;   )
 ;; (add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1)))
 ;; ;; }}}
+#+end_src
 
+** package database
+
+#+begin_src emacs-lisp :tangle yes
 ;; package database: epkg + epkgs
 ;; {{{
 (setq epkg-repository "~/Documents/GitHub/epkgs")
@@ -1464,7 +1890,11 @@ occurence of CHAR."
               (cadr (assq pkg package-alist)))))
    package-activated-list))
 ;; }}}
+#+end_src
 
+** 光标跳转
+
+#+begin_src emacs-lisp :tangle yes
 ;; avy
 ;; {{{
 ;; https://karthinks.com/software/avy-can-do-anything
@@ -1475,7 +1905,11 @@ occurence of CHAR."
 (keymap-global-set "M-g e"   #'avy-goto-word-0)
 (keymap-global-set "C-c C-j" #'avy-resume)
 ;; }}}
+#+end_src
 
+** consult
+
+#+begin_src emacs-lisp :tangle yes
 ;; consult
 ;; {{{
 ;; Example configuration for Consult
@@ -1593,7 +2027,11 @@ occurence of CHAR."
   ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
   )
 ;; }}}
+#+end_src
 
+** vertico+posframe+orderless+marginalia
+
+#+begin_src emacs-lisp :tangle yes
 ;; vertico
 ;; {{{
 (use-package vertico
@@ -1722,7 +2160,18 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
      (marginalia-annotate-binding cand)
      (marginalia--documentation (marginalia--function-doc sym)))))
 ;; }}}
+#+end_src
 
+
+** Diff
+
+
+
+** org-roam
+
+*** basic config
+
+#+begin_src emacs-lisp :tangle yes
 ;; org-roam: basic config
 ;; {{{
 (use-package org-roam
@@ -1751,7 +2200,140 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   (org-roam-db-autosync-mode 1) ;; if md-roam installed, move to md-roam config
   )
 ;; }}}
+#+end_src
 
+*** directory
+
+#+begin_src emacs-lisp :tangle no
+;; org-roam: directory
+;; {{{
+;; }}}
+#+end_src
+
+*** node
+
+#+begin_src emacs-lisp :tangle no
+;; org-roam: node directory                                                       ; FIXME
+;; {{{
+;; (with-eval-after-load 'org-roam
+;;   (cl-defmethod org-roam-node-directories ((node org-roam-node))
+;;     (if-let ((dirs (file-name-directory (file-relative-name (org-roam-node-file node) org-roam-directory))))
+;;         (format "(%s)" (car (split-string dirs "/")))
+;;       ""))
+;;   (setq org-roam-node-display-template
+;;         "${title:30} ${tags:30} ${directories:15}")
+;;   )
+;; }}}
+
+;; org-roam: backlink count & node hierarchy
+;; {{{
+;; ;; https://github.com/Jousimies/.emacs.d/blob/master/lisp/init-roam.el
+;; (require 'org)
+;; (require 'org-roam)
+;; ;;
+;; (cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
+;;   (let* ((count (caar (org-roam-db-query
+;;                        [:select (funcall count source)
+;;                                 :from links
+;;                                 :where (= dest $s1)
+;;                                 :and (= type "id")]
+;;                        (org-roam-node-id node)))))
+;;     (format "[%d]" count)))
+;; ;;
+;; ;;   (cl-defmethod org-roam-node-filetitle ((node org-roam-node))
+;; ;;     "Return the file TITLE for the node."
+;; ;;     (if-let ((file (org-roam-node-file node)))
+;; ;;         (with-temp-buffer
+;; ;;           (insert-file-contents file nil 0 1024)
+;; ;;           (cadr (assoc "TITLE"
+;; ;;                        (org-collect-keywords (list "TITLE")))))
+;; ;;       (cadr (assoc "TITLE"
+;; ;;                    (org-collect-keywords (list "TITLE"))))))
+
+;; ;; (cl-defmethod org-roam-node-hierarchy ((node org-roam-node))
+;; ;;   "Return the hierarchy for the node."
+;; ;;   (let ((title (org-roam-node-title node))
+;; ;;         (olp (org-roam-node-olp node))
+;; ;;         (level (org-roam-node-level node))
+;; ;;         (filetitle (org-roam-node-filetitle node)))
+;; ;;     (concat
+;; ;;      (if (> level 0) (concat filetitle " > "))
+;; ;;      (if (> level 1) (concat (string-join olp " > ") " > "))
+;; ;;      title))
+;; ;;   )
+;; ;;
+;; (setq org-roam-node-display-template
+;;       "${title:30} ${backlinkscount:5} ${tags:30} ${directories:15}")
+;; }}}
+#+end_src
+
+
+*** completion
+
+#+begin_src emacs-lisp :tangle no
+;; org-roam: completion
+;; {{{
+;;roam links support auto-completion via completion-at-point
+;; call M-x completion-at-point within a roam link.
+;; Where the | character represents the cursor:
+;; [[|]] : completes for a file title
+;; [[roam:]] : completes for a file title
+;; [[*|]] : completes for a headline within this file
+;; [[foo*|]] : completes a headline within the file with title “foo”
+;; [[roam:foo*|]] completes a headline within the file with title “foo”
+;; }}}
+#+end_src
+
+*** slug
+
+#+begin_src emacs-lisp :tangle no
+;; org-roam: slug (called by org-roam-capture-templates)
+;; {{{
+;; (cl-defmethod org-roam-node-slug ((node org-roam-node))
+;;   "Return the slug of NODE."
+;;   (let ((title (org-roam-node-title node))
+;;         (slug-trim-chars '(;; Combining Diacritical Marks https://www.unicode.org/charts/PDF/U0300.pdf
+;;                            768 ; U+0300 COMBINING GRAVE ACCENT
+;;                            769 ; U+0301 COMBINING ACUTE ACCENT
+;;                            770 ; U+0302 COMBINING CIRCUMFLEX ACCENT
+;;                            771 ; U+0303 COMBINING TILDE
+;;                            772 ; U+0304 COMBINING MACRON
+;;                            774 ; U+0306 COMBINING BREVE
+;;                            775 ; U+0307 COMBINING DOT ABOVE
+;;                            776 ; U+0308 COMBINING DIAERESIS
+;;                            777 ; U+0309 COMBINING HOOK ABOVE
+;;                            778 ; U+030A COMBINING RING ABOVE
+;;                            780 ; U+030C COMBINING CARON
+;;                            795 ; U+031B COMBINING HORN
+;;                            803 ; U+0323 COMBINING DOT BELOW
+;;                            804 ; U+0324 COMBINING DIAERESIS BELOW
+;;                            805 ; U+0325 COMBINING RING BELOW
+;;                            807 ; U+0327 COMBINING CEDILLA
+;;                            813 ; U+032D COMBINING CIRCUMFLEX ACCENT BELOW
+;;                            814 ; U+032E COMBINING BREVE BELOW
+;;                            816 ; U+0330 COMBINING TILDE BELOW
+;;                            817 ; U+0331 COMBINING MACRON BELOW
+;;                            )))
+;;     (cl-flet* ((nonspacing-mark-p (char)
+;;                                   (memq char slug-trim-chars))
+;;                (strip-nonspacing-marks (s)
+;;                                        (ucs-normalize-NFC-string
+;;                                         (apply #'string (seq-remove #'nonspacing-mark-p
+;;                                                                     (ucs-normalize-NFD-string s)))))
+;;                (cl-replace (title pair)
+;;                            (replace-regexp-in-string (car pair) (cdr pair) title)))
+;;       (let* ((pairs `(("[^[:alnum:][:digit:]]" . "-") ;; convert anything not alphanumeric
+;;                       ("--*" . "-")                   ;; remove sequential underscores
+;;                       ("^-" . "")                     ;; remove starting underscore
+;;                       ("-$" . "")))                   ;; remove ending underscore
+;;              (slug (-reduce-from #'cl-replace (strip-nonspacing-marks title) pairs)))
+;;         (downcase slug)))))
+;; }}}
+#+end_src
+
+*** tag
+
+#+begin_src emacs-lisp :tangle yes
 ;; org-roam: filter tags
 ;; {{{
 (defun my/org-roam-filter-by-tag (tag-name)
@@ -1784,7 +2366,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
      nil
      (lambda (node) (member chosen-tag (org-roam-node-tags node))))))
 ;; }}}
+#+end_src
 
+*** template
+
+#+begin_src emacs-lisp :tangle yes
 ;; org-roam: template,  id (uuid) timestamps and so on
 ;; {{{
 (setq org-roam-capture-templates
@@ -1897,7 +2483,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
         ;; Z
         ))
 ;; }}}
+#+end_src
 
+*** UI & ORUI
+
+#+begin_src emacs-lisp :tangle yes
 ;; org-roam: UI
 ;; {{{
 ;; (custom-set-faces
@@ -1926,7 +2516,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
         org-roam-ui-open-on-start t)
   )
 ;; }}}
+#+end_src
 
+*** database
+
+#+begin_src emacs-lisp :tangle yes
 ;; little hack
 ;; {{{
 ;; brew install --cask db-browser-for-sqlite
@@ -1940,7 +2534,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
    (t
     (message "my/org-roam-view-db not yet working on this system-type"))))
 ;; }}}
+#+end_src
 
+*** consult-org-roam
+
+#+begin_src emacs-lisp :tangle yes
 ;; consult-org-roam
 ;; {{{
 (use-package consult-org-roam
@@ -1969,7 +2567,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   ("C-c n l" . consult-org-roam-forward-links)
   ("C-c n s" . consult-org-roam-search))
 ;; }}}
+#+end_src
 
+*** org-similarity
+
+#+begin_src emacs-lisp :tangle yes
 ;; org-similarity
 ;; {{{
 (use-package org-similarity
@@ -1988,7 +2590,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   (setq org-similarity-recursive-search t)
   )
 ;; }}}
+#+end_src
 
+*** md-roam
+
+#+begin_src emacs-lisp :tangle yes
 ;; md-roam
 ;; {{{
 ;; https://emacs.stackexchange.com/questions/5465/how-to-migrate-markdown-files-to-emacs-org-mode-format
@@ -1999,7 +2605,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; (setq md-roam-file-extension "md") ; default "md". Specify an extension such as "markdown"
 ;; (org-roam-db-autosync-mode 1) ; autosync-mode triggers db-sync. md-roam-mode must be already active
 ;; }}}
+#+end_src
 
+** markdown
+
+#+begin_src emacs-lisp :tangle yes
 ;; markdown-mode
 ;; {{{
 (use-package markdown-mode
@@ -2016,7 +2626,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   (setq markdown-enable-math t)
   )
 ;; }}}
+#+end_src
 
+** RFC
+
+#+begin_src emacs-lisp :tangle yes
 ;; RFC
 ;; {{{
 (use-package rfc-mode
@@ -2025,13 +2639,21 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   (setq rfc-mode-directory (expand-file-name "~/Documents/GitHub/RFC-all/txt/"))
   )
 ;; }}}
+#+end_src
 
+** 跟随系统 UI
+
+#+begin_src emacs-lisp :tangle yes
 ;; auto-dark
 ;; {{{
 (use-package auto-dark
   :init (auto-dark-mode t))
 ;; }}}
+#+end_src
 
+** frame 管理
+
+#+begin_src emacs-lisp :tangle yes
 ;; moom + transient
 ;; {{{
 ;; (with-suppressed-warnings '(void-function transient-prefix)) ;FIXME
@@ -2063,13 +2685,21 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;;   )
 ;; )
 ;; }}}
+#+end_src
 
+** window 管理
+
+#+begin_src emacs-lisp :tangle yes
 ;; {{{ ace-window
 ;; (require 'ace-window)
 (keymap-global-set "H-o" #'ace-window)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
 ;; }}}
+#+end_src
 
+** 光标跳转
+
+#+begin_src emacs-lisp :tangle yes
 ;; goto-line-preview
 ;; {{{
 (use-package goto-line-preview
@@ -2078,13 +2708,53 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   ("H-l" . goto-line-preview)
   )
 ;; }}}
+#+end_src
 
+** UI
+
+#+begin_src emacs-lisp :tangle no
+;; ;; olivetti
+;; ;; {{{
+;; ;; https://emacs-china.org/t/emacs/19797/4
+;; (use-package olivetti
+;;   :diminish
+;;   :bind ("<f8>" . olivetti-mode)
+;;   :init
+;;   (setq olivetti-body-width 90)         ; default: fill-column+2
+;;   (defun xs-toggle-olivetti-for-org ()
+;;     "if current buffer is org and only one visible buffer
+;;   enable olivetti mode"
+;;     (if (and (eq (buffer-local-value 'major-mode (current-buffer)) 'org-mode)
+;;              (or (eq (length (window-list nil nil nil)) 1)
+;;                  (window-at-side-p (frame-first-window) 'right))) ;; frame-first-window 的 mode 是 org-mode 并且没有右边 window
+;;         (olivetti-mode 1)
+;;       (olivetti-mode 0)
+;;       (when (eq (buffer-local-value 'major-mode (current-buffer)) 'org-mode)
+;;         (visual-line-mode 1))))
+;;   (add-hook 'org-mode-hook #'xs-toggle-olivetti-for-org)
+;;   (add-hook 'window-configuration-change-hook #'xs-toggle-olivetti-for-org))
+;; ;; }}}
+#+end_src
+
+** 图表
+
+*** Graphviz
+
+#+begin_src emacs-lisp :tangle yes
 ;; graphviz-dot-mode
 ;; {{{
 (setq graphviz-dot-indent-width 4)
 (setq graphviz-dot-preview-extension "svg")
 ;; }}}
+#+end_src
 
+*** PlantUML
+
+*** D2
+
+** 地图
+
+#+begin_src emacs-lisp :tangle yes
 ;; osm: OpenStreetMap
 ;; {{{
 (use-package osm
@@ -2105,7 +2775,13 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   (with-eval-after-load 'org
     (require 'osm-ol)))
 ;; }}}
+#+end_src
 
+** 网页浏览、信息订阅、阅读
+
+*** elfeed
+
+#+begin_src emacs-lisp :tangle yes
 ;; elfeed
 ;; {{{
 ;; reference: https://github.com/jiacai2050/jiacai2050.github.io/blob/hugo/playground/mu4e-elfeed-config.el
@@ -2129,7 +2805,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   :hook (elfeed-dashboard-mode . elfeed-org)
   )
 ;; }}}
+#+end_src
 
+*** nov + shrface + eww
+
+#+begin_src emacs-lisp :tangle yes
 ;; shrface eww nov
 ;; {{{
 (use-package shrface
@@ -2160,7 +2840,62 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
    )
   )
 ;; }}}
+#+end_src
 
+*** PDF
+
+#+begin_src emacs-lisp :tangle no
+;; ;; pdf-tools
+;; ;; {{{
+;; ;; https://github.com/furkanusta/dotfiles/blob/master/emacs/dot-emacs.d/elisp/usta-uncategorized.el
+;; (use-package pdf-tools
+;;   :ensure nil
+;;   ;; :magic ("%PDF" . pdf-view-mode)
+;;   :mode ("\\.[pP][dD][fF]\\'" . pdf-view-mode)
+;;   ;; :hook (
+;;     ;; (pdf-view-mode . disable-line-numbers)
+;;          ;; (pdf-view-mode . pdf-sync-minor-mode)
+;;          ;; (pdf-view-mode . pdf-links-minor-mode)
+;;          ;; (pdf-view-mode . pdf-history-minor-mode)
+;;          ;; (pdf-view-mode . pdf-annot-minor-mode)
+;;          ;; (pdf-view-mode . pdf-view-themed-minor-mode)
+;;     ;; )
+;;   :custom
+;;   (pdf-view-display-size 'fit-page)
+;;   ;; (pdf-annot-activate-created-annotations nil)
+;;   (pdf-view-resize-factor 1.1)
+;;   :bind (:map pdf-view-mode-map
+;;          ("M-w" . pdf-view-kill-ring-save)
+;;               ("o" . pdf-outline)
+;;               ("O" . pdf-occur)
+;;               ("M-g M-g" . pdf-view-goto-page)
+;;               ("S-SPC" . pdf-view-scroll-down-or-previous-page)
+;;          ("<double-wheel-down>" .  pdf-view-next-line-or-next-page)
+;;          ("<triple-wheel-down>" .  pdf-view-next-line-or-next-page)
+;;          ("j" . pdf-view-next-line-or-next-page)
+;;          ("k" . pdf-view-previous-line-or-previous-page)
+;;          ("J" . forward-page)
+;;          ("K" . backward-page)
+;;          ("=" . pdf-view-enlarge)
+;;          ("-" . pdf-view-shrink)
+;;          ("w" . pdf-view-fit-width-to-window)
+;;          ("h" . pdf-view-fit-height-to-window)
+;;          ("p" . pdf-view-fit-page-to-window)
+;;          ("/" . isearch-forward)
+;;     )
+;;   )
+
+;; ;; (keymap-set pdf-view-mode "<double-wheel-down>"  #'pdf-view-next-line-or-next-page)
+;; ;; (keymap-set pdf-view-mode "<triple-wheel-down>"  #'pdf-view-next-line-or-next-page)
+;; ;; }}}
+#+end_src
+
+
+* Package (Git and elsewhere)
+
+** macOS App 交互                                                     :macOS:
+
+#+begin_src emacs-lisp :tangle yes
 ;; org-mac-link
 ;; {{{
 (use-package org-mac-link
@@ -2170,7 +2905,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
          )
   )
 ;; }}}
+#+end_src
 
+** 快捷键历史记录
+
+#+begin_src emacs-lisp :tangle yes
 ;; keyfreq: Track Emacs commands frequency
 ;; {{{
 ;; keyfreq fork: keyfreq-html-v2 show keyboard heat map
@@ -2291,12 +3030,20 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;;         "emms-"
 ;;        )))
 ;; }}}
+#+end_src
 
+** 帮助※文档
+
+#+begin_src emacs-lisp :tangle yes
 ;; elisp-demos
 ;; {{{
 (advice-add 'helpful-update :after #'elisp-demos-advice-helpful-update)
 ;; }}}
+#+end_src
 
+** LSP
+
+#+begin_src emacs-lisp :tangle yes
 ;; lsp-bridge
 ;; {{{
 (use-package lsp-bridge
@@ -2331,19 +3078,31 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;;      (global-lsp-bridge-mode)
 ;;      ))
 ;; }}}
+#+end_src
 
+** fuck
+
+#+begin_src emacs-lisp :tangle yes
 ;; fuck
 ;; {{{
 (require 'fuck)
 (keymap-global-set "H-k" #'fuck)
 ;; }}}
+#+end_src
 
+** Unicode
+
+#+begin_src emacs-lisp :tangle yes
 ;; unicode
 ;; {{{
 (require 'modeline-char)
 (add-hook 'after-init-hook 'mlc-char-in-mode-line-mode-global)
 ;; }}}
+#+end_src
 
+** org-auto-tangle
+
+#+begin_src emacs-lisp :tangle yes
 ;; org-auto-tangle
 ;; {{{
 (use-package org-auto-tangle
@@ -2351,7 +3110,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   :hook (org-mode . org-auto-tangle-mode)
   )
 ;; }}}
+#+end_src
 
+** 折叠
+
+#+begin_src emacs-lisp :tangle yes
 ;; ts-fold
 ;; {{{
 ;; (use-package ts-fold
@@ -2359,7 +3122,13 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;;   )
 ;; (add-hook 'tree-sitter-after-on-hook #'ts-fold-indicators-mode)
 ;; }}}
+#+end_src
 
+** 多媒体
+
+*** 字幕※歌词 Subtitle & Lyric
+
+#+begin_src emacs-lisp :tangle yes
 ;; subed: subtitle edit
 ;; {{{
 (use-package subed
@@ -2374,7 +3143,21 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   ;; Break lines at 40 characters
   (add-hook 'subed-mode-hook (lambda () (setq-local fill-column 40))))
 ;; }}}
+#+end_src
 
+*** STT
+
+*** TTS
+
+*** Video
+
+
+
+** 图表
+
+*** D2
+
+#+begin_src emacs-lisp :tangle yes
 ;; D2 Mode
 ;; {{{
 (add-to-list 'auto-mode-alist '("\\.d2" . d2-mode))
@@ -2398,7 +3181,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;;       (scheme . t)
 ;;       (d2 . t)))
 ;; }}}
+#+end_src
 
+** 阅读
+
+#+begin_src emacs-lisp :tangle yes
 (use-package nov-xwidget
   :ensure nil
   :demand t
@@ -2406,7 +3193,12 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   :config
   (define-key nov-mode-map (kbd "o") 'nov-xwidget-view)
   (add-hook 'nov-mode-hook 'nov-xwidget-inject-all-files))
+#+end_src
 
+
+** 图像
+
+#+begin_src emacs-lisp :tangle yes
 ;; image-roll
 ;; {{{
 (use-package image-roll
@@ -2414,4 +3206,15 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   )
 ;; }}}
 
+
+#+end_src
+
+
+* File End
+
+#+begin_src emacs-lisp :tangle yes
 ;;; init.el ends here
+#+end_src
+
+
+* Misc

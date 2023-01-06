@@ -1,62 +1,9 @@
 ;; -*- coding: utf-8; lexical-binding: t; -*-
 ;; -*- origami-fold-style: triple-braces -*-
-;; early-init.el --- Emacs 27+ pre-initialisation config
+;;; early-init.el --- Emacs 27+ pre-initialisation config
 ;; Code loaded before the package system and GUI is initialized.
 
-;; profile
-;; {{{
-;; M-x profiler-start
-;; M-x profiler-report
-;; profiler-report-render-calltree
-(defconst my/before-load-init-time (current-time))
-
-;;;###autoload
-(defun my/load-init-time ()
-  "Loading time of user init files including time for `after-init-hook'."
-  (let ((time1 (float-time
-                (time-subtract after-init-time my/before-load-init-time)))
-        (time2 (float-time
-                (time-subtract (current-time) my/before-load-init-time))))
-    (message (concat "Loading init files: %.0f [msec], "
-                     "of which %.f [msec] for `after-init-hook'.")
-             (* 1000 time1) (* 1000 (- time2 time1)))))
-(add-hook 'after-init-hook #'my/load-init-time t)
-
-(defvar my/tick-previous-time my/before-load-init-time)
-
-;;;###autoload
-(defun my/tick-init-time (msg)
-  "Tick boot sequence at loading MSG."
-  (when my/loading-profile-p
-    (let ((ctime (current-time)))
-      (message "---- %5.2f[ms] %s"
-               (* 1000 (float-time
-                        (time-subtract ctime my/tick-previous-time)))
-               msg)
-      (setq my/tick-previous-time ctime))))
-
-(defun my/emacs-init-time ()
-  "Emacs booting time in msec."
-  (interactive)
-  (message "Emacs booting time: %.0f [msec] = `emacs-init-time'."
-           (* 1000
-              (float-time (time-subtract
-                           after-init-time
-                           before-init-time)))))
-
-(add-hook 'after-init-hook #'my/emacs-init-time)
-;; }}}
-
-;; Emacs
-;; {{{
-(let* ((emacs-Res "/Applications/Emacs.app/Contents/Resources/")
-       (emacs-git "~/Documents/emacs/") ; emacs-git /src/ source
-       (emacs-src (if (file-exists-p (concat emacs-Res "src/"))
-                      emacs-Res
-                    emacs-git)))
-  (setq source-directory emacs-src)
-  (setq find-function-C-source-directory (concat emacs-src "src/")))
-;; }}}
+;; Date: 2023-01-06 07:23:09 +0800
 
 ;; startup
 ;; {{{
@@ -71,12 +18,14 @@
 (setq debug-on-error t)
 ;; warning
 (setq byte-compile-warnings nil)
-;; (setq native-comp-async-report-warnings-errors nil)
+(setq native-comp-async-report-warnings-errors nil)
+;; (add-to-list 'warning-suppress-log-types '((defvaralias))) ; FIXME
 ;; error
 ;; }}}
 
-(setq use-short-answers t) ;; use y/n instead of yes/no
 (setq confirm-kill-emacs (lambda (prompt) (y-or-n-p-with-timeout "确认退出？" 10 "y")))
+;; (setq confirm-kill-emacs 'yes-or-no-p)
+(setq use-short-answers t) ;; use y/n instead of yes/no
 
 ;; custome-file
 ;; {{{
@@ -112,30 +61,41 @@
 (setq system-time-locale "C")
 ;; }}}
 
-;; key
+(setq vc-follow-symlinks t)
+
+;; keymap
 ;; {{{
-;; repeat-mode
-(setq repeat-mode t)
-(defvar org-mode-navigation-repeat-map
-  "Keymap to repeat `org-mode' navigation key sequences.  Used in `repeat-mode'."
-  ;; org-mode C-c C-n 或 C-p 或 C-f 或 C-b 或 C-i 或 C-u
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "C-n") #'org-next-visible-heading)
-    (define-key map (kbd "C-p") #'org-previous-visible-heading)
-    (define-key map (kbd "C-f") #'org-forward-heading-same-level)
-    (define-key map (kbd "C-b") #'org-backward-heading-same-level)
-    (define-key map (kbd "C-u") #'org-up-heading)
-    (define-key map (kbd "C-i") #'org-down-heading)
-    (--each '(
-              org-next-visible-heading
-              org-previous-visible-heading
-              org-forward-heading-same-level
-              org-backward-heading-same-level
-              org-up-heading org-down-heading)
-      (put it 'repeat-map 'org-mode-navigation-repeat-map)
+;; bind: 全局按键/快捷键 (Global key bindings)
+(setq echo-keystrokes 0.1)
+(setq mac-command-modifier       'super   ;; s: super(Command/Win)
+      mac-control-modifier       'control ;; C: Ctrl
+      mac-option-modifier        'meta    ;; M: Meta (Option/Alt)
+      mac-right-command-modifier 'hyper   ;; H: hyper (reachable for thumb)
+      mac-right-option-modifier  'none    ;; Leave Option to macOS
+      mac-right-control-modifier 'control ;; C: Ctrl
+      ;; mac-function-modifier            ;; Function Key
+      ;;                                  ;; A: Alt (redundant and not used)
+      ;;                                  ;; H: Hyper
+      ;;                                  ;; S: Shift
       )
-    map)
-  )
+
+;; }}}
+
+;; basic keybinding
+;; {{{
+(keymap-global-set "s-a" #'mark-whole-buffer)
+(keymap-global-set "s-c" #'kill-ring-save)          ;; M-w     copy       复制
+(keymap-global-set "s-q" #'save-buffers-kill-emacs) ;;         copy       复制
+(keymap-global-set "s-v" #'yank)                    ;; C-y     paste/yank 粘贴
+(keymap-global-set "s-w" #'delete-frame)            ;;
+(keymap-global-set "s-s" #'save-buffer)             ;; C-x C-s save       保存
+(keymap-global-set "s-x" #'kill-region)             ;; C-w     cut        剪切
+(keymap-global-set "s-z" #'undo)                    ;; C-_     undo       撤销
+(keymap-global-set "s-Z" #'undo-redo)               ;; C-M-_   undo-redo  重做
+;;
+(keymap-global-set     "S-s-<return>" #'toggle-frame-maximized)
+(keymap-global-set     "C-s-f"        #'toggle-frame-fullscreen) ;; macOS
+(keymap-set global-map "H-q"          #'restart-emacs)
 ;; }}}
 
 ;; UI
@@ -167,12 +127,6 @@
 (setq use-dialog-box nil)   ;; 鼠标点击不触发弹窗
 ;; }}}
 
-
-;; symlink and version control
-;; {{{
-(setq vc-follow-symlinks t)
-;; }}}
-
 ;; minibuffer
 ;; {{{
 (setq enable-recursive-minibuffers t)
@@ -191,38 +145,41 @@
 
 ;; package
 ;; {{{
-(setq package-archives '(
-                         ("elpa"                . "https://elpa.gnu.org/packages/")
-                         ;; ("elpa-devel"          . "https://elpa.gnu.org/devel/")
-                         ;; ("jcs-elpa"            . "https://jcs-emacs.github.io/jcs-elpa/packages/")
-                         ;; ("gnu"                 . "http://elpa.gnu.org/packages/")
-                         ;; ("gnu-devel"           . "https://elpa.gnu.org/devel/")
-                         ;; ("gnu-tsinghua"        . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-                         ;; ("gnu-ustc"            . "http://mirrors.ustc.edu.cn/elpa/gnu/")
-                         ("melpa"               . "http://melpa.org/packages/")
-                         ;; ("melpa-stable"        . "https://stable.melpa.org/packages/")
-                         ;; ("melpa-tsinghua"      . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-                         ;; ("melpa-ustc"          . "http://mirrors.ustc.edu.cn/elpa/melpa/")
-                         ;; ("nongnu"              . "https://elpa.nongnu.org/nongnu/")
-                         ;; ("nongnu-devel"        . "https://elpa.nongnu.org/devel/")
-                         ;; ("nongnu-ustc"         . "http://mirrors.ustc.edu.cn/elpa/nongnu/")
-                         ))
-;; (setq package-archive-priorities '(
-;;                                    ("elpa"                       . 22)
-;;                                    ("nongnu"                     . 21)
-;;                                    ("gnu"                        . 17)
-;;                                    ("gnu-devel"                  . 18)
-;;                                    ("gnu-tsinghua"               . 50)
-;;                                    ("gnu-ustc"                   . 49)
-;;                                    ("melpa"                      . 51)
-;;                                    ("melpa-stable"               . 14)
-;;                                    ("melpa-tsinghua"             . 48)
-;;                                    ("melpa-ustc"                 . 47)
-;;                                    ("nongnu"                     . 10)
-;;                                    ("nongnu-devel"               . 11)
-;;                                    ("nongnu-ustc"                . 46)
-;;                                    ("jcs-elpa"                   . 7)
-;;                                    ))
+(setq package-archives
+      '(
+        ("elpa"                . "https://elpa.gnu.org/packages/")
+        ("melpa"               . "http://melpa.org/packages/")
+        ;; ("elpa-devel"          . "https://elpa.gnu.org/devel/")
+        ;; ("jcs-elpa"            . "https://jcs-emacs.github.io/jcs-elpa/packages/")
+        ;; ("gnu"                 . "http://elpa.gnu.org/packages/")
+        ;; ("gnu-devel"           . "https://elpa.gnu.org/devel/")
+        ;; ("gnu-tsinghua"        . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+        ;; ("gnu-ustc"            . "http://mirrors.ustc.edu.cn/elpa/gnu/")
+        ;; ("melpa-stable"        . "https://stable.melpa.org/packages/")
+        ;; ("melpa-tsinghua"      . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+        ;; ("melpa-ustc"          . "http://mirrors.ustc.edu.cn/elpa/melpa/")
+        ;; ("nongnu"              . "https://elpa.nongnu.org/nongnu/")
+        ;; ("nongnu-devel"        . "https://elpa.nongnu.org/devel/")
+        ;; ("nongnu-ustc"         . "http://mirrors.ustc.edu.cn/elpa/nongnu/")
+        ))
+;; (setq package-archive-priorities
+;; '(
+;;         ("elpa"                       . 22)
+;;         ("nongnu"                     . 21)
+;;         ("gnu"                        . 17)
+;;         ("gnu-devel"                  . 18)
+;;         ("gnu-tsinghua"               . 50)
+;;         ("gnu-ustc"                   . 49)
+;;         ("melpa"                      . 51)
+;;         ("melpa-stable"               . 14)
+;;         ("melpa-tsinghua"             . 48)
+;;         ("melpa-ustc"                 . 47)
+;;         ("nongnu"                     . 10)
+;;         ("nongnu-devel"               . 11)
+;;         ("nongnu-ustc"                . 46)
+;;         ("jcs-elpa"                   . 7)
+;;   )
+;; )
 ;; }}}
 
 ;; package: add other source packages to load path
@@ -259,20 +216,6 @@
         (add-subdirs-to-load-path subdir-path)))))
 
 (add-subdirs-to-load-path "~/.config/emacs/lib")
-
-(defun add-files-to-load-path (folder)
-  "Add FOLDER and its subdirectories to `load-path'."
-  (let ((base folder))
-    (unless (member base load-path)
-      (add-to-list 'load-path base))
-    (dolist (f (directory-files base))
-      (let ((name (concat base "/" f)))
-        (when (and (file-directory-p name)
-                   (not (equal f ".."))
-                   (not (equal f ".")))
-          (unless (member base load-path)
-            (add-to-list 'load-path name)))))))
-
-(add-files-to-load-path (expand-file-name "site-lisp" user-emacs-directory))
-
 ;; }}}
+
+;;; early-init.el ends here

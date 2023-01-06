@@ -40,3 +40,12 @@
 [submodule "lib/ts-fold"]
 	path = lib/ts-fold
 	url = git@github.com:emacs-tree-sitter/ts-fold.git
+[submodule "lib/image-roll"]
+	path = lib/image-roll
+	url = git@github.com:dalanicolai/image-roll.el.git
+[submodule "lib/org-mac-link"]
+	path = lib/org-mac-link
+	url = git@github.com:suliveevil/org-mac-link.git
+[submodule "lib/nov-xwidget"]
+	path = lib/nov-xwidget
+	url = git@github.com:chenyanming/nov-xwidget.git
