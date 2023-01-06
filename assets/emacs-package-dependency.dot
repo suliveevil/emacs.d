@@ -78,6 +78,7 @@ digraph G {"khoj" -> "emacs";
 "all-the-icons-dired" -> "emacs";
 "all-the-icons-dired" -> "all-the-icons";
 "async" -> "emacs";
+"wucuo" -> "emacs";
 "shrink-path" -> "emacs";
 "shrink-path" -> "s";
 "shrink-path" -> "dash";

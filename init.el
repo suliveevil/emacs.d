@@ -2,12 +2,13 @@
 ;; -*- origami-fold-style: triple-braces -*-
 ;;; init.el
 
-;; Date: 2023-01-06T08:34:05+0800
+;; Date: 2023-01-06T12:52:58+0800
 
 (let (
       (gc-cons-threshold most-positive-fixnum)
       (file-name-handler-alist nil)
-      ))
+      )
+  )
 
 ;; time
 ;; {{{
@@ -165,12 +166,23 @@
   (interactive)
   (find-file-other-window user-init-file))
 (keymap-global-set "C-c I" #'my/open-init-file)
-;;
+
+(defun my/open-init-org() ;; Emacs init
+  (interactive)
+  (find-file-other-window
+   (expand-file-name
+    "init.org"
+    (concat user-emacs-directory)
+    )
+   )
+  )
+(keymap-global-set "C-c H-i" #'my/open-init-org)
 ;; (defun open-goku-file()      ;; Emacs early-init
 ;;   (interactive)
 ;;   (find-file "~/.config/karabiner.edn")
 ;;   (find-file "~/.config/goku/karabiner.edn")
 ;; )
+
 ;; }}}
 
 ;; side buffer
@@ -360,7 +372,7 @@ Version 2018-06-18 2021-09-30"
 
 ;; touchpad/trackpad & mouse
 ;; {{{
-(setq mouse-wheel-tilt-scroll t)
+(setq mouse-wheel-tilt-scroll t) ; Make the direction sane on an apple trackpad
 (setq mouse-wheel-flip-direction t)
 ;;
 ;; (defun mouse-hover-tooltip (&optional arg)
@@ -735,7 +747,10 @@ occurence of CHAR."
 (setq info (my/emacs-package-dependency))
 
 ;; (with-temp-file "/tmp/g.dot"
-(with-temp-file "~/.config/emacs/assets/emacs-package-dependency.dot"
+(with-temp-file (expand-file-name
+                       "assets/emacs-package-dependency.dot"
+                       (concat user-emacs-directory)
+                       )
   (insert "digraph G {")
   (insert (mapconcat #'identity
                      (cl-loop for pkg-reqs in info
@@ -1055,6 +1070,228 @@ occurence of CHAR."
   (global-pangu-spacing-mode 1)
   (setq pangu-spacing-real-insert-separtor t)
   )
+;; }}}
+
+;; ispell flyspell: aspell/hunspell
+;; (dolist (hook '(text-mode-hook))                          ;; enable in text-mode
+;;   (add-hook hook (lambda () (flyspell-mode 1))))
+;; (dolist (hook '(change-log-mode-hook log-edit-mode-hook)) ;; disable in change-log-mode
+;;   (add-hook hook (lambda () (flyspell-mode -1))))
+
+;; aspell
+;; {{{
+(setq ispell-program-name "aspell")
+;; You could add extra option "--camel-case" for camel case code spell checking if Aspell 0.60.8+ is installed
+;; @see https://github.com/redguardtoo/emacs.d/issues/796
+(setq ispell-extra-args '(
+                          "--sug-mode=ultra"
+                          "--lang=en_US"
+                          "--camel-case"
+                          "--run-together"
+                          "--run-together-limit=16"
+                          ))
+;; ispell-personal-dictionary
+;; }}}
+
+;; macOS spell
+;; {{{
+;; ~/Library/Spelling/LocalDictionary
+;; }}}
+
+;; wucuo
+;; {{{
+;; [redguardtoo](https://github.com/redguardtoo/emacs.d/lisp/init-spelling.el)
+(defvar my-default-spell-check-language "en_US"
+  "Language used by aspell and hunspell CLI.")
+
+(with-eval-after-load 'flyspell
+  ;; You can also use "M-x ispell-word" or hotkey "M-$". It pop up a multiple choice
+  ;; @see http://frequal.com/Perspectives/EmacsTip03-FlyspellAutoCorrectWord.html
+  (keymap-global-set "C-c s" #'flyspell-auto-correct-word)
+
+  ;; better performance
+  (setq flyspell-issue-message-flag nil))
+
+;; flyspell-lazy is outdated and conflicts with latest flyspell
+
+;; Basic Logic Summary:
+;; If (aspell is installed) { use aspell}
+;; else if (hunspell is installed) { use hunspell }
+;; English dictionary is used.
+;;
+;; I prefer aspell because:
+;; - aspell is very stable and easy to install
+;; - looks Kevin Atkinson still get some road map for aspell:
+;; @see http://lists.gnu.org/archive/html/aspell-announce/2011-09/msg00000.html
+(defun my-detect-ispell-args (&optional run-together)
+  "If RUN-TOGETHER is true, spell check the CamelCase words.
+RUN-TOGETHER makes aspell less capable to find plain English typo.
+So it should be used in `prog-mode-hook' only."
+  (let* (args)
+    (when ispell-program-name
+      (cond
+       ;; use aspell
+       ((string-match "aspell" ispell-program-name)
+        ;; force the English dictionary, support Camel Case spelling check (tested with aspell 0.6)
+        ;; For aspell's option "--lang", "two letter ISO 3166 country code after a underscore" is OPTIONAL.
+        (setq args (list "--sug-mode=ultra" (format "--lang=%s" my-default-spell-check-language)))
+        ;; "--run-together-min" could not be 3, see `check` in "speller_impl.cpp".
+        ;; The algorithm is not precise.
+        ;; Run `echo tasteTableConfig | aspell --lang=en_US -C --run-together-limit=16  --encoding=utf-8 -a` in shell.
+        (when run-together
+          (cond
+           ;; Kevin Atkinson said now aspell supports camel case directly
+           ;; https://github.com/redguardtoo/emacs.d/issues/796
+           ((string-match "--.*camel-case"
+                          (shell-command-to-string (concat ispell-program-name " --help")))
+            (setq args (append args '("--camel-case"))))
+
+           ;; old aspell uses "--run-together". Please note we are not dependent on this option
+           ;; to check camel case word. wucuo is the final solution. This aspell options is just
+           ;; some extra check to speed up the whole process.
+           (t
+            (setq args (append args '("--run-together" "--run-together-limit=16")))))))
+
+       ;; use hunspell
+       ((string-match "hunspell" ispell-program-name)
+        (setq args nil))))
+    args))
+
+;; Aspell Setup (recommended):
+;; It's easy to set up aspell. So the details are skipped.
+;;
+;; Hunspell Setup:
+;; 1. Install hunspell from http://hunspell.sourceforge.net/
+;;
+;; 2. Download openoffice dictionary extension from
+;; http://extensions.openoffice.org/en/project/english-dictionaries-apache-openoffice
+;;
+;; 3. Say `dict-en.oxt' is downloaded. Rename it to `dict-en.zip' and unzip
+;; the contents to a temporary folder. Got "en_US.dic" and "en_US.aff" in
+;; that folder.
+;;
+;; 4. Hunspell's option "-d en_US" means finding dictionary "en_US"
+;; Modify `ispell-local-dictionary-alist' to set that option of hunspell
+;;
+;; 5. Copy "en_US.dic" and "en_US.aff" from that temporary folder to
+;; the place for dictionary files. I use "~/usr_local/share/hunspell/".
+;;
+;; 6. Add that folder to shell environment variable "DICPATH"
+;;
+;; 7. Restart emacs so when hunspell is run by ispell/flyspell to make
+;; "DICPATH" take effect
+;;
+;; hunspell searches a dictionary named "en_US" in the path specified by
+;; "DICPATH" by default.
+
+(defvar my-force-to-use-hunspell nil
+  "Force to use hunspell.  If nil, try to detect aspell&hunspell.")
+
+(defun my-configure-ispell-parameters ()
+  "Set `ispell-program-name' and other parameters."
+  (cond
+   ;; use aspell
+   ((and (not my-force-to-use-hunspell) (executable-find "aspell"))
+    (setq ispell-program-name "aspell"))
+
+   ;; use hunspell
+   ((executable-find "hunspell")
+    (setq ispell-program-name "hunspell")
+    (setq ispell-local-dictionary my-default-spell-check-language)
+    (setq ispell-local-dictionary-alist
+          (list (list my-default-spell-check-language
+                      "[[:alpha:]]" "[^[:alpha:]]" "[']"
+                      nil
+                      (list "-d" my-default-spell-check-language)
+                      nil
+                      'utf-8)))
+    ;; New variable `ispell-hunspell-dictionary-alist' is defined in Emacs
+    ;; If it's nil, Emacs tries to automatically set up the dictionaries.
+    (when (boundp 'ispell-hunspell-dictionary-alist)
+      (setq ispell-hunspell-dictionary-alist ispell-local-dictionary-alist)))
+
+   (t (setq ispell-program-name nil)
+      (message "You need install either aspell or hunspell for ispell"))))
+
+;; You could define your own configuration and call `my-configure-ispell-parameters' in "~/.custom.el"
+(my-configure-ispell-parameters)
+
+(defun my-ispell-word-hack (orig-func &rest args)
+  "Use Emacs original arguments when calling `ispell-word'.
+When fixing a typo, avoid pass camel case option to cli program."
+  (let* ((old-ispell-extra-args ispell-extra-args))
+    (ispell-kill-ispell t)
+    ;; use emacs original arguments
+    (setq ispell-extra-args (my-detect-ispell-args))
+    (apply orig-func args)
+    ;; restore our own ispell arguments
+    (setq ispell-extra-args old-ispell-extra-args)
+    (ispell-kill-ispell t)))
+(advice-add 'ispell-word :around #'my-ispell-word-hack)
+(advice-add 'flyspell-auto-correct-word :around #'my-ispell-word-hack)
+
+(defvar my-disable-wucuo nil
+  "Disable wucuo.")
+
+(defun my-ensure (feature)
+  "Make sure FEATURE is required."
+  (unless (featurep feature)
+    (condition-case nil
+        (require feature)
+      (error nil))))
+
+(defun text-mode-hook-setup ()
+  "Set up text mode."
+  ;; Turn off RUN-TOGETHER option when spell check text.
+  (unless my-disable-wucuo
+    (setq-local ispell-extra-args (my-detect-ispell-args))
+    (my-ensure 'wucuo)
+    (wucuo-start)))
+(add-hook 'text-mode-hook 'text-mode-hook-setup)
+
+(defun my-clean-aspell-dict ()
+  "Clean ~/.aspell.pws (dictionary used by aspell)."
+  (interactive)
+  (let* ((dict (file-truename "~/.aspell.en.pws"))
+         (lines (my-read-lines dict))
+         ;; sort words
+         (aspell-words (sort (cdr lines) 'string<)))
+    (save-buffer)
+    (sit-for 1)
+    (with-temp-file dict
+      (insert (format "%s %d\n%s"
+                      "personal_ws-1.1 en"
+                      (length aspell-words)
+                      (mapconcat 'identity aspell-words "\n"))))))
+;; }}}
+
+;; wucuo: aspell or hunspell
+;; {{{
+(with-eval-after-load 'wucuo
+  ;; (setq wucuo-aspell-language-to-use "en")
+  ;; (setq wucuo-hunspell-dictionary-base-name "en_US")
+  ;; do NOT turn on `flyspell-mode' automatically.
+  ;; check buffer or visible region only
+  ;; spell check buffer every 30 seconds
+  (setq wucuo-update-interval 2))
+
+(setq wucuo-spell-check-buffer-predicate
+      (lambda ()
+        (not (memq
+              major-mode
+              '(dired-mode
+                log-edit-mode
+                compilation-mode
+                help-mode
+                profiler-report-mode
+                speedbar-mode
+                gud-mode
+                calc-mode
+                Info-mode)
+              )
+             )
+        )
+      )
 ;; }}}
 
 ;; binky-mode
@@ -2175,10 +2412,18 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; {{{
 ;; keyfreq fork: keyfreq-html-v2 show keyboard heat map
 (require 'keyfreq) ;; 导入插件包
-(setq keyfreq-folder "~/.config/emacs/lib/keyfreq")
+(setq keyfreq-folder  (expand-file-name
+                       "lib/keyfreq"
+                       (concat user-emacs-directory)
+                       )
+      )
 (keyfreq-mode 1)          ;; 启动插件包
 (keyfreq-autosave-mode 1) ;; 自动保存模式
-(setq-default keyfreq-file "~/.config/emacs/assets/keyfreq-log")
+(setq-default keyfreq-file (expand-file-name
+                       "assets/keyfreq-log"
+                       (concat user-emacs-directory)
+                       )
+	      )
 ;; (defun turnon-keyfreq-mode ()
 ;;   "Turn on keyfreq."
 ;;   (interactive)
