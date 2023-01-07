@@ -153,6 +153,7 @@ digraph G {"khoj" -> "emacs";
 "consult" -> "compat";
 "elisp-demos" -> "emacs";
 "benchmark-init" -> "emacs";
+"parrot" -> "emacs";
 "vertico" -> "emacs";
 "consult-org-roam" -> "emacs";
 "consult-org-roam" -> "org-roam";

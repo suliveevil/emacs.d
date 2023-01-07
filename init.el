@@ -484,6 +484,12 @@ i.e. change right window to bottom, or change bottom window to right."
 ;;     (pos-tip-hide)))
 ;; }}}
 
+;; pair completion
+(use-package electric-pair-mode
+  :ensure nil
+  :hook (prog-mode . electric-pair-mode)
+)
+
 ;; goto-char by Oliver Scholz
 ;; {{{
 (defun my/go-to-char (n char)
@@ -503,6 +509,10 @@ occurence of CHAR."
 ;; [joseph-go-to-char - EmacsWiki](https://www.emacswiki.org/emacs/joseph-go-to-char)
 ;; [doitian/iy-go-to-char: Go to next CHAR which is similar to "f" and "t" in vim](https://github.com/doitian/iy-go-to-char)
 ;; }}}
+
+(keymap-global-set "H-SPC H-SPC" (lambda () (interactive) (insert "\u200b")))
+;; (define-key org-mode-map (kbd "H-SPC H-SPC")
+;;             (lambda () (interactive) (insert "\u200b")))
 
 ;; line
 ;; {{{
@@ -582,27 +592,10 @@ occurence of CHAR."
 ;; completion: buffer and minibuffer
 ;; {{{
 ;; dabbrev: dynamic abbreviation expand
-(keymap-set minibuffer-mode-map "TAB" #'minibuffer-complete)
 (keymap-global-set               "C-<tab>" #'dabbrev-expand)
-(keymap-set minibuffer-local-map "C-<tab>" #'dabbrev-expand)
+
 ;; hippie-expand
 (keymap-global-set "M-/" #'hippie-expand)
-;; completion window
-(add-to-list 'display-buffer-alist
-             '("\\*Completions\\*"
-               (display-buffer-reuse-window display-buffer-in-side-window)
-               (side . bottom)
-               (slot . 0)))
-;; case: ignore case
-(setq completion-ignore-case t
-      read-buffer-completion-ignore-case t    ;; default nil
-      read-file-name-completion-ignore-case t ;; default t
-      )
-;; completion style
-(setq completion-styles '(substring initials partial-completion flex basic))
-(setq completion-cycle-threshold 10)
-;; pair completion
-(electric-pair-mode 1)
 ;; }}}
 
 ;; refresh-file: format/indent elisp file
@@ -1309,12 +1302,66 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 (keymap-global-set "C-c C-j" #'avy-resume)
 ;; }}}
 
+(use-package parrot
+  :defer 2
+  :bind (
+         ("H-w r" . parrot-rotate-prev-word-at-point)
+         ("H-w t" . parrot-rotate-next-word-at-point)
+         )
+  :config
+  (parrot-mode)
+  (parrot-set-parrot-type 'emacs)
+  (setq parrot-rotate-dict
+        '(
+          (:rot ("alpha" "beta") :caps t :lower nil)
+          ;; => rotations are "Alpha" "Beta"
+
+          (:rot ("snek" "snake" "stawp"))
+          ;; => rotations are "snek" "snake" "stawp"
+
+          (:rot ("yes" "no") :caps t :upcase t)
+          ;; => rotations are "yes" "no", "Yes" "No", "YES" "NO"
+
+          (:rot ("&" "|"))
+          ;; => rotations are "&" "|"
+
+	  (:rot ("nil" "t"))
+	  
+          ;; default dictionary starts here ('v')
+          (:rot ("begin" "end") :caps t :upcase t)
+          (:rot ("enable" "disable") :caps t :upcase t)
+          (:rot ("enter" "exit") :caps t :upcase t)
+          (:rot ("forward" "backward") :caps t :upcase t)
+          (:rot ("front" "rear" "back") :caps t :upcase t)
+          (:rot ("get" "set") :caps t :upcase t)
+          (:rot ("high" "low") :caps t :upcase t)
+          (:rot ("in" "out") :caps t :upcase t)
+          (:rot ("left" "right") :caps t :upcase t)
+          (:rot ("min" "max") :caps t :upcase t)
+          (:rot ("on" "off") :caps t :upcase t)
+          (:rot ("prev" "next"))
+          (:rot ("start" "stop") :caps t :upcase t)
+          (:rot ("true" "false") :caps t :upcase t)
+          (:rot ("&&" "||"))
+          (:rot ("==" "!="))
+          (:rot ("." "->"))
+          (:rot ("if" "cond" "else" "elif"))
+          (:rot ("ifdef" "ifndef"))
+          (:rot ("int8_t" "int16_t" "int32_t" "int64_t"))
+          (:rot ("uint8_t" "uint16_t" "uint32_t" "uint64_t"))
+          (:rot ("1" "2" "3" "4" "5" "6" "7" "8" "9" "10"))
+          (:rot ("1st" "2nd" "3rd" "4th" "5th" "6th" "7th" "8th" "9th" "10th"))
+          )
+        )
+  )
+
 ;; difftastic + magit
 ;; {{{
 ;; (with-eval-after-load 'magit
 (use-package magit
   ;; :defer 2
-  :bind (("C-c v g" . magit-status)
+  :bind (("C-x g"   . magit-status)
+	 ("C-c v g" . magit-status)
          ("H-m H-m" . magit-status))
   :config
   (defun my/magit--with-difftastic (buffer command)
@@ -1500,7 +1547,6 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 ;; 将光标前的 regexp 转换为可以搜索中文的 regexp.
 (keymap-set minibuffer-local-map "H-c" #'pyim-cregexp-convert-at-point)
 (pyim-default-scheme 'quanpin)
-;; (pyim-isearch-mode 1) ;; 开启代码搜索中文功能（比如拼音，五笔码等）
 ;; ;
                                         ; cursor
 (setq pyim-indicator-list (list #'my-pyim-indicator-with-cursor-color #'pyim-indicator-with-modeline))
@@ -1509,13 +1555,13 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
   (if (not (equal input-method "pyim"))
       (progn
         ;; 用户在这里定义 pyim 未激活时的光标颜色设置语句
-        (set-cursor-color "green"))
+        (set-cursor-color "blue"))
     (if chinese-input-p
         (progn
           ;; 用户在这里定义 pyim 输入中文时的光标颜色设置语句
           (set-cursor-color "purple"))
       ;; 用户在这里定义 pyim 输入英文时的光标颜色设置语句
-      (set-cursor-color "blue"))))
+      (set-cursor-color "green"))))
 ;; 探针
 (setq-default pyim-english-input-switch-functions
               '(pyim-probe-dynamic-english
@@ -1537,6 +1583,8 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
   (let ((result (funcall orig-func component)))
     (pyim-cregexp-build result)))
 (advice-add 'orderless-regexp :around #'my-orderless-regexp)
+;; isearch 开启代码搜索中文功能（比如拼音，五笔码等）
+;; (pyim-isearch-mode 1) ; 性能差，不启用
 ;; }}}
 
 ;; ;; smart-input-source
@@ -1925,7 +1973,7 @@ When fixing a typo, avoid pass camel case option to cli program."
   :custom
   ;; Don't compact font caches during GC. Windows Laggy Issue
   (inhibit-compacting-font-caches t)
-  (doom-modeline-minor-modes t)
+  (doom-modeline-minor-modes nil)
   (doom-modeline-icon t)
   (doom-modeline-major-mode-color-icon t)
   :config
@@ -2755,11 +2803,15 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   )
 ;; }}}
 
-(run-with-idle-timer
- 1 nil
- #'(lambda ()
-     (require 'explain-pause-mode)
-     ))
+(use-package explain-pause-mode
+  :ensure nil
+  :defer 1
+  )
+;; (run-with-idle-timer
+;;  1 nil
+;;  #'(lambda ()
+;;      (require 'explain-pause-mode)
+;;      ))
 
 ;; org-mac-link
 ;; {{{
@@ -2911,6 +2963,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   :ensure nil
   :after (yasnippet)
   ;; :bind
+  :init  (setq lsp-bridge-enable-mode-line nil)
   :hook (prog-mode . lsp-bridge-mode)
   :config
   ;; DON'T setup any of acm keymap                       ; FIXME
@@ -2922,8 +2975,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   ;; (keymap-set lsp-bridge-mode-map "ESC" 'acm-hide )
   ;; (setq acm-quick-access-modifier 'meta)
   ;; (setq acm-enable-quick-access t)
-  (setq lsp-bridge-enable-mode-line nil)
-  (setq lsp-bridge-use-wenls-in-org-mode t)
+  ;; (setq lsp-bridge-use-wenls-in-org-mode t)
   ;; (global-lsp-bridge-mode)
   (add-to-list 'lsp-bridge-org-babel-lang-list "emacs-lisp")
   (add-to-list 'lsp-bridge-org-babel-lang-list "shell")
