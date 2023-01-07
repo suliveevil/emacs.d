@@ -538,6 +538,87 @@ Version 2018-06-18 2021-09-30"
 ;; }}}
 #+end_src
 
+** Eshell
+
+#+begin_src emacs-lisp :tangle yes
+(use-package eshell
+  :init
+  (require 'esh-mode) ; eshell-mode-map
+  :bind
+  (
+   ("C-x s" . eshell)
+   ;; :map eshell-mode-map
+   ;; (
+    ;;("C-l" . eshell-clear)
+    ;; ("C-r" . helm-eshell-history)
+    ;; )
+   )
+  )
+#+end_src
+
+*** completion
+
+#+begin_src emacs-lisp :tangle no
+(defun eshell--complete-commands-list ()
+  "Generate list of applicable, visible commands."
+  (let ((filename (pcomplete-arg)) glob-name)
+    (if (file-name-directory filename)
+        (if eshell-force-execution
+            (pcomplete-dirs-or-entries nil #'file-readable-p)
+          (pcomplete-executables))
+      (if (and (> (length filename) 0)
+               (eq (aref filename 0) eshell-explicit-command-char))
+          (setq filename (substring filename 1)
+                pcomplete-stub filename
+                glob-name t))
+      (let* ((paths (eshell-get-path))
+             (cwd (file-name-as-directory
+                   (expand-file-name default-directory)))
+             (path "") (comps-in-path ())
+             (file "") (filepath "") (completions ()))
+        ;; Go thru each path in the search path, finding completions.
+        (while paths
+          (setq path (file-name-as-directory
+                      (expand-file-name (or (car paths) ".")))
+                comps-in-path
+                (and (file-accessible-directory-p path)
+                     (file-name-all-completions filename path)))
+          ;; Go thru each completion found, to see whether it should
+          ;; be used.
+          (while comps-in-path
+            (setq file (car comps-in-path)
+                  filepath (concat path file))
+            (if (and (not (member file completions)) ;
+                     (or (string-equal path cwd)
+                         (not (file-directory-p filepath)))
+                     (if eshell-force-execution
+                         (file-readable-p filepath)
+                       (file-executable-p filepath)))
+                (setq completions (cons file completions)))
+            (setq comps-in-path (cdr comps-in-path)))
+          (setq paths (cdr paths)))
+        ;; Add aliases which are currently visible, and Lisp functions.
+        (pcomplete-uniquify-list
+         (if glob-name
+             completions
+           (setq completions
+                 (append (if (fboundp 'eshell-alias-completions)
+                             (eshell-alias-completions filename))
+                         (eshell-winnow-list
+                          (mapcar
+                           (lambda (name)
+                             (substring name 7))
+                           (all-completions (concat "eshell/" filename)
+                                            obarray #'functionp))
+                          nil '(eshell-find-alias-function))
+                         completions))
+           (append (and (or eshell-show-lisp-completions
+                            (and eshell-show-lisp-alternatives
+                                 (null completions)))
+                        (all-completions filename obarray #'functionp))
+                   completions)))))))
+#+end_src
+
 ** frame
 
 #+begin_src emacs-lisp :tangle yes
@@ -988,13 +1069,51 @@ separator."
 
 ** isearch
 
+[[https://pengpengxp.github.io/emacs/emacs_isearch_summary.html][一份isearch的使用总结]]
+
 #+begin_src emacs-lisp :tangle yes
 ;; isearch
 ;; {{{
 ;; M-<: first match
 ;; M->: last  match
+(keymap-set isearch-mode-map "C-c" 'isearch-cancel)
+(keymap-set isearch-mode-map "DEL" 'isearch-del-char)
 (keymap-set isearch-mode-map "s-v" 'isearch-yank-kill)
 (setq isearch-lazy-count t) ;; anzu
+(setq isearch-allow-motion t)
+;; 这样可以在 literal 的 isearch 中，把空格直接当成正则里面的 .* 匹配
+(setq isearch-lax-whitespace t)
+(setq isearch-regexp-lax-whitespace t)
+(setq search-whitespace-regexp ".*")
+(setq isearch-regexp-lax-whitespace nil) ; 在搜正则时不开启这个功能，空格就是空格
+;;
+;; 自动 wrap
+(defadvice isearch-search (after isearch-no-fail activate)
+  (unless isearch-success
+    (ad-disable-advice 'isearch-search 'after 'isearch-no-fail)
+    (ad-activate 'isearch-search)
+    (isearch-repeat (if isearch-forward 'forward))
+    (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
+    (ad-activate 'isearch-search)))
+;;
+;; 重新输入并搜索
+(defmacro isearch-quit-and-run (&rest body)
+  "Quit the minibuffer and run BODY afterwards."
+  (declare (indent 0))
+  `(progn
+     (put 'quit 'error-message "")
+     (run-at-time nil nil
+                  (lambda ()
+                    (put 'quit 'error-message "Quit")
+                    (with-demoted-errors "Error: %S"
+                      ,@body)))
+     (isearch-cancel)))
+
+(defun my/rerun-isearch ()
+  "rerun isearch from the original place."
+  (interactive)
+  (isearch-quit-and-run
+    (isearch-forward)))
 ;; }}}
 #+end_src
 
@@ -1017,7 +1136,7 @@ separator."
 
 [[https://robbmann.io/emacsd/][My Literate .emacs.d · robbmann]] [[https://github.com/renzmann/.emacs.d][renzmann/.emacs.d]]
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
 ;; minibuffer
 ;; {{{
 ;; completion window
@@ -1034,7 +1153,10 @@ separator."
 ;; completion style
 (setq completion-styles '(substring initials partial-completion flex basic))
 (setq completion-cycle-threshold 10)
-
+(setq completions-format 'one-column)
+(setq completions-header-format nil)
+(setq completions-max-height 20)
+(setq completion-auto-select nil)
 (setq enable-recursive-minibuffers t)
 (setq completion-auto-help 'always)
 (setq completion-auto-select 'second-tab)
@@ -2298,6 +2420,9 @@ https://github.com/joddie/macrostep
 
 ** 字符/字符串
 
+*** 括号
+
+[[https://github.com/AmaiKinono/puni][AmaiKinono/puni]]: Structured editing (soft deletion, expression navigating & manipulating) that supports many major modes out 
 
 *** 近义词/反义词
 
@@ -2361,6 +2486,90 @@ https://github.com/joddie/macrostep
 *** 大小写
 
 
+** Emacs Lisp
+
+#+begin_src emacs-lisp :tangle no
+(use-package lisp
+  :hook
+  (after-save . check-parens))
+
+(use-package elisp-mode
+  :bind
+  (:map emacs-lisp-mode-map
+        ("C-c C-d C-d" . describe-function)
+        ("C-c C-d d" . describe-function)
+        ("C-c C-k" . eval-buffer)))
+
+(use-package highlight-defined
+  :ensure t
+  :custom
+  (highlight-defined-face-use-itself t)
+  :hook
+  (help-mode . highlight-defined-mode)
+  (emacs-lisp-mode . highlight-defined-mode))
+
+(use-package highlight-quoted
+  :ensure t
+  :hook
+  (emacs-lisp-mode . highlight-quoted-mode))
+
+(use-package highlight-sexp
+  :quelpa
+  (highlight-sexp :repo "daimrod/highlight-sexp" :fetcher github :version original)
+  :hook
+  (clojure-mode . highlight-sexp-mode)
+  (emacs-lisp-mode . highlight-sexp-mode)
+  (lisp-mode . highlight-sexp-mode))
+
+(use-package eros
+  :ensure t
+  :hook
+  (emacs-lisp-mode . eros-mode))
+
+(use-package suggest
+  :ensure t
+  :defer t)
+
+(use-package ipretty
+  :defer t
+  :ensure t
+  :config
+  (ipretty-mode 1))
+
+(use-package nameless
+  :ensure t
+  :hook
+  (emacs-lisp-mode .  nameless-mode)
+  :custom
+  (nameless-global-aliases '())
+  (nameless-private-prefix t))
+
+
+(use-package erefactor
+  :ensure t
+  :defer t)
+
+(use-package flycheck-package
+  :ensure t
+  :hook
+  (emacs-lisp-mode . flycheck-package-setup))
+
+(use-package elsa
+  :defer t
+  :ensure t)
+
+(use-package flycheck-elsa
+  :ensure t
+  :hook
+  (emacs-lisp-mode . flycheck-elsa-setup))
+#+end_src
+
+
+** isearch-mb
+
+[[https://github.com/astoff/isearch-mb][astoff/isearch-mb]]
+
+[[https://emacs-china.org/t/isearch-mb-minibuffer-isearch-query/17878][isearch-mb: 在 minibuffer 中编辑 isearch query - Emacs China]]
 
 ** 文件管理
 
@@ -4519,7 +4728,7 @@ https://github.com/zk-phi/spray
         ("z" . switch-to-minibuffer))
   :custom
   (isearch-allow-scroll t)
-                                        ;(enable-recursive-minibuffers t)
+  ;; (enable-recursive-minibuffers t)
   (minibuffer-depth-indicate-mode t)
   (minibuffer-electric-default-mode t)
   ;; Don't insert completion at point into minibuffer

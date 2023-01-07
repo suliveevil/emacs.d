@@ -259,22 +259,23 @@ sibling file: [[file:init.org][init.el config]]
 
 
 #+begin_src emacs-lisp :tangle yes
-  ;; basic keybinding
-  ;; {{{
-  (keymap-global-set "s-a" #'mark-whole-buffer)
-  (keymap-global-set "s-c" #'kill-ring-save)          ;; M-w     copy       复制
-  (keymap-global-set "s-q" #'save-buffers-kill-emacs) ;;         copy       复制
-  (keymap-global-set "s-v" #'yank)                    ;; C-y     paste/yank 粘贴
-  (keymap-global-set "s-w" #'delete-frame)            ;;
-  (keymap-global-set "s-s" #'save-buffer)             ;; C-x C-s save       保存
-  (keymap-global-set "s-x" #'kill-region)             ;; C-w     cut        剪切
-  (keymap-global-set "s-z" #'undo)                    ;; C-_     undo       撤销
-  (keymap-global-set "s-Z" #'undo-redo)               ;; C-M-_   undo-redo  重做
-  ;;
-  (keymap-global-set     "S-s-<return>" #'toggle-frame-maximized)
-  (keymap-global-set     "C-s-f"        #'toggle-frame-fullscreen) ;; macOS
-  (keymap-set global-map "H-q"          #'restart-emacs)
-  ;; }}}
+;; basic keybinding
+;; {{{
+(keymap-global-set "s-a" #'mark-whole-buffer)
+(keymap-global-set "s-c" #'kill-ring-save)          ;; M-w     copy       复制
+(keymap-global-set "s-q" #'save-buffers-kill-emacs) ;;         copy       复制
+(keymap-global-set "s-v" #'yank)                    ;; C-y     paste/yank 粘贴
+(keymap-global-set "s-w" #'delete-frame)            ;;
+(keymap-global-set "s-s" #'save-buffer)             ;; C-x C-s save       保存
+(keymap-global-set "s-x" #'kill-region)             ;; C-w     cut        剪切
+(keymap-global-set "s-z" #'undo)                    ;; C-_     undo       撤销
+(keymap-global-set "s-Z" #'undo-redo)               ;; C-M-_   undo-redo  重做
+;;
+(keymap-global-set     "S-s-<return>" #'toggle-frame-maximized)
+(keymap-global-set     "C-s-f"        #'toggle-frame-fullscreen) ;; macOS
+(keymap-set global-map "H-q"          #'restart-emacs)
+(keymap-global-set     "H-x"          #'execute-extended-command)
+;; }}}
 #+end_src
 
 *** repeat-mode

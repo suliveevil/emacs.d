@@ -367,6 +367,20 @@ Version 2018-06-18 2021-09-30"
   )
 ;; }}}
 
+(use-package eshell
+  :init
+  (require 'esh-mode) ; eshell-mode-map
+  :bind
+  (
+   ("C-x s" . eshell)
+   ;; :map eshell-mode-map
+   ;; (
+    ;;("C-l" . eshell-clear)
+    ;; ("C-r" . helm-eshell-history)
+    ;; )
+   )
+  )
+
 ;; frame
 ;; {{{
 (setq frame-size-history t)
@@ -585,8 +599,116 @@ occurence of CHAR."
 ;; {{{
 ;; M-<: first match
 ;; M->: last  match
+(keymap-set isearch-mode-map "C-c" 'isearch-cancel)
+(keymap-set isearch-mode-map "DEL" 'isearch-del-char)
 (keymap-set isearch-mode-map "s-v" 'isearch-yank-kill)
 (setq isearch-lazy-count t) ;; anzu
+(setq isearch-allow-motion t)
+;; 这样可以在 literal 的 isearch 中，把空格直接当成正则里面的 .* 匹配
+(setq isearch-lax-whitespace t)
+(setq isearch-regexp-lax-whitespace t)
+(setq search-whitespace-regexp ".*")
+(setq isearch-regexp-lax-whitespace nil) ; 在搜正则时不开启这个功能，空格就是空格
+;;
+;; 自动 wrap
+(defadvice isearch-search (after isearch-no-fail activate)
+  (unless isearch-success
+    (ad-disable-advice 'isearch-search 'after 'isearch-no-fail)
+    (ad-activate 'isearch-search)
+    (isearch-repeat (if isearch-forward 'forward))
+    (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
+    (ad-activate 'isearch-search)))
+;;
+;; 重新输入并搜索
+(defmacro isearch-quit-and-run (&rest body)
+  "Quit the minibuffer and run BODY afterwards."
+  (declare (indent 0))
+  `(progn
+     (put 'quit 'error-message "")
+     (run-at-time nil nil
+                  (lambda ()
+                    (put 'quit 'error-message "Quit")
+                    (with-demoted-errors "Error: %S"
+                      ,@body)))
+     (isearch-cancel)))
+
+(defun my/rerun-isearch ()
+  "rerun isearch from the original place."
+  (interactive)
+  (isearch-quit-and-run
+    (isearch-forward)))
+;; }}}
+
+;; minibuffer
+;; {{{
+;; completion window
+(add-to-list 'display-buffer-alist
+             '("\\*Completions\\*"
+               (display-buffer-reuse-window display-buffer-in-side-window)
+               (side . bottom)
+               (slot . 0)))
+;; case: ignore case
+(setq completion-ignore-case t
+      read-buffer-completion-ignore-case t    ;; default nil
+      read-file-name-completion-ignore-case t ;; default t
+      )
+;; completion style
+(setq completion-styles '(substring initials partial-completion flex basic))
+(setq completion-cycle-threshold 10)
+(setq completions-format 'one-column)
+(setq completions-header-format nil)
+(setq completions-max-height 20)
+(setq completion-auto-select nil)
+(setq enable-recursive-minibuffers t)
+(setq completion-auto-help 'always)
+(setq completion-auto-select 'second-tab)
+
+;; (keymap-set minibuffer-mode-map "TAB" #'minibuffer-complete)
+;; (keymap-set minibuffer-local-map "C-<tab>" #'dabbrev-expand)
+
+;; Up/down when completing in the minibuffer
+(define-key minibuffer-local-map (kbd "C-p") #'minibuffer-previous-completion)
+(define-key minibuffer-local-map (kbd "C-n") #'minibuffer-next-completion)
+
+;; Up/down when competing in a normal buffer
+(define-key completion-in-region-mode-map (kbd "C-p") #'minibuffer-previous-completion)
+(define-key completion-in-region-mode-map (kbd "C-n") #'minibuffer-next-completion)
+
+(defun my/sort-by-alpha-length (elems)
+  "Sort ELEMS first alphabetically, then by length."
+  (sort elems (lambda (c1 c2)
+                (or (string-version-lessp c1 c2)
+                    (< (length c1) (length c2))))))
+
+(defun my/sort-by-history (elems)
+  "Sort ELEMS by minibuffer history.
+Use `mct-sort-sort-by-alpha-length' if no history is available."
+  (if-let ((hist (and (not (eq minibuffer-history-variable t))
+                      (symbol-value minibuffer-history-variable))))
+      (minibuffer--sort-by-position hist elems)
+    (my/sort-by-alpha-length elems)))
+
+(defun my/completion-category ()
+  "Return completion category."
+  (when-let ((window (active-minibuffer-window)))
+    (with-current-buffer (window-buffer window)
+      (completion-metadata-get
+       (completion-metadata (buffer-substring-no-properties
+                             (minibuffer-prompt-end)
+                             (max (minibuffer-prompt-end) (point)))
+                            minibuffer-completion-table
+                            minibuffer-completion-predicate)
+       'category))))
+
+(defun my/sort-multi-category (elems)
+  "Sort ELEMS per completion category."
+  (pcase (my/completion-category)
+    ('nil elems) ; no sorting
+    ('kill-ring elems)
+    ('project-file (my/sort-by-alpha-length elems))
+    (_ (my/sort-by-history elems))))
+
+(setq completions-sort #'my/sort-multi-category)
 ;; }}}
 
 ;; completion: buffer and minibuffer

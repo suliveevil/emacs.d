@@ -105,6 +105,7 @@
 (keymap-global-set     "S-s-<return>" #'toggle-frame-maximized)
 (keymap-global-set     "C-s-f"        #'toggle-frame-fullscreen) ;; macOS
 (keymap-set global-map "H-q"          #'restart-emacs)
+(keymap-global-set     "H-x"          #'execute-extended-command)
 ;; }}}
 
 ;; UI
