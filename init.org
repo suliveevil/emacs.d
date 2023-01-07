@@ -4815,23 +4815,8 @@ https://github.com/zk-phi/spray
 *** lsp-bridge
 
 
-
-#+begin_src emacs-lisp :tangle yes
-(require 'yasnippet)
-(yas-global-mode 1)
-(require 'lsp-bridge)
-(setq lsp-bridge-enable-mode-line nil)
-(setq lsp-bridge-use-ds-pinyin-in-org-mode t)
-;; (setq lsp-bridge-use-wenls-in-org-mode t)
-(setq acm-enable-quick-access t)
-;; (setq acm-acm-modifier 'meta)
+#+begin_src emacs-lisp :tangle no
 ;; (keymap-set acm-mode-map "H-;" 'lsp-bridge-toggle-sdcv-helper)
-(keymap-set acm-mode-map "TAB" 'acm-select-next)
-(keymap-set acm-mode-map "<backtab>" 'acm-select-prev)
-(keymap-set acm-mode-map "C-j" 'acm-insert-common)
-(keymap-set acm-mode-map "SPC" 'acm-complete)
-(keymap-set acm-mode-map "ESC" 'acm-hide )
-
 ;; (define-key map [remap next-line] #'acm-select-next)
 ;; (define-key map [remap previous-line] #'acm-select-prev)
 ;; (define-key map [down] #'acm-select-next)
@@ -4852,12 +4837,33 @@ https://github.com/zk-phi/spray
 ;; (define-key map "\M-k" #'acm-doc-scroll-down)
 ;; (define-key map "\M-l" #'acm-hide)
 ;; (define-key map "\C-g" #'acm-hide)
-
-(global-lsp-bridge-mode)
 #+end_src
 
+#+begin_src emacs-lisp :tangle yes
+(require 'yasnippet)
+(yas-global-mode 1)
+(require 'lsp-bridge)
+(setq lsp-bridge-enable-mode-line nil)
+(setq lsp-bridge-use-ds-pinyin-in-org-mode t)
+;; (setq lsp-bridge-use-wenls-in-org-mode t)
+(setq acm-enable-quick-access t)
+(setq acm-quick-access-modifier 'meta)
+(keymap-set acm-mode-map "M-j" 'acm-select-next)
+(keymap-set acm-mode-map "M-k" 'acm-select-prev)
+(global-lsp-bridge-mode)
+;; (keymap-set acm-mode-map "TAB" 'acm-select-next)
+;; ;; (keymap-set acm-mode-map "H-j" 'acm-select-next)
+;; ;; (keymap-set acm-mode-map "H-k" 'acm-select-prev)
+;; (keymap-set acm-mode-map "<backtab>" 'acm-select-prev)
+;; (keymap-set acm-mode-map "C-j" 'acm-insert-common)
+;; (keymap-set acm-mode-map "SPC" 'acm-complete)
+;; (keymap-set acm-mode-map "ESC" 'acm-hide )
+#+end_src
+
+
+
 #+begin_src emacs-lisp :tangle no
-;; lsp-bridge
+;; lsp-bridge                                        ; FIXME
 ;; {{{
 (use-package lsp-bridge
   :ensure nil
@@ -4875,7 +4881,7 @@ https://github.com/zk-phi/spray
 	 )
   :config
   (setq acm-enable-quick-access t)
-  (setq acm-acm-modifier 'meta)
+  (setq acm-quick-access-modifier 'meta)
   ;; (setq lsp-bridge-use-ds-pinyin-in-org-mode t)
   (add-to-list 'lsp-bridge-org-babel-lang-list "emacs-lisp")
   (add-to-list 'lsp-bridge-org-babel-lang-list "shell")
