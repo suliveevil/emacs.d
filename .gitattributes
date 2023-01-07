@@ -1,3 +1,4 @@
 *.doc diff=word
 *.docx diff=word
 *.png diff=exif
+*.db3 filter=lfs diff=lfs merge=lfs -text

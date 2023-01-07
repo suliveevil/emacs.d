@@ -2771,37 +2771,15 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   )
 ;; }}}
 
-;; moom + transient
-;; {{{
-(with-suppressed-warnings '(void-function transient-prefix)) ;FIXME
-(add-to-list 'warning-suppress-types '((void-function transient-prefix)))
-(use-package moom
-  :after transcient
-  :ensure nil
-  ;; :if (memq window-system '(mac ns x))
-  ;; (keymap-global-set "" #'moom-font-increase)
-  :commands (moom-transient-dispatch moom-transient-config)
-  :config
-  (require 'moom-transient)
+(with-eval-after-load "moom"
   (setq moom-use-font-module nil)
-  (moom-mode 1)
-  (moom-transient-hide-cursor) ;; if needed
-  ;; (define-key moom-mode-map (kbd "C-c o") #'moom-transient-dispatch)
+  ;; (moom-recommended-keybindings '(all wof))
   (moom-recommended-keybindings '(move fit expand fill font reset undo))
+  (when (require 'moom-transient nil t)
+    (moom-transient-hide-cursor) ;; if needed
+    (define-key moom-mode-map (kbd "C-c o") #'moom-transient-dispatch)
+    )
   )
-
-;; (unless (and (display-graphic-p) (eq system-type 'darwin))
-;;   (add-hook 'after-init-hook 'moom-mode)
-;;   )
-
-;; (with-eval-after-load "moom"
-
-;;   (when (require 'moom-transient nil t)
-;;     (moom-transient-hide-cursor) ;; if needed
-;;     (define-key moom-mode-map (kbd "C-c o") #'moom-transient-dispatch)
-;;     )
-;;   )
-;; }}}
 
 ;; {{{ ace-window
 ;; (require 'ace-window)
@@ -3079,40 +3057,43 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 (advice-add 'helpful-update :after #'elisp-demos-advice-helpful-update)
 ;; }}}
 
-;; lsp-bridge
-;; {{{
-(use-package lsp-bridge
-  :ensure nil
-  :after (yasnippet)
-  ;; :bind
-  :init  (setq lsp-bridge-enable-mode-line nil)
-  :hook (prog-mode . lsp-bridge-mode)
-  :config
-  ;; DON'T setup any of acm keymap                       ; FIXME
-  ;; (keymap-set lsp-bridge-mode-map "H-;" 'lsp-bridge-toggle-sdcv-helper)
-  ;; (keymap-set lsp-bridge-mode-map "TAB" 'acm-select-next)
-  ;; (keymap-set lsp-bridge-mode-map "<backtab>" 'acm-select-prev)
-  ;; (keymap-set lsp-bridge-mode-map "SPC" 'acm-insert-common)
-  ;; (keymap-set lsp-bridge-mode-map "RET" 'acm-complete)
-  ;; (keymap-set lsp-bridge-mode-map "ESC" 'acm-hide )
-  ;; (setq acm-quick-access-modifier 'meta)
-  ;; (setq acm-enable-quick-access t)
-  ;; (setq lsp-bridge-use-wenls-in-org-mode t)
-  ;; (global-lsp-bridge-mode)
-  (add-to-list 'lsp-bridge-org-babel-lang-list "emacs-lisp")
-  (add-to-list 'lsp-bridge-org-babel-lang-list "shell")
-  )
-;; (setq lsp-bridge-enable-mode-line nil)
+(require 'yasnippet)
+(yas-global-mode 1)
+(require 'lsp-bridge)
+(setq lsp-bridge-enable-mode-line nil)
+(setq lsp-bridge-use-ds-pinyin-in-org-mode t)
 ;; (setq lsp-bridge-use-wenls-in-org-mode t)
-;; (run-with-idle-timer
-;;  1 nil
-;;  #'(lambda ()
-;;      (require 'yasnippet)
-;;      (yas-global-mode 1)
-;;      (require 'lsp-bridge)
-;;      (global-lsp-bridge-mode)
-;;      ))
-;; }}}
+(setq acm-enable-quick-access t)
+;; (setq acm-acm-modifier 'meta)
+;; (keymap-set acm-mode-map "H-;" 'lsp-bridge-toggle-sdcv-helper)
+(keymap-set acm-mode-map "TAB" 'acm-select-next)
+(keymap-set acm-mode-map "<backtab>" 'acm-select-prev)
+(keymap-set acm-mode-map "C-j" 'acm-insert-common)
+(keymap-set acm-mode-map "SPC" 'acm-complete)
+(keymap-set acm-mode-map "ESC" 'acm-hide )
+
+;; (define-key map [remap next-line] #'acm-select-next)
+;; (define-key map [remap previous-line] #'acm-select-prev)
+;; (define-key map [down] #'acm-select-next)
+;; (define-key map [up] #'acm-select-prev)
+;; (define-key map [tab]  #'acm-complete)
+;; (define-key map "\M-n" #'acm-select-next)
+;; (define-key map "\M-p" #'acm-select-prev)
+;; (define-key map "\M-," #'acm-select-last)
+;; (define-key map "\M-." #'acm-select-first)
+;; (define-key map "\C-m" #'acm-complete)
+;; (define-key map "\t" #'acm-complete)
+;; (define-key map "\n" #'acm-complete)
+;; (define-key map "\M-h" #'acm-complete)
+;; (define-key map "\M-H" #'acm-insert-common)
+;; (define-key map "\M-u" #'acm-filter)
+;; (define-key map "\M-d" #'acm-doc-toggle)
+;; (define-key map "\M-j" #'acm-doc-scroll-up)
+;; (define-key map "\M-k" #'acm-doc-scroll-down)
+;; (define-key map "\M-l" #'acm-hide)
+;; (define-key map "\C-g" #'acm-hide)
+
+(global-lsp-bridge-mode)
 
 ;; fuck
 ;; {{{
