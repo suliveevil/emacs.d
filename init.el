@@ -1394,7 +1394,7 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
   :bind (
          ("H-c H-a" . mc/edit-beginnings-of-lines)
          ("H-c H-e" . mc/edit-ends-of-lines)
-         ("H-c H-c" . mc/edit-lines)
+         ("H-c H-l" . mc/edit-lines)
          ("H-c H-n" . mc/mark-next-like-this)
          ("H-c H-p" . mc/mark-previous-like-this)
          ("H-c H-h" . mc/mark-all-like-this)
@@ -1448,6 +1448,7 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
           ;; => rotations are "&" "|"
 
 	  (:rot ("nil" "t"))
+	  (:rot ("setq" "defvar"))
 	  
           ;; default dictionary starts here ('v')
           (:rot ("begin" "end") :caps t :upcase t)
@@ -1659,18 +1660,19 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 (setq-default pyim-punctuation-translate-p '(auto)) ;; 全角半角
 (keymap-set pyim-mode-map "-" 'pyim-page-previous-page)
 (keymap-set pyim-mode-map "+" 'pyim-page-next-page)
+;; (keymap-set pyim-mode-map "H-k" 'pyim-page-previous-page)
+;; (keymap-set pyim-mode-map "H-j" 'pyim-page-next-page)
 (keymap-global-set "H-e" 'toggle-input-method)
 (keymap-global-set "H-b" 'pyim-backward-word)
-;; (keymap-global-set [remap forward-word] #'pyim-forward-word)
-;; (keymap-global-set [remap backward-word] #'pyim-backward-word)
 (keymap-global-set "H-f" 'pyim-forward-word)
+;; (keymap-global-set [remap backward-word] #'pyim-backward-word)
+;; (keymap-global-set [remap forward-word] #'pyim-forward-word)
 ;; 金手指设置，可以将光标处的编码，比如：拼音字符串，转换为中文。
-(keymap-global-set "H-j" #'pyim-convert-string-at-point)
+(keymap-global-set "H-c H-s" #'pyim-convert-string-at-point)
 ;; 将光标前的 regexp 转换为可以搜索中文的 regexp.
-(keymap-set minibuffer-local-map "H-c" #'pyim-cregexp-convert-at-point)
+;; (keymap-set minibuffer-local-map "H-c" #'pyim-cregexp-convert-at-point)
 (pyim-default-scheme 'quanpin)
-;; ;
-                                        ; cursor
+;;
 (setq pyim-indicator-list (list #'my-pyim-indicator-with-cursor-color #'pyim-indicator-with-modeline))
 
 (defun my-pyim-indicator-with-cursor-color (input-method chinese-input-p)
@@ -1686,14 +1688,19 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
       (set-cursor-color "green"))))
 ;; 探针
 (setq-default pyim-english-input-switch-functions
-              '(pyim-probe-dynamic-english
-                ;; pyim-probe-isearch-mode
+              '(
                 pyim-probe-program-mode
-                pyim-probe-org-structure-template))
+		;; pyim-probe-dynamic-english
+                ;; pyim-probe-isearch-mode
+                pyim-probe-org-structure-template
+		pyim-probe-org-speed-commands
+		))
 
 (setq-default pyim-punctuation-half-width-functions
-              '(pyim-probe-punctuation-line-beginning
-                pyim-probe-punctuation-after-punctuation))
+              '(
+		pyim-probe-punctuation-line-beginning
+                pyim-probe-punctuation-after-punctuation
+		))
 ;; 让 avy 支持拼音搜索
 (with-eval-after-load 'avy
   (defun my-avy--regex-candidates (fun regex &optional beg end pred group)
@@ -1708,46 +1715,6 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 ;; isearch 开启代码搜索中文功能（比如拼音，五笔码等）
 ;; (pyim-isearch-mode 1) ; 性能差，不启用
 ;; }}}
-
-;; ;; smart-input-source
-;; ;; {{{
-;; (use-package sis
-;;   :init
-;;   ;; `C-s/r' 默认优先使用英文 必须在 sis-global-respect-mode 前配置
-;;   (setq sis-respect-go-english-triggers
-;;         (list 'isearch-forward 'isearch-backward) ; isearch-forward 时默认进入 en
-;;         sis-respect-restore-triggers
-;;         (list 'isearch-exit 'isearch-abort))
-;;   :config
-;;   (sis-ism-lazyman-config
-;;    "com.apple.keylayout.ABC"
-;;    "com.apple.inputmethod.SCIM.ITABC"
-;;    'macism
-;;    )
-;;   (sis-global-cursor-color-mode t)
-;;   (sis-global-respect-mode t)
-;;   (sis-global-context-mode t)
-;;   (sis-global-inline-mode t)   ; 中文状态下，中文后<spc>切换英文，结束后切回中文
-;;   ;; (keymap-global-set "<f9>" #'sis-log-mode) ; 开启日志
-;;   ;; 特殊定制
-;;   (setq sis-default-cursor-color "green" ;; 英文光标色
-;;         sis-other-cursor-color "purple"  ;; 中文光标色 green
-;;         ;; sis-inline-tighten-head-rule 'all ; 删除头部空格，默认 1，删除一个空格，1/0/'all
-;;         sis-inline-tighten-tail-rule 'all ; 删除尾部空格，默认 1，删除一个空格，1/0/'all
-;;         sis-inline-with-english t ; 默认是 t, 中文 context 下输入<spc>进入内联英文
-;;         sis-inline-with-other t) ; 默认是 nil，而且 prog-mode 不建议开启, 英文 context 下输入<spc><spc>进行内联中文
-;;   ;; 特殊 buffer 禁用 sis 前缀,使用 Emacs 原生快捷键  setqsis-prefix-override-buffer-disable-predicates
-;;   (setq sis-prefix-override-buffer-disable-predicates
-;;         (list 'minibufferp
-;;               (lambda (buffer) ; magit revision magit 的 keymap 是基于 text property 的，优先级比 sis 更高。进入 magit 后，disable sis 的映射
-;;                 (sis--string-match-p "^magit-revision:" (buffer-name buffer)))
-;;               (lambda (buffer) ; special buffer，所有*打头的 buffer，但是不包括*Scratch* *New, *About GNU 等 buffer
-;;                 (and (sis--string-match-p "^\*" (buffer-name buffer))
-;;                      (not (sis--string-match-p "^\*About GNU Emacs" (buffer-name buffer))) ; *About GNU Emacs" 仍可使用 C-h/C-x/C-c 前缀
-;;                      (not (sis--string-match-p "^\*New" (buffer-name buffer)))
-;;                      (not (sis--string-match-p "^\*Scratch" (buffer-name buffer))))))) ; *Scratch*  仍可使用 C-h/C-x/C-c 前缀
-;;   )
-;; ;; }}}
 
 ;; pangu-spacing
 ;; {{{
@@ -3061,20 +3028,29 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 (yas-global-mode 1)
 (require 'lsp-bridge)
 (setq lsp-bridge-enable-mode-line nil)
-(setq lsp-bridge-use-ds-pinyin-in-org-mode t)
+;; (setq lsp-bridge-use-ds-pinyin-in-org-mode t)
 ;; (setq lsp-bridge-use-wenls-in-org-mode t)
 (setq acm-enable-quick-access t)
 (setq acm-quick-access-modifier 'meta)
-(keymap-set acm-mode-map "M-j" 'acm-select-next)
-(keymap-set acm-mode-map "M-k" 'acm-select-prev)
-(global-lsp-bridge-mode)
-;; (keymap-set acm-mode-map "TAB" 'acm-select-next)
-;; ;; (keymap-set acm-mode-map "H-j" 'acm-select-next)
-;; ;; (keymap-set acm-mode-map "H-k" 'acm-select-prev)
+(add-to-list 'lsp-bridge-org-babel-lang-list "emacs-lisp")
+(add-to-list 'lsp-bridge-org-babel-lang-list "shell")
+
+;; (keymap-set acm-mode-map "ESC"       'acm-hide)   ; FIXME
+
+(keymap-unset acm-mode-map "SPC")
+(keymap-unset acm-mode-map "RET")
+(keymap-unset acm-mode-map "TAB")
+(keymap-unset acm-mode-map "<tab>")
+(keymap-set acm-mode-map "SPC"       'acm-complete)
+(keymap-set acm-mode-map "RET"     'acm-select-next)
+(keymap-set acm-mode-map "TAB"       'acm-select-prev)
+;; (keymap-set acm-mode-map "<tab>"     'acm-select-next)
 ;; (keymap-set acm-mode-map "<backtab>" 'acm-select-prev)
-;; (keymap-set acm-mode-map "C-j" 'acm-insert-common)
-;; (keymap-set acm-mode-map "SPC" 'acm-complete)
-;; (keymap-set acm-mode-map "ESC" 'acm-hide )
+(keymap-set acm-mode-map "C-j"       'acm-insert-common)
+(keymap-set acm-mode-map "H-j"       'acm-select-next)
+(keymap-set acm-mode-map "H-k"       'acm-select-prev)
+
+(global-lsp-bridge-mode)
 
 ;; fuck
 ;; {{{

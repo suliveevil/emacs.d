@@ -309,6 +309,13 @@ sibling file: [[file:init.org][init.el config]]
   ;; }}}
 #+end_src
 
+*** prefix-command
+
+#+begin_src emacs-lisp :tangle no
+(define-prefix-command 'hyper-c-map)
+(keymap-global-set "H-c H-f" #'find-file)
+#+end_src
+
 ** UI
 
 #+begin_src emacs-lisp :tangle yes
