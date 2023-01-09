@@ -13,9 +13,6 @@
 [submodule "lib/d2-mode"]
 	path = lib/d2-mode
 	url = git@github.com:andorsk/d2-mode.git
-[submodule "lib/fuck"]
-	path = lib/fuck
-	url = git@github.com:suliveevil/fuck.el.git
 [submodule "lib/elisp-demos"]
 	path = lib/elisp-demos
 	url = git@github.com:suliveevil/elisp-demos.git
@@ -52,3 +49,6 @@
 [submodule "lib/explain-pause-mode"]
 	path = lib/explain-pause-mode
 	url = https://github.com/lastquestion/explain-pause-mode
+[submodule "lib/advance-words-count"]
+	path = lib/advance-words-count
+	url = git@github.com:LdBeth/advance-words-count.el.git

@@ -436,7 +436,7 @@ i.e. change right window to bottom, or change bottom window to right."
                     (split-window-vertically)
                   (split-window-horizontally))
                 (set-window-buffer (windmove-find-other-window neighbour-dir) other-buf))))))))
-(keymap-global-set "C-c H-w" #'my-toggle-vertical-horizontal-split)
+(keymap-global-set "H-w H-w" #'my-toggle-vertical-horizontal-split)
 
 ;; fold
 ;; {{{
@@ -1508,12 +1508,19 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
   :bind (
          ("H-w r" . parrot-rotate-prev-word-at-point)
          ("H-w t" . parrot-rotate-next-word-at-point)
+	 ("H-k H-k" . parrot-rotate-next-word-at-point)
+	 ("H-k H-j" . parrot-rotate-prev-word-at-point)
          )
   :config
   (parrot-mode)
   (parrot-set-parrot-type 'emacs)
   (setq parrot-rotate-dict
         '(
+	  ;; personal setting
+	  (:rot ("¥" "$" "￥"))
+	  (:rot ("nil" "t"))
+	  (:rot ("setq" "defvar"))
+	  ;;
           (:rot ("alpha" "beta") :caps t :lower nil)
           ;; => rotations are "Alpha" "Beta"
 
@@ -1526,9 +1533,6 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
           (:rot ("&" "|"))
           ;; => rotations are "&" "|"
 
-	  (:rot ("nil" "t"))
-	  (:rot ("setq" "defvar"))
-	  
           ;; default dictionary starts here ('v')
           (:rot ("begin" "end") :caps t :upcase t)
           (:rot ("enable" "disable") :caps t :upcase t)
@@ -1551,7 +1555,7 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
           (:rot ("ifdef" "ifndef"))
           (:rot ("int8_t" "int16_t" "int32_t" "int64_t"))
           (:rot ("uint8_t" "uint16_t" "uint32_t" "uint64_t"))
-          (:rot ("1" "2" "3" "4" "5" "6" "7" "8" "9" "10"))
+          (:rot ("0" "1" "2" "3" "4" "5" "6" "7" "8" "9"))
           (:rot ("1st" "2nd" "3rd" "4th" "5th" "6th" "7th" "8th" "9th" "10th"))
           )
         )
@@ -2975,6 +2979,9 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   )
 ;; }}}
 
+(require 'advance-words-count)
+(require 'advance-wc-mode)
+
 ;; keyfreq: Track Emacs commands frequency
 ;; {{{
 ;; keyfreq fork: keyfreq-html-v2 show keyboard heat map
@@ -3144,12 +3151,6 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 (keymap-set acm-mode-map "C-j"       'acm-insert-common)
 
 (global-lsp-bridge-mode)
-
-;; fuck
-;; {{{
-(require 'fuck)
-(keymap-global-set "H-k" #'fuck)
-;; }}}
 
 ;; unicode
 ;; {{{

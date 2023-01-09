@@ -1,0 +1,2 @@
+;;; Generated package description from khoj.el  -*- no-byte-compile: t -*-
+(define-package "khoj" "20230105.1624" "Natural, Incremental Search for your Second Brain" '((emacs "27.1")) :commit "abd035e2fab173a463faf2976c3b8400885b2c4b" :authors '(("Debanjum Singh Solanky" . "debanjum@gmail.com")) :maintainer '("Debanjum Singh Solanky" . "debanjum@gmail.com") :keywords '("search" "org-mode" "outlines" "markdown" "beancount" "ledger" "image") :url "https://github.com/debanjum/khoj/tree/master/src/interface/emacs")

@@ -44,7 +44,7 @@ digraph G {"khoj" -> "emacs";
 "osx-dictionary" -> "cl-lib";
 "consult" -> "emacs";
 "consult" -> "compat";
-"tablist" -> "emacs";
+"opencc" -> "emacs";
 "ace-pinyin" -> "avy";
 "ace-pinyin" -> "pinyinlib";
 "magit" -> "emacs";

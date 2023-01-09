@@ -731,7 +731,7 @@ i.e. change right window to bottom, or change bottom window to right."
                     (split-window-vertically)
                   (split-window-horizontally))
                 (set-window-buffer (windmove-find-other-window neighbour-dir) other-buf))))))))
-(keymap-global-set "C-c H-w" #'my-toggle-vertical-horizontal-split)
+(keymap-global-set "H-w H-w" #'my-toggle-vertical-horizontal-split)
 #+end_src
 
 ** 折叠 fold
@@ -2451,12 +2451,19 @@ https://github.com/joddie/macrostep
   :bind (
          ("H-w r" . parrot-rotate-prev-word-at-point)
          ("H-w t" . parrot-rotate-next-word-at-point)
+	 ("H-k H-k" . parrot-rotate-next-word-at-point)
+	 ("H-k H-j" . parrot-rotate-prev-word-at-point)
          )
   :config
   (parrot-mode)
   (parrot-set-parrot-type 'emacs)
   (setq parrot-rotate-dict
         '(
+	  ;; personal setting
+	  (:rot ("¥" "$" "￥"))
+	  (:rot ("nil" "t"))
+	  (:rot ("setq" "defvar"))
+	  ;;
           (:rot ("alpha" "beta") :caps t :lower nil)
           ;; => rotations are "Alpha" "Beta"
 
@@ -2469,9 +2476,6 @@ https://github.com/joddie/macrostep
           (:rot ("&" "|"))
           ;; => rotations are "&" "|"
 
-	  (:rot ("nil" "t"))
-	  (:rot ("setq" "defvar"))
-	  
           ;; default dictionary starts here ('v')
           (:rot ("begin" "end") :caps t :upcase t)
           (:rot ("enable" "disable") :caps t :upcase t)
@@ -2494,7 +2498,7 @@ https://github.com/joddie/macrostep
           (:rot ("ifdef" "ifndef"))
           (:rot ("int8_t" "int16_t" "int32_t" "int64_t"))
           (:rot ("uint8_t" "uint16_t" "uint32_t" "uint64_t"))
-          (:rot ("1" "2" "3" "4" "5" "6" "7" "8" "9" "10"))
+          (:rot ("0" "1" "2" "3" "4" "5" "6" "7" "8" "9"))
           (:rot ("1st" "2nd" "3rd" "4th" "5th" "6th" "7th" "8th" "9th" "10th"))
           )
         )
@@ -4749,6 +4753,13 @@ https://github.com/zk-phi/spray
 #+end_src
 
 
+** 字符
+[[https://github.com/LdBeth/advance-words-count.el][LdBeth/advance-words-count.el: Extended `count-words' function]]
+
+#+begin_src emacs-lisp :tangle yes
+(require 'advance-words-count)
+(require 'advance-wc-mode)
+#+end_src
 
 ** 快捷键历史记录
 
@@ -5087,9 +5098,16 @@ https://github.com/zk-phi/spray
 ;; }}}
 #+end_src
 
-** fuck
 
-#+begin_src emacs-lisp :tangle yes
+** parrot
+
+#+begin_src emacs-lisp
+
+#+end_src
+
+** Fuck
+
+#+begin_src emacs-lisp :tangle no
 ;; fuck
 ;; {{{
 (require 'fuck)
