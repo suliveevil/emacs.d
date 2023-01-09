@@ -77,6 +77,8 @@ https://www.bing.com
 
 ** 时间 date & time
 
+2023-01-08T21:00:08+0800
+
 #+begin_src emacs-lisp :tangle yes
 ;; time
 ;; {{{
@@ -810,69 +812,7 @@ i.e. change right window to bottom, or change bottom window to right."
 ;; }}}
 #+end_src
 
-** 字符 Character & string
-
-*** 括号自动补全
-
-
-#+begin_src emacs-lisp :tangle yes
-;; pair completion
-(use-package electric-pair-mode
-  :ensure nil
-  :hook (prog-mode . electric-pair-mode)
-)
-#+end_src
-
-*** 跳转
-
-
-#+begin_src emacs-lisp :tangle yes
-;; goto-char by Oliver Scholz
-;; {{{
-(defun my/go-to-char (n char)
-  "Move forward to Nth occurence of CHAR.
-Typing `wy-go-to-char-key' again will move forwad to the next Nth
-occurence of CHAR."
-  (interactive "p\ncGo to char: ")
-  (search-forward (string char) nil nil n)
-  (while (char-equal (read-char)
-                     char)
-    (search-forward (string char) nil nil n))
-  (setq unread-command-events (list last-input-event)))
-
-(keymap-set global-map "C-c a" #'my/go-to-char)
-;; similar work
-;; [go-to-char.el - EmacsWiki](https://www.emacswiki.org/emacs/go-to-char.el)
-;; [joseph-go-to-char - EmacsWiki](https://www.emacswiki.org/emacs/joseph-go-to-char)
-;; [doitian/iy-go-to-char: Go to next CHAR which is similar to "f" and "t" in vim](https://github.com/doitian/iy-go-to-char)
-;; }}}
-#+end_src
-
-*** 数字
-
-#+begin_src emacs-lisp :tangle no
-(defun my-thousands-separate (num)
-  "Formats the (possibly floating point) number with a thousands
-separator."
-  (let* ((nstr (number-to-string num))
-         (dot-ind (string-match "\\." nstr))
-         (nstr-no-decimal (if dot-ind
-                              (substring nstr 0 dot-ind)
-                            nstr))
-         (nrest (if dot-ind
-                    (substring nstr dot-ind)
-                  nil))
-         (pretty nil)
-         (cnt 0))
-    (dolist (c (reverse (append nstr-no-decimal nil)))
-      (if (and (zerop (% cnt 3)) (> cnt 0))
-          (setq pretty (cons ?, pretty)))
-      (setq pretty (cons c pretty))
-      (setq cnt (1+ cnt)))
-    (concat pretty nrest))
-  )
-#+end_src
-
+** 字符 Character & Text/String
 
 *** 空白字符
 
@@ -884,6 +824,7 @@ separator."
 
 #+begin_src emacs-lisp :tangle no
 ;;(when (or (my-system-type-is-gnu) (my-system-is-blanche))
+;; (add-to-list post-command-hook 'whitespace-mode) ; FIXME
 (whitespace-mode)
 ;; only show bad whitespace
 (setq whitespace-style '(
@@ -898,16 +839,28 @@ separator."
 ;;  )
 #+end_src
 
-** 单词 Word
+*** 括号自动补全
 
-*** Title Capitalization
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
+;; pair completion
+(use-package electric-pair-mode
+  :ensure nil
+  :hook (prog-mode . electric-pair-mode)
+)
+#+end_src
+
+*** Text Case
+
+Title Capitalization
+
+
+#+begin_src emacs-lisp :tangle yes
 ;; additionally to the list defined in title-capitalization:
 (defvar my-do-not-capitalize-words '("suliveevil")
   "Personal list of words that doesn't get capitalized in titles.")
 
-(defun title-capitalization (beg end)
+(defun text-case-title-capitalization (beg end)
   "Proper English title capitalization of a marked region"
   ;; - before: the presentation of this heading of my own from my keyboard and yet
   ;; - after:  The Presentation of This Heading of My Own from My Keyboard and Yet
@@ -978,6 +931,61 @@ separator."
           (capitalize-word 1))))
   )
 #+end_src
+
+
+
+*** 跳转
+
+
+#+begin_src emacs-lisp :tangle yes
+;; goto-char by Oliver Scholz
+;; {{{
+(defun my/go-to-char (n char)
+  "Move forward to Nth occurence of CHAR.
+Typing `wy-go-to-char-key' again will move forwad to the next Nth
+occurence of CHAR."
+  (interactive "p\ncGo to char: ")
+  (search-forward (string char) nil nil n)
+  (while (char-equal (read-char)
+                     char)
+    (search-forward (string char) nil nil n))
+  (setq unread-command-events (list last-input-event)))
+
+(keymap-set global-map "C-c a" #'my/go-to-char)
+;; similar work
+;; [go-to-char.el - EmacsWiki](https://www.emacswiki.org/emacs/go-to-char.el)
+;; [joseph-go-to-char - EmacsWiki](https://www.emacswiki.org/emacs/joseph-go-to-char)
+;; [doitian/iy-go-to-char: Go to next CHAR which is similar to "f" and "t" in vim](https://github.com/doitian/iy-go-to-char)
+;; }}}
+#+end_src
+
+*** 数字
+
+#+begin_src emacs-lisp :tangle no
+(defun my-thousands-separate (num)
+  "Formats the (possibly floating point) number with a thousands
+separator."
+  (let* ((nstr (number-to-string num))
+         (dot-ind (string-match "\\." nstr))
+         (nstr-no-decimal (if dot-ind
+                              (substring nstr 0 dot-ind)
+                            nstr))
+         (nrest (if dot-ind
+                    (substring nstr dot-ind)
+                  nil))
+         (pretty nil)
+         (cnt 0))
+    (dolist (c (reverse (append nstr-no-decimal nil)))
+      (if (and (zerop (% cnt 3)) (> cnt 0))
+          (setq pretty (cons ?, pretty)))
+      (setq pretty (cons c pretty))
+      (setq cnt (1+ cnt)))
+    (concat pretty nrest))
+  )
+#+end_src
+
+
+** 单词 Word
 
 
 
@@ -1133,6 +1141,12 @@ separator."
 *** tempo
 
 ** minibuffer                                                         :FIXME:
+
+
+#+begin_src emacs-lisp :tangle yes
+(keymap-set minibuffer-mode-map "H-j" #'next-line)
+(keymap-set minibuffer-mode-map "H-k" #'previous-line)
+#+end_src
 
 [[https://robbmann.io/posts/emacs-29-completions/][The *Completions* Buffer Gets a Big Upgrade in Emacs 29 · robbmann]]
 
@@ -2328,6 +2342,7 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
   :config
   (which-key-mode)
   (setq which-key-idle-secondary-delay 0.5)
+  (which-key-posframe-mode)
   )
 #+end_src
 
@@ -2488,8 +2503,65 @@ https://github.com/joddie/macrostep
 
 *** 大小写
 
+** 正则表达式
+
+*** pcre2el
+
+[[https://github.com/joddie/pcre2el][joddie/pcre2el: convert between PCRE, Emacs and rx regexp syntax]]
+
+| Convert from | convert to |
+|--------------+------------|
+| ELISP        | RX         |
+| ELISP        | SRE        |
+| ELISP        | string     |
+| PCRE         | ELISP      |
+| PCRE         | RX         |
+| PCRE         | SRE        |
+| PCRE         | string     |
+| RX           | ELISP      |
+| RX           | PCRE       |
+| RX           | SRE        |
+
+test
+
+#+begin_src python
+re="(([\u2e80-\u9fff]+)([\n\r]{1,2})?([\s\t])?(([\u2e80-\u9fff]+)|(\w)+)([\s\t])?)"
+#+end_src
+
+#+begin_src emacs-lisp
+(submatch
+ (submatch
+  (+ (any (48 . 117)))
+  )
+ (\?
+  (submatch (** 1 2 (any 10 13)))
+  )
+ (\?
+  (submatch (any 9 10 12 13 32))
+  )
+ (submatch (or
+	    (submatch
+	     (+ (any (48 . 117))))
+	    (+
+	     (submatch (any 95 alnum))
+	     )
+	    )
+	   )
+ (\?
+  (submatch (any 9 10 12 13 32))
+  )
+ )
+#+end_src
+
+*** xr
 
 ** Emacs Lisp
+
+*** 代码分析
+
+elisp-depmap
+
+*** 辅助编辑
 
 #+begin_src emacs-lisp :tangle no
 (use-package lisp
@@ -2790,6 +2862,8 @@ Natural Language Search
 ;; (pyim-greatdict-enable)
 (require 'pyim-tsinghua-dict)
 (pyim-tsinghua-dict-enable)
+;; isearch 开启代码搜索中文功能（比如拼音，五笔码等）
+;; (pyim-isearch-mode 1) ; 性能差，不启用
 (setq default-input-method "pyim")
 (setq pyim-page-style 'vertical)
 (setq pyim-page-tooltip '(posframe minibuffer popup))
@@ -2816,28 +2890,34 @@ Natural Language Search
   (if (not (equal input-method "pyim"))
       (progn
         ;; 用户在这里定义 pyim 未激活时的光标颜色设置语句
-        (set-cursor-color "blue"))
+        (set-cursor-color "grey")
+        )
     (if chinese-input-p
         (progn
           ;; 用户在这里定义 pyim 输入中文时的光标颜色设置语句
-          (set-cursor-color "purple"))
+          (set-cursor-color "purple")
+          )
       ;; 用户在这里定义 pyim 输入英文时的光标颜色设置语句
-      (set-cursor-color "green"))))
+      (set-cursor-color "green")
+      )
+    )
+  )
 ;; 探针
 (setq-default pyim-english-input-switch-functions
               '(
+		pyim-probe-auto-english
                 pyim-probe-program-mode
-		;; pyim-probe-dynamic-english
-                ;; pyim-probe-isearch-mode
+                pyim-probe-dynamic-english
+                pyim-probe-isearch-mode
                 pyim-probe-org-structure-template
-		pyim-probe-org-speed-commands
-		))
+                pyim-probe-org-speed-commands
+                ))
 
 (setq-default pyim-punctuation-half-width-functions
               '(
-		pyim-probe-punctuation-line-beginning
+                pyim-probe-punctuation-line-beginning
                 pyim-probe-punctuation-after-punctuation
-		))
+                ))
 ;; 让 avy 支持拼音搜索
 (with-eval-after-load 'avy
   (defun my-avy--regex-candidates (fun regex &optional beg end pred group)
@@ -2849,8 +2929,6 @@ Natural Language Search
   (let ((result (funcall orig-func component)))
     (pyim-cregexp-build result)))
 (advice-add 'orderless-regexp :around #'my-orderless-regexp)
-;; isearch 开启代码搜索中文功能（比如拼音，五笔码等）
-;; (pyim-isearch-mode 1) ; 性能差，不启用
 ;; }}}
 #+end_src
 
@@ -2902,7 +2980,42 @@ Natural Language Search
                    (= (length (pyim-process-get-entered 'point-before)) 0)))))))
 #+end_src
 
+** emacs-rime
+
+
+#+begin_src emacs-lisp
+(defun change-cursor-color-on-input-method ()
+    "Set cursor color depending on whether an input method is used or not."
+    (interactive)
+    (set-cursor-color (if (and (rime--should-enable-p)
+                               (not (rime--should-inline-ascii-p))
+                               current-input-method)
+                          input-method-cursor-color
+                        default-cursor-color)))
+#+end_src
+
+[[https://github.com/DogLooksGood/emacs-rime][DogLooksGood/emacs-rime: RIME ㄓ in Emacs]]
+
+[[https://github.com/Eason0210/im-cursor-chg][Eason0210/im-cursor-chg]]
+
 ** 系统输入法切换                                                    :输入法:
+
+| 当前输入法 | 光标前两个单词中是否有中文 | 空格或制表符数量 | 是否切换 |
+|------------+----------------------------+------------------+----------|
+| 中文       | 是                         |                0 | 否       |
+| 中文       | 是                         |                1 | 否       |
+| 中文       | 是                         |                2 | 是       |
+| 中文       | 否                         |                0 |          |
+| 中文       | 否                         |                1 |          |
+| 中文       | 否                         |                2 |          |
+| 英文       | 是                         |                0 | 否       |
+| 英文       | 是                         |                1 |          |
+| 英文       | 是                         |                2 |          |
+| 英文       | 否                         |                0 |          |
+| 英文       | 否                         |                1 |          |
+| 英文       | 否                         |                2 |          |
+
+*** sis
 
 #+begin_src emacs-lisp :tangle no
 ;; smart-input-source
@@ -2926,8 +3039,8 @@ Natural Language Search
   (sis-global-inline-mode t)   ; 中文状态下，中文后<spc>切换英文，结束后切回中文
   ;; (keymap-global-set "<f9>" #'sis-log-mode) ; 开启日志
   ;; 特殊定制
-  (setq sis-default-cursor-color "green" ;; 英文光标色
-        sis-other-cursor-color "purple"  ;; 中文光标色 green
+  (setq sis-default-cursor-color "blue" ;; 英文光标色
+        sis-other-cursor-color "orange"  ;; 中文光标色 green
         ;; sis-inline-tighten-head-rule 'all ; 删除头部空格，默认 1，删除一个空格，1/0/'all
         sis-inline-tighten-tail-rule 'all ; 删除尾部空格，默认 1，删除一个空格，1/0/'all
         sis-inline-with-english t ; 默认是 t, 中文 context 下输入<spc>进入内联英文
@@ -4583,6 +4696,9 @@ https://github.com/zk-phi/spray
 
 *** notmuch
 
+** crux
+
+[[https://github.com/bbatsov/crux][bbatsov/crux: A Collection of Ridiculously Useful eXtensions for Emacs]]
 
 ** emacs-everywhere
 
@@ -4701,7 +4817,7 @@ https://github.com/zk-phi/spray
           ;; mouse-set-point
           ;; move-beginning-of-line
           ;; move-end-of-line
-          ;; mwheel-scroll
+          mwheel-scroll
           ;; my-company-number
           ;; my-setup-develop-environment
           ;; newline-and-indent
@@ -4718,7 +4834,8 @@ https://github.com/zk-phi/spray
           ;; right-char
           ;; rjsx-electric-gt
           ;; rjsx-electric-lt
-          ;; self-insert-command
+	  org-self-insert-command
+          self-insert-command
           ;; shellcop-erase-buffer
           ;; smarter-move-beginning-of-line
           ;; suspend-frame
@@ -4898,7 +5015,7 @@ https://github.com/zk-phi/spray
 (require 'yasnippet)
 (yas-global-mode 1)
 (require 'lsp-bridge)
-(setq lsp-bridge-enable-mode-line nil)
+(setq lsp-bridge-enable-mode-line -1)
 ;; (setq lsp-bridge-use-ds-pinyin-in-org-mode t)
 ;; (setq lsp-bridge-use-wenls-in-org-mode t)
 (setq acm-enable-quick-access t)
@@ -4912,14 +5029,21 @@ https://github.com/zk-phi/spray
 (keymap-unset acm-mode-map "RET")
 (keymap-unset acm-mode-map "TAB")
 (keymap-unset acm-mode-map "<tab>")
+;; complete
 (keymap-set acm-mode-map "SPC"       'acm-complete)
-(keymap-set acm-mode-map "RET"     'acm-select-next)
-(keymap-set acm-mode-map "TAB"       'acm-select-prev)
-;; (keymap-set acm-mode-map "<tab>"     'acm-select-next)
-;; (keymap-set acm-mode-map "<backtab>" 'acm-select-prev)
-(keymap-set acm-mode-map "C-j"       'acm-insert-common)
+(keymap-set acm-mode-map "RET"       'acm-complete)
+;; select 方案一
+(keymap-set acm-mode-map "TAB"       'acm-select-next)
+(keymap-set acm-mode-map "H-TAB"       'acm-select-next)
+(keymap-set acm-mode-map "<backtab>" 'acm-select-prev)
+;; select 方案二
 (keymap-set acm-mode-map "H-j"       'acm-select-next)
 (keymap-set acm-mode-map "H-k"       'acm-select-prev)
+;; select 方案三
+;; (keymap-set acm-mode-map "RET"     'acm-select-next)
+;; (keymap-set acm-mode-map "<tab>"     'acm-select-prev)
+;; abort
+(keymap-set acm-mode-map "C-j"       'acm-insert-common)
 
 (global-lsp-bridge-mode)
 #+end_src

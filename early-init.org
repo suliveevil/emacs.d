@@ -309,6 +309,12 @@ sibling file: [[file:init.org][init.el config]]
   ;; }}}
 #+end_src
 
+*** universal-argument
+
+#+begin_src emacs-lisp :tangle yes
+(keymap-global-set "H-a" #'universal-argument)
+#+end_src
+
 *** prefix-command
 
 #+begin_src emacs-lisp :tangle no

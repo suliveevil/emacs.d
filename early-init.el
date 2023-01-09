@@ -108,6 +108,8 @@
 (keymap-global-set     "H-x"          #'execute-extended-command)
 ;; }}}
 
+(keymap-global-set "H-a" #'universal-argument)
+
 ;; UI
 ;; {{{
 ;; (push '(fullscreen . maximized) default-frame-alist)

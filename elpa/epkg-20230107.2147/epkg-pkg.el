@@ -1,9 +1,9 @@
-(define-package "epkg" "20230105.1926" "Browse the Emacsmirror package database"
+(define-package "epkg" "20230107.2147" "Browse the Emacsmirror package database"
   '((emacs "25.1")
-    (compat "29.1.0.1")
+    (compat "29.1.1.0")
     (closql "20210927")
     (llama "0.2.0"))
-  :commit "5bff5be316d4edd406aa1c38e8f5695f2f8c606c" :authors
+  :commit "9d079e9490dc3040f0528f1673f3796cc8be5189" :authors
   '(("Jonas Bernoulli" . "jonas@bernoul.li"))
   :maintainer
   '("Jonas Bernoulli" . "jonas@bernoul.li")

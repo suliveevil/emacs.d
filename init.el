@@ -498,11 +498,90 @@ i.e. change right window to bottom, or change bottom window to right."
 ;;     (pos-tip-hide)))
 ;; }}}
 
+(keymap-global-set "H-SPC H-SPC" (lambda () (interactive) (insert "\u200b")))
+;; (define-key org-mode-map (kbd "H-SPC H-SPC")
+;;             (lambda () (interactive) (insert "\u200b")))
+
 ;; pair completion
 (use-package electric-pair-mode
   :ensure nil
   :hook (prog-mode . electric-pair-mode)
 )
+
+;; additionally to the list defined in title-capitalization:
+(defvar my-do-not-capitalize-words '("suliveevil")
+  "Personal list of words that doesn't get capitalized in titles.")
+
+(defun text-case-title-capitalization (beg end)
+  "Proper English title capitalization of a marked region"
+  ;; - before: the presentation of this heading of my own from my keyboard and yet
+  ;; - after:  The Presentation of This Heading of My Own from My Keyboard and Yet
+  ;; - before: a a a a a a a a
+  ;; - after:  A a a a a a a A
+  (interactive "r")
+  (save-excursion
+    (let* (
+           ;; basic list of words which don't get capitalized according to simplified rules:
+           ;; http://karl-voit.at/2015/05/25/elisp-title-capitalization/
+           (do-not-capitalize-basic-words '(
+                                            "a"
+                                            "ago"
+                                            "an"
+                                            "and"
+                                            "as"
+                                            "at"
+                                            "but"
+                                            "by"
+                                            "es"
+                                            "for"
+                                            "from"
+                                            "in"
+                                            "into"
+                                            "it"
+                                            "n"
+                                            "next"
+                                            "nor"
+                                            "of"
+                                            "off"
+                                            "on"
+                                            "onto"
+                                            "or"
+                                            "over"
+                                            "past"
+                                            "s"
+                                            "so"
+                                            "t"
+                                            "the"
+                                            "till"
+                                            "to"
+                                            "up"
+                                            "yet"))
+           ;; if user has defined 'my-do-not-capitalize-words, append to basic list:
+           (do-not-capitalize-words (if (boundp 'my-do-not-capitalize-words)
+                                        (append do-not-capitalize-basic-words my-do-not-capitalize-words )
+                                      do-not-capitalize-basic-words
+                                      )
+                                    )
+           )
+      ;; go to begin of first word:
+      (goto-char beg)
+      (capitalize-word 1)
+      ;; go through the region, word by word:
+      (while (< (point) end)
+        (skip-syntax-forward "^w" end)
+        (let ((word (thing-at-point 'word)))
+          (if (stringp word)
+              ;; capitalize current word except it is list member:
+              (if (member (downcase word) do-not-capitalize-words)
+                  (downcase-word 1)
+                (capitalize-word 1)))))
+      ;; capitalize last word in any case:
+      (backward-word 1)
+      (if (and (>= (point) beg)
+               (not (member (or (thing-at-point 'word) "s")
+                            '("n" "t" "es" "s"))))
+          (capitalize-word 1))))
+  )
 
 ;; goto-char by Oliver Scholz
 ;; {{{
@@ -523,10 +602,6 @@ occurence of CHAR."
 ;; [joseph-go-to-char - EmacsWiki](https://www.emacswiki.org/emacs/joseph-go-to-char)
 ;; [doitian/iy-go-to-char: Go to next CHAR which is similar to "f" and "t" in vim](https://github.com/doitian/iy-go-to-char)
 ;; }}}
-
-(keymap-global-set "H-SPC H-SPC" (lambda () (interactive) (insert "\u200b")))
-;; (define-key org-mode-map (kbd "H-SPC H-SPC")
-;;             (lambda () (interactive) (insert "\u200b")))
 
 ;; line
 ;; {{{
@@ -638,6 +713,9 @@ occurence of CHAR."
   (isearch-quit-and-run
     (isearch-forward)))
 ;; }}}
+
+(keymap-set minibuffer-mode-map "H-j" #'next-line)
+(keymap-set minibuffer-mode-map "H-k" #'previous-line)
 
 ;; minibuffer
 ;; {{{
@@ -1353,6 +1431,7 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
   :config
   (which-key-mode)
   (setq which-key-idle-secondary-delay 0.5)
+  (which-key-posframe-mode)
   )
 
 ;; free-keys
@@ -1653,6 +1732,8 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 ;; (pyim-greatdict-enable)
 (require 'pyim-tsinghua-dict)
 (pyim-tsinghua-dict-enable)
+;; isearch 开启代码搜索中文功能（比如拼音，五笔码等）
+;; (pyim-isearch-mode 1) ; 性能差，不启用
 (setq default-input-method "pyim")
 (setq pyim-page-style 'vertical)
 (setq pyim-page-tooltip '(posframe minibuffer popup))
@@ -1679,28 +1760,34 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
   (if (not (equal input-method "pyim"))
       (progn
         ;; 用户在这里定义 pyim 未激活时的光标颜色设置语句
-        (set-cursor-color "blue"))
+        (set-cursor-color "grey")
+        )
     (if chinese-input-p
         (progn
           ;; 用户在这里定义 pyim 输入中文时的光标颜色设置语句
-          (set-cursor-color "purple"))
+          (set-cursor-color "purple")
+          )
       ;; 用户在这里定义 pyim 输入英文时的光标颜色设置语句
-      (set-cursor-color "green"))))
+      (set-cursor-color "green")
+      )
+    )
+  )
 ;; 探针
 (setq-default pyim-english-input-switch-functions
               '(
+		pyim-probe-auto-english
                 pyim-probe-program-mode
-		;; pyim-probe-dynamic-english
-                ;; pyim-probe-isearch-mode
+                pyim-probe-dynamic-english
+                pyim-probe-isearch-mode
                 pyim-probe-org-structure-template
-		pyim-probe-org-speed-commands
-		))
+                pyim-probe-org-speed-commands
+                ))
 
 (setq-default pyim-punctuation-half-width-functions
               '(
-		pyim-probe-punctuation-line-beginning
+                pyim-probe-punctuation-line-beginning
                 pyim-probe-punctuation-after-punctuation
-		))
+                ))
 ;; 让 avy 支持拼音搜索
 (with-eval-after-load 'avy
   (defun my-avy--regex-candidates (fun regex &optional beg end pred group)
@@ -1712,8 +1799,6 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
   (let ((result (funcall orig-func component)))
     (pyim-cregexp-build result)))
 (advice-add 'orderless-regexp :around #'my-orderless-regexp)
-;; isearch 开启代码搜索中文功能（比如拼音，五笔码等）
-;; (pyim-isearch-mode 1) ; 性能差，不启用
 ;; }}}
 
 ;; pangu-spacing
@@ -2954,7 +3039,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
           ;; mouse-set-point
           ;; move-beginning-of-line
           ;; move-end-of-line
-          ;; mwheel-scroll
+          mwheel-scroll
           ;; my-company-number
           ;; my-setup-develop-environment
           ;; newline-and-indent
@@ -2971,7 +3056,8 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
           ;; right-char
           ;; rjsx-electric-gt
           ;; rjsx-electric-lt
-          ;; self-insert-command
+	  org-self-insert-command
+          self-insert-command
           ;; shellcop-erase-buffer
           ;; smarter-move-beginning-of-line
           ;; suspend-frame
@@ -3027,7 +3113,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 (require 'yasnippet)
 (yas-global-mode 1)
 (require 'lsp-bridge)
-(setq lsp-bridge-enable-mode-line nil)
+(setq lsp-bridge-enable-mode-line -1)
 ;; (setq lsp-bridge-use-ds-pinyin-in-org-mode t)
 ;; (setq lsp-bridge-use-wenls-in-org-mode t)
 (setq acm-enable-quick-access t)
@@ -3041,14 +3127,21 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 (keymap-unset acm-mode-map "RET")
 (keymap-unset acm-mode-map "TAB")
 (keymap-unset acm-mode-map "<tab>")
+;; complete
 (keymap-set acm-mode-map "SPC"       'acm-complete)
-(keymap-set acm-mode-map "RET"     'acm-select-next)
-(keymap-set acm-mode-map "TAB"       'acm-select-prev)
-;; (keymap-set acm-mode-map "<tab>"     'acm-select-next)
-;; (keymap-set acm-mode-map "<backtab>" 'acm-select-prev)
-(keymap-set acm-mode-map "C-j"       'acm-insert-common)
+(keymap-set acm-mode-map "RET"       'acm-complete)
+;; select 方案一
+(keymap-set acm-mode-map "TAB"       'acm-select-next)
+(keymap-set acm-mode-map "H-TAB"       'acm-select-next)
+(keymap-set acm-mode-map "<backtab>" 'acm-select-prev)
+;; select 方案二
 (keymap-set acm-mode-map "H-j"       'acm-select-next)
 (keymap-set acm-mode-map "H-k"       'acm-select-prev)
+;; select 方案三
+;; (keymap-set acm-mode-map "RET"     'acm-select-next)
+;; (keymap-set acm-mode-map "<tab>"     'acm-select-prev)
+;; abort
+(keymap-set acm-mode-map "C-j"       'acm-insert-common)
 
 (global-lsp-bridge-mode)
 

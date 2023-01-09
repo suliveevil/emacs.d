@@ -1,3 +1,0 @@
-(require 'netease-cloud-music)
-(require 'netease-cloud-music-ui) ; TUI
-(require 'netease-cloud-music-comment)

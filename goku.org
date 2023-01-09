@@ -1,0 +1,35 @@
+:PROPERTIES: header-args:emacs-lisp :tangle "~/.config/emacs/test.el"
+:ID:       40213D91-A6A0-4D9C-968E-CF79C1EB36AB
+:END:
+#+title: GokuRakuJoudo
+
+[[file:~/.config/karabiner.edn][Local File: karabiner.edn]]
+
+#+begin_src emacs-lisp :tangle "~/.config/emacs/test.el"
+;; test
+;; 2023-01-08T14:32:21+0800
+#+end_src
+
+* test 1
+:PROPERTIES: header-args:emacs-lisp :tangle "~/.config/emacs/test1.el"
+:ID:       A143345F-D681-4AA2-B83D-9AD28E43A856
+:END:
+
+
+#+begin_src emacs-lisp :tangle yes
+;; test 1
+;; 2023-01-08T14:25:39+0800
+#+end_src
+
+* test 2
+:PROPERTIES: header-args:emacs-lisp :tangle "~/.config/emacs/test2.el"
+:ID:       CD25820B-61CB-4530-A16C-128F4F118FF7
+:END:
+
+
+#+begin_src emacs-lisp :tangle yes
+;; test 2
+;; 2023-01-08T14:25:56+0800
+#+end_src
+
+
