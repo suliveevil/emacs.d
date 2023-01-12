@@ -1701,14 +1701,6 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
   )
 ;; }}}
 
-;; khoj
-;; {{{
-;; Install Khoj Package from MELPA Stable
-(use-package khoj
-  :defer t
-  :bind ("C-c n s" . 'khoj))
-;; }}}
-
 ;; dictionary: Apple 词典: osx-dictionary
 ;; {{{
 ;; (require 'osx-dictionary)
@@ -1741,17 +1733,17 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 (setq default-input-method "pyim")
 (setq pyim-page-style 'vertical)
 (setq pyim-page-tooltip '(posframe minibuffer popup))
-(setq pyim-page-length 9)
+(setq pyim-page-length 5)
 (setq-default pyim-punctuation-translate-p '(auto)) ;; 全角半角
-(keymap-set pyim-mode-map "-" 'pyim-page-previous-page)
-(keymap-set pyim-mode-map "+" 'pyim-page-next-page)
-;; (keymap-set pyim-mode-map "H-k" 'pyim-page-previous-page)
-;; (keymap-set pyim-mode-map "H-j" 'pyim-page-next-page)
 (keymap-global-set "H-e" 'toggle-input-method)
-(keymap-global-set "H-b" 'pyim-backward-word)
-(keymap-global-set "H-f" 'pyim-forward-word)
 ;; (keymap-global-set [remap backward-word] #'pyim-backward-word)
 ;; (keymap-global-set [remap forward-word] #'pyim-forward-word)
+(keymap-global-set "H-b" 'pyim-backward-word)
+(keymap-global-set "H-f" 'pyim-forward-word)
+(keymap-set pyim-mode-map "-" 'pyim-page-previous-page)
+(keymap-set pyim-mode-map "+" 'pyim-page-next-page)
+(keymap-set pyim-mode-map "H-h" 'pyim-page-previous-page)
+(keymap-set pyim-mode-map "H-l" 'pyim-page-next-page)
 ;; 金手指设置，可以将光标处的编码，比如：拼音字符串，转换为中文。
 (keymap-global-set "H-c H-s" #'pyim-convert-string-at-point)
 ;; 将光标前的 regexp 转换为可以搜索中文的 regexp.
@@ -2978,6 +2970,25 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
          )
   )
 ;; }}}
+
+(setq browser-hist-default-browser 'safari) ; FIXME
+(use-package browser-hist
+  :ensure nil
+  :init(use-package sqlite)
+  :bind
+  ("H-s H-s" . browser-hist-search)
+  :config
+  (setq browser-hist-db-paths
+      '(
+	(chrome . "$HOME/Library/Application Support/Google/Chrome/Default/History")
+        (brave . "$HOME/Library/Application Support/BraveSoftware/Brave-Browser/Default/History")
+        (firefox . "$HOME/Library/Application Support/Firefox/Profiles/*.default-release/places.sqlite")
+	(safari . "$HOME/Library/Safari/History.db")
+      ))
+    
+  :commands
+  (browser-hist-search)
+  )
 
 (require 'advance-words-count)
 (require 'advance-wc-mode)

@@ -118,6 +118,7 @@
         (width . 97)
         (left . 700)
         (top . 20)
+	(alpha . (95 .80))
         ;; (vertical-scroll-bars . nil)
         ;; (horizontal-scroll-bars . nil)
         ;; (tool-bar-lines . 0)

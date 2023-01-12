@@ -1,2 +1,0 @@
-;;; Generated package description from goto-line-preview.el  -*- no-byte-compile: t -*-
-(define-package "goto-line-preview" "20221231.1701" "Preview line when executing `goto-line` command" '((emacs "25")) :commit "9091885111e96590e9c9f4d311706497da6b8f84" :authors '(("Shen, Jen-Chieh" . "jcs090218@gmail.com")) :maintainer '("Shen, Jen-Chieh" . "jcs090218@gmail.com") :keywords '("convenience" "line" "navigation") :url "https://github.com/emacs-vs/goto-line-preview")

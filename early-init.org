@@ -325,34 +325,35 @@ sibling file: [[file:init.org][init.el config]]
 ** UI
 
 #+begin_src emacs-lisp :tangle yes
-  ;; UI
-  ;; {{{
-  ;; (push '(fullscreen . maximized) default-frame-alist)
-  (setq default-frame-alist
-        '((height . 46)
-          (width . 97)
-          (left . 700)
-          (top . 20)
-          ;; (vertical-scroll-bars . nil)
-          ;; (horizontal-scroll-bars . nil)
-          ;; (tool-bar-lines . 0)
-          ))
-  (setq inhibit-splash-screen t)        ;; 禁用欢迎界面
-  (tool-bar-mode -1)          ;; 工具栏
-  (set-fringe-mode 10)        ;;
-  (global-visual-line-mode 1) ;;
-  (setq visible-bell t)       ;; 关闭提示声音
-  (context-menu-mode 1)       ;; 鼠标右键菜单
-  (setq context-menu-functions
-        '(context-menu-ffap
-          occur-context-menu
-          context-menu-region
-          context-menu-undo
-          context-menu-minor
-          context-menu-local
-          ))
-  (setq use-dialog-box nil)   ;; 鼠标点击不触发弹窗
-  ;; }}}
+;; UI
+;; {{{
+;; (push '(fullscreen . maximized) default-frame-alist)
+(setq default-frame-alist
+      '((height . 46)
+        (width . 97)
+        (left . 700)
+        (top . 20)
+	(alpha . (95 .80))
+        ;; (vertical-scroll-bars . nil)
+        ;; (horizontal-scroll-bars . nil)
+        ;; (tool-bar-lines . 0)
+        ))
+(setq inhibit-splash-screen t)        ;; 禁用欢迎界面
+(tool-bar-mode -1)          ;; 工具栏
+(set-fringe-mode 10)        ;;
+(global-visual-line-mode 1) ;;
+(setq visible-bell t)       ;; 关闭提示声音
+(context-menu-mode 1)       ;; 鼠标右键菜单
+(setq context-menu-functions
+      '(context-menu-ffap
+        occur-context-menu
+        context-menu-region
+        context-menu-undo
+        context-menu-minor
+        context-menu-local
+        ))
+(setq use-dialog-box nil)   ;; 鼠标点击不触发弹窗
+;; }}}
 #+end_src
 
 

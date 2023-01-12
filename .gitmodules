@@ -52,3 +52,6 @@
 [submodule "lib/advance-words-count"]
 	path = lib/advance-words-count
 	url = git@github.com:LdBeth/advance-words-count.el.git
+[submodule "lib/browser-hist"]
+	path = lib/browser-hist
+	url = git@github.com:agzam/browser-hist.el.git

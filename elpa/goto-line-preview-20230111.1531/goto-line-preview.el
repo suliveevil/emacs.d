@@ -5,8 +5,8 @@
 
 ;; Author: Shen, Jen-Chieh <jcs090218@gmail.com>
 ;; URL: https://github.com/emacs-vs/goto-line-preview
-;; Package-Version: 20221231.1701
-;; Package-Commit: 9091885111e96590e9c9f4d311706497da6b8f84
+;; Package-Version: 20230111.1531
+;; Package-Commit: c6db484cf401351f7f2f57496b0466b774435947
 ;; Version: 0.1.1
 ;; Package-Requires: ((emacs "25"))
 ;; Keywords: convenience line navigation
@@ -89,9 +89,14 @@
         jumped)
     (run-hooks 'goto-line-preview-before-hook)
     (unwind-protect
-        (setq jumped (read-number (if goto-line-preview--relative-p
-                                      "Goto line relative: "
-                                    "Goto line: ")))
+        (setq jumped (read-number
+		      (let ((lines (line-number-at-pos (point-max))))
+			(format (if goto-line-preview--relative-p
+				    "[%d] Goto line relative: (%d to %d) "
+				  "[%d] Goto line: (%d to %d) ")
+				goto-line-preview--prev-line-num
+				(max 0 (min 1 lines))
+				lines))))
       (if jumped
           (with-current-buffer (window-buffer goto-line-preview--prev-window)
             (unless (region-active-p) (push-mark window-point)))
