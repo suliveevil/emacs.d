@@ -121,4 +121,5 @@ org-ql
 
 https://whhone.com/emacs-config/#taking-note-with-org-roam
 
+[[https://hadi.timachi.com/project/9/GNU_Emacs_3D_logo][Hadi Timachi's personal website | Projects | GNU/Emacs 3D logo]]
 

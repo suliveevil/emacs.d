@@ -19,11 +19,13 @@
 	 ("Leo Liu" . "sdl.web@gmail.com"))
 	(:commit . "90c90a80322aa9f26ce88f2f24a224afc4c994b8"))])
  (ada-mode .
-	   [(7 3 1)
+	   [(8 0 3)
 	    ((uniquify-files
 	      (1 0 1))
 	     (wisi
-	      (4 0 0))
+	      (4 1 1))
+	     (gnat-compiler
+	      (1 0 0))
 	     (emacs
 	      (25 3)))
 	    "major-mode for editing Ada sources" tar
@@ -32,7 +34,7 @@
 	     (:maintainer "Stephen Leake" . "stephen_leake@stephe-leake.org")
 	     (:authors
 	      ("Stephen Leake" . "stephen_leake@stephe-leake.org"))
-	     (:commit . "64acce8bda65d3409166a63be26fd21100ef54ce"))])
+	     (:commit . "6daaf0ccbe572ef1a9e7355d5c4bbf86a9e4ae75"))])
  (ada-ref-man .
 	      [(2020 1)
 	       nil "Ada Reference Manual 2012" tar
@@ -162,14 +164,14 @@
 	   ("John Wiegley" . "jwiegley@gmail.com"))
 	  (:commit . "53addd02fbad33765f508f8e6254ebd44e1f81e5"))])
  (auctex .
-	 [(13 1 6)
+	 [(13 1 8)
 	  ((emacs
 	    (25 1)))
 	  "Integrated environment for *TeX*" tar
 	  ((:url . "https://www.gnu.org/software/auctex/")
 	   (:keywords "tex" "latex" "texinfo" "context" "doctex" "preview-latex")
 	   (:maintainer nil . "auctex-devel@gnu.org")
-	   (:commit . "945aba3d418657b1a66ea83b98728017cc5b92b5"))])
+	   (:commit . "ebd714ef815b6ab8b9b947b884a210fa14df3a47"))])
  (aumix-mode .
 	     [(7)
 	      nil "run the aumix program in a buffer" single
@@ -501,7 +503,7 @@
 			("Ingo Lohmar" . "i.lohmar@gmail.com"))
 		       (:keywords "abbrev" "convenience" "matching"))])
  (compat .
-	 [(29 1 1 0)
+	 [(29 1 1 1)
 	  ((emacs
 	    (24 4)))
 	  "Emacs Lisp Compatibility Library" tar
@@ -510,7 +512,7 @@
 	   (:maintainer "Daniel Mendler <mail@daniel-mendler.de>, Compat Development" . "~pkal/compat-devel@lists.sr.ht")
 	   (:authors
 	    ("Philip Kaludercic <philipk@posteo.net>, Daniel Mendler" . "mail@daniel-mendler.de"))
-	   (:commit . "887ec71fa3a90bc0d333ae9c333436148e909dbd"))])
+	   (:commit . "57295d30c8c62470558ddfde6ce5926de47a091c"))])
  (consult .
 	  [(0 31)
 	   ((emacs
@@ -900,7 +902,7 @@
 	       ("Leo Liu" . "sdl.web@gmail.com"))
 	      (:commit . "f155d19c528e27f8f6c72f0d75f652edbdcab37f"))])
  (ebdb .
-       [(0 8 16)
+       [(0 8 17)
 	((emacs
 	  (25 1))
 	 (seq
@@ -911,7 +913,7 @@
 	 (:maintainer "Eric Abrahamsen" . "eric@ericabrahamsen.net")
 	 (:authors
 	  ("Eric Abrahamsen" . "eric@ericabrahamsen.net"))
-	 (:commit . "a961744cc49a6e9b96474ef8ea90dc34feaef24c"))])
+	 (:commit . "610d1ed5d4095936836102e1e48dc4416d0d260b"))])
  (ebdb-gnorb .
 	     [(1 0 2)
 	      ((gnorb
@@ -1354,6 +1356,18 @@
 	     (:authors
 	      ("Stefan Monnier" . "monnier@iro.umontreal.ca"))
 	     (:maintainer "Stefan Monnier" . "monnier@iro.umontreal.ca"))])
+ (gnat-compiler .
+		[(1 0 1)
+		 ((emacs
+		   (25 3))
+		  (wisi
+		   (4 2 0)))
+		 "Support for running GNAT tools" tar
+		 ((:maintainer "Stephen Leake" . "stephen_leake@member.fsf.org")
+		  (:authors
+		   ("Stephen Leake" . "stephen_leake@member.fsf.org"))
+		  (:url . "https://elpa.gnu.org/packages/gnat-compiler.html")
+		  (:commit . "959c4d359637d6ddabba5a531266c3bc95df5745"))])
  (gnome-c-style .
 		[(0 1)
 		 nil "minor mode for editing GNOME-style C source code" tar
@@ -1420,6 +1434,20 @@
 	     ("Damien Cassou" . "damien@cassou.me"))
 	    (:maintainer "Damien Cassou" . "damien@cassou.me")
 	    (:url . "https://gitlab.petton.fr/DamienCassou/desktop-environment"))])
+ (gpr-query .
+	    [(1 0 2)
+	     ((emacs
+	       (25 3))
+	      (wisi
+	       (4 2 0))
+	      (gnat-compiler
+	       (1 0 1)))
+	     "Minor mode for navigating sources using gpr_query" tar
+	     ((:maintainer "Stephen Leake" . "stephen_leake@member.fsf.org")
+	      (:authors
+	       ("Stephen Leake" . "stephen_leake@member.fsf.org"))
+	      (:url . "https://elpa.gnu.org/packages/gpr-query.html")
+	      (:commit . "92ac06f23d02c94aa89a1a5364776ea7df15d581"))])
  (graphql .
 	  [(0 1 2)
 	   ((emacs
@@ -3726,18 +3754,18 @@
 		("Bastien" . "bzg@gnu.org"))
 	       (:maintainer "Bastien" . "bzg@gnu.org"))])
  (wisi .
-       [(4 0 0)
+       [(4 2 1)
 	((emacs
 	  (25 3))
 	 (seq
 	  (2 20)))
 	"Utilities for implementing an indentation/navigation engine using a generalized LR parser" tar
-	((:url . "http://stephe-leake.org/ada/wisitoken.html")
+	((:url . "https://stephe-leake.org/ada/wisitoken.html")
 	 (:keywords "parser" "indentation" "navigation")
 	 (:maintainer "Stephen Leake" . "stephen_leake@stephe-leake.org")
 	 (:authors
 	  ("Stephen Leake" . "stephen_leake@stephe-leake.org"))
-	 (:commit . "dd717efa4b86c5c20d09a64f5a110f6f844b4c5e"))])
+	 (:commit . "decea1307cc18e7596468cca20c626b4c67d1f31"))])
  (wisitoken-grammar-mode .
 			 [(1 2 0)
 			  ((wisi
@@ -3768,6 +3796,17 @@
 	   ("Leo Liu" . "sdl.web@gmail.com"))
 	  (:url . "https://elpa.gnu.org/packages/xclip.html")
 	  (:commit . "5b54645cab438e133e27b4690c57066f8271a992"))])
+ (xeft .
+       [(3 2)
+	((emacs
+	  (26 0)))
+	"Deft feat. Xapian" tar
+	((:url . "https://git.sr.ht/~casouri/xeft")
+	 (:keywords "applications" "note" "searching")
+	 (:maintainer "Yuan Fu" . "casouri@gmail.com")
+	 (:authors
+	  ("Yuan Fu" . "casouri@gmail.com"))
+	 (:commit . "4bdb052d815b67dff327bc976c73d81c94040d75"))])
  (xelb .
        [(0 18)
 	((emacs
