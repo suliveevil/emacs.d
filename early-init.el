@@ -5,6 +5,8 @@
 
 ;; Date: 2023-01-06 07:23:09 +0800
 
+(setq inhibit-automatic-native-compilation t)
+
 ;; Profile emacs startup
 (add-hook 'emacs-startup-hook
           (lambda ()

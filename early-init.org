@@ -39,6 +39,11 @@ sibling file: [[file:init.org][init.el config]]
   (setq gc-cons-percentage 0.6)
 #+end_src
 
+** native-compilation
+
+#+begin_src emacs-lisp :tangle yes
+(setq inhibit-automatic-native-compilation t)
+#+end_src
 
 ** Profile
 
