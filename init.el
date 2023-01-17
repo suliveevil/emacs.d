@@ -852,6 +852,7 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
 (use-package org
   ;; :init (setq org-fold-core-style "overlays")
   :config
+  (setq org-image-actual-width nil)
   (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
   (add-to-list 'org-file-apps '("\\.odp" . "open %s"))
   )
