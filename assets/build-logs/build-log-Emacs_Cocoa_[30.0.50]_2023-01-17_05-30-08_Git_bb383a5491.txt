@@ -41,8 +41,8 @@ make[2]: Nothing to be done for `all'.
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C ../admin/unidata emoji-zwj.el
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C ../admin/charsets cp51932.el
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C ../admin/charsets eucjp-ms.el
-make[4]: Nothing to be done for `eucjp-ms.el'.
 make[4]: Nothing to be done for `cp51932.el'.
+make[4]: Nothing to be done for `eucjp-ms.el'.
 make[4]: Nothing to be done for `charscript.el'.
 make[4]: Nothing to be done for `emoji-zwj.el'.
 make[4]: Nothing to be done for `all'.
@@ -58,8 +58,8 @@ make[2]: Nothing to be done for `all'.
   GEN      autoloads
 make[2]: Nothing to be done for `compile-targets'.
 make[2]: `org.texi' is up to date.
-make[2]: `modus-themes.texi' is up to date.
 make[2]: Nothing to be done for `generate-ja-dic'.
+make[2]: `modus-themes.texi' is up to date.
 make[2]: Nothing to be done for `compile-targets'.
 make[2]: Nothing to be done for `compile-targets'.
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C doc/misc info
@@ -97,10 +97,10 @@ unset CDPATH; \
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C ../admin/unidata emoji-zwj.el
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C ../admin/charsets cp51932.el
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C ../admin/charsets eucjp-ms.el
-make[2]: Nothing to be done for `cp51932.el'.
 make[2]: Nothing to be done for `eucjp-ms.el'.
-make[2]: Nothing to be done for `emoji-zwj.el'.
+make[2]: Nothing to be done for `cp51932.el'.
 make[2]: Nothing to be done for `charscript.el'.
+make[2]: Nothing to be done for `emoji-zwj.el'.
 make[2]: Nothing to be done for `all'.
 /Applications/Xcode.app/Contents/Developer/usr/bin/make -C ../admin/unidata all EMACS="../../src/bootstrap-emacs"
 make[2]: Nothing to be done for `all'.
