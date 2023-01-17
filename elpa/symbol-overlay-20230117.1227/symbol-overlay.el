@@ -4,8 +4,8 @@
 
 ;; Author: wolray <wolray@foxmail.com>
 ;; Version: 4.1
-;; Package-Version: 20230102.952
-;; Package-Commit: 37de0a1c81c79d5a4bba417b545516122024ca12
+;; Package-Version: 20230117.1227
+;; Package-Commit: ed007230378b03f384b5a2b643dd857010ef21d3
 ;; URL: https://github.com/wolray/symbol-overlay/
 ;; Keywords: faces, matching
 ;; Package-Requires: ((emacs "24.3") (seq "2.2"))
@@ -240,7 +240,9 @@ DIR is an integer.
 If EXCLUDE is non-nil, get all overlays excluding those belong to SYMBOL."
   (let ((overlays (cond ((= dir 0) (overlays-in (point-min) (point-max)))
                         ((< dir 0) (overlays-in (point-min) (point)))
-                        ((> dir 0) (overlays-in (point) (point-max))))))
+                        ((> dir 0) (overlays-in
+                                    (if (looking-at-p "\\_>") (1- (point)) (point))
+                                    (point-max))))))
     (seq-filter
      (lambda (ov)
        (let ((value (overlay-get ov 'symbol))
@@ -361,7 +363,8 @@ buffer happens to be current when the timer is fired."
 
 (defun symbol-overlay-post-command ()
   "Installed on `post-command-hook'."
-  (unless (string= (symbol-overlay-get-symbol t) symbol-overlay-temp-symbol)
+  (unless (or (null symbol-overlay-temp-symbol)
+              (string= (symbol-overlay-get-symbol t) symbol-overlay-temp-symbol))
     (symbol-overlay-remove-temp)))
 
 (defun symbol-overlay-put-one (symbol &optional face)

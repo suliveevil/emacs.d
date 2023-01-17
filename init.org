@@ -3969,7 +3969,8 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
         (concat "${title:*} "
                 (propertize "${tags:10}" 'face 'org-tag)))
   (require 'org-roam-protocol)  ;; org-roam-protocol
-  (org-roam-db-autosync-mode 1) ;; if md-roam installed, move to md-roam config
+  (org-roam-db-autosync-mode)
+  ;; (org-roam-db-autosync-mode 1) ;; if md-roam installed, move to md-roam config
   )
 ;; }}}
 #+end_src

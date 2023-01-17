@@ -1,7 +1,7 @@
-(define-package "emacsql-sqlite" "20221127.2146" "EmacSQL back-end for SQLite"
+(define-package "emacsql-sqlite" "20230117.1648" "EmacSQL back-end for SQLite"
   '((emacs "25.1")
     (emacsql "3.1.1"))
-  :commit "6b2e65bdf785364cf7c34c31fea5812e1e58c657" :authors
+  :commit "3cec7dcb201568a09ee9cebf0ea1e43cba9d334a" :authors
   '(("Christopher Wellons" . "wellons@nullprogram.com"))
   :maintainer
   '("Jonas Bernoulli" . "jonas@bernoul.li")
