@@ -1778,13 +1778,15 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
                 pyim-probe-isearch-mode
                 pyim-probe-org-structure-template
                 pyim-probe-org-speed-commands
-                ))
+                )
+	      )
 
 (setq-default pyim-punctuation-half-width-functions
               '(
                 pyim-probe-punctuation-line-beginning
                 pyim-probe-punctuation-after-punctuation
-                ))
+                )
+	      )
 ;; 让 avy 支持拼音搜索
 (with-eval-after-load 'avy
   (defun my-avy--regex-candidates (fun regex &optional beg end pred group)
@@ -2516,6 +2518,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
          ("C-c n c" . org-roam-capture)
          ("C-c n f" . org-roam-node-find)
          ("C-c n g" . org-roam-graph)
+	 ("C-c n h" . org-fold-hide-entry)
          ("C-c n i" . org-roam-node-insert)
          ("C-c n j" . org-roam-dailies-capture-today) ;; Dailies
          ("C-c n l" . org-roam-buffer-toggle)
@@ -2532,7 +2535,8 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
         (concat "${title:*} "
                 (propertize "${tags:10}" 'face 'org-tag)))
   (require 'org-roam-protocol)  ;; org-roam-protocol
-  (org-roam-db-autosync-mode 1) ;; if md-roam installed, move to md-roam config
+  (org-roam-db-autosync-mode)
+  ;; (org-roam-db-autosync-mode 1) ;; if md-roam installed, move to md-roam config
   )
 ;; }}}
 

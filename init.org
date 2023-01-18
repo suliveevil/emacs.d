@@ -2942,13 +2942,15 @@ Natural Language Search
                 pyim-probe-isearch-mode
                 pyim-probe-org-structure-template
                 pyim-probe-org-speed-commands
-                ))
+                )
+	      )
 
 (setq-default pyim-punctuation-half-width-functions
               '(
                 pyim-probe-punctuation-line-beginning
                 pyim-probe-punctuation-after-punctuation
-                ))
+                )
+	      )
 ;; 让 avy 支持拼音搜索
 (with-eval-after-load 'avy
   (defun my-avy--regex-candidates (fun regex &optional beg end pred group)
@@ -3014,7 +3016,7 @@ Natural Language Search
 ** emacs-rime
 
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (defun change-cursor-color-on-input-method ()
     "Set cursor color depending on whether an input method is used or not."
     (interactive)
@@ -3953,6 +3955,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
          ("C-c n c" . org-roam-capture)
          ("C-c n f" . org-roam-node-find)
          ("C-c n g" . org-roam-graph)
+	 ("C-c n h" . org-fold-hide-entry)
          ("C-c n i" . org-roam-node-insert)
          ("C-c n j" . org-roam-dailies-capture-today) ;; Dailies
          ("C-c n l" . org-roam-buffer-toggle)
