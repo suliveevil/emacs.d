@@ -2512,13 +2512,16 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; {{{
 (use-package org-roam
   ;; :defer 1
+  :init
+   (setq org-roam-directory "~/org-roam")
+   (setq org-roam-db-location "~/org-roam/org-roam.db")
   :after org
   :bind (
          ("C-c n a" . org-roam-alias-add)
          ("C-c n c" . org-roam-capture)
          ("C-c n f" . org-roam-node-find)
          ("C-c n g" . org-roam-graph)
-	 ("C-c n h" . org-fold-hide-entry)
+         ("C-c n h" . org-fold-hide-entry)
          ("C-c n i" . org-roam-node-insert)
          ("C-c n j" . org-roam-dailies-capture-today) ;; Dailies
          ("C-c n l" . org-roam-buffer-toggle)
@@ -2527,8 +2530,6 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
          )
   :config
   (setq org-roam-completion-everywhere t)
-  (setq org-roam-directory "~/org-roam")
-  (setq org-roam-db-location "~/org-roam/org-roam.db")
   (setq org-roam-file-extensions '("org" "md")) ;; enable Org-roam for markdown
   ;; (setq org-roam-node-display-template "${title:50} ${tags:30}")
   (setq org-roam-node-display-template
@@ -2610,7 +2611,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
          :unnarrowed  t)
         ;; F
         ;; g:
-        ;; G
+        ("G" "游戏" plain "%?"
+         :target (file+head "游戏/${slug}.org"
+                            "#+title: ${title}\n")
+         :immediate-finish t
+         :unnarrowed t)
         ("h" "人物" plain "%?"
          :target (file+head "topics/人物/${slug}.org"
                             "#+title: ${title}\n")
@@ -2629,8 +2634,16 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
         ;; K
         ;; l:
         ;; L
-        ;; m:
-        ;; M
+        ("m" "音乐" plain "%?"
+         :target (file+head "音乐/${slug}.org"
+                            "#+title: ${title}\n")
+         :immediate-finish t
+         :unnarrowed t)
+        ("M" "电影" plain "%?"
+         :target (file+head "电影/${slug}.org"
+                            "#+title: ${title}\n")
+         :immediate-finish t
+         :unnarrowed t)
         ;; n:
         ;; N
         ;; o:
@@ -2652,7 +2665,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
                             "#+title: ${title}\n#+date: %<%FT%T%z>\n")
          :immediate-finish t
          :unnarrowed t)
-        ;; R
+        ("R" "纪录片" plain "%?"
+         :target (file+head "纪录片/${slug}.org"
+                            "#+title: ${title}\n")
+         :immediate-finish t
+         :unnarrowed t)
         ;; s:
         ("s" "软件" plain "%?"
          :target (file+head "software/${slug}.org"
@@ -2666,7 +2683,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
                             "#+title: ${title}\n#+date: %<%FT%T%z>\n")
          :immediate-finish t
          :unnarrowed t)
-        ;; T
+        ("T" "电视剧" plain "%?"
+         :target (file+head "电视剧/${slug}.org"
+                            "#+title: ${title}\n")
+         :immediate-finish t
+         :unnarrowed t)
         ;; u:
         ;; U
         ("v" "Emacs 变量" plain "%?"
@@ -3189,6 +3210,22 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;;   )
 ;; (add-hook 'tree-sitter-after-on-hook #'ts-fold-indicators-mode)
 ;; }}}
+
+(require 'diff-lisp)
+(defvar diff-lisp-set-a-and-b nil)
+(defun diff-lisp-set-a-and-b ()
+  (interactive)
+  (if (eq diff-lisp-set-a-and-b nil)
+      (progn
+        (diff-lisp-mark-selected-text-as-a)
+	(setq diff-lisp-set-a-and-b t)
+        )
+    (progn
+      (diff-lisp-diff-a-and-b)
+      (setq diff-lisp-set-a-and-b nil)
+      ))
+  )
+(keymap-global-set "s-/" #'diff-lisp-set-a-and-b)
 
 ;; subed: subtitle edit
 ;; {{{
