@@ -112,6 +112,31 @@
 
 (keymap-global-set "H-a" #'universal-argument)
 
+;; 快速打开文件
+;; {{{
+(defun my/open-init-file() ;; Emacs init
+  (interactive)
+  (find-file-other-window user-init-file))
+(keymap-global-set "C-c E" #'my/open-init-file)
+
+(defun my/open-init-org() ;; Emacs init
+  (interactive)
+  (find-file-other-window
+   (expand-file-name
+    "init.org"
+    (concat user-emacs-directory)
+    )
+   )
+  )
+(keymap-global-set "C-c H-e" #'my/open-init-org)
+;; (defun open-goku-file()      ;; Emacs early-init
+;;   (interactive)
+;;   (find-file "~/.config/karabiner.edn")
+;;   (find-file "~/.config/goku/karabiner.edn")
+;; )
+
+;; }}}
+
 ;; UI
 ;; {{{
 ;; (push '(fullscreen . maximized) default-frame-alist)

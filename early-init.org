@@ -327,6 +327,39 @@ sibling file: [[file:init.org][init.el config]]
 (keymap-global-set "H-c H-f" #'find-file)
 #+end_src
 
+
+** buffer and File
+
+*** open file
+
+#+begin_src emacs-lisp :tangle yes
+;; 快速打开文件
+;; {{{
+(defun my/open-init-file() ;; Emacs init
+  (interactive)
+  (find-file-other-window user-init-file))
+(keymap-global-set "C-c E" #'my/open-init-file)
+
+(defun my/open-init-org() ;; Emacs init
+  (interactive)
+  (find-file-other-window
+   (expand-file-name
+    "init.org"
+    (concat user-emacs-directory)
+    )
+   )
+  )
+(keymap-global-set "C-c H-e" #'my/open-init-org)
+;; (defun open-goku-file()      ;; Emacs early-init
+;;   (interactive)
+;;   (find-file "~/.config/karabiner.edn")
+;;   (find-file "~/.config/goku/karabiner.edn")
+;; )
+
+;; }}}
+#+end_src
+
+
 ** UI
 
 #+begin_src emacs-lisp :tangle yes

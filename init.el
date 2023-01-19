@@ -225,31 +225,6 @@
   (setq delete-by-moving-to-trash t))
 ;; }}}
 
-;; 快速打开文件
-;; {{{
-(defun my/open-init-file() ;; Emacs init
-  (interactive)
-  (find-file-other-window user-init-file))
-(keymap-global-set "C-c E" #'my/open-init-file)
-
-(defun my/open-init-org() ;; Emacs init
-  (interactive)
-  (find-file-other-window
-   (expand-file-name
-    "init.org"
-    (concat user-emacs-directory)
-    )
-   )
-  )
-(keymap-global-set "C-c H-e" #'my/open-init-org)
-;; (defun open-goku-file()      ;; Emacs early-init
-;;   (interactive)
-;;   (find-file "~/.config/karabiner.edn")
-;;   (find-file "~/.config/goku/karabiner.edn")
-;; )
-
-;; }}}
-
 ;; side buffer
 ;; {{{
 (defun my/side-buffer ()
@@ -1496,12 +1471,12 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 ;; avy
 ;; {{{
 ;; https://karthinks.com/software/avy-can-do-anything
-(keymap-global-set "C-;"     #'avy-goto-char)
-(keymap-global-set "C-'"     #'avy-goto-char-2)
-(keymap-global-set "M-g f"   #'avy-goto-line)
-(keymap-global-set "M-g w"   #'avy-goto-word-1)
-(keymap-global-set "M-g e"   #'avy-goto-word-0)
-(keymap-global-set "C-c C-j" #'avy-resume)
+(keymap-global-set "H-j H-j"     #'avy-goto-char)
+(keymap-global-set "H-j 2"     #'avy-goto-char-2)
+(keymap-global-set "H-j H-k"   #'avy-goto-line)
+;; (keymap-global-set "M-g w"   #'avy-goto-word-1)
+;; (keymap-global-set "M-g e"   #'avy-goto-word-0)
+(keymap-global-set "C-c H-j" #'avy-resume)
 ;; }}}
 
 (use-package parrot
@@ -1731,7 +1706,7 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 (pyim-tsinghua-dict-enable)
 ;; isearch 开启代码搜索中文功能（比如拼音，五笔码等）
 ;; (pyim-isearch-mode 1) ; 性能差，不启用
-(setq default-input-method "pyim")
+;; (setq default-input-method "pyim")
 (setq pyim-page-style 'vertical)
 (setq pyim-page-tooltip '(posframe minibuffer popup))
 (setq pyim-page-length 5)
@@ -1741,17 +1716,21 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 ;; (keymap-global-set [remap forward-word] #'pyim-forward-word)
 (keymap-global-set "H-b" 'pyim-backward-word)
 (keymap-global-set "H-f" 'pyim-forward-word)
-(keymap-set pyim-mode-map "-" 'pyim-page-previous-page)
-(keymap-set pyim-mode-map "+" 'pyim-page-next-page)
-(keymap-set pyim-mode-map "H-h" 'pyim-page-previous-page)
-(keymap-set pyim-mode-map "H-l" 'pyim-page-next-page)
 ;; 金手指设置，可以将光标处的编码，比如：拼音字符串，转换为中文。
 (keymap-global-set "H-c H-s" #'pyim-convert-string-at-point)
 ;; 将光标前的 regexp 转换为可以搜索中文的 regexp.
 ;; (keymap-set minibuffer-local-map "H-c" #'pyim-cregexp-convert-at-point)
+(keymap-set pyim-mode-map "-" 'pyim-page-previous-page)
+(keymap-set pyim-mode-map "+" 'pyim-page-next-page)
+(keymap-set pyim-mode-map "H-h" 'pyim-page-previous-page)
+(keymap-set pyim-mode-map "H-l" 'pyim-page-next-page)
 (pyim-default-scheme 'quanpin)
 ;;
-(setq pyim-indicator-list (list #'my-pyim-indicator-with-cursor-color #'pyim-indicator-with-modeline))
+(setq pyim-indicator-list (list
+                           #'my-pyim-indicator-with-cursor-color
+                           #'pyim-indicator-with-modeline
+                           )
+      )
 
 (defun my-pyim-indicator-with-cursor-color (input-method chinese-input-p)
   (if (not (equal input-method "pyim"))
@@ -1772,21 +1751,21 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 ;; 探针
 (setq-default pyim-english-input-switch-functions
               '(
-		pyim-probe-auto-english
+                pyim-probe-auto-english
                 pyim-probe-program-mode
                 pyim-probe-dynamic-english
                 pyim-probe-isearch-mode
                 pyim-probe-org-structure-template
                 pyim-probe-org-speed-commands
                 )
-	      )
+              )
 
 (setq-default pyim-punctuation-half-width-functions
               '(
                 pyim-probe-punctuation-line-beginning
                 pyim-probe-punctuation-after-punctuation
                 )
-	      )
+              )
 ;; 让 avy 支持拼音搜索
 (with-eval-after-load 'avy
   (defun my-avy--regex-candidates (fun regex &optional beg end pred group)
@@ -2588,7 +2567,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
                             "#+title: ${title}\n#+date: %<%FT%T%z>\n#+category:\n#+filetags: \n")
          :immediate-finish t
          :unnarrowed  t)
-        ;; c:
+        ("c" "角色" plain "%?"
+         :target (file+head "topics/角色/${slug}.org"
+                            "#+title: ${title}\n")
+         :immediate-finish t
+         :unnarrowed t)
         ;; C
         ("d" "default" plain "%?"
          :target (file+head "${slug}.org"
@@ -2618,7 +2601,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
          :unnarrowed t)
         ("h" "人物" plain "%?"
          :target (file+head "topics/人物/${slug}.org"
-                            "#+title: ${title}\n")
+                            "#+title: ${title}\n* ${title}\n")
          :immediate-finish t
          :unnarrowed t)
         ;; H
@@ -2680,7 +2663,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
         ;; t: topic todo
         ("t" "主题" plain "%?"
          :target (file+head "topics/${slug}.org"
-                            "#+title: ${title}\n#+date: %<%FT%T%z>\n")
+                            "#+title: ${title}\n")
          :immediate-finish t
          :unnarrowed t)
         ("T" "电视剧" plain "%?"
@@ -3157,7 +3140,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 (require 'yasnippet)
 (yas-global-mode 1)
 (require 'lsp-bridge)
-(setq lsp-bridge-enable-mode-line -1)
+(setq lsp-bridge-enable-mode-line nil)
 ;; (setq lsp-bridge-use-ds-pinyin-in-org-mode t)
 ;; (setq lsp-bridge-use-wenls-in-org-mode t)
 (setq acm-enable-quick-access t)
