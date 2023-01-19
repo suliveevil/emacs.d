@@ -55,3 +55,6 @@
 [submodule "lib/browser-hist"]
 	path = lib/browser-hist
 	url = git@github.com:agzam/browser-hist.el.git
+[submodule "lib/diff-lisp"]
+	path = lib/diff-lisp
+	url = git@github.com:redguardtoo/diff-lisp.git
