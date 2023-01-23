@@ -213,6 +213,77 @@ https://www.bing.com
 ;; }}}
 #+end_src
 
+** 历史记录 history
+
+*** 命令历史
+
+#+begin_src emacs-lisp :tangle yes
+;; Persist history over Emacs restarts. Vertico sorts by history position.
+(use-package savehist
+  :ensure nil
+  :hook (after-init . savehist-mode)
+  :config
+  (setq enable-recursive-minibuffers t)
+  (setq history-length 1024)
+  (setq savehist-additional-variables '(mark-ring
+                                        global-mark-ring
+                                        search-ring
+                                        regexp-search-ring
+                                        extended-command-history))
+  (setq savehist-autosave-interval 300)
+  )
+#+end_src
+
+*** 文件历史
+
+#+begin_src emacs-lisp :tangle yes
+(use-package recentf
+  :ensure nil
+  :hook (after-init . recentf-mode)
+  :custom
+  (recentf-max-saved-items 256)
+  (recentf-max-menu-items 20)
+  (recentf-auto-cleanup 'never)
+  (recentf-filename-handlers '(abbreviate-file-name))
+  (recentf-exclude `(,@(cl-loop for f in `(,package-user-dir
+                                           ;; ,no-littering-var-directory
+                                           ;; ,no-littering-etc-directory
+                                           )
+                                collect (abbreviate-file-name f))
+                     ;; Folders on macOS start
+                     "^/private/tmp/"
+                     "^/var/folders/"
+                     ;; Folders on macOS end
+                     ".cache"
+                     ".cask"
+                     ".elfeed"
+                     "elfeed"
+                     "bookmarks"
+                     "cache"
+                     "ido.*"
+                     "persp-confs"
+                     "recentf"
+                     "undo-tree-hist"
+                     "url"
+                     "^/tmp/"
+                     "/ssh\\(x\\)?:"
+                     "/su\\(do\\)?:"
+                     "^/usr/include/"
+                     "/TAGS\\'"
+                     "COMMIT_EDITMSG\\'")
+                   )
+  )
+#+end_src
+
+*** 光标位置历史
+
+#+begin_src emacs-lisp :tangle yes
+;; 自动记住每个文件的最后一次访问的光标位置
+(use-package saveplace
+  :ensure nil
+  :hook (after-init . save-place-mode)
+  )
+#+end_src
 
 ** 文件和缓冲区 file/buffer
 
@@ -284,14 +355,6 @@ https://www.bing.com
   )
 
 ;; }}}
-#+end_src
-
-*** recentf
-
-#+begin_src emacs-lisp :tangle yes
-(recentf-mode 1)
-(setq recentf-max-menu-items 50)
-(setq recentf-max-saved-items 50)
 #+end_src
 
 *** auto-save
@@ -421,7 +484,9 @@ If no file is associated, just close buffer without prompt for save."
 ;; {{{
 (defun my/kill-all-other-buffers ()
   (interactive)
-  (mapc 'kill-buffer (cdr (buffer-list (current-buffer)))))
+  (mapc 'kill-buffer (cdr (buffer-list (current-buffer))))
+  )
+(keymap-global-set "C-c K" #'my/kill-all-other-buffers)
 ;; }}}
 #+end_src
 
@@ -735,6 +800,10 @@ i.e. change right window to bottom, or change bottom window to right."
 ;; }}}
 
 
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(put 'narrow-to-region 'disabled nil)
 #+end_src
 
 ** Alfred Search                                                      :macOS:
@@ -1721,6 +1790,51 @@ Adapted code from: http://ergoemacs.org/emacs/elisp_html-linkify.html"
               ("PHONE"     :foreground "forest green" :weight bold))))
 #+end_src
 
+*** org-capture
+
+#+begin_src emacs-lisp :tangle no
+(use-package org-capture
+  :ensure nil
+  :bind ("\e\e c" . (lambda () (interactive) (org-capture)))
+  :hook ((org-capture-mode . (lambda ()
+                               (setq-local
+				org-complete-tags-always-offer-all-agenda-tags
+				t)))
+         (org-capture-mode . delete-other-windows))
+  :custom
+  (org-capture-use-agenda-date nil)
+  ;; define common template
+  (org-capture-templates `(
+			   ("t" "Tasks" entry
+			    (file+headline "tasks.org" "Reminders")
+                            "* TODO %i%?"
+                            :empty-lines-after 1
+                            :prepend t)
+                           ("n" "Notes" entry
+			    (file+headline "capture.org" "Notes")
+                            "* %? %^g\n%i\n"
+                            :empty-lines-after 1)
+                           ;; For EWW
+                           ("b" "Bookmarks"
+			    entry (file+headline "capture.org" "Bookmarks")
+                            "* %:description\n\n%a%?"
+                            :empty-lines 1
+                            :immediate-finish t)
+                           ("d" "Diary")
+                           ("dt" "Today's TODO list"
+			    entry (file+olp+datetree "diary.org")
+                            "* Today's TODO list [/]\n%T\n\n** TODO %?"
+                            :empty-lines 1
+                            :jump-to-captured t)
+                           ("do" "Other stuff"
+			    entry (file+olp+datetree "diary.org")
+                            "* %?\n%T\n\n%i"
+                            :empty-lines 1
+                            :jump-to-captured t)
+                           ))
+  )
+#+end_src
+
 ** mode-line
 
 #+begin_src emacs-lisp :tangle yes
@@ -2422,6 +2536,12 @@ https://github.com/joddie/macrostep
 #+begin_src emacs-lisp :tangle yes
 ;; avy
 ;; {{{
+(use-package avy
+  :ensure nil
+  :custom
+  (avy-background t)
+  (avy-keys '(?a ?s ?d ?f ?g ?h ?j ?l ?q ?e ?r ?u ?i ?p ?n))
+ )
 ;; https://karthinks.com/software/avy-can-do-anything
 (keymap-global-set "H-j H-j"     #'avy-goto-char)
 (keymap-global-set "H-j 2"     #'avy-goto-char-2)
@@ -2436,7 +2556,7 @@ https://github.com/joddie/macrostep
 
 *** 括号
 
-[[https://github.com/AmaiKinono/puni][AmaiKinono/puni]]: Structured editing (soft deletion, expression navigating & manipulating) that supports many major modes out 
+[[https://github.com/AmaiKinono/puni][AmaiKinono/puni]]: Structured editing (soft deletion, expression navigating & manipulating) that supports many major modes out
 
 *** 近义词/反义词
 
@@ -2446,8 +2566,10 @@ https://github.com/joddie/macrostep
 (use-package parrot
   :defer 2
   :bind (
+	 ;;
          ("H-w r" . parrot-rotate-prev-word-at-point)
          ("H-w t" . parrot-rotate-next-word-at-point)
+	 ;;
 	 ("H-k H-k" . parrot-rotate-next-word-at-point)
 	 ("H-k H-j" . parrot-rotate-prev-word-at-point)
          )
@@ -2640,6 +2762,13 @@ elisp-depmap
   (emacs-lisp-mode . flycheck-elsa-setup))
 #+end_src
 
+** undo
+
+#+begin_src emacs-lisp :tangle yes
+(use-package vundo
+  :ensure nil
+ )
+#+end_src
 
 ** isearch-mb
 
@@ -2835,8 +2964,17 @@ Natural Language Search
 (keymap-global-set "C-c d" #'osx-dictionary-search-word-at-point)
 ;; }}}
 #+end_src
-
 ** 拼音搜索
+
+*** pinyinlib
+
+#+begin_src emacs-lisp :tangle yes
+(use-package pinyinlib
+  :ensure nil
+  )
+#+end_src
+
+*** ace-pinyin
 
 #+begin_src emacs-lisp :tangle yes
 ;; ace-pinyin
@@ -2885,7 +3023,23 @@ Natural Language Search
 (keymap-set pyim-mode-map "H-h" 'pyim-page-previous-page)
 (keymap-set pyim-mode-map "H-l" 'pyim-page-next-page)
 (pyim-default-scheme 'quanpin)
-;;
+;; 让 avy 支持拼音搜索
+(with-eval-after-load 'avy
+  (defun my-avy--regex-candidates (fun regex &optional beg end pred group)
+    (let ((regex (pyim-cregexp-build regex)))
+      (funcall fun regex beg end pred group)))
+  (advice-add 'avy--regex-candidates :around #'my-avy--regex-candidates))
+;; 让 vertico, selectrum 等补全框架，通过 orderless 支持拼音搜索候选项功能。
+(defun my-orderless-regexp (orig-func component)
+  (let ((result (funcall orig-func component)))
+    (pyim-cregexp-build result)))
+(advice-add 'orderless-regexp :around #'my-orderless-regexp)
+;; }}}
+#+end_src
+
+*** 光标颜色
+
+#+begin_src emacs-lisp :tangle no
 (setq pyim-indicator-list (list
                            #'my-pyim-indicator-with-cursor-color
                            #'pyim-indicator-with-modeline
@@ -2908,6 +3062,11 @@ Natural Language Search
       )
     )
   )
+#+end_src
+
+*** 输入法切换探针
+
+#+begin_src emacs-lisp : tangle no
 ;; 探针
 (setq-default pyim-english-input-switch-functions
               '(
@@ -2926,21 +3085,7 @@ Natural Language Search
                 pyim-probe-punctuation-after-punctuation
                 )
               )
-;; 让 avy 支持拼音搜索
-(with-eval-after-load 'avy
-  (defun my-avy--regex-candidates (fun regex &optional beg end pred group)
-    (let ((regex (pyim-cregexp-build regex)))
-      (funcall fun regex beg end pred group)))
-  (advice-add 'avy--regex-candidates :around #'my-avy--regex-candidates))
-;; 让 vertico, selectrum 等补全框架，通过 orderless 支持拼音搜索候选项功能。
-(defun my-orderless-regexp (orig-func component)
-  (let ((result (funcall orig-func component)))
-    (pyim-cregexp-build result)))
-(advice-add 'orderless-regexp :around #'my-orderless-regexp)
-;; }}}
 #+end_src
-
-*** 输入法切换探针
 
 #+begin_src emacs-lisp :tangle no
 (defun pyim-probe-dynamic-english ()
@@ -2986,6 +3131,36 @@ Natural Language Search
                 (pyim-string-match-p "\\cc" str-before-2)
               (and (not (pyim-string-match-p "\\cc" str-before-1))
                    (= (length (pyim-process-get-entered 'point-before)) 0)))))))
+#+end_src
+
+** orderless
+
+#+begin_src emacs-lisp :tangle yes
+;; orderless: minibuffer filter, works with icomplete
+;; {{{
+(use-package orderless
+  :ensure nil
+  :init
+  (setq completion-styles '(basic partial-completion orderless))
+  ;; (setq completion-styles '(orderless basic initials substring partial-completion flex)
+  (setq orderless-component-separator "[ &]") ; & is for company because space will break completion
+  (setq completion-category-defaults nil)
+  (setq completion-category-overrides nil)
+  ;; (setq completion-category-overrides '(
+  ;;                                    (file
+  ;;                                     (styles basic partial-completion)
+  ;;                                     )
+  ;;                                    )
+  ;;    )
+  ;; :config
+  ;; make completion support pinyin, refer to
+  ;; https://emacs-china.org/t/vertico/17913/2
+  ;; (defun completion--regex-pinyin (str)
+  ;;   (orderless-regexp (pinyinlib-build-regexp-string str))
+  ;;   )
+  ;; (add-to-list 'orderless-matching-styles 'completion--regex-pinyin)
+  )
+;; }}}
 #+end_src
 
 ** emacs-rime
@@ -3345,8 +3520,29 @@ binky-mode
 ;; yasnippet
 ;; {{{
 (use-package yasnippet
+  :ensure nil
+  :diminish yas-minor-mode
+  :hook ((after-init . yas-reload-all)
+         ((prog-mode LaTeX-mode org-mode) . yas-minor-mode)
+         )
   :config
-  (yas-global-mode 1)
+  ;; (yas-global-mode 1)
+  ;; Suppress warning for yasnippet code.
+  (require 'warnings)
+  (add-to-list 'warning-suppress-types '(yasnippet backquote-change))
+
+  ;; (setq yas-prompt-functions '(yas-x-prompt yas-dropdown-prompt))
+
+  ;; (defun smarter-yas-expand-next-field ()
+  ;;   "Try to `yas-expand' then `yas-next-field' at current cursor position."
+  ;;   (interactive)
+  ;;   (let ((old-point (point))
+  ;;         (old-tick (buffer-chars-modified-tick)))
+  ;;     (yas-expand)
+  ;;     (when (and (eq old-point (point))
+  ;;                (eq old-tick (buffer-chars-modified-tick)))
+  ;;       (ignore-errors (yas-next-field))))
+  ;;   )
   )
 ;; }}}
 #+end_src
@@ -3439,11 +3635,18 @@ binky-mode
 ;; diff-hl
 ;; {{{
 (use-package diff-hl
-  :defer 2
+  :hook (
+         (dired-mode         . diff-hl-dired-mode-unless-remote)
+         (magit-pre-refresh  . diff-hl-magit-pre-refresh)
+         (magit-post-refresh . diff-hl-magit-post-refresh)
+         )
+  :init
+  (global-diff-hl-mode t)
   :config
-  (global-diff-hl-mode)
+  (unless (display-graphic-p)
+    (diff-hl-margin-mode))
   )
-;; (global-git-gutter-mode +1) ; BUG when deleting folded 17000+lines
+;; (global-git-gutter-mode +1) ; BUG/Bad performance when deleting folded 17000+lines
 
 ;; }}}
 #+end_src
@@ -3661,8 +3864,12 @@ https://github.com/logangrado/hideshow-orgmode
          ;; Minibuffer history
          :map minibuffer-local-map
          ("M-s" . consult-history)  ;; orig. next-matching-history-element
-         ("M-r" . consult-history)) ;; orig. previous-matching-history-element
-
+         ("H-r" . consult-history) ;; orig. previous-matching-history-element
+         :map org-mode-map
+         ("C-c C-j"  . consult-org-heading)
+         :map prog-mode-map
+         ("C-c C-j"  . consult-outline)
+         )
   ;; Enable automatic preview at point in the *Completions* buffer. This is
   ;; relevant when you use the default completion UI.
   :hook (completion-list-mode . consult-preview-at-point-mode)
@@ -3673,7 +3880,7 @@ https://github.com/logangrado/hideshow-orgmode
   ;; Optionally configure the register formatting. This improves the register
   ;; preview for `consult-register', `consult-register-load',
   ;; `consult-register-store' and the Emacs built-ins.
-  (setq register-preview-delay 0.5
+  (setq register-preview-delay 0
         register-preview-function #'consult-register-format)
 
   ;; Optionally tweak the register preview window.
@@ -3686,6 +3893,13 @@ https://github.com/logangrado/hideshow-orgmode
 
   ;; Configure other variables and modes in the :config section,
   ;; after lazily loading the package.
+  ;; macOS locate doesn't support `--ignore-case --existing' args.
+  (setq consult-locate-args (pcase system-type
+                              ('gnu/linux
+                               "locate --ignore-case --existing --regex")
+                              ('darwin
+                               "mdfind -name")
+                              ))
   :config
 
   ;; Optionally configure preview. The default value
@@ -3701,8 +3915,8 @@ https://github.com/logangrado/hideshow-orgmode
    consult-bookmark consult-recent-file consult-xref
    consult--source-bookmark consult--source-file-register
    consult--source-recent-file consult--source-project-recent-file
-   ;; :preview-key (kbd "M-.")
-   :preview-key '(:debounce 0.4 any))
+   :preview-key (kbd "M-.")
+   )
 
   ;; Optionally configure the narrowing key.
   ;; Both < and C-+ work reasonably well.
@@ -3728,7 +3942,7 @@ https://github.com/logangrado/hideshow-orgmode
 ;; }}}
 #+end_src
 
-** vertico+posframe+orderless+marginalia
+** vertico+posframe
 
 #+begin_src emacs-lisp :tangle yes
 ;; vertico
@@ -3751,11 +3965,6 @@ https://github.com/logangrado/hideshow-orgmode
   ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
   (setq vertico-cycle t)
   )
-
-;; Persist history over Emacs restarts. Vertico sorts by history position.
-(use-package savehist
-  :init
-  (savehist-mode))
 
 ;; Configure directory extension.
 (use-package vertico-directory
@@ -3818,19 +4027,12 @@ https://github.com/logangrado/hideshow-orgmode
       '((left-fringe . 20)
         (right-fringe . 20)))
 ;; }}}
+#+end_src
 
-;; orderless: minibuffer filter, works with icomplete
-;; {{{
-(use-package orderless
-  ;; (setq completion-styles '(orderless basic initials substring partial-completion flex)
-  :config
-  (setq completion-styles '(orderless)
-        completion-category-defaults nil
-        completion-category-overrides '((file
-                                         (styles basic partial-completion))
-                                        )))
-;; }}}
 
+** marginalia
+
+#+begin_src emacs-lisp :tangle yes
 ;; marginalia: minibuffer annotations
 ;; {{{
 ;; Enable rich annotations using the Marginalia package
@@ -3839,10 +4041,13 @@ https://github.com/logangrado/hideshow-orgmode
   ;; :bind (("C-M-a" . marginalia-cycle)
   ;;        :map minibuffer-local-map
   ;;        ("C-M-a" . marginalia-cycle))
-  :init ;; The :init configuration is always executed (Not lazy!)
+  :init
+  ;; The :init configuration is always executed (Not lazy!)
   ;; Must be in the :init section of use-package such that the mode gets
   ;; enabled right away. Note that this forces loading the package.
-  (marginalia-mode))
+  ;; (marginalia-mode)
+  :hook (after-init . marginalia-mode)
+  )
 ;;
 ;; https://emacs-china.org/t/21-emacs-vertico-orderless-marginalia-embark-consult/19683/
 (defun marginalia-annotate-command (cand)
@@ -3860,7 +4065,6 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
      (marginalia--documentation (marginalia--function-doc sym)))))
 ;; }}}
 #+end_src
-
 
 ** Diff
 
@@ -4208,7 +4412,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
          :unnarrowed t)
         ("P" "Emacs 包/插件" plain "%?"
          :target (file+head "Emacs/package/${title}.org"
-                            "#+title: ${title}\n#+date: %<%FT%T%z>\n#+filetags: :Emacs:\n")
+                            "#+title: ${title}\n#+filetags: :Emacs:\n")
          :immediate-finish t
          :unnarrowed t)
         ;; q:
@@ -4318,11 +4522,14 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; consult-org-roam
 ;; {{{
 (use-package consult-org-roam
-  :after (org-roam consult)
-  :init
-  (require 'consult-org-roam)
-  ;; Activate the minor mode
-  (consult-org-roam-mode 1)
+  :ensure nil
+  ;; :after (org consult)
+  :bind
+  ;; Define some convenient keybindings as an addition
+  ("C-c n F" . consult-org-roam-file-find)
+  ("C-c n b" . consult-org-roam-backlinks)
+  ("C-c n l" . consult-org-roam-forward-links)
+  ("C-c n s" . consult-org-roam-search)
   :custom
   ;; Use `ripgrep' for searching with `consult-org-roam-search'
   (consult-org-roam-grep-func #'consult-ripgrep)
@@ -4335,14 +4542,17 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   ;; Eventually suppress previewing for certain functions
   (consult-customize
    consult-org-roam-forward-links
-   :preview-key (kbd "M-."))
-  :bind
-  ;; Define some convenient keybindings as an addition
-  ("C-c n F" . consult-org-roam-file-find)
-  ("C-c n b" . consult-org-roam-backlinks)
-  ("C-c n l" . consult-org-roam-forward-links)
-  ("C-c n s" . consult-org-roam-search))
+   :preview-key (kbd "M-.")
+   )
+  )
 ;; }}}
+#+end_src
+
+
+#+begin_src emacs-lisp :tangle no
+(require 'consult-org-roam)
+;; Activate the minor mode
+(consult-org-roam-mode 1)
 #+end_src
 
 *** org-similarity
@@ -5038,13 +5248,6 @@ https://github.com/zk-phi/spray
     (interactive)
     (let ((completion-auto-select t))
       (minibuffer-complete))))
-
-(use-package orderless
-  :straight t
-  :custom
-  (completion-styles '(orderless basic))
-  (completion-category-defaults nil)
-  (completion-category-overrides '((file (styles basic partial-completion)))))
 ;; }}}
 #+end_src
 
@@ -5052,6 +5255,46 @@ https://github.com/zk-phi/spray
 
 *** lsp-bridge
 
+
+#+begin_src emacs-lisp :tangle yes
+;; lsp-bridge                                        ; FIXME
+;; {{{
+(use-package lsp-bridge
+  :ensure nil
+  :after (yasnippet)
+  ;; :bind
+  :init
+  (setq lsp-bridge-enable-mode-line nil)
+  ;; (setq lsp-bridge-use-ds-pinyin-in-org-mode t)
+  ;; (setq lsp-bridge-use-wenls-in-org-mode t)
+  (setq acm-enable-quick-access t)
+  (setq acm-quick-access-modifier 'meta)
+  ;; :hook ((prog-mode org-mode) . lsp-bridge-mode)
+  :hook (prog-mode . lsp-bridge-mode)
+  :bind (:map acm-mode-map
+              ("C-j"       . acm-insert-common)
+              ;; complete
+              ("SPC"       . acm-complete)
+              ("RET"       . acm-complete)
+              ;; select
+              ("TAB"       . acm-select-next)
+              ("<backtab>" . acm-select-prev)
+              ;; ("H-TAB" . acm-select-prev)
+              ("H-j"       . acm-select-next)
+              ("H-k" . acm-select-prev)
+              )
+  :custom
+  ;; lsp-bridge-org-babel-lang-list
+  ;; default: clojure latex python
+  (add-to-list 'lsp-bridge-org-babel-lang-list "emacs-lisp")
+  (add-to-list 'lsp-bridge-org-babel-lang-list "shell")
+  )
+;; }}}
+#+end_src
+
+#+begin_src emacs-lisp
+
+#+end_src
 
 #+begin_src emacs-lisp :tangle no
 ;; (keymap-set acm-mode-map "H-;" 'lsp-bridge-toggle-sdcv-helper)
@@ -5077,20 +5320,19 @@ https://github.com/zk-phi/spray
 ;; (define-key map "\C-g" #'acm-hide)
 #+end_src
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
+;; (run-with-idle-timer
+;;  1 nil
+;;  #'(lambda ()
+;;      (require 'yasnippet)
+;;      (yas-global-mode 1)
+;;      (require 'lsp-bridge)
+;;      (global-lsp-bridge-mode)
+;;      ))
 (require 'yasnippet)
 (yas-global-mode 1)
 (require 'lsp-bridge)
-(setq lsp-bridge-enable-mode-line nil)
-;; (setq lsp-bridge-use-ds-pinyin-in-org-mode t)
-;; (setq lsp-bridge-use-wenls-in-org-mode t)
-(setq acm-enable-quick-access t)
-(setq acm-quick-access-modifier 'meta)
-(add-to-list 'lsp-bridge-org-babel-lang-list "emacs-lisp")
-(add-to-list 'lsp-bridge-org-babel-lang-list "shell")
-
 ;; (keymap-set acm-mode-map "ESC"       'acm-hide)   ; FIXME
-
 (keymap-unset acm-mode-map "SPC")
 (keymap-unset acm-mode-map "RET")
 (keymap-unset acm-mode-map "TAB")
@@ -5115,50 +5357,6 @@ https://github.com/zk-phi/spray
 #+end_src
 
 
-
-#+begin_src emacs-lisp :tangle no
-;; lsp-bridge                                        ; FIXME
-;; {{{
-(use-package lsp-bridge
-  :ensure nil
-  ;; :after (yasnippet)
-  ;; :bind
-  :init  (setq lsp-bridge-enable-mode-line nil)
-  ;; :hook ((prog-mode org-mode) . lsp-bridge-mode)
-  :hook (prog-mode . lsp-bridge-mode)
-  :bind (:map acm-mode-map
-	      ("TAB"       . acm-select-next)
-	      ("<backtab>" . acm-select-prev)
-	      ("C-j"       . acm-insert-common)
-	      ("SPC"       . acm-complete)
-	      ("ESC"       . acm-hide)
-	 )
-  :config
-  (setq acm-enable-quick-access t)
-  (setq acm-quick-access-modifier 'meta)
-  ;; (setq lsp-bridge-use-ds-pinyin-in-org-mode t)
-  (add-to-list 'lsp-bridge-org-babel-lang-list "emacs-lisp")
-  (add-to-list 'lsp-bridge-org-babel-lang-list "shell")
-  )
-;; (setq lsp-bridge-enable-mode-line nil)
-;; (setq lsp-bridge-use-wenls-in-org-mode t)
-;; (run-with-idle-timer
-;;  1 nil
-;;  #'(lambda ()
-;;      (require 'yasnippet)
-;;      (yas-global-mode 1)
-;;      (require 'lsp-bridge)
-;;      (global-lsp-bridge-mode)
-;;      ))
-;; }}}
-#+end_src
-
-
-** parrot
-
-#+begin_src emacs-lisp
-
-#+end_src
 
 ** Fuck
 
@@ -5235,7 +5433,7 @@ https://github.com/zk-phi/spray
 #+begin_src emacs－lisp :tangle no
 (require 'netease-cloud-music)
 (require 'netease-cloud-music-ui) ; TUI
-(require 'netease-cloud-music-comment) 
+(require 'netease-cloud-music-comment)
 #+end_src
 
 *** 字幕※歌词 Subtitle & Lyric
