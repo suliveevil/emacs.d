@@ -1732,8 +1732,10 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 (use-package deadgrep
   :defer t
   :bind*
-  (("C-c r" . deadgrep)
-   ("C-c f" . grep-org-files))
+  (
+   ("H-r H-g" . deadgrep)
+   ;; ("C-c f" . grep-org-files)
+   )
   :config
   (defun grep-org-files (words)
     (interactive "sSearch org files: ")
@@ -1745,6 +1747,15 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
       )
     )
   )
+;; }}}
+
+;; khoj
+;; {{{
+;; Install Khoj Package from MELPA Stable
+(use-package khoj
+  :ensure nil
+  :defer t
+  :bind ("C-c n s" . 'khoj))
 ;; }}}
 
 ;; dictionary: Apple 词典: osx-dictionary
@@ -1829,12 +1840,18 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
   ;;                                    )
   ;;    )
   ;; :config
-  ;; make completion support pinyin, refer to
-  ;; https://emacs-china.org/t/vertico/17913/2
+  ;; ;; make completion support pinyin, refer to
+  ;; ;; https://emacs-china.org/t/vertico/17913/2
+  ;; ;; list 版
   ;; (defun completion--regex-pinyin (str)
   ;;   (orderless-regexp (pinyinlib-build-regexp-string str))
   ;;   )
   ;; (add-to-list 'orderless-matching-styles 'completion--regex-pinyin)
+  ;; ;; advice 版
+  ;; (defun orderless-regexp-pinyin (str)
+  ;;   (setf (car str) (pinyinlib-build-regexp-string (car str)))
+  ;;   str)
+  ;; (advice-add 'orderless-regexp :filter-args #'orderless-regexp-pinyin)
   )
 ;; }}}
 
@@ -2332,6 +2349,7 @@ When fixing a typo, avoid pass camel case option to cli program."
          ("M-s g" . consult-grep)
          ("M-s G" . consult-git-grep)
          ("M-s r" . consult-ripgrep)
+	 ("C-c r g" . consult-ripgrep)
          ("M-s l" . consult-line)
          ("M-s L" . consult-line-multi)
          ("M-s k" . consult-keep-lines)
@@ -2648,7 +2666,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
         ;; B
         ("b" "图书" plain "%?"
          :target (file+head "图书/${slug}.org"
-                            "#+title: ${title}\n#+date: %<%FT%T%z>\n#+category:\n#+filetags: \n")
+                            "#+title: ${title}\n#+date: %<%FT%T%z>\n")
          :immediate-finish t
          :unnarrowed  t)
         ("c" "角色" plain "%?"
@@ -2659,21 +2677,21 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
         ;; C
         ("d" "default" plain "%?"
          :target (file+head "${slug}.org"
-                            "#+title: ${title}\n#+date: %<%FT%T%z>\n#+category:\n#+filetags:\n")
+                            "#+title: ${title}\n#+date: %<%FT%T%z>\n")
          :empty-lines 1
          :immediate-finish t
          :unnarrowed  t)
         ;; D
         ("e" "Emacs" plain "%?"
          :target (file+head "Emacs/${slug}.org"
-                            "#+title: ${title}\n#+date: %<%FT%T%z>\n#+category:\n#+filetags: \n")
+                            "#+title: ${title}\n#+category:\n")
          :immediate-finish t
          :unnarrowed  t)
         ;; E
         ;; f:
-        ("f" "Emacs Function" plain "%?"
+        ("f" "Emacs 命令与函数/Command & Function" plain "%?"
          :target (file+head "Emacs/function/${title}.org"
-                            "#+title: ${title}\n#+date: %<%FT%T%z>\n#+category:\n#+filetags: \n")
+                            "#+title: ${title}\n#+category:\n")
          :immediate-finish t
          :unnarrowed  t)
         ;; F
@@ -2693,7 +2711,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
         ;; I
         ;; j:
         ;; J
-        ("k" "Emacs keymap" plain "%?"
+        ("k" "Emacs 快捷键/keymap" plain "%?"
          :target (file+head "Emacs/keymap/${slug}.org"
                             "#+title: ${title}\n")
          :immediate-finish t
@@ -2759,7 +2777,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
         ;; U
         ("v" "Emacs 变量" plain "%?"
          :target (file+head "Emacs/variable/${title}.org"
-                            "#+title: ${title}\n#+date: %<%FT%T%z>\n")
+                            "#+title: ${title}\n")
          :immediate-finish t
          :unnarrowed t)
         ;; V:
@@ -2827,7 +2845,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   ("C-c n F" . consult-org-roam-file-find)
   ("C-c n b" . consult-org-roam-backlinks)
   ("C-c n l" . consult-org-roam-forward-links)
-  ("C-c n s" . consult-org-roam-search)
+  ;; ("C-c n s" . consult-org-roam-search)
   :custom
   ;; Use `ripgrep' for searching with `consult-org-roam-search'
   (consult-org-roam-grep-func #'consult-ripgrep)

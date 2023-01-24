@@ -49,6 +49,8 @@ digraph G {"exec-path-from-shell" -> "emacs";
 "all-the-icons-completion" -> "all-the-icons";
 "compat" -> "emacs";
 "request" -> "emacs";
+"khoj" -> "emacs";
+"khoj" -> "transient";
 "which-key" -> "emacs";
 "simple-httpd" -> "cl-lib";
 "applescript-mode" -> "emacs";
