@@ -672,7 +672,8 @@ if IGNORE-CASE is non-nil."
             (when (car m)
               (add-face-text-property (car m) (cadr m)
                                       'consult-highlight-match nil str))
-            (setq m (cddr m))))))))
+            (setq m (cddr m)))))))
+  str)
 
 (defconst consult--convert-regexp-table
   (append
@@ -975,7 +976,7 @@ When no project is found and MAY-PROMPT is non-nil ask the user."
     dir))
 
 (defun consult--format-location (file line &optional str)
-  "Format location string 'FILE:LINE:STR'."
+  "Format location string FILE:LINE:STR."
   (setq line (number-to-string line)
         str (concat file ":" line (and str ":") str)
         file (length file))
@@ -1002,11 +1003,17 @@ When no project is found and MAY-PROMPT is non-nil ask the user."
   "Return t if position POS lies in range `point-min' to `point-max'."
   (<= (point-min) pos (point-max)))
 
+(defun consult--prefix-group (cand transform)
+  "Return title for CAND or TRANSFORM the candidate.
+The candidate must have a `consult--prefix-group' property."
+  (if transform
+      (substring cand (1+ (length (get-text-property 0 'consult--prefix-group cand))))
+    (get-text-property 0 'consult--prefix-group cand)))
+
 (defun consult--type-group (types)
   "Return group function for TYPES."
   (lambda (cand transform)
-    (if transform
-        cand
+    (if transform cand
       (alist-get (get-text-property 0 'consult--type cand) types))))
 
 (defun consult--type-narrow (types)
@@ -2056,11 +2063,16 @@ PROPS are optional properties passed to `make-process'."
 (defun consult--async-highlight (async builder)
   "Return ASYNC function which highlightes the candidates.
 BUILDER is the command line builder."
-  (let ((highlight))
+  (let (highlight)
     (lambda (action)
       (cond
        ((stringp action)
-        (setq highlight (plist-get (funcall builder action) :highlight))
+        (let ((tmp (funcall builder action)))
+          (if (not (keywordp (car tmp)))
+              (setq highlight (cdr tmp))
+            ;; TODO remove backward compatibility code
+            (message "Consult: The command builder return value changed, it should be a pair instead of a plist")
+            (setq highlight (plist-get tmp :highlight))))
         (funcall async action))
        ((and (consp action) highlight)
         (dolist (str action)
@@ -2182,14 +2194,18 @@ BUILDER is the command line builder function."
     (setq input (funcall builder input))
     (if (stringp (car input))
         input
-      (plist-get input :command))))
+      (if (not (keywordp (car input)))
+          (car input)
+        ;; TODO remove backward compatibility code
+        (message "Consult: The command builder return value changed, it should be a pair instead of a plist")
+        (plist-get input :command)))))
 
 (defmacro consult--async-command (builder &rest args)
   "Asynchronous command pipeline.
 ARGS is a list of `make-process' properties and transforms.  BUILDER is the
 command line builder function, which takes the input string and must either
-return a list of command line arguments or a plist with the command line
-argument list :command and a highlighting function :highlight."
+return a list of command line arguments or a pair of the command line
+argument list and a highlighting function."
   (declare (indent 1))
   `(thread-first
      (consult--async-sink)
@@ -2485,8 +2501,7 @@ INHERIT-INPUT-METHOD, if non-nil the minibuffer inherits the input method."
 
 (defun consult--multi-group (sources cand transform)
   "Return title of candidate CAND or TRANSFORM the candidate given SOURCES."
-  (if transform
-      cand
+  (if transform cand
     (plist-get (consult--multi-source sources cand) :name)))
 
 (defun consult--multi-preview-key (sources)
@@ -3121,8 +3136,7 @@ CANDIDATES is the list of candidates."
 (defun consult--line-multi-group (cand transform)
   "Group function used by `consult-line-multi'.
 If TRANSFORM non-nil, return transformed CAND, otherwise return title."
-  (if transform
-      cand
+  (if transform cand
     (let ((marker (car (get-text-property 0 'consult-location cand))))
       (buffer-name
        ;; Handle cheap marker
@@ -3151,10 +3165,10 @@ BUFFERS is the list of buffers."
                  (when (seq-every-p
                         (lambda (x) (save-excursion (re-search-forward x end t)))
                         (cdr regexps))
-                   (let ((cand (buffer-substring-no-properties beg end)))
-                     (funcall hl cand)
-                     (push (consult--location-candidate cand (cons buf beg) line)
-                           candidates))))
+                   (push (consult--location-candidate
+                          (funcall hl (buffer-substring-no-properties beg end))
+                          (cons buf beg) line)
+                         candidates)))
                (unless (eobp) (forward-char 1))))))))))
 
 ;;;###autoload
@@ -4449,10 +4463,6 @@ outside a project.  See `consult-buffer' for more details."
 
 ;;;;; Command: consult-kmacro
 
-(declare-function kmacro--keys "kmacro")
-(declare-function kmacro--counter "kmacro")
-(declare-function kmacro--format "kmacro")
-
 (defun consult--kmacro-candidates ()
   "Return alist of kmacros and indices."
   (thread-last
@@ -4514,11 +4524,16 @@ Macros containing mouse clicks are omitted."
 (defun consult--grep-format (async builder)
   "Return ASYNC function highlighting grep match results.
 BUILDER is the command argument builder."
-  (let ((highlight))
+  (let (highlight)
     (lambda (action)
       (cond
        ((stringp action)
-        (setq highlight (plist-get (funcall builder action) :highlight))
+        (let ((tmp (funcall builder action)))
+          (if (not (keywordp (car tmp)))
+              (setq highlight (cdr tmp))
+            ;; TODO remove backward compatibility code
+            (message "Consult: The command builder return value changed, it should be a pair instead of a plist")
+            (setq highlight (plist-get tmp :highlight))))
         (funcall async action))
        ((consp action)
         (let (result)
@@ -4540,8 +4555,8 @@ BUILDER is the command argument builder."
                   (when highlight
                     (funcall highlight content))
                   (setq str (concat file sep line sep content))
-                  ;; Store file name in order to avoid allocations in `consult--grep-group'
-                  (add-text-properties 0 file-len `(face consult-file consult--grep-file ,file) str)
+                  ;; Store file name in order to avoid allocations in `consult--prefix-group'
+                  (add-text-properties 0 file-len `(face consult-file consult--prefix-group ,file) str)
                   (put-text-property (1+ file-len) (+ 1 file-len line-len) 'face 'consult-line-number str)
                   (when ctx
                     (add-face-text-property (+ 2 file-len line-len) (length str) 'consult-grep-context 'append str))
@@ -4574,12 +4589,6 @@ FIND-FILE is the file open function, defaulting to `find-file'."
                             cand
                             (and (not (eq action 'return)) open))))))
 
-(defun consult--grep-group (cand transform)
-  "Return title for CAND or TRANSFORM the candidate."
-  (if transform
-      (substring cand (1+ (length (get-text-property 0 'consult--grep-file cand))))
-    (get-text-property 0 'consult--grep-file cand)))
-
 (defun consult--grep-exclude-args ()
   "Produce grep exclude arguments.
 Take the variables `grep-find-ignored-directories' and
@@ -4609,7 +4618,7 @@ INITIAL is inital input."
      :add-history (consult--async-split-thingatpt 'symbol)
      :require-match t
      :category 'consult-grep
-     :group #'consult--grep-group
+     :group #'consult--prefix-group
      :history '(:input consult--grep-history)
      :sort nil)))
 
@@ -4629,17 +4638,16 @@ INITIAL is inital input."
                    (flags (append cmd opts))
                    (ignore-case (or (member "-i" flags) (member "--ignore-case" flags))))
         (if (or (member "-F" flags) (member "--fixed-strings" flags))
-            `(:command (,@cmd "-e" ,arg ,@opts) :highlight
-                       ,(apply-partially #'consult--highlight-regexps
-                                         (list (regexp-quote arg)) ignore-case))
+            (cons (append cmd (list "-e" arg) opts)
+                  (apply-partially #'consult--highlight-regexps
+                                   (list (regexp-quote arg)) ignore-case))
           (pcase-let ((`(,re . ,hl) (funcall consult--regexp-compiler arg type ignore-case)))
             (when re
-              `(:command
-                (,@cmd
-                 ,(if (eq type 'pcre) "-P" "-E") ;; perl or extended
-                 "-e" ,(consult--join-regexps re type)
-                 ,@opts)
-                :highlight ,hl))))))))
+              (cons (append cmd
+                            (list (if (eq type 'pcre) "-P" "-E") ;; perl or extended
+                                  "-e" (consult--join-regexps re type))
+                            opts)
+                    hl))))))))
 
 ;;;###autoload
 (defun consult-grep (&optional dir initial)
@@ -4691,14 +4699,13 @@ Otherwise the `default-directory' is searched."
                (flags (append cmd opts))
                (ignore-case (or (member "-i" flags) (member "--ignore-case" flags))))
     (if (or (member "-F" flags) (member "--fixed-strings" flags))
-        `(:command (,@cmd "-e" ,arg ,@opts) :highlight
-                   ,(apply-partially #'consult--highlight-regexps
-                                     (list (regexp-quote arg)) ignore-case))
+        (cons (append cmd (list "-e" arg) opts)
+              (apply-partially #'consult--highlight-regexps
+                               (list (regexp-quote arg)) ignore-case))
       (pcase-let ((`(,re . ,hl) (funcall consult--regexp-compiler arg 'extended ignore-case)))
         (when re
-          `(:command
-            (,@cmd ,@(cdr (mapcan (lambda (x) (list "--and" "-e" x)) re)) ,@opts)
-            :highlight ,hl))))))
+          (cons (append cmd (cdr (mapcan (lambda (x) (list "--and" "-e" x)) re)) opts)
+                hl))))))
 
 ;;;###autoload
 (defun consult-git-grep (&optional dir initial)
@@ -4723,16 +4730,15 @@ for more details."
                                       (not (string-match-p "[[:upper:]]" arg)))
                                   (or (member "-i" flags) (member "--ignore-case" flags)))))
         (if (or (member "-F" flags) (member "--fixed-strings" flags))
-            `(:command (,@cmd "-e" ,arg ,@opts) :highlight
-                       ,(apply-partially #'consult--highlight-regexps
-                                         (list (regexp-quote arg)) ignore-case))
+            (cons (append cmd (list "-e" arg) opts)
+                  (apply-partially #'consult--highlight-regexps
+                                   (list (regexp-quote arg)) ignore-case))
           (pcase-let ((`(,re . ,hl) (funcall consult--regexp-compiler arg type ignore-case)))
             (when re
-              `(:command
-                (,@cmd ,@(and (eq type 'pcre) '("-P"))
-                       "-e" ,(consult--join-regexps re type)
-                       ,@opts)
-                :highlight ,hl))))))))
+              (cons (append cmd (and (eq type 'pcre) '("-P"))
+                            (list "-e" (consult--join-regexps re type))
+                            opts)
+                    hl))))))))
 
 ;;;###autoload
 (defun consult-ripgrep (&optional dir initial)
@@ -4777,8 +4783,7 @@ INITIAL is inital input."
                    ;; ignore-case=t since -iregex is used below
                    (`(,re . ,hl) (funcall consult--regexp-compiler arg type t)))
         (when re
-          (list :command
-                (append cmd
+          (cons (append cmd
                         (cdr (mapcan
                               (lambda (x)
                                 `("-and" "-iregex"
@@ -4789,7 +4794,7 @@ INITIAL is inital input."
                                             "\\\\(\\?:" "\\(" x 'fixedcase 'literal))))
                               re))
                         opts)
-                :highlight hl))))))
+                hl))))))
 
 ;;;###autoload
 (defun consult-find (&optional dir initial)
@@ -4808,9 +4813,9 @@ See `consult-grep' for more details regarding the asynchronous search."
   "Build command line given CONFIG and INPUT."
   (pcase-let ((`(,arg . ,opts) (consult--command-split input)))
     (unless (string-blank-p arg)
-      (list :command (append (consult--build-args consult-locate-args)
-                             (list arg) opts)
-            :highlight (cdr (consult--default-regexp-compiler input 'basic t))))))
+      (cons (append (consult--build-args consult-locate-args)
+                    (list arg) opts)
+            (cdr (consult--default-regexp-compiler input 'basic t))))))
 
 ;;;###autoload
 (defun consult-locate (&optional initial)
@@ -4831,10 +4836,10 @@ details regarding the asynchronous search."
   (pcase-let* ((`(,arg . ,opts) (consult--command-split input))
                (`(,re . ,hl) (funcall consult--regexp-compiler arg 'basic t)))
     (when re
-      (list :command (append (consult--build-args consult-man-args)
-                             (list (consult--join-regexps re 'basic))
-                             opts)
-            :highlight hl))))
+      (cons (append (consult--build-args consult-man-args)
+                    (list (consult--join-regexps re 'basic))
+                    opts)
+            hl))))
 
 (defun consult--man-format (lines)
   "Format man candidates from LINES."
@@ -4842,15 +4847,16 @@ details regarding the asynchronous search."
     (save-match-data
       (dolist (str lines)
         (when (string-match "\\`\\(.*?\\([^ ]+\\) *(\\([^,)]+\\)[^)]*).*?\\) +- +\\(.*\\)\\'" str)
-          (let ((names (match-string 1 str))
-                (name (match-string 2 str))
-                (section (match-string 3 str))
-                (desc (match-string 4 str)))
-            (add-face-text-property 0 (length names) 'consult-file nil names)
-            (push (cons
-                   (format "%s - %s" names desc)
-                   (concat section " " name))
-                  candidates)))))
+          (let* ((names (match-string 1 str))
+                 (name (match-string 2 str))
+                 (section (match-string 3 str))
+                 (desc (match-string 4 str))
+                 (cand (format "%s - %s" names desc)))
+            (add-text-properties 0 (length names)
+                                 (list 'face 'consult-file
+                                       'consult-man (concat section " " name))
+                                 cand)
+            (push cand candidates)))))
     (nreverse candidates)))
 
 ;;;###autoload
@@ -4868,7 +4874,8 @@ the asynchronous search."
           (consult--async-highlight #'consult--man-builder))
         :prompt "Manual entry: "
         :require-match t
-        :lookup #'consult--lookup-cdr
+        :category 'consult-man
+        :lookup (apply-partially #'consult--lookup-prop 'consult-man)
         :initial (consult--async-split-initial initial)
         :add-history (consult--async-split-thingatpt 'symbol)
         :history '(:input consult--man-history))))

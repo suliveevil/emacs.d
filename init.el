@@ -1603,6 +1603,21 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
         )
   )
 
+;; read-symbol-positions-list is deleted from Emacs 29
+(defvar read-symbol-positions-list nil)
+(use-package elisp-depmap
+  :ensure nil
+  :bind (
+         ("C-c H-d" . elisp-depmap-graphviz-digraph)
+         ("C-c H-g" . elisp-depmap-graphviz)
+         ("C-c H-s" . elisp-depmap-makesummarytable)
+         )
+  :config
+  (
+   (setq elisp-depmap-exec-file "~/.config/emacs/assets/elisp-dep-ana.dot")
+   )
+  )
+
 (use-package vundo
   :ensure nil
  )
@@ -3245,7 +3260,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   :after (yasnippet)
   ;; :bind
   :init
-  (setq lsp-bridge-enable-mode-line nil)
+  (setq-default lsp-bridge-enable-mode-line nil)
   ;; (setq lsp-bridge-use-ds-pinyin-in-org-mode t)
   ;; (setq lsp-bridge-use-wenls-in-org-mode t)
   (setq acm-enable-quick-access t)
@@ -3281,6 +3296,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; org-auto-tangle
 ;; {{{
 (use-package org-auto-tangle
+  :defer t
   :ensure nil
   :hook (org-mode . org-auto-tangle-mode)
   )
@@ -3294,14 +3310,17 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; (add-hook 'tree-sitter-after-on-hook #'ts-fold-indicators-mode)
 ;; }}}
 
-(require 'diff-lisp)
+(use-package diff-lisp
+  :ensure nil
+  :defer t
+  )
 (defvar diff-lisp-set-a-and-b nil)
 (defun diff-lisp-set-a-and-b ()
   (interactive)
   (if (eq diff-lisp-set-a-and-b nil)
       (progn
         (diff-lisp-mark-selected-text-as-a)
-	(setq diff-lisp-set-a-and-b t)
+        (setq diff-lisp-set-a-and-b t)
         )
     (progn
       (diff-lisp-diff-a-and-b)

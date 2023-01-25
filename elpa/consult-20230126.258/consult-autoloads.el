@@ -337,6 +337,15 @@ QUERY can be set to a plist according to `consult--buffer-query'.
 (register-definition-prefixes "consult-imenu" '("consult-imenu-"))
 
 
+;;; Generated autoloads from consult-info.el
+
+(autoload 'consult-info "consult-info" "\
+Full text search through info MANUALS.
+
+(fn &rest MANUALS)" t)
+(register-definition-prefixes "consult-info" '("consult-info--"))
+
+
 ;;; Generated autoloads from consult-org.el
 
 (autoload 'consult-org-heading "consult-org" "\

@@ -285,6 +285,16 @@ https://www.bing.com
   )
 #+end_src
 
+** repeat-mode
+
+#+begin_src emacs-lisp :tangle no
+(use-package repeat
+  :ensure nil
+  )
+(global-set-key (kbd "M-o") #'other-window)
+(put 'other-window 'repeat-map nil)
+#+end_src
+
 ** 文件和缓冲区 file/buffer
 
 #+begin_src emacs-lisp :tangle yes
@@ -1790,6 +1800,32 @@ Adapted code from: http://ergoemacs.org/emacs/elisp_html-linkify.html"
               ("PHONE"     :foreground "forest green" :weight bold))))
 #+end_src
 
+*** org-babel-tangle
+
+#+begin_src emacs-lisp :tangle no
+(defun org-babel-tangle-config ()
+  (when (string-equal (buffer-file-name)
+                      (expand-file-name "~/.config/emacs/init.org"))
+    (let ((org-config-babel-evaluate nil))
+      (org-babel-tangle))))
+
+(add-hook 'org-mode-hook
+          (lambda ()
+            (add-hook 'after-save-hook #'org-babel-tangle-config)))
+
+#+end_src
+
+#+begin_src emacs-lisp
+;; Local Variables:
+;; eval: (add-hook 'after-save-hook (lambda ()(if
+;;                                     (y-or-n-p "Reload?")
+;; 				    (load-file user-init-file))) nil t)
+;; eval: (add-hook 'after-save-hook (lambda ()(if
+;;                                     (y-or-n-p "Tangle?")
+;; 				    (org-babel-tangle))) nil t)
+;; End:
+#+end_src
+
 *** org-capture
 
 #+begin_src emacs-lisp :tangle no
@@ -2002,7 +2038,7 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 
 ** package
 
-#+begin_src text :tangle no
+#+begin_src emacs-lisp :tangle no
 
 #+end_src
 
@@ -2011,73 +2047,85 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 #+begin_src emacs-lisp :tangle no
 (add-to-list 'package-selected-packages
              '(
+               ;; org-auto-tangle
+               ;; sis
+               ace-pinyin
+               ace-window
                all-the-icons-completion
+               all-the-icons-dired
+               applescript-mode
                auto-dark
+               benchmark-init
+               closql
                color-theme-sanityinc-solarized
                color-theme-sanityinc-tomorrow
                consult
                consult-org-roam
                csv-mode
                d2-mode
+               deadgrep
+               diff-hl
+               doom-modeline
+               el-fetch
                elfeed
                elfeed-dashboard
                elfeed-org
                elisp-demos
+               elisp-depmap
+               embark
                epkg
+               exec-path-from-shell
                expand-region
+               free-keys
                fuck
+               goggles
                goto-line-preview
+               graphviz-dot-mode
+               helpful
+               highlight-parentheses
                keycast
                lsp-bridge
                magit-delta
                magit-section
+               marginalia
+               markdown-mode
                mermaid-mode
+               moom
                multiple-cursors
+               mybigword
                nov
                nov-xwidget
                olivetti
+               opencc
+               orderless
+               org-auto-tangle
+               org-modern
+               org-roam
+               org-roam-ui
                org-similarity
+               org-sticky-header
                origami
+               osm
+               osx-dictionary
                pangu-spacing
+               parrot
+               pcre2el
+               pyim
+               ;; pyim-basedict
+               request
                rfc-mode
                semantic-mode
                shrface
-               sis
+               simple-httpd
                solarized-theme
                subed
                symbol-overlay
-               ts-fold
-               wucuo
-               all-the-icons-dired
-               doom-modeline
-               ace-window
-               moom
-               el-fetch
-               exec-path-from-shell
-               applescript-mode
-               yasnippet
-               osx-dictionary
-               free-keys
-               graphviz-dot-mode
-               org-sticky-header
                topsy
-               highlight-parentheses
-               goggles
-               pyim-basedict
-               pyim
-               deadgrep
-               helpful
-               markdown-mode
-               embark
-               ace-pinyin
-               vertico-posframe
-               org-auto-tangle
-               benchmark-init
-               org-roam-ui
-               org-roam
-               marginalia
-               orderless
+               ts-fold
                vertico
+               vertico-posframe
+               wucuo
+               yasnippet
                )
              )
 #+end_src
@@ -2683,6 +2731,23 @@ re="(([\u2e80-\u9fff]+)([\n\r]{1,2})?([\s\t])?(([\u2e80-\u9fff]+)|(\w)+)([\s\t])
 *** 代码分析
 
 elisp-depmap
+
+#+begin_src emacs-lisp :tangle yes
+;; read-symbol-positions-list is deleted from Emacs 29
+(defvar read-symbol-positions-list nil)
+(use-package elisp-depmap
+  :ensure nil
+  :bind (
+         ("C-c H-d" . elisp-depmap-graphviz-digraph)
+         ("C-c H-g" . elisp-depmap-graphviz)
+         ("C-c H-s" . elisp-depmap-makesummarytable)
+         )
+  :config
+  (
+   (setq elisp-depmap-exec-file "~/.config/emacs/assets/elisp-dep-ana.dot")
+   )
+  )
+#+end_src
 
 *** 辅助编辑
 
@@ -3951,6 +4016,14 @@ https://github.com/logangrado/hideshow-orgmode
 ;; }}}
 #+end_src
 
+#+begin_src emacs-lisp :tangle no
+(setq consult-ripgrep-args
+      "rg --sortr path --null --line-buffered
+--color=never --max-columns=1000 --path-separator /
+--smart-case --no-heading --line-number --multiline --type org ."
+      )
+#+end_src
+
 ** vertico+posframe
 
 #+begin_src emacs-lisp :tangle yes
@@ -4078,6 +4151,11 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ** Diff
 
 
+** org-download
+
+#+begin_src emacs-lisp :tangle no
+(setq  org-download-screenshot-method "screencapture -i %s")
+#+end_src
 
 ** org-modern
 
@@ -5273,7 +5351,7 @@ https://github.com/zk-phi/spray
   :after (yasnippet)
   ;; :bind
   :init
-  (setq lsp-bridge-enable-mode-line nil)
+  (setq-default lsp-bridge-enable-mode-line nil)
   ;; (setq lsp-bridge-use-ds-pinyin-in-org-mode t)
   ;; (setq lsp-bridge-use-wenls-in-org-mode t)
   (setq acm-enable-quick-access t)
@@ -5395,14 +5473,16 @@ https://github.com/zk-phi/spray
 ;; org-auto-tangle
 ;; {{{
 (use-package org-auto-tangle
+  :defer t
   :ensure nil
   :hook (org-mode . org-auto-tangle-mode)
   )
 ;; }}}
 #+end_src
 
-** 折叠
 
+
+** 折叠
 
 #+begin_src emacs-lisp :tangle yes
 ;; ts-fold
@@ -5418,14 +5498,17 @@ https://github.com/zk-phi/spray
 ** Diff
 
 #+begin_src emacs-lisp :tangle yes
-(require 'diff-lisp)
+(use-package diff-lisp
+  :ensure nil
+  :defer t
+  )
 (defvar diff-lisp-set-a-and-b nil)
 (defun diff-lisp-set-a-and-b ()
   (interactive)
   (if (eq diff-lisp-set-a-and-b nil)
       (progn
         (diff-lisp-mark-selected-text-as-a)
-	(setq diff-lisp-set-a-and-b t)
+        (setq diff-lisp-set-a-and-b t)
         )
     (progn
       (diff-lisp-diff-a-and-b)
