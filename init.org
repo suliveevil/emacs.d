@@ -1837,6 +1837,8 @@ Adapted code from: http://ergoemacs.org/emacs/elisp_html-linkify.html"
 				org-complete-tags-always-offer-all-agenda-tags
 				t)))
          (org-capture-mode . delete-other-windows))
+  :config
+  (setq org-default-notes-file "~/org-roam/notes/inbox.org")
   :custom
   (org-capture-use-agenda-date nil)
   ;; define common template
@@ -2043,6 +2045,7 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 #+end_src
 
 *** package list                                                      :FIXME:
+
 
 #+begin_src emacs-lisp :tangle no
 (add-to-list 'package-selected-packages
@@ -2743,9 +2746,8 @@ elisp-depmap
          ("C-c H-s" . elisp-depmap-makesummarytable)
          )
   :config
-  (
-   (setq elisp-depmap-exec-file "~/.config/emacs/assets/elisp-dep-ana.dot")
-   )
+  (setq elisp-depmap-parse-hashtablesize 1024)
+  ;; (elisp-depmap-exec-file "~/.config/emacs/assets/elisp-dep-ana.dot")
   )
 #+end_src
 
@@ -2825,6 +2827,14 @@ elisp-depmap
   :ensure t
   :hook
   (emacs-lisp-mode . flycheck-elsa-setup))
+#+end_src
+
+*** 格式化
+
+#+begin_src emacs-lisp :tangle yes
+(use-package elisp-autofmt
+  :commands (elisp-autofmt-mode elisp-autofmt-buffer)
+  :hook (emacs-lisp-mode . elisp-autofmt-mode))
 #+end_src
 
 ** undo
@@ -3793,7 +3803,7 @@ binky-mode
 
 *** ICON 图标
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 ;; all-the-icons
 ;; {{{
 ;; (use-package all-the-icons :if (display-graphic-p))
@@ -3801,6 +3811,29 @@ binky-mode
   (require 'all-the-icons)
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
   (add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup))
+;; }}}
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+;; all-the-icons
+;; {{{
+(use-package all-the-icons
+  :ensure nil
+  ;; :when (display-graphic-p)
+  :if (display-graphic-p)
+  )
+
+(use-package all-the-icons-completion
+  :ensure nil
+  :hook ((after-init . all-the-icons-completion-mode)
+         (marginalia-mode . all-the-icons-completion-marginalia-setup))
+  )
+
+(use-package all-the-icons-dired
+  :ensure nil
+  :when (display-graphic-p)
+  :hook (dired-mode . all-the-icons-dired-mode)
+  )
 ;; }}}
 #+end_src
 
@@ -4254,6 +4287,30 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 #+end_src
 
 *** node
+
+#+begin_src emacs-lisp :tangle no
+(defun org-roam-protocol-open-node (info)
+  "This handler simply opens the file with emacsclient.
+INFO is a plist containing additional information passed by the protocol URL.
+It should contain the FILE key, pointing to the path of the file to open.
+  Example protocol string:
+org-protocol://roam-node?node=uuid"
+  (when-let ((node (plist-get info :node)))
+    (raise-frame)
+    (org-roam-node-visit (org-roam-populate
+                          (org-roam-node-create :id node))
+                         nil
+                         'force)
+    )
+  nil)
+
+(push '("org-roam-node"
+        :protocol "roam-node"
+        :function org-roam-protocol-open-node)
+      org-protocol-protocol-alist)
+#+end_src
+
+
 
 #+begin_src emacs-lisp :tangle no
 ;; org-roam: node directory                                                       ; FIXME
@@ -5380,7 +5437,8 @@ https://github.com/zk-phi/spray
 #+end_src
 
 #+begin_src emacs-lisp
-
+(setq lsp-bridge-default-mode-hooks
+      (remove 'org-mode-hook lsp-bridge-default-mode-hooks))
 #+end_src
 
 #+begin_src emacs-lisp :tangle no

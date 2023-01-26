@@ -18,7 +18,6 @@
 .cask
 .cvsignore
 .depend
-.dir-locals.el
 .emacs.desktop
 .emacs.desktop.lock
 .last-package-update-day
@@ -36,7 +35,6 @@
 /ac-comphist.dat
 /anything-c-adaptive-history
 /auto-save-list
-/custom.el
 /newsticker
 /session.*
 /swank

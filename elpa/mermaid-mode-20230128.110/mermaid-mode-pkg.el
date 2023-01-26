@@ -1,0 +1,2 @@
+;;; Generated package description from mermaid-mode.el  -*- no-byte-compile: t -*-
+(define-package "mermaid-mode" "20230128.110" "major mode for working with mermaid graphs" '((f "0.20.0") (emacs "25.3")) :commit "57f584de3ff0ad9b12412c5be10a7e50bd024bce" :authors '(("Adrien Brochard")) :maintainer '("Adrien Brochard") :keywords '("mermaid" "graphs" "tools" "processes") :url "https://github.com/abrochard/mermaid-mode")
