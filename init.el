@@ -1613,10 +1613,13 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
          ("C-c H-s" . elisp-depmap-makesummarytable)
          )
   :config
-  (
-   (setq elisp-depmap-exec-file "~/.config/emacs/assets/elisp-dep-ana.dot")
-   )
+  (setq elisp-depmap-parse-hashtablesize 1024)
+  ;; (elisp-depmap-exec-file "~/.config/emacs/assets/elisp-dep-ana.dot")
   )
+
+(use-package elisp-autofmt
+  :commands (elisp-autofmt-mode elisp-autofmt-buffer)
+  :hook (emacs-lisp-mode . elisp-autofmt-mode))
 
 (use-package vundo
   :ensure nil
@@ -2261,11 +2264,23 @@ When fixing a typo, avoid pass camel case option to cli program."
 
 ;; all-the-icons
 ;; {{{
-;; (use-package all-the-icons :if (display-graphic-p))
-(when (display-graphic-p)
-  (require 'all-the-icons)
-  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
-  (add-hook 'marginalia-mode-hook #'all-the-icons-completion-marginalia-setup))
+(use-package all-the-icons
+  :ensure nil
+  ;; :when (display-graphic-p)
+  :if (display-graphic-p)
+  )
+
+(use-package all-the-icons-completion
+  :ensure nil
+  :hook ((after-init . all-the-icons-completion-mode)
+         (marginalia-mode . all-the-icons-completion-marginalia-setup))
+  )
+
+(use-package all-the-icons-dired
+  :ensure nil
+  :when (display-graphic-p)
+  :hook (dired-mode . all-the-icons-dired-mode)
+  )
 ;; }}}
 
 ;; fold: origami
