@@ -9,13 +9,28 @@
 
 ;;; Code:
 
+(let (
+      ;; (gc-cons-threshold most-positive-fixnum)
+      (file-name-handler-alist nil)
+      )
+  )
+
+(setq gc-cons-threshold (* 500 1024 1024)) ; 500 MiB
+
+;; Restore after startup
+(add-hook 'after-init-hook
+          (lambda ()
+            (setq gc-cons-threshold 800000) ; default 800000
+            (message "gc-cons-threshold restored to %S"
+                     gc-cons-threshold)))
+
 (setq inhibit-automatic-native-compilation t)
 
 ;; Profile emacs startup
 (add-hook 'emacs-startup-hook
           (lambda ()
             (message "*** Emacs loaded in %s with %d garbage collections."
-                     (format "%.2f seconds"
+                     (format "%.6f seconds"
                              (float-time
                               (time-subtract after-init-time before-init-time)))
                      gcs-done)))
@@ -112,6 +127,12 @@
 ;;
 (keymap-global-set     "S-s-<return>" #'toggle-frame-maximized)
 (keymap-global-set     "C-s-f"        #'toggle-frame-fullscreen) ;; macOS
+;;
+(keymap-global-set "C-<backspace>" '(lambda ()
+                                        (interactive)
+                                        (kill-line 0)
+                                        (indent-according-to-mode)))
+;;
 (keymap-set global-map "H-q"          #'restart-emacs)
 (keymap-global-set     "H-x"          #'execute-extended-command)
 ;; }}}

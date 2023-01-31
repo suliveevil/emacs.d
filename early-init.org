@@ -26,18 +26,39 @@ sibling file: [[file:init.org][init.el config]]
 ;;; Code:
 #+end_src
 
-** Garbage Collection
+** Garbage Collection & file-name-handler
+
+
+#+begin_src emacs-lisp :tangle yes
+(let (
+      ;; (gc-cons-threshold most-positive-fixnum)
+      (file-name-handler-alist nil)
+      )
+  )
+#+end_src
+
+
+#+begin_src emacs-lisp :tangle yes
+(setq gc-cons-threshold (* 500 1024 1024)) ; 500 MiB
+
+;; Restore after startup
+(add-hook 'after-init-hook
+          (lambda ()
+            (setq gc-cons-threshold 800000) ; default 800000
+            (message "gc-cons-threshold restored to %S"
+                     gc-cons-threshold)))
+#+end_src
+
 
 #+begin_src emacs-lisp :tangle no
+;; Don't collect garbage when init
+(setq gc-cons-threshold most-positive-fixnum) ;; 2^61 on my device
+
 ;; Increase the GC threshold for faster startup
 ;; The default is 800 kilobytes.  Measured in bytes.
 (setq gc-cons-threshold (* 500 1024 1024)) ;; 500 MiB
 #+end_src
 
-#+begin_src emacs-lisp :tangle no
-;; Don't collect garbage when init
-(setq gc-cons-threshold most-positive-fixnum) ;; 2^61 on my device
-#+end_src
 
 #+begin_src emacs-lisp :tangle no
 (setq gc-cons-percentage 0.6)
@@ -56,13 +77,13 @@ sibling file: [[file:init.org][init.el config]]
 (add-hook 'emacs-startup-hook
           (lambda ()
             (message "*** Emacs loaded in %s with %d garbage collections."
-                     (format "%.2f seconds"
+                     (format "%.6f seconds"
                              (float-time
                               (time-subtract after-init-time before-init-time)))
                      gcs-done)))
 #+end_src
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 ;; profile
 ;; {{{
 ;; M-x profiler-start
@@ -284,6 +305,12 @@ sibling file: [[file:init.org][init.el config]]
 ;;
 (keymap-global-set     "S-s-<return>" #'toggle-frame-maximized)
 (keymap-global-set     "C-s-f"        #'toggle-frame-fullscreen) ;; macOS
+;;
+(keymap-global-set "C-<backspace>" '(lambda ()
+                                        (interactive)
+                                        (kill-line 0)
+                                        (indent-according-to-mode)))
+;;
 (keymap-set global-map "H-q"          #'restart-emacs)
 (keymap-global-set     "H-x"          #'execute-extended-command)
 ;; }}}
