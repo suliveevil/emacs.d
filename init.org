@@ -9,6 +9,35 @@ sibling file: [[file:early-init.org][early-init.el config]]
 
 https://www.bing.com
 
+* What's Emacs
+
+#+begin_src emacs-lisp :tangle no
+;; What's Emacs
+;; {{{ EMACS: The Extensible, Customizable Display Editor
+;; E.             M.                  A.                C.            S.
+;; Emacs          Makes               A                 Computer      Slow
+;; Escape         Meta                Alt               Control       Shift
+;; Emacs          Makers              Are               Crazy         Sickos
+;; Emacs          Makes               All               Computing     Simple
+;; Emacs          Makefiles           Annihilate        C-Shells
+;; Emacs          Manuals             Always            Cause         Senility
+;; Emacs          May                 Allow             Customized    Screwups
+;; Emacs          Manuals             Are               Cryptic   and Surreal
+;; Eventually     Munches             All               Computer      Storage
+;; Eight          Megabytes           And               Constantly    Swapping
+;; Elsewhere      Maybe               All               Commands  are Simple
+;; Excellent      Manuals             Are               Clearly       Suppressed
+;; Emacs          May                 Alienate          Clients   and Supporters
+;; Except      by Middle              Aged              Computer      Scientists
+;; Extended       Macros              Are               Considered    Superfluous
+;; Every          Mode                Accelerates       Creation   of Software
+;; Each           Manual's            Audience     is   Completely    Stupefied
+;; Exceptionally  Mediocre            Algorithm    for  Computer      Scientists
+;; Easily         Maintained with the Assistance   of   Chemical      Solutions
+;; Eradication of Memory              Accomplished with Complete      Simplicity
+;; }}}
+#+end_src
+
 * init
 
 
@@ -233,6 +262,7 @@ https://www.bing.com
 ** 剪贴板 clipboard
 
 #+begin_src emacs-lisp :tangle yes
+(keymap-global-set "C-c H-k" #'browse-kill-ring)
 ;; zap-up-to-char
 (keymap-global-set "M-z" #'zap-up-to-char)
 #+end_src
@@ -332,8 +362,79 @@ https://www.bing.com
 
 ** eldoc help and man pages
 
+#+begin_src emacs-lisp :tangle yes
+;; random function
+;; {{{
+(defun describe-random-interactive-function ()
+  "Show the documentation for a random interactive function.
+Consider only documented, non-obsolete functions."
+  (interactive)
+  (let (result)
+    (mapatoms
+     (lambda (s)
+       (when (and (commandp s)
+                  (documentation s t)
+                  (null (get s 'byte-obsolete-info)))
+         (setq result (cons s result)))))
+    (describe-function (elt result (random (length result))))))
+;; }}}
+#+end_src
+
 #+begin_src emacs-lisp :tangle no
 (use-package man)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+;; faster man pages
+;; {{{
+(defun faster-man (page)
+  "Get a *nix manual page and put it in a buffer.
+Faster alternative to (man) and (woman)."
+  (interactive
+   (list
+    ;; autocompletion machinery stolen from (man)
+    (let* ((default-entry (Man-default-man-entry))
+           (completion-ignore-case t)
+                                        ; no cache across calls for completion table
+           Man-completion-cache
+           (input (completing-read
+                   (format "Manual entry%s"
+                           (if (string= "" default-entry)
+                               ": "
+                             (format " (default %s): " default-entry)))
+                   'Man-completion-table
+                   nil nil nil 'Man-topic-history default-entry)))
+      (if (string= "" input)
+          (error "No args given")
+        input))))
+  (let* ((buffer (pop-to-buffer (format "*Faster Man - %s*" page))))
+    (with-current-buffer buffer
+      (erase-buffer)
+      (let ((proc
+             (progn
+               ;; Actual shell command.
+               ;; Redirect troff warnings & errors to /dev/null
+               ;; so it doesn't pollute the output.
+               ;; Also, quote man page so it can display
+               ;; things like "printf(3)"
+               (async-shell-command
+                (format "man \"%s\" 2> /dev/null | col -b" page) buffer)
+               (get-buffer-process buffer))))
+        (when (process-live-p proc)
+          ;; wait for process to finish, then apply fundamental-mode on it
+          ;; and jump to the beginning of buffer
+          (set-process-sentinel proc (lambda (process signal)
+                                       (when (memq
+                                              (process-status process)
+                                              '(exit signal))
+                                         (with-current-buffer buffer
+                                           (fundamental-mode)
+                                           (beginning-of-buffer))))))
+        )
+      )
+    )
+  )
+;; }}}
 #+end_src
 
 ** repeat-mode
@@ -649,9 +750,9 @@ Version 2018-06-18 2021-09-30"
    ("C-x s" . eshell)
    ;; :map eshell-mode-map
    ;; (
-    ;;("C-l" . eshell-clear)
-    ;; ("C-r" . helm-eshell-history)
-    ;; )
+   ;;("C-l" . eshell-clear)
+   ;; ("C-r" . helm-eshell-history)
+   ;; )
    )
   )
 #+end_src
@@ -943,8 +1044,83 @@ i.e. change right window to bottom, or change bottom window to right."
 #+end_src
 
 ** 字符 Character & Text/String
+*** unicode
 
-*** 空白字符
+#+begin_src emacs-lisp :tangle yes
+;; unicode
+;; {{{
+;; https://www.unicode.org/Public/UCD/latest/ucd/UnicodeData.txt
+(when (file-exists-p "~/.config/emacs/assets/unicode/UnicodeData.txt")
+  (setq describe-char-unicodedata-file
+        "~/.config/emacs/assets/unicode/UnicodeData.txt")
+  )
+;; }}}
+#+end_src
+
+*** 空白字符/不可见字符
+
+#+begin_src emacs-lisp :tangle yes
+;; 不可见字符: zero-width characters ->​<-
+;; {{{
+;; http://xahlee.info/emacs/emacs/elisp_unicode_replace_invisible_chars.html
+(defun xah-replace-invisible-char ()
+  "Query replace some invisible Unicode chars.
+The chars replaced are:
+ LEFT-TO-RIGHT MARK           (8206, #x200e)
+ OBJECT REPLACEMENT CHARACTER (65532, #xfffc)
+ RIGHT-TO-LEFT MARK           (8207, #x200f)
+ RIGHT-TO-LEFT OVERRIDE       (8238, #x202e)
+ ZERO WIDTH NO-BREAK SPACE    (65279, #xfeff)
+ ZERO WIDTH SPACE             (codepoint 8203, #x200b)
+
+Search begins at buffer beginning. (respects `narrow-to-region')
+
+URL `http://xahlee.info/emacs/emacs/elisp_unicode_replace_invisible_chars.html'
+Version: 2018-09-07 2022-09-13"
+  (interactive)
+  (let ((case-replace nil)
+        (case-fold-search nil)
+        ($p0 (point)))
+    (goto-char (point-min))
+    (while (re-search-forward
+            "\ufeff\\|\u200b\\|\u200f\\|\u202e\\|\u200e\\|\ufffc"
+            nil t)
+      (replace-match ""))
+    (goto-char $p0))
+  )
+;; }}}
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+;; see invisible chars
+;; {{{
+;; https://emacs-china.org/t/topic/19557
+(defun my/see-invisible-chars ()
+  "Highlight ZERO WIDTH chars in all buffers."
+  (interactive)
+  (let ((charnames (list
+                    "BYTE ORDER MARK"
+                    "LEFT-TO-RIGHT EMBEDDING"
+                    "LEFT-TO-RIGHT MARK"
+                    "OBJECT REPLACEMENT CHARACTER"
+                    "RIGHT-TO-LEFT MARK"
+                    "RIGHT-TO-LEFT OVERRIDE"
+                    "ZERO WIDTH JOINER"
+                    "ZERO WIDTH NO-BREAK SPACE"
+                    "ZERO WIDTH NON-JOINER"
+                    "ZERO WIDTH SPACE"
+                    )))
+    (set-face-background 'glyphless-char "RoyalBlue1")
+    (dolist (name charnames)
+      ;; see info node "info:elisp#Glyphless Chars" for available values
+      (set-char-table-range glyphless-char-display
+                            (char-from-name name) "fuck"))
+    )
+  )
+;; }}}
+#+end_src
+
+
 
 #+begin_src emacs-lisp :tangle yes
 (keymap-global-set "H-SPC H-SPC" (lambda () (interactive) (insert "\u200b")))
@@ -991,7 +1167,7 @@ i.e. change right window to bottom, or change bottom window to right."
 (use-package electric-pair-mode
   :ensure nil
   :hook (prog-mode . electric-pair-mode)
-)
+  )
 #+end_src
 
 *** Text Case
@@ -1822,10 +1998,10 @@ Adapted code from: http://ergoemacs.org/emacs/elisp_html-linkify.html"
 ;; https://stackoverflow.com/a/73426792
 (defun org-image-resize (frame)
   (when (derived-mode-p 'org-mode)
-      (if (< (window-total-width) 80)
-      (setq org-image-actual-width (window-pixel-width))
-    (setq org-image-actual-width (* 80 (window-font-width))))
-      (org-redisplay-inline-images)))
+    (if (< (window-total-width) 80)
+        (setq org-image-actual-width (window-pixel-width))
+      (setq org-image-actual-width (* 80 (window-font-width))))
+    (org-redisplay-inline-images)))
 
 (add-hook 'window-size-change-functions 'org-image-resize)
 #+end_src
@@ -1834,11 +2010,11 @@ Adapted code from: http://ergoemacs.org/emacs/elisp_html-linkify.html"
 ;; https://stackoverflow.com/a/73426792
 (defun org-image-resize (frame)
   (when (derived-mode-p 'org-mode)
-      (setq org-image-actual-width
-	    (window-pixel-width)
-	    ;; (- (window-pixel-width) 20)
-	    )
-      (org-redisplay-inline-images)))
+    (setq org-image-actual-width
+          (window-pixel-width)
+          ;; (- (window-pixel-width) 20)
+          )
+    (org-redisplay-inline-images)))
 
 (add-hook 'window-size-change-functions 'org-image-resize)
 #+end_src
@@ -1924,10 +2100,10 @@ Adapted code from: http://ergoemacs.org/emacs/elisp_html-linkify.html"
 ;; Local Variables:
 ;; eval: (add-hook 'after-save-hook (lambda ()(if
 ;;                                     (y-or-n-p "Reload?")
-;; 				    (load-file user-init-file))) nil t)
+;;                                  (load-file user-init-file))) nil t)
 ;; eval: (add-hook 'after-save-hook (lambda ()(if
 ;;                                     (y-or-n-p "Tangle?")
-;; 				    (org-babel-tangle))) nil t)
+;;                                  (org-babel-tangle))) nil t)
 ;; End:
 #+end_src
 
@@ -1939,8 +2115,8 @@ Adapted code from: http://ergoemacs.org/emacs/elisp_html-linkify.html"
   :bind ("\e\e c" . (lambda () (interactive) (org-capture)))
   :hook ((org-capture-mode . (lambda ()
                                (setq-local
-				org-complete-tags-always-offer-all-agenda-tags
-				t)))
+                                org-complete-tags-always-offer-all-agenda-tags
+                                t)))
          (org-capture-mode . delete-other-windows))
   :config
   (setq org-default-notes-file "~/org-roam/notes/inbox.org")
@@ -1948,29 +2124,29 @@ Adapted code from: http://ergoemacs.org/emacs/elisp_html-linkify.html"
   (org-capture-use-agenda-date nil)
   ;; define common template
   (org-capture-templates `(
-			   ("t" "Tasks" entry
-			    (file+headline "tasks.org" "Reminders")
+                           ("t" "Tasks" entry
+                            (file+headline "tasks.org" "Reminders")
                             "* TODO %i%?"
                             :empty-lines-after 1
                             :prepend t)
                            ("n" "Notes" entry
-			    (file+headline "capture.org" "Notes")
+                            (file+headline "capture.org" "Notes")
                             "* %? %^g\n%i\n"
                             :empty-lines-after 1)
                            ;; For EWW
                            ("b" "Bookmarks"
-			    entry (file+headline "capture.org" "Bookmarks")
+                            entry (file+headline "capture.org" "Bookmarks")
                             "* %:description\n\n%a%?"
                             :empty-lines 1
                             :immediate-finish t)
                            ("d" "Diary")
                            ("dt" "Today's TODO list"
-			    entry (file+olp+datetree "diary.org")
+                            entry (file+olp+datetree "diary.org")
                             "* Today's TODO list [/]\n%T\n\n** TODO %?"
                             :empty-lines 1
                             :jump-to-captured t)
                            ("do" "Other stuff"
-			    entry (file+olp+datetree "diary.org")
+                            entry (file+olp+datetree "diary.org")
                             "* %?\n%T\n\n%i"
                             :empty-lines 1
                             :jump-to-captured t)
@@ -2701,7 +2877,7 @@ https://github.com/joddie/macrostep
   :custom
   (avy-background t)
   (avy-keys '(?a ?s ?d ?f ?g ?h ?j ?l ?q ?e ?r ?u ?i ?p ?n))
- )
+  )
 ;; https://karthinks.com/software/avy-can-do-anything
 (keymap-global-set "H-j H-j"     #'avy-goto-char)
 (keymap-global-set "H-j 2"     #'avy-goto-char-2)
@@ -2720,8 +2896,8 @@ https://github.com/joddie/macrostep
 
 #+begin_src emacs-lisp :tangle yes
 (use-package puni
- :ensure nil
- )
+  :ensure nil
+  )
 #+end_src
 
 *** 近义词/反义词等 parrot
@@ -2732,23 +2908,23 @@ https://github.com/joddie/macrostep
 (use-package parrot
   :defer 2
   :bind (
-	 ;;
+         ;;
          ("H-w r" . parrot-rotate-prev-word-at-point)
          ("H-w t" . parrot-rotate-next-word-at-point)
-	 ;;
-	 ("H-k H-k" . parrot-rotate-next-word-at-point)
-	 ("H-k H-j" . parrot-rotate-prev-word-at-point)
+         ;;
+         ("H-k H-k" . parrot-rotate-next-word-at-point)
+         ("H-k H-j" . parrot-rotate-prev-word-at-point)
          )
   :config
   (parrot-mode)
   (parrot-set-parrot-type 'emacs)
   (setq parrot-rotate-dict
         '(
-	  ;; personal setting
-	  (:rot ("¥" "$" "￥"))
-	  (:rot ("nil" "t"))
-	  (:rot ("setq" "defvar"))
-	  ;;
+          ;; personal setting
+          (:rot ("¥" "$" "￥"))
+          (:rot ("nil" "t"))
+          (:rot ("setq" "defvar"))
+          ;;
           (:rot ("alpha" "beta") :caps t :lower nil)
           ;; => rotations are "Alpha" "Beta"
 
@@ -2829,13 +3005,13 @@ re="(([\u2e80-\u9fff]+)([\n\r]{1,2})?([\s\t])?(([\u2e80-\u9fff]+)|(\w)+)([\s\t])
   (submatch (any 9 10 12 13 32))
   )
  (submatch (or
-	    (submatch
-	     (+ (any (48 . 117))))
-	    (+
-	     (submatch (any 95 alnum))
-	     )
-	    )
-	   )
+            (submatch
+             (+ (any (48 . 117))))
+            (+
+             (submatch (any 95 alnum))
+             )
+            )
+           )
  (\?
   (submatch (any 9 10 12 13 32))
   )
@@ -2957,7 +3133,7 @@ elisp-depmap
 #+begin_src emacs-lisp :tangle yes
 (use-package vundo
   :ensure nil
- )
+  )
 #+end_src
 
 ** isearch-mb
@@ -2987,7 +3163,7 @@ https://github.com/Fuco1/dired-hacks
 (use-package magit
   ;; :defer 2
   :bind (("C-x g"   . magit-status)
-	 ("C-c v g" . magit-status)
+         ("C-c v g" . magit-status)
          ("H-m H-m" . magit-status))
   :config
   (defun my/magit--with-difftastic (buffer command)
@@ -3368,13 +3544,13 @@ Natural Language Search
 
 #+begin_src emacs-lisp :tangle no
 (defun change-cursor-color-on-input-method ()
-    "Set cursor color depending on whether an input method is used or not."
-    (interactive)
-    (set-cursor-color (if (and (rime--should-enable-p)
-                               (not (rime--should-inline-ascii-p))
-                               current-input-method)
-                          input-method-cursor-color
-                        default-cursor-color)))
+  "Set cursor color depending on whether an input method is used or not."
+  (interactive)
+  (set-cursor-color (if (and (rime--should-enable-p)
+                             (not (rime--should-inline-ascii-p))
+                             current-input-method)
+                        input-method-cursor-color
+                      default-cursor-color)))
 #+end_src
 
 [[https://github.com/DogLooksGood/emacs-rime][DogLooksGood/emacs-rime: RIME ㄓ in Emacs]]
@@ -4091,7 +4267,7 @@ https://github.com/logangrado/hideshow-orgmode
          ("M-s g" . consult-grep)
          ("M-s G" . consult-git-grep)
          ("M-s r" . consult-ripgrep)
-	 ("C-c r g" . consult-ripgrep)
+         ("C-c r g" . consult-ripgrep)
          ("M-s l" . consult-line)
          ("M-s L" . consult-line-multi)
          ("M-s k" . consult-keep-lines)
@@ -4395,8 +4571,8 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 (use-package org-roam
   ;; :defer 1
   :init
-   (setq org-roam-directory "~/org-roam")
-   (setq org-roam-db-location "~/org-roam/org-roam.db")
+  (setq org-roam-directory "~/org-roam")
+  (setq org-roam-db-location "~/org-roam/org-roam.db")
   :after org
   :bind (
          ("C-c n a" . org-roam-alias-add)
@@ -5140,7 +5316,7 @@ org-protocol://roam-node?node=uuid"
 
 *** nov + shrface + eww :FIXME:
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 ;; shrface eww nov
 ;; {{{
 (use-package shrface
@@ -5149,25 +5325,34 @@ org-protocol://roam-node?node=uuid"
   (shrface-basic)
   (shrface-trial)
   (shrface-default-keybindings) ; setup default keybindings
-  (setq shrface-href-versatile t))
+  (setq shrface-href-versatile t)
+  )
+
 (use-package eww
   :defer t
   :init
   (add-hook 'eww-after-render-hook #'shrface-mode)
   :config
-  (require 'shrface))
+  (require 'shrface)
+  )
+
 (use-package nov
   :defer t
   :mode ("\\.[eE][pP][uU][bB]\\'" . nov-mode)
   :init
   (add-hook 'nov-mode-hook #'shrface-mode)
   :config
-  ((setq nov-text-width 80)
+  (
+   ;; (setq nov-text-width 80)
    (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
    (add-to-list 'auto-mode-alist '("\\.epub$" . nov-mode))
    (require 'shrface)
-   (setq nov-shr-rendering-functions '((img . nov-render-img) (title . nov-render-title)))
-   (setq nov-shr-rendering-functions (append nov-shr-rendering-functions shr-external-rendering-functions))
+   (setq nov-shr-rendering-functions '(
+                                       (img . nov-render-img)
+                                       (title . nov-render-title)))
+   (setq nov-shr-rendering-functions
+         (append nov-shr-rendering-functions
+                 shr-external-rendering-functions))
    )
   )
 ;; }}}
@@ -5304,7 +5489,7 @@ https://github.com/zk-phi/spray
 *** browser-hist
 
 #+begin_src emacs-lisp :tangle yes
-  (setq browser-hist-default-browser 'safari) ; FIXME
+(setq browser-hist-default-browser 'safari) ; FIXME
 (use-package browser-hist
   :ensure nil
   :init(use-package sqlite)
@@ -5312,13 +5497,13 @@ https://github.com/zk-phi/spray
   ("H-s H-s" . browser-hist-search)
   :config
   (setq browser-hist-db-paths
-      '(
-	(chrome . "$HOME/Library/Application Support/Google/Chrome/Default/History")
-        (brave . "$HOME/Library/Application Support/BraveSoftware/Brave-Browser/Default/History")
-        (firefox . "$HOME/Library/Application Support/Firefox/Profiles/*.default-release/places.sqlite")
-	(safari . "$HOME/Library/Safari/History.db")
-      ))
-    
+        '(
+          (chrome . "$HOME/Library/Application Support/Google/Chrome/Default/History")
+          (brave . "$HOME/Library/Application Support/BraveSoftware/Brave-Browser/Default/History")
+          (firefox . "$HOME/Library/Application Support/Firefox/Profiles/*.default-release/places.sqlite")
+          (safari . "$HOME/Library/Safari/History.db")
+          ))
+
   :commands
   (browser-hist-search)
   )
@@ -5429,7 +5614,7 @@ https://github.com/zk-phi/spray
           ;; right-char
           ;; rjsx-electric-gt
           ;; rjsx-electric-lt
-	  org-self-insert-command
+          org-self-insert-command
           self-insert-command
           ;; shellcop-erase-buffer
           ;; smarter-move-beginning-of-line
@@ -5723,22 +5908,22 @@ https://github.com/zk-phi/spray
 #+begin_src emacs-lisp :tangle yes
 (use-package diff-lisp
   :ensure nil
-  :defer t
-  )
-(defvar diff-lisp-set-a-and-b nil)
-(defun diff-lisp-set-a-and-b ()
-  (interactive)
-  (if (eq diff-lisp-set-a-and-b nil)
+  :config
+  (defvar diff-lisp-set-a-and-b nil)
+  (defun diff-lisp-set-a-and-b ()
+    (interactive)
+    (if (eq diff-lisp-set-a-and-b nil)
+        (progn
+          (diff-lisp-mark-selected-text-as-a)
+          (setq diff-lisp-set-a-and-b t)
+          )
       (progn
-        (diff-lisp-mark-selected-text-as-a)
-        (setq diff-lisp-set-a-and-b t)
-        )
-    (progn
-      (diff-lisp-diff-a-and-b)
-      (setq diff-lisp-set-a-and-b nil)
-      ))
+        (diff-lisp-diff-a-and-b)
+        (setq diff-lisp-set-a-and-b nil)
+        ))
+    )
+  (keymap-global-set "s-/" #'diff-lisp-set-a-and-b)
   )
-(keymap-global-set "s-/" #'diff-lisp-set-a-and-b)
 #+end_src
 
 ** 多媒体
