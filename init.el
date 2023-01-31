@@ -46,7 +46,7 @@
 ;; {{{
 (set-face-attribute 'default nil
                     :family "Sarasa Mono SC Nerd"
-                    :height 140 ;; 更改显示字体大小
+                    :height 140 ; 更改显示字体大小
                     )
 (global-font-lock-mode t) ;; turn on syntax highlighting for all buffers
 ;; }}}
@@ -61,24 +61,37 @@
 
 ;; tree-sitter
 ;; {{{
-(require 'treesit)
-;; (tree-sitter-load 'elisp "elisp")
-;; (add-to-list 'tree-sitter-major-mode-language-alist '(emacs-lisp-mode . elisp))
-(when (treesit-available-p)
-  (setq major-mode-remap-alist
-        '((c-mode          . c-ts-mode)
-          (cmake-mode      . cmake-ts-mode)
-          ;; (c++-mode        . c++-ts-mode)
-          (conf-toml-mode  . toml-ts-mode)
-          (csharp-mode     . csharp-ts-mode)
-          (css-mode        . css-ts-mode)
-          (java-mode       . java-ts-mode)
-          (js-mode         . js-ts-mode)
-          (javascript-mode . js-ts-mode)
-          (js-json-mode    . json-ts-mode)
-          (python-mode     . python-ts-mode)
-          (ruby-mode       . ruby-ts-mode)
-          (sh-mode         . bash-ts-mode))))
+;; Use the built-in treesit and load all language grammars
+(use-package treesit
+  :ensure nil
+  :custom
+  ;; Load languages directly from the repository after making them
+  (treesit-extra-load-path '("~/.config/emacs/tree-sitter/"))
+  :config
+  ;; Replace relevant modes with the treesitter variant
+  (dolist (mode
+           '(
+             (bash-mode       . bash-ts-mode)
+             (c-mode          . c-ts-mode)
+             (cmake-mode      . cmake-ts-mode)
+             (conf-toml-mode  . toml-ts-mode)
+             (csharp-mode     . csharp-ts-mode)
+             (css-mode        . css-ts-mode)
+             (dockerfile-mode . dockerfile-ts-mode)
+             (java-mode       . java-ts-mode)
+             (javascript-mode . js-ts-mode)
+             (js-json-mode    . json-ts-mode)
+             (js-mode         . js-ts-mode)
+             (python-mode     . python-ts-mode)
+             (ruby-mode       . ruby-ts-mode)
+             (sh-mode         . bash-ts-mode)
+             (typescript-mode . typescript-ts-mode)
+             ;; (c++-mode        . c++-ts-mode) ; FIXME
+             ;; (go-mode         . go-ts-mode) ; FIXME
+             ))
+    (add-to-list 'major-mode-remap-alist mode)
+    )
+  )
 ;; }}}
 
 ;; chunk
@@ -492,6 +505,10 @@ i.e. change right window to bottom, or change bottom window to right."
 ;; }}}
 
 (put 'narrow-to-region 'disabled nil)
+;; (put 'dired-find-alternate-file 'disabled nil)
+;; (put 'downcase-region 'disabled nil)
+;; (put 'upcase-region 'disabled nil)
+;; (put 'list-timers 'disabled nil)
 
 ;; Alfred
 ;; {{{
@@ -1461,10 +1478,14 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 ;; }}}
 
 (use-package which-key
-  :defer 1
+  :hook (after-init . which-key-mode)
   :config
+  (setq
+   which-key-idle-delay 1.6
+   which-key-idle-secondary-delay 0.4
+   which-key-show-operator-state-maps t
+   )
   (which-key-mode)
-  (setq which-key-idle-secondary-delay 0.5)
   (which-key-posframe-mode)
   )
 
@@ -1542,6 +1563,10 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 ;; (keymap-global-set "M-g e"   #'avy-goto-word-0)
 (keymap-global-set "C-c H-j" #'avy-resume)
 ;; }}}
+
+(use-package puni
+ :ensure nil
+ )
 
 (use-package parrot
   :defer 2
@@ -2144,10 +2169,12 @@ When fixing a typo, avoid pass camel case option to cli program."
 (use-package helpful
   :bind
   ("C-h f" . helpful-function)
+  ("C-h h" . #'helpful-at-point)
   ([remap describe-symbol] . helpful-symbol)
   ([remap describe-variable] . helpful-variable)
   ([remap describe-command] . helpful-command)
-  ([remap describe-key] . helpful-key))
+  ([remap describe-key] . helpful-key)
+  )
 ;; Note that the built-in `describe-function' includes both functions
 ;; and macros. `helpful-function' is functions only, so we provide
 ;; `helpful-callable' as a drop-in replacement.
@@ -2562,6 +2589,7 @@ When fixing a typo, avoid pass camel case option to cli program."
   ;; :bind (("C-M-a" . marginalia-cycle)
   ;;        :map minibuffer-local-map
   ;;        ("C-M-a" . marginalia-cycle))
+  ;; :custom (marginalia-align 'right)
   :init
   ;; The :init configuration is always executed (Not lazy!)
   ;; Must be in the :init section of use-package such that the mode gets
@@ -2946,6 +2974,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   :defer t
   :config
   (setq rfc-mode-directory (expand-file-name "~/Documents/GitHub/RFC-all/txt/"))
+  (setq rfc-mode-index-path (concat rfc-mode-directory"rfc-index.txt"))
   )
 ;; }}}
 
@@ -2984,7 +3013,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; {{{
 (use-package goto-line-preview
   :bind
-  ;; ([remap goto-line] . goto-line-preview)
+  ([remap goto-line] . goto-line-preview)
   ("C-c H-l" . goto-line-preview)
   )
 ;; }}}
@@ -3005,7 +3034,10 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
          ("C-c m v" . osm-server)
          ("C-c m t" . osm-goto)
          ("C-c m x" . osm-gpx-show)
-         ("C-c m j" . osm-bookmark-jump))
+         ("C-c m j" . osm-bookmark-jump)
+         :map osm-mode-map
+         ("q" . (lambda() (interactive) (quit-window t)))
+         )
 
   :custom
   ;; Take a look at the customization group `osm' for more options.
@@ -3051,11 +3083,13 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; elfeed-dashboard
 (use-package elfeed-dashboard
   :ensure nil
+  :after elfeed
   )
 
 ;;elfeed-org
 (use-package elfeed-org
   :ensure nil
+  :after elfeed
   :hook (elfeed-dashboard-mode . elfeed-org)
   )
 ;; }}}
@@ -3090,6 +3124,10 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
    )
   )
 ;; }}}
+
+(use-package mode-minder
+  :ensure nil
+  )
 
 (use-package explain-pause-mode
   :ensure nil

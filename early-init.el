@@ -96,11 +96,13 @@
 ;; {{{
 (keymap-global-set "s-a" #'mark-whole-buffer)
 (keymap-global-set "s-c" #'kill-ring-save)          ;; M-w     copy       复制
+;; clipboard-kill-ring-save
 (keymap-global-set "s-q" #'save-buffers-kill-emacs) ;;         copy       复制
 (keymap-global-set "s-v" #'yank)                    ;; C-y     paste/yank 粘贴
 (keymap-global-set "s-w" #'delete-frame)            ;;
 (keymap-global-set "s-s" #'save-buffer)             ;; C-x C-s save       保存
 (keymap-global-set "s-x" #'kill-region)             ;; C-w     cut        剪切
+;; clipboard-kill-region
 (keymap-global-set "s-z" #'undo)                    ;; C-_     undo       撤销
 (keymap-global-set "s-Z" #'undo-redo)               ;; C-M-_   undo-redo  重做
 ;;
@@ -167,10 +169,13 @@
 (setq use-dialog-box nil)   ;; 鼠标点击不触发弹窗
 ;; }}}
 
-;; email
+;; user name & email
 ;; {{{
-(setq user-mail-address "suliveevil@qq.com")
 (setq user-full-name "suliveevil")
+(setq user-mail-address "suliveevil@qq.com")
+;; user-domain          ""
+;; user-organisation    ""
+;; user-gpg-encrypt-key ""
 ;; }}}
 
 ;; package: package-enable-at-startup is before init but after early-init
