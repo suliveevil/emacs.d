@@ -40,7 +40,6 @@ https://www.bing.com
 
 * init
 
-
 #+begin_src emacs-lisp :tangle no
 ;; test
 ;; {{{
@@ -87,73 +86,115 @@ https://www.bing.com
   )
 #+end_src
 
+** profile
+
+*** benchmark-init                                                    :FIXME:
+
+#+begin_src emacs-lisp :tangle no
+;; profile: benchmark-init
+;; {{{
+(require 'benchmark-init-modes)  ; FIXME
+(require 'benchmark-init)
+(benchmark-init/activate)
+;; To disable collection of benchmark data after init is done.
+(add-hook 'after-init-hook 'benchmark-init/deactivate)
+;; }}}
+#+end_src
+
+** 键盘与快捷键 keyboard & key-binding/keymap
+
+[[https://www.gnu.org/software/emacs/manual/html_node/elisp/Key-Binding-Conventions.html][Key Binding Conventions (GNU Emacs Lisp Reference Manual)]]
+
+
+
+*** repeat-mode
+
+#+begin_src emacs-lisp :tangle no
+(use-package repeat
+  :ensure nil
+  )
+(global-set-key (kbd "M-o") #'other-window)
+(put 'other-window 'repeat-map nil)
+#+end_src
+
+** 触控板和鼠标 touchpad/trackpad & mouse
+
+#+begin_src emacs-lisp :tangle yes
+;; touchpad/trackpad & mouse
+;; {{{
+(setq mouse-wheel-tilt-scroll t) ; Make the direction sane on an apple trackpad
+(setq mouse-wheel-flip-direction t)
+;;
+;; (defun mouse-hover-tooltip (&optional arg)
+;;   "Show mouse hover help info using pos-tip-show."
+;;   (interactive)
+;;   (let ((help (help-at-pt-kbd-string)))
+;;     (if help
+;;         (pos-tip-show help nil nil nil 0)
+;;       (if (not arg) (message "No local help at point"))))
+;;   (unwind-protect
+;;       (push (read-event) unread-command-events)
+;;     (pos-tip-hide)))
+;; }}}
+#+end_src
+
+*** 右键菜单 context menu
+
+#+begin_src emacs-lisp :tangle no
+(add-hook 'text-mode-hook 'context-menu-mode)
+(add-hook 'shell-mode-hook 'context-menu-mode)
+(add-hook 'dired-mode-hook 'context-menu-mode)
+
+(require 'dictionary)
+
+(defun my-context-menu (menu click)
+  "My context menu"
+  (define-key-after menu [dictionary-lookup]
+    '(menu-item "Dict" dictionary-search-word-at-mouse
+                :help "Look up in dictionary"))
+  menu)
+
+;; hook into context menu
+(add-hook 'context-menu-functions #'my-context-menu)
+#+end_src
+
+** 光标和选区 cursor/region/selection
+
+#+begin_src emacs-lisp :tangle yes
+;; cursor
+;; {{{
+;; cursor move
+;; [Emacs 一行内移动 cursor 的最佳方案是什么？ - Emacs China](https://emacs-china.org/t/emacs-cursor/6753/12)
+;; make cursor the width of the character it is under i.e. full width of a TAB
+(setq x-stretch-cursor t) ;; When on a tab, make the cursor the tab length.
+;; cursor line: 光标所在行显示/高亮
+;; (global-hl-line-mode t) ;; highlight current line
+(custom-set-faces '(hl-line ((t (:background "grey")))))
+(delete-selection-mode t) ;; 删除选中的文字或选中文字后输入时替换选中的文字
+(global-subword-mode)     ;; camelCase and superword-mode
+;; }}}
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(put 'narrow-to-region 'disabled nil)
+;; (put 'dired-find-alternate-file 'disabled nil)
+;; (put 'downcase-region 'disabled nil)
+;; (put 'upcase-region 'disabled nil)
+;; (put 'list-timers 'disabled nil)
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(setq
+ scroll-step 1
+ scroll-margin 3
+ scroll-conservatively 10000
+ )
+#+end_src
+
 ** Emacs Lisp
 
 #+begin_src emacs-lisp :tangle yes
 (add-hook 'emacs-lisp-mode-hook 'turn-off-auto-fill)
-#+end_src
-
-** use-package
-
-#+begin_src emacs-lisp :tangle yes
-;; use-package
-;; {{{
-(require 'use-package-ensure)
-(setq use-package-always-ensure t)
-(setq use-package-verbose t)
-;; }}}
-#+end_src
-
-** 时间 date & time
-
-2023-01-08T21:00:08+0800
-
-#+begin_src emacs-lisp :tangle yes
-;; time
-;; {{{
-(defun my/date-and-time-iso8601 ()
-  (interactive)
-  (insert (format-time-string "%FT%T%z"))
-  )
-
-(keymap-global-set "C-c D" #'my/date-and-time-iso8601)
-;; }}}
-#+end_src
-
-** 图表与 PDF
-
-#+begin_src emacs-lisp :tangle yes
-(defun my/webkit-open-local-file (fpath)
-  (interactive "fEnter file path: ")
-  (when (member (substring fpath -4 nil) '("html" ".pdf" ".mp4"))
-    (xwidget-webkit-browse-url
-     (concat "file://" (expand-file-name fpath)))
-    )
-  )
-#+end_src
-
-** 网络搜索
-#+begin_src emacs-lisp :tangle yes
-(defun my/open-microsoft-bing ()
-  (interactive)
-  (xwidget-webkit-browse-url "https://www.bing.com" t)
-  )
-#+end_src
-
-#+RESULTS:
-: my/open-microsoft-bing
-
-** 字体和语法高亮 font & syntax
-
-#+begin_src emacs-lisp :tangle yes
-;; font and syntax
-;; {{{
-(set-face-attribute 'default nil
-                    :family "Sarasa Mono SC Nerd"
-                    :height 140 ; 更改显示字体大小
-                    )
-(global-font-lock-mode t) ;; turn on syntax highlighting for all buffers
-;; }}}
 #+end_src
 
 ** pretty-symbols
@@ -161,10 +202,184 @@ https://www.bing.com
 #+begin_src emacs-lisp :tangle yes
 ;; pretty-symbols
 ;; {{{
-(add-hook 'prog-mode-hook 'prettify-symbols-mode)
 (setq-default prettify-symbols-alist
-              '(("lambda" . ?λ)
-                ("function" . ?𝑓)))
+              '(
+                ("lambda" . ?λ)
+                ("function" . ?𝑓)
+                )
+              )
+(add-hook 'prog-mode-hook 'prettify-symbols-mode)
+;; }}}
+#+end_src
+
+** package
+
+*** package list                                                      :FIXME:
+
+#+begin_src emacs-lisp :tangle no
+(add-to-list 'package-selected-packages
+             '(
+               ;; khoj
+               ;; org-auto-tangle
+               ;; pyim-basedict
+               ;; sis
+               ace-pinyin
+               ace-window
+               all-the-icons-completion
+               all-the-icons-dired
+               applescript-mode
+               auto-dark
+               benchmark-init
+               closql
+               color-theme-sanityinc-solarized
+               color-theme-sanityinc-tomorrow
+               consult
+               consult-org-roam
+               csv-mode
+               d2-mode
+               deadgrep
+               diff-hl
+               doom-modeline
+               el-fetch
+               elfeed
+               elfeed-dashboard
+               elfeed-org
+               elisp-autofmt
+               elisp-demos
+               elisp-depmap
+               embark
+               embark-consult
+               empv
+               epkg
+               exec-path-from-shell
+               expand-region
+               free-keys
+               fuck
+               goggles
+               goto-line-preview
+               graphviz-dot-mode
+               helpful
+               highlight-parentheses
+               keycast
+               lsp-bridge
+               magit-delta
+               magit-section
+               marginalia
+               markdown-mode
+               mermaid-mode
+               moom
+               multiple-cursors
+               mybigword
+               nov
+               nov-xwidget
+               olivetti
+               opencc
+               orderless
+               org-auto-tangle
+               org-modern
+               org-roam
+               org-roam-ui
+               org-similarity
+               org-sticky-header
+               origami
+               osm
+               osx-dictionary
+               pangu-spacing
+               parrot
+               pcre2el
+               puni
+               pyim
+               request
+               rfc-mode
+               semantic-mode
+               shrface
+               simple-httpd
+               solarized-theme
+               subed
+               symbol-overlay
+               topsy
+               ts-fold
+               vertico
+               vertico-posframe
+               wgrep
+               wucuo
+               yasnippet
+               )
+             )
+#+end_src
+
+*** initialize
+
+#+begin_src emacs-lisp :tangle yes
+;; package.el: mirror 插件镜像
+;; {{{
+;; GitHub connection: https://github.com/hedzr/mirror-list
+;; (require 'package)
+;; 代理
+;; (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+;; (setq url-proxy-services '(("no_proxy" . "^\\(192\\.168\\..*\\)")
+;;                            ("http" . "<代理 IP>:<代理端口号>")
+;;                            ("https" . "<代理 IP>:<代理端口号>")))
+;;
+;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+;;
+;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
+;; and `package-pinned-packages`. Most users will not need or want to do this.
+;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+;;
+;; emacs-eask/archives: Magic to prevent refreshing package archives failure
+;; https://github.com/emacs-eask/archives
+;;
+(package-initialize) ;; pair with (setq package-enable-at-startup nil) ;; early-init
+;; 防止反复调用 package-refresh-contents 影响加载速度
+(when (not package-archive-contents)
+  (package-refresh-contents))
+;; }}}
+#+end_src
+
+*** package dependency graph
+
+#+begin_src emacs-lisp :tangle yes
+;; package dependency graph (Graphviz)
+;; {{{
+;; https://emacs-china.org/t/package/22775/2?u=suliveevil
+;; https://www.gnu.org/software/emacs/manual/html_mono/cl.html#Loop-Facility
+;; (defun get-pkg-reqs-alist ()
+(defun my/emacs-package-dependency ()
+  (interactive)
+  (cl-loop for pkg-and-desc in package-alist
+           for pkg = (car pkg-and-desc)
+           for desc = (cadr pkg-and-desc)
+           for req-names = (cl-loop for it in (package-desc-reqs desc) collect (car it))
+           collect (cons pkg req-names)))
+;; (setq info (get-pkg-reqs-alist))
+
+(setq info (my/emacs-package-dependency))
+
+;; (with-temp-file "/tmp/g.dot"
+(with-temp-file (expand-file-name
+                 "assets/emacs-package-dependency.dot"
+                 (concat user-emacs-directory)
+                 )
+  (insert "digraph G {")
+  (insert (mapconcat #'identity
+                     (cl-loop for pkg-reqs in info
+                              for pkg = (car pkg-reqs)
+                              for reqs = (cdr pkg-reqs)
+                              nconcing (cl-loop for req in reqs
+                                                collect (format "\"%s\" -> \"%s\";\n" pkg req)))))
+  (insert "}"))
+;; }}}
+#+end_src
+
+*** use-package
+
+#+begin_src emacs-lisp :tangle yes
+;; use-package
+;; {{{
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
+(setq use-package-verbose t)
 ;; }}}
 #+end_src
 
@@ -239,128 +454,7 @@ https://www.bing.com
 ;; }}}
 #+end_src
 
-** chunk
-
-#+begin_src emacs-lisp :tangle yes
-;; chunk
-;; {{{
-;; Increase how much is read from processes in a single chunk (default is 4kb)
-(setq read-process-output-max #x10000) ;; 64kb
-;; }}}
-#+end_src
-
-** 书签 Bookmark
-
-#+begin_src emacs-lisp :tangle no
-;; bookmark
-;; {{{
-;; https://www.youtube.com/watch?v=ajiEBK2swKo
-
-;; }}}
-#+end_src
-
-** 剪贴板 clipboard
-
-#+begin_src emacs-lisp :tangle yes
-(keymap-global-set "C-c H-k" #'browse-kill-ring)
-;; zap-up-to-char
-(keymap-global-set "M-z" #'zap-up-to-char)
-#+end_src
-
-** 注释 comment
-
-#+begin_src emacs-lisp :tangle yes
-;; comment
-;; {{{
-(defun comment-current-line-dwim ()
-  "Comment or uncomment the current line/region."
-  (interactive)
-  (save-excursion
-    (if (use-region-p)
-        (comment-or-uncomment-region (region-beginning) (region-end))
-      (push-mark (beginning-of-line) t t)
-      (end-of-line)
-      (comment-dwim nil)
-      )
-    )
-  )
-(keymap-global-set "H-/" #'comment-current-line-dwim)
-;; }}}
-#+end_src
-
-** 历史记录 history
-
-*** 命令历史
-
-#+begin_src emacs-lisp :tangle yes
-;; Persist history over Emacs restarts. Vertico sorts by history position.
-(use-package savehist
-  :ensure nil
-  :hook (after-init . savehist-mode)
-  :config
-  (setq enable-recursive-minibuffers t)
-  (setq history-length 1024)
-  (setq savehist-additional-variables '(mark-ring
-                                        global-mark-ring
-                                        search-ring
-                                        regexp-search-ring
-                                        extended-command-history))
-  (setq savehist-autosave-interval 300)
-  )
-#+end_src
-
-*** 文件历史
-
-#+begin_src emacs-lisp :tangle yes
-(use-package recentf
-  :ensure nil
-  :hook (after-init . recentf-mode)
-  :custom
-  (recentf-max-saved-items 256)
-  (recentf-max-menu-items 20)
-  (recentf-auto-cleanup 'never)
-  (recentf-filename-handlers '(abbreviate-file-name))
-  (recentf-exclude `(,@(cl-loop for f in `(,package-user-dir
-                                           ;; ,no-littering-var-directory
-                                           ;; ,no-littering-etc-directory
-                                           )
-                                collect (abbreviate-file-name f))
-                     ;; Folders on macOS start
-                     "^/private/tmp/"
-                     "^/var/folders/"
-                     ;; Folders on macOS end
-                     ".cache"
-                     ".cask"
-                     ".elfeed"
-                     "elfeed"
-                     "bookmarks"
-                     "cache"
-                     "ido.*"
-                     "persp-confs"
-                     "recentf"
-                     "undo-tree-hist"
-                     "url"
-                     "^/tmp/"
-                     "/ssh\\(x\\)?:"
-                     "/su\\(do\\)?:"
-                     "^/usr/include/"
-                     "/TAGS\\'"
-                     "COMMIT_EDITMSG\\'")
-                   )
-  )
-#+end_src
-
-*** 光标位置历史
-
-#+begin_src emacs-lisp :tangle yes
-;; 自动记住每个文件的最后一次访问的光标位置
-(use-package saveplace
-  :ensure nil
-  :hook (after-init . save-place-mode)
-  )
-#+end_src
-
-** eldoc help and man pages
+** 帮助文档 eldoc help man-pages...
 
 #+begin_src emacs-lisp :tangle yes
 ;; random function
@@ -437,27 +531,491 @@ Faster alternative to (man) and (woman)."
 ;; }}}
 #+end_src
 
-** repeat-mode
+** 时间 date & time
 
-#+begin_src emacs-lisp :tangle no
-(use-package repeat
-  :ensure nil
+2023-01-08T21:00:08+0800
+
+#+begin_src emacs-lisp :tangle yes
+;; time
+;; {{{
+(defun my/date-and-time-iso8601 ()
+  (interactive)
+  (insert (format-time-string "%FT%T%z"))
   )
-(global-set-key (kbd "M-o") #'other-window)
-(put 'other-window 'repeat-map nil)
+
+(keymap-global-set "C-c D" #'my/date-and-time-iso8601)
+;; }}}
 #+end_src
 
-** 文件和缓冲区 file/buffer
+** 网络搜索
+#+begin_src emacs-lisp :tangle yes
+(defun my/open-microsoft-bing ()
+  (interactive)
+  (xwidget-webkit-browse-url "https://www.bing.com" t)
+  )
+#+end_src
+
+#+RESULTS:
+: my/open-microsoft-bing
+
+** 字体和语法高亮 font & syntax
+
+#+begin_src emacs-lisp :tangle yes
+;; font and syntax
+;; {{{
+(set-face-attribute 'default nil
+                    :family "Sarasa Mono SC Nerd"
+                    :height 140 ; 更改显示字体大小
+                    )
+(global-font-lock-mode t) ;; turn on syntax highlighting for all buffers
+;; }}}
+#+end_src
+
+** 剪贴板 clipboard
+
+#+begin_src emacs-lisp :tangle yes
+(keymap-global-set "C-c H-k" #'browse-kill-ring)
+;; zap-up-to-char
+(keymap-global-set "M-z" #'zap-up-to-char)
+#+end_src
+
+** 注释 comment
+
+#+begin_src emacs-lisp :tangle yes
+;; comment
+;; {{{
+(defun comment-current-line-dwim ()
+  "Comment or uncomment the current line/region."
+  (interactive)
+  (save-excursion
+    (if (use-region-p)
+        (comment-or-uncomment-region (region-beginning) (region-end))
+      (push-mark (beginning-of-line) t t)
+      (end-of-line)
+      (comment-dwim nil)
+      )
+    )
+  )
+(keymap-global-set "H-/" #'comment-current-line-dwim)
+;; }}}
+#+end_src
+
+** 书签 Bookmark
+
+#+begin_src emacs-lisp :tangle no
+;; bookmark
+;; {{{
+;; https://www.youtube.com/watch?v=ajiEBK2swKo
+(use-package bookmark
+  :ensure nil
+  ;; :bind (
+  ;; 	 ("C-x r m" . bookmark-set)
+  ;;        ("C-x r d" . bookmark-delete)
+  ;;        ("C-x r j" . bookmark-jump)
+  ;; 	 )
+  )
+;; }}}
+#+end_src
+
+** 历史记录 history
+
+*** 命令历史
+
+#+begin_src emacs-lisp :tangle yes
+;; Persist history over Emacs restarts. Vertico sorts by history position.
+(use-package savehist
+  :ensure nil
+  :hook (after-init . savehist-mode)
+  :config
+  (setq enable-recursive-minibuffers t)
+  (setq history-length 1024)
+  (setq savehist-save-minibuffer-history 1)
+  (setq savehist-additional-variables '(
+                                        extended-command-history
+                                        global-mark-ring
+                                        mark-ring
+                                        regexp-search-ring
+                                        search-ring
+                                        ))
+  (setq savehist-autosave-interval 300)
+  )
+#+end_src
+
+*** 文件历史
+
+#+begin_src emacs-lisp :tangle yes
+(use-package recentf
+  :ensure nil
+  :hook (after-init . recentf-mode)
+  :custom
+  (recentf-max-saved-items 256)
+  (recentf-max-menu-items 20)
+  (recentf-auto-cleanup 'never)
+  (recentf-filename-handlers '(abbreviate-file-name))
+  (recentf-exclude `(,@(cl-loop for f in `(,package-user-dir
+                                           ;; ,no-littering-var-directory
+                                           ;; ,no-littering-etc-directory
+                                           )
+                                collect (abbreviate-file-name f))
+                     ;; Folders on macOS start
+                     "^/private/tmp/"
+                     "^/var/folders/"
+                     ;; Folders on macOS end
+                     ".cache"
+                     ".cask"
+                     ".elfeed"
+                     "elfeed"
+                     "bookmarks"
+                     "cache"
+                     "ido.*"
+                     "persp-confs"
+                     "recentf"
+                     "undo-tree-hist"
+                     "url"
+                     "^/tmp/"
+                     "/ssh\\(x\\)?:"
+                     "/su\\(do\\)?:"
+                     "^/usr/include/"
+                     "/TAGS\\'"
+                     "COMMIT_EDITMSG\\'")
+                   )
+  )
+#+end_src
+
+*** 光标位置历史
+
+#+begin_src emacs-lisp :tangle yes
+;; 自动记住每个文件的最后一次访问的光标位置
+(use-package saveplace
+  :ensure nil
+  :hook (after-init . save-place-mode)
+  )
+#+end_src
+
+** 文件 file
 
 #+begin_src emacs-lisp :tangle yes
 ;; warn when opening files bigger than 100 MB
 (setq large-file-warning-threshold (* 100 1000 1000))
 
 ;; 使 Emacs 自动加载外部修改过的文件
-(global-auto-revert-mode 1)
+;; (global-auto-revert-mode 1)
+(add-hook 'on-first-file-hook 'global-auto-revert-mode)
 
 ;; Open file system read-only files as read-only in Emacs as well.
 (setq view-read-only t)
+#+end_src
+
+*** chunk
+
+#+begin_src emacs-lisp :tangle yes
+;; chunk
+;; {{{
+;; Increase how much is read from processes in a single chunk (default is 4kb)
+(setq read-process-output-max #x10000) ;; 64kb
+;; }}}
+#+end_src
+
+*** symlink
+
+#+begin_src emacs-lisp :tangle no
+;; symlink
+;; {{{
+(defun read-only-if-symlink ()
+  (if (file-symlink-p buffer-file-name)
+      (progn
+        (setq buffer-read-only t)
+        (message "File is a symlink"))))
+(add-hook 'find-file-hooks 'read-only-if-symlink)
+;; }}}
+#+end_src
+
+*** auto-save
+
+#+begin_src emacs-lisp :tangle yes
+;; auto-save: 定期预存，防止停电、系统崩溃等原因造成的数据损失
+;; {{{
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
+
+(add-hook 'after-init-hook 'auto-save-visited-mode) ;; save file when buffer/focus change 自动保存
+(setq
+ auto-save-default t ; auto-save every buffer that visits a file
+ auto-save-timeout 20 ; number of seconds idle time before auto-save (default: 30)
+ auto-save-interval 200 ; number of keystrokes between auto-saves (default: 300)
+ )
+;; }}}
+#+end_src
+
+*** backup
+
+#+begin_src emacs-lisp :tangle yes
+;; backup file: 备份
+;; {{{
+;; https://stackoverflow.com/questions/151945/how-do-i-control-how-emacs-makes-backup-files
+;;
+;; (defvar --backup-directory (concat user-emacs-directory "backups"))
+;; (if (not (file-exists-p --backup-directory))
+;;         (make-directory --backup-directory t))
+;; (setq backup-directory-alist `(("." . ,--backup-directory)))
+;; (setq backup-directory-alist `((".*" . ,(expand-file-name "backup" user-emacs-directory))))
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq make-backup-files t         ; backup of a file the first time it is saved.
+      backup-by-copying t         ; don't clobber symlinks
+      version-control t           ; version numbers for backup files
+      delete-old-versions t       ; delete excess backup files silently
+      delete-by-moving-to-trash t
+      dired-kept-versions 2
+      kept-old-versions 6 ; oldest versions to keep when a new numbered backup is made (default: 2)
+      kept-new-versions 9 ; newest versions to keep when a new numbered backup is made (default: 2)
+      )
+;; }}}
+#+end_src
+
+*** lockfile
+
+#+begin_src emacs-lisp :tangle yes
+;; lockfile: 不同进程修改同一文件
+;; {{{
+(setq create-lockfiles t)
+(setq lock-file-name-transforms
+      '(("\\`/.*/\\([^/]+\\)\\'" "/var/tmp/\\1" t)))
+;; }}}
+#+end_src
+
+*** file head
+
+#+begin_src emacs-lisp :tangle no
+(auto-insert-mode)
+(setq auto-insert-query nil) ;; 不提醒
+;; https://honmaple.me/articles/2018/01/emacs自动添加文件头.html
+(setq auto-insert-alist
+      '(((python-mode . "Python program") nil
+         "#!/usr/bin/env python\n"
+         "# -*- coding: utf-8 -*-\n"
+         "# **************************************************************************\n"
+         "# Copyright © " (substring (current-time-string) -4) " " (user-full-name) "\n"
+         "# File Name: " (file-name-nondirectory buffer-file-name) "\n"
+         "# Author: " (user-full-name)"\n"
+         "# Email: " user-mail-address "\n"
+         "# Created: " (format-time-string "%Y-%m-%d %T (%Z)" (current-time)) "\n"
+         "# Last Update: " (format-time-string "%Y-%m-%d %T (%Z)" (current-time)) "\n"
+         "#          By: \n"
+         "# Description: \n"
+         "# **************************************************************************\n")
+        ((c-mode . "C program") nil
+         "/**************************************************************************\n"
+         " Copyright © " (substring (current-time-string) -4) " " (user-full-name) "\n"
+         " File Name: " (file-name-nondirectory buffer-file-name) "\n"
+         " Author: " (user-full-name)"\n"
+         " Email: " user-mail-address "\n"
+         " Created: " (format-time-string "%Y-%m-%d %T (%Z)" (current-time)) "\n"
+         " Last Update: \n"
+         "           By: \n"
+         " Description: \n"
+         " **************************************************************************/\n"
+         "#include<stdio.h>\n"
+         "#include<string.h>\n")
+        ((sh-mode . "Shell script") nil
+         "#!/bin/bash\n"
+         "# **************************************************************************\n"
+         "# Copyright © " (substring (current-time-string) -4) " " (user-full-name) "\n"
+         "# File Name: " (file-name-nondirectory buffer-file-name) "\n"
+         "# Author: " (user-full-name)"\n"
+         "# Email: " user-mail-address "\n"
+         "# Created: " (format-time-string "%Y-%m-%d %T (%Z)" (current-time)) "\n"
+         "# Last Update: \n"
+         "#          By: \n"
+         "# Description: \n"
+         "# **************************************************************************/\n")))
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+;; https://honmaple.me/articles/2018/01/emacs自动更新文件头.html
+#+end_src
+
+*** file name and file extension
+
+#+begin_src emacs-lisp :tangle yes
+;; file name and file extension
+;; {{{
+;;
+;; https://github.com/chyla/kill-file-path
+;;
+;; 如何在文件夹层次结构中找到所有不同的文件扩展名？
+;; https://qa.1r1g.com/sf/ask/128957811/#
+;;
+
+;; file name only
+(defun my/copy-file-name ()
+  "Copy the current buffer file name to the clipboard."
+  (interactive)
+  (let ((filename (if (equal major-mode 'dired-mode)
+                      default-directory
+                    (buffer-name))))
+    (when filename
+      (kill-new filename))
+    (message filename)))
+
+;; file name with file path
+(defun my/copy-file-name-full ()
+  "Copy the current buffer file name (with full path) to the clipboard."
+  (interactive)
+  (let ((filename (if (equal major-mode 'dired-mode)
+                      default-directory
+                    (buffer-file-name))))
+    (when filename
+      (kill-new filename)
+      (message "Copied buffer file name '%s' to the clipboard." filename))))
+;; }}}
+#+end_src
+
+*** file path
+
+#+begin_src emacs-lisp :tangle yes
+;; file path
+;; {{{
+(defun my/copy-file-path (&optional DirPathOnlyQ)
+  "Copy current buffer file path or dired path.
+Result is full path.
+If `universal-argument' is called first, copy only the dir path.
+
+If in dired, copy the current or marked files.
+
+If a buffer is not file and not dired, copy value of `default-directory'.
+
+URL `http://xahlee.info/emacs/emacs/emacs_copy_file_path.html'
+Version 2018-06-18 2021-09-30"
+  (interactive "P")
+  (let (($fpath
+         (if (string-equal major-mode 'dired-mode)
+             (progn
+               (let (($result (mapconcat 'identity (dired-get-marked-files) "\n")))
+                 (if (equal (length $result) 0)
+                     (progn default-directory )
+                   (progn $result))))
+           (if (buffer-file-name)
+               (buffer-file-name)
+             (expand-file-name default-directory)))))
+    (kill-new
+     (if DirPathOnlyQ
+         (progn
+           (message "Directory copied: %s" (file-name-directory $fpath))
+           (file-name-directory $fpath))
+       (progn
+         (message "File path copied: %s" $fpath)
+         $fpath )))))
+;; }}}
+#+end_src
+
+*** delete file
+
+#+begin_src emacs-lisp :tangle yes
+;; delete buffer file
+;; {{{
+(defun my/delete-current-file ()
+  "Delete the file associated with the current buffer.
+Delete the current buffer too.
+If no file is associated, just close buffer without prompt for save."
+  (interactive)
+  (let ((currentFile (buffer-file-name)))
+    (when (yes-or-no-p (concat "Delete file?: " currentFile))
+      (kill-buffer (current-buffer))
+      (when currentFile
+        (delete-file currentFile)))))
+;; }}}
+#+end_src
+
+*** 垃圾筒                                                            :macOS:
+
+#+begin_src emacs-lisp :tangle yes
+;; move file to trash when delete
+;; {{{
+;;; macOS
+(when (eq system-type 'darwin)
+  (setq trash-directory "~/.Trash/")
+  (setq delete-by-moving-to-trash t))
+;; }}}
+#+end_src
+
+** 文件夹 dired
+
+#+begin_src emacs-lisp :tangle yes
+;; dired
+;; {{{
+(use-package dired
+  :ensure nil
+  :custom
+  (dired-dwim-target t)
+  (dired-kill-when-opening-new-dired-buffer t)
+  :config
+  (setq dired-recursive-deletes 'always
+        dired-recursive-copies 'always) ; 全部递归拷贝、删除文件夹中的文件
+  (setq dired-use-ls-dired t)
+  (setq dired-auto-revert-buffer t)
+  ;; (dired-listing-switches "-alGh")
+  (setq insert-directory-program "/opt/homebrew/bin/gls")
+  (setq dired-listing-switches
+        "-l --almost-all --human-readable --group-directories-first --no-group")
+  )
+
+(defun dired-open-dwim ()
+  (interactive)
+  (if (file-directory-p (dired-file-name-at-point))
+      (dired-find-file)
+    (dired-find-file-other-window)))
+(keymap-set dired-mode-map "RET" 'dired-open-dwim)
+;; }}}
+#+end_src
+
+** 项目 project
+
+#+begin_src emacs-lisp :tangle yes
+;; project
+;; {{{
+(use-package project
+  ;; :bind-keymap
+  ;; (("C-c p" . project-prefix-map))
+  )
+;; }}}
+#+end_src
+
+** 缓冲区 buffer
+*** kill buffer
+
+#+begin_src emacs-lisp :tangle yes
+;; kill buffer
+;; {{{
+(defun my/kill-all-other-buffers ()
+  (interactive)
+  (mapc 'kill-buffer (cdr (buffer-list (current-buffer))))
+  )
+(keymap-global-set "C-c K" #'my/kill-all-other-buffers)
+;; }}}
+#+end_src
+
+*** side-buffer
+
+#+begin_src emacs-lisp :tangle yes
+;; side buffer
+;; {{{
+(defun my/side-buffer ()
+  (interactive)
+  (let ((other (buffer-name (window-buffer (next-window)))))
+    (delete-other-windows)
+    (set-frame-width (selected-frame)
+                     (+ (frame-width (selected-frame)) (window-width)))
+    (split-window-horizontally)
+    (split-window-vertically)
+    (with-selected-window (next-window)
+      (set-window-buffer (selected-window) other))
+    (with-selected-window (previous-window)
+      (set-window-buffer (selected-window) "*Scratch*")))
+  )
+
+(keymap-global-set "C-c B" #'my/side-buffer)
+;; }}}
 #+end_src
 
 *** ibuffer
@@ -515,226 +1073,754 @@ Faster alternative to (man) and (woman)."
             (lambda ()
               (ibuffer-switch-to-saved-filter-groups "default")))
   )
-
 ;; }}}
 #+end_src
 
-*** auto-save
+*** 单词 Word
+*** 行 line
 
 #+begin_src emacs-lisp :tangle yes
-;; auto-save: 定期预存，防止停电、系统崩溃等原因造成的数据损失
+;; line
 ;; {{{
-(setq auto-save-file-name-transforms
-      `((".*" ,temporary-file-directory t)))
-
-(add-hook 'after-init-hook 'auto-save-visited-mode) ;; save file when buffer/focus change 自动保存
-(setq
- auto-save-default t ; auto-save every buffer that visits a file
- auto-save-timeout 20 ; number of seconds idle time before auto-save (default: 30)
- auto-save-interval 200 ; number of keystrokes between auto-saves (default: 300)
- )
+;; wrap/truncate
+(setq-default truncate-lines t)
+(setq word-wrap-by-category t) ;; improves CJK + Latin word-wrapping
+(setq scroll-margin 5)
+(setq-default display-line-numbers-widen t) ; Keep line numbers inside a narrow
+(setq display-line-numbers-width-start t)
+(setq display-line-numbers-grow-only t)    ;; do not shrink line number width
+(setq display-line-numbers-type 'relative) ;; 相对行号
+(global-display-line-numbers-mode 1)
+;; new line
+;; https://github.com/manateelazycat/open-newline
+(defun open-newline-above (arg)
+  "Move to the previous line (like vi) and then opens a line."
+  (interactive "p")
+  (beginning-of-line)
+  (open-line arg)
+  (if (not (member major-mode '(haskell-mode org-mode literate-haskell-mode)))
+      (indent-according-to-mode)
+    (beginning-of-line)))
+(keymap-global-set "C-c O" #'open-newline-above)
+(defun open-newline-below (arg)
+  "Move to the next line (like vi) and then opens a line."
+  (interactive "p")
+  (end-of-line)
+  (open-line arg)
+  (call-interactively 'next-line arg)
+  (if (not (member major-mode '(haskell-mode org-mode literate-haskell-mode)))
+      (indent-according-to-mode)
+    (beginning-of-line)))
+(keymap-global-set "C-c C-o" #'open-newline-below)
 ;; }}}
 #+end_src
 
-
-*** backup
+*** 列 column
 
 #+begin_src emacs-lisp :tangle yes
-;; backup file: 备份
+;; column
 ;; {{{
-;; https://stackoverflow.com/questions/151945/how-do-i-control-how-emacs-makes-backup-files
-;;
-;; (defvar --backup-directory (concat user-emacs-directory "backups"))
-;; (if (not (file-exists-p --backup-directory))
-;;         (make-directory --backup-directory t))
-;; (setq backup-directory-alist `(("." . ,--backup-directory)))
-;; (setq backup-directory-alist `((".*" . ,(expand-file-name "backup" user-emacs-directory))))
-(setq backup-directory-alist
-      `((".*" . ,temporary-file-directory)))
-(setq make-backup-files t         ; backup of a file the first time it is saved.
-      backup-by-copying t         ; don't clobber symlinks
-      version-control t           ; version numbers for backup files
-      delete-old-versions t       ; delete excess backup files silently
-      delete-by-moving-to-trash t
-      dired-kept-versions 2
-      kept-old-versions 6 ; oldest versions to keep when a new numbered backup is made (default: 2)
-      kept-new-versions 9 ; newest versions to keep when a new numbered backup is made (default: 2)
-      )
+(setq-default fill-column 80) ;; M-x set-fill-column RET
+;; (add-hook 'prog-mode-hook 'display-fill-column-indicator-mode)
+(add-hook 'after-init-hook 'global-display-fill-column-indicator-mode)
 ;; }}}
 #+end_src
 
-*** lockfile
+*** 句子 sentence
 
 #+begin_src emacs-lisp :tangle yes
-;; lockfile: 不同进程修改同一文件
+;; sentence: 断句
 ;; {{{
-(setq create-lockfiles t)
-(setq lock-file-name-transforms
-      '(("\\`/.*/\\([^/]+\\)\\'" "/var/tmp/\\1" t)))
+(setq sentence-end "\\([。！？]\\|……\\|[.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*")
+;; (setq sentence-end-double-space nil)
 ;; }}}
 #+end_src
 
-*** 垃圾筒                                                            :macOS:
+*** 段落 paragraph
 
 #+begin_src emacs-lisp :tangle yes
-;; move file to trash when delete
-;; {{{
-;;; macOS
-(when (eq system-type 'darwin)
-  (setq trash-directory "~/.Trash/")
-  (setq delete-by-moving-to-trash t))
-;; }}}
-#+end_src
+(defun my-fill-or-unfill ()
+  "Like `fill-paragraph', but unfill if used twice."
+  (interactive)
+  (let ((fill-column
+         (if (eq last-command 'my-fill-or-unfill)
+             (progn (setq this-command nil)
+                    (point-max))
+           fill-column)))
+    (call-interactively 'fill-paragraph nil (vector nil t))))
 
-*** symlink
+(global-set-key [remap fill-paragraph]
+                'my-fill-or-unfill)
+#+end_src
 
 #+begin_src emacs-lisp :tangle no
-;; symlink
-;; {{{
-(defun read-only-if-symlink ()
-  (if (file-symlink-p buffer-file-name)
-      (progn
-        (setq buffer-read-only t)
-        (message "File is a symlink"))))
-(add-hook 'find-file-hooks 'read-only-if-symlink)
-;; }}}
-#+end_src
-
-*** side-buffer
-
-#+begin_src emacs-lisp :tangle yes
-;; side buffer
-;; {{{
-(defun my/side-buffer ()
-  (interactive)
-  (let ((other (buffer-name (window-buffer (next-window)))))
-    (delete-other-windows)
-    (set-frame-width (selected-frame)
-                     (+ (frame-width (selected-frame)) (window-width)))
-    (split-window-horizontally)
-    (split-window-vertically)
-    (with-selected-window (next-window)
-      (set-window-buffer (selected-window) other))
-    (with-selected-window (previous-window)
-      (set-window-buffer (selected-window) "*Scratch*"))))
-(keymap-global-set "C-c B" #'my/side-buffer)
-;; }}}
-#+end_src
-
-*** delete file
-
-#+begin_src emacs-lisp :tangle yes
-;; delete buffer file
-;; {{{
-(defun my/delete-current-file ()
-  "Delete the file associated with the current buffer.
-Delete the current buffer too.
-If no file is associated, just close buffer without prompt for save."
-  (interactive)
-  (let ((currentFile (buffer-file-name)))
-    (when (yes-or-no-p (concat "Delete file?: " currentFile))
-      (kill-buffer (current-buffer))
-      (when currentFile
-        (delete-file currentFile)))))
-;; }}}
-#+end_src
-
-*** kill buffer
-
-#+begin_src emacs-lisp :tangle yes
-;; kill buffer
-;; {{{
-(defun my/kill-all-other-buffers ()
-  (interactive)
-  (mapc 'kill-buffer (cdr (buffer-list (current-buffer))))
+;; https://www.emacswiki.org/emacs/UnfillParagraph
+(defun unfill-paragraph (&optional region)
+  "Takes a multi-line paragraph and makes it into a single line of text."
+  (interactive (progn (barf-if-buffer-read-only) '(t)))
+  (let ((fill-column (point-max))
+        ;; This would override `fill-column' if it's an integer.
+        (emacs-lisp-docstring-fill-column t))
+    (fill-paragraph nil region))
   )
-(keymap-global-set "C-c K" #'my/kill-all-other-buffers)
+#+end_src
+
+** minibuffer                                                         :FIXME:
+
+#+begin_src emacs-lisp :tangle yes
+(keymap-set minibuffer-mode-map "H-j" #'next-line)
+(keymap-set minibuffer-mode-map "H-k" #'previous-line)
+#+end_src
+
+[[https://robbmann.io/posts/emacs-29-completions/][The *Completions* Buffer Gets a Big Upgrade in Emacs 29 · robbmann]]
+
+[[https://robbmann.io/emacsd/][My Literate .emacs.d · robbmann]] [[https://github.com/renzmann/.emacs.d][renzmann/.emacs.d]]
+
+#+begin_src emacs-lisp :tangle yes
+;; minibuffer
+;; {{{
+;; completion window
+(add-to-list 'display-buffer-alist
+             '("\\*Completions\\*"
+               (display-buffer-reuse-window display-buffer-in-side-window)
+               (side . bottom)
+               (slot . 0)))
+;; case: ignore case
+(setq completion-ignore-case t
+      read-buffer-completion-ignore-case t    ;; default nil
+      read-file-name-completion-ignore-case t ;; default t
+      )
+;; completion style
+(setq completion-styles '(substring initials partial-completion flex basic))
+(setq completion-cycle-threshold 10)
+(setq completions-format 'one-column)
+(setq completions-header-format nil)
+(setq completions-max-height 20)
+(setq completion-auto-select nil)
+(setq enable-recursive-minibuffers t)
+(setq completion-auto-help 'always)
+(setq completion-auto-select 'second-tab)
+
+;; (keymap-set minibuffer-mode-map "TAB" #'minibuffer-complete)
+;; (keymap-set minibuffer-local-map "C-<tab>" #'dabbrev-expand)
+
+;; Up/down when completing in the minibuffer
+(define-key minibuffer-local-map (kbd "C-p") #'minibuffer-previous-completion)
+(define-key minibuffer-local-map (kbd "C-n") #'minibuffer-next-completion)
+
+;; Up/down when competing in a normal buffer
+(define-key completion-in-region-mode-map (kbd "C-p") #'minibuffer-previous-completion)
+(define-key completion-in-region-mode-map (kbd "C-n") #'minibuffer-next-completion)
+
+(defun my/sort-by-alpha-length (elems)
+  "Sort ELEMS first alphabetically, then by length."
+  (sort elems (lambda (c1 c2)
+                (or (string-version-lessp c1 c2)
+                    (< (length c1) (length c2))))))
+
+(defun my/sort-by-history (elems)
+  "Sort ELEMS by minibuffer history.
+Use `mct-sort-sort-by-alpha-length' if no history is available."
+  (if-let ((hist (and (not (eq minibuffer-history-variable t))
+                      (symbol-value minibuffer-history-variable))))
+      (minibuffer--sort-by-position hist elems)
+    (my/sort-by-alpha-length elems)))
+
+(defun my/completion-category ()
+  "Return completion category."
+  (when-let ((window (active-minibuffer-window)))
+    (with-current-buffer (window-buffer window)
+      (completion-metadata-get
+       (completion-metadata (buffer-substring-no-properties
+                             (minibuffer-prompt-end)
+                             (max (minibuffer-prompt-end) (point)))
+                            minibuffer-completion-table
+                            minibuffer-completion-predicate)
+       'category))))
+
+(defun my/sort-multi-category (elems)
+  "Sort ELEMS per completion category."
+  (pcase (my/completion-category)
+    ('nil elems) ; no sorting
+    ('kill-ring elems)
+    ('project-file (my/sort-by-alpha-length elems))
+    (_ (my/sort-by-history elems))))
+
+(setq completions-sort #'my/sort-multi-category)
 ;; }}}
 #+end_src
 
-** dired
+** 补全、代码片段与模板 Completion Snippet and Template
+
+*** abbrev/dabbrev Completion
 
 #+begin_src emacs-lisp :tangle yes
-;; dired
+;; completion: buffer and minibuffer
 ;; {{{
-(require 'dired)
-(defun dired-open-dwim ()
-  (interactive)
-  (if (file-directory-p (dired-file-name-at-point))
-      (dired-find-file)
-    (dired-find-file-other-window)))
-(keymap-set dired-mode-map "RET" 'dired-open-dwim)
-;; }}}
+;; dabbrev: dynamic abbreviation expand
+(keymap-global-set               "C-<tab>" #'dabbrev-expand)
 
-;; file name/file extension/file path
-;; {{{
-;; https://github.com/chyla/kill-file-path
-;; [如何在文件夹层次结构中找到所有不同的文件扩展名？ |](https://qa.1r1g.com/sf/ask/128957811/#)
-;;
-;; file name
-;; file name only
-(defun my/copy-file-name ()
-  "Copy the current buffer file name to the clipboard."
-  (interactive)
-  (let ((filename (if (equal major-mode 'dired-mode)
-                      default-directory
-                    (buffer-name))))
-    (when filename
-      (kill-new filename))
-    (message filename)))
-;; file name with file path
-(defun my/copy-file-name-full ()
-  "Copy the current buffer file name (with full path) to the clipboard."
-  (interactive)
-  (let ((filename (if (equal major-mode 'dired-mode)
-                      default-directory
-                    (buffer-file-name))))
-    (when filename
-      (kill-new filename)
-      (message "Copied buffer file name '%s' to the clipboard." filename))))
-;;
-;; file path
-(defun my/copy-file-path (&optional DirPathOnlyQ)
-  "Copy current buffer file path or dired path.
-Result is full path.
-If `universal-argument' is called first, copy only the dir path.
-
-If in dired, copy the current or marked files.
-
-If a buffer is not file and not dired, copy value of `default-directory'.
-
-URL `http://xahlee.info/emacs/emacs/emacs_copy_file_path.html'
-Version 2018-06-18 2021-09-30"
-  (interactive "P")
-  (let (($fpath
-         (if (string-equal major-mode 'dired-mode)
-             (progn
-               (let (($result (mapconcat 'identity (dired-get-marked-files) "\n")))
-                 (if (equal (length $result) 0)
-                     (progn default-directory )
-                   (progn $result))))
-           (if (buffer-file-name)
-               (buffer-file-name)
-             (expand-file-name default-directory)))))
-    (kill-new
-     (if DirPathOnlyQ
-         (progn
-           (message "Directory copied: %s" (file-name-directory $fpath))
-           (file-name-directory $fpath))
-       (progn
-         (message "File path copied: %s" $fpath)
-         $fpath )))))
+;; hippie-expand
+(setq hippie-expand-try-functions-list '(
+					 try-complete-file-name-partially
+                                         try-complete-file-name
+                                         try-expand-all-abbrevs
+                                         try-expand-dabbrev
+                                         try-expand-dabbrev-all-buffers
+                                         try-expand-dabbrev-from-kill
+                                         try-complete-lisp-symbol-partially
+                                         try-complete-lisp-symbol
+					 ))
+;; (global-set-key [remap dabbrev-expand] 'hippie-expand)
+(keymap-global-set "M-/" #'hippie-expand)
 ;; }}}
 #+end_src
 
-** 项目 project
+*** skeleton
+
+*** tempo
+
+** 字符/字符串 Character & Text/String
+*** unicode
 
 #+begin_src emacs-lisp :tangle yes
-;; project
+;; unicode
 ;; {{{
-(use-package project
-  ;; :bind-keymap
-  ;; (("C-c p" . project-prefix-map))
+;; https://www.unicode.org/Public/UCD/latest/ucd/UnicodeData.txt
+(when (file-exists-p "~/.config/emacs/assets/unicode/UnicodeData.txt")
+  (setq describe-char-unicodedata-file
+        "~/.config/emacs/assets/unicode/UnicodeData.txt")
+  )
+;; }}}
+#+end_src
+
+*** 空白字符/不可见字符
+
+#+begin_src emacs-lisp :tangle yes
+;; 不可见字符: zero-width characters ->​<-
+;; {{{
+;; http://xahlee.info/emacs/emacs/elisp_unicode_replace_invisible_chars.html
+(defun xah-replace-invisible-char ()
+  "Query replace some invisible Unicode chars.
+The chars replaced are:
+ LEFT-TO-RIGHT MARK           (8206, #x200e)
+ OBJECT REPLACEMENT CHARACTER (65532, #xfffc)
+ RIGHT-TO-LEFT MARK           (8207, #x200f)
+ RIGHT-TO-LEFT OVERRIDE       (8238, #x202e)
+ ZERO WIDTH NO-BREAK SPACE    (65279, #xfeff)
+ ZERO WIDTH SPACE             (codepoint 8203, #x200b)
+
+Search begins at buffer beginning. (respects `narrow-to-region')
+
+URL `http://xahlee.info/emacs/emacs/elisp_unicode_replace_invisible_chars.html'
+Version: 2018-09-07 2022-09-13"
+  (interactive)
+  (let ((case-replace nil)
+        (case-fold-search nil)
+        ($p0 (point)))
+    (goto-char (point-min))
+    (while (re-search-forward
+            "\ufeff\\|\u200b\\|\u200f\\|\u202e\\|\u200e\\|\ufffc"
+            nil t)
+      (replace-match ""))
+    (goto-char $p0))
+  )
+;; }}}
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+;; see invisible chars
+;; {{{
+;; https://emacs-china.org/t/topic/19557
+(defun my/see-invisible-chars ()
+  "Highlight ZERO WIDTH chars in all buffers."
+  (interactive)
+  (let ((charnames (list
+                    "BYTE ORDER MARK"
+                    "LEFT-TO-RIGHT EMBEDDING"
+                    "LEFT-TO-RIGHT MARK"
+                    "OBJECT REPLACEMENT CHARACTER"
+                    "RIGHT-TO-LEFT MARK"
+                    "RIGHT-TO-LEFT OVERRIDE"
+                    "ZERO WIDTH JOINER"
+                    "ZERO WIDTH NO-BREAK SPACE"
+                    "ZERO WIDTH NON-JOINER"
+                    "ZERO WIDTH SPACE"
+                    )))
+    (set-face-background 'glyphless-char "RoyalBlue1")
+    (dolist (name charnames)
+      ;; see info node "info:elisp#Glyphless Chars" for available values
+      (set-char-table-range glyphless-char-display
+                            (char-from-name name) "fuck"))
+    )
+  )
+;; }}}
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(keymap-global-set "H-SPC H-SPC" (lambda () (interactive) (insert "\u200b")))
+;; (define-key org-mode-map (kbd "H-SPC H-SPC")
+;;             (lambda () (interactive) (insert "\u200b")))
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+;;(when (or (my-system-type-is-gnu) (my-system-is-blanche))
+;; (add-to-list post-command-hook 'whitespace-mode) ; FIXME
+(whitespace-mode)
+;; only show bad whitespace
+(setq whitespace-style '(
+                         trailing
+                         space-before-tab
+                         indentation
+                         empty
+                         space-after-tab
+                         )
+      )
+;;(face trailing lines-tail) whitespace-line-column 80) ;; highlight long lines tails (setq whitespace-style
+;;  )
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(setq-default indent-tabs-mode nil)     ; do not insert tabs when indenting by default
+(setq tab-width 4)                      ; 4 spaces by default
+
+(defun my/infer-indentation-style ()
+  ;; if our source file uses tabs, we use tabs, if spaces spaces, and if
+  ;; neither, we use the current indent-tabs-mode
+  (let ((space-count (how-many "^  " (point-min) (point-max)))
+        (tab-count (how-many "^\t" (point-min) (point-max))))
+    (if (> space-count tab-count) (setq indent-tabs-mode nil))
+    (if (> tab-count space-count) (setq indent-tabs-mode t)))
+  )
+#+end_src
+
+*** 括号自动补全
+
+#+begin_src emacs-lisp :tangle yes
+;; pair completion
+(use-package electric-pair-mode
+  :ensure nil
+  :hook (prog-mode . electric-pair-mode)
+  )
+#+end_src
+
+*** Text Case
+
+Title Capitalization
+
+#+begin_src emacs-lisp :tangle yes
+;; additionally to the list defined in title-capitalization:
+(defvar my-do-not-capitalize-words '("suliveevil")
+  "Personal list of words that doesn't get capitalized in titles.")
+
+(defun text-case-title-capitalization (beg end)
+  "Proper English title capitalization of a marked region"
+  ;; - before: the presentation of this heading of my own from my keyboard and yet
+  ;; - after:  The Presentation of This Heading of My Own from My Keyboard and Yet
+  ;; - before: a a a a a a a a
+  ;; - after:  A a a a a a a A
+  (interactive "r")
+  (save-excursion
+    (let* (
+           ;; basic list of words which don't get capitalized according to simplified rules:
+           ;; http://karl-voit.at/2015/05/25/elisp-title-capitalization/
+           (do-not-capitalize-basic-words '(
+                                            "a"
+                                            "ago"
+                                            "an"
+                                            "and"
+                                            "as"
+                                            "at"
+                                            "but"
+                                            "by"
+                                            "es"
+                                            "for"
+                                            "from"
+                                            "in"
+                                            "into"
+                                            "it"
+                                            "n"
+                                            "next"
+                                            "nor"
+                                            "of"
+                                            "off"
+                                            "on"
+                                            "onto"
+                                            "or"
+                                            "over"
+                                            "past"
+                                            "s"
+                                            "so"
+                                            "t"
+                                            "the"
+                                            "till"
+                                            "to"
+                                            "up"
+                                            "yet"))
+           ;; if user has defined 'my-do-not-capitalize-words, append to basic list:
+           (do-not-capitalize-words (if (boundp 'my-do-not-capitalize-words)
+                                        (append do-not-capitalize-basic-words my-do-not-capitalize-words )
+                                      do-not-capitalize-basic-words
+                                      )
+                                    )
+           )
+      ;; go to begin of first word:
+      (goto-char beg)
+      (capitalize-word 1)
+      ;; go through the region, word by word:
+      (while (< (point) end)
+        (skip-syntax-forward "^w" end)
+        (let ((word (thing-at-point 'word)))
+          (if (stringp word)
+              ;; capitalize current word except it is list member:
+              (if (member (downcase word) do-not-capitalize-words)
+                  (downcase-word 1)
+                (capitalize-word 1)))))
+      ;; capitalize last word in any case:
+      (backward-word 1)
+      (if (and (>= (point) beg)
+               (not (member (or (thing-at-point 'word) "s")
+                            '("n" "t" "es" "s"))))
+          (capitalize-word 1))))
+  )
+#+end_src
+
+*** 跳转
+
+#+begin_src emacs-lisp :tangle yes
+;; goto-char by Oliver Scholz
+;; {{{
+(defun my/go-to-char (n char)
+  "Move forward to Nth occurence of CHAR.
+Typing `wy-go-to-char-key' again will move forwad to the next Nth
+occurence of CHAR."
+  (interactive "p\ncGo to char: ")
+  (search-forward (string char) nil nil n)
+  (while (char-equal (read-char)
+                     char)
+    (search-forward (string char) nil nil n))
+  (setq unread-command-events (list last-input-event)))
+
+(keymap-set global-map "C-c a" #'my/go-to-char)
+;; similar work
+;; [go-to-char.el - EmacsWiki](https://www.emacswiki.org/emacs/go-to-char.el)
+;; [joseph-go-to-char - EmacsWiki](https://www.emacswiki.org/emacs/joseph-go-to-char)
+;; [doitian/iy-go-to-char: Go to next CHAR which is similar to "f" and "t" in vim](https://github.com/doitian/iy-go-to-char)
+;; }}}
+#+end_src
+
+*** 数字
+
+#+begin_src emacs-lisp :tangle no
+(defun my-thousands-separate (num)
+  "Formats the (possibly floating point) number with a thousands
+separator."
+  (let* ((nstr (number-to-string num))
+         (dot-ind (string-match "\\." nstr))
+         (nstr-no-decimal (if dot-ind
+                              (substring nstr 0 dot-ind)
+                            nstr))
+         (nrest (if dot-ind
+                    (substring nstr dot-ind)
+                  nil))
+         (pretty nil)
+         (cnt 0))
+    (dolist (c (reverse (append nstr-no-decimal nil)))
+      (if (and (zerop (% cnt 3)) (> cnt 0))
+          (setq pretty (cons ?, pretty)))
+      (setq pretty (cons c pretty))
+      (setq cnt (1+ cnt)))
+    (concat pretty nrest))
+  )
+#+end_src
+
+*** 批量替换 batch replace
+
+#+begin_src emacs-lisp :tangle no
+(setq repl-regexp-list
+      '(
+	("(" "（")
+        (")" "）")
+        ("\\." "。")
+        ("," "，")
+        ("?" "？")
+        ;; ....
+        ))
+
+(defun replall--get-repl-regexp-list ()
+  (if (bound-and-true-p repl-regexp-list)
+      repl-regexp-list
+    (message "please set variable 'repl-regexp-list'!")))
+
+(defun replall--regexp (file lst)
+  (with-temp-buffer
+    (insert-file-contents file)
+    (goto-char (point-min))
+    (dolist (pair lst)
+      (while (re-search-forward (car pair) nil t)
+        (replace-match (cadr pair)))
+      (goto-char (point-min)))
+    (write-file file)))
+
+(defun replall-regexp-in-curr-buffer ()
+  (interactive)
+  (let ((curr-file (buffer-file-name (current-buffer)))
+        (repl-list (replall--get-repl-regexp-list)))
+    (replall--regexp curr-file repl-list)))
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+;; https://geekinney.com/post/emacs-hack-string-batch-replacement/
+(setq repl-string-list
+      '(("old" "new")
+        ("test" "测试")
+        ("错误" "right")
+        ("隔开你" "戈楷旎")))
+
+(setq repl-regexp-list
+      '(("\\." "。")))
+
+(setq repl-file "~/replace.txt")
+
+(defun replall--read-pair-from-file ()
+  (let ((repl-list '()))
+    (with-temp-buffer
+      (insert-file-contents repl-file)
+      (goto-char (point-min))
+      (while (< (point) (point-max))
+        (setq repl-pair (split-string (thing-at-point 'line) "[ \f\t\n\r\v]+" t "[ \f\t\n\r\v]+"))
+        (if (null repl-pair)
+            (next-line)
+          (next-line)
+          (setq repl-list (append repl-list (list repl-pair))))))
+    repl-list))
+
+(defun replall--get-repl-string-list ()
+  (if (bound-and-true-p repl-string-list)
+      repl-string-list
+    (replall--read-pair-from-file)))
+
+(defun replall--get-repl-regexp-list ()
+  (if (bound-and-true-p repl-regexp-list)
+      repl-regexp-list
+    (message "please set variable 'repl-regexp-list'!")))
+
+(defun replall--string (file lst)
+  (with-temp-buffer
+    (insert-file-contents file)
+    (goto-char (point-min))
+    (dolist (pair lst)
+      (while (search-forward (car pair) nil t)
+        (replace-match (cadr pair)))
+      (goto-char (point-min)))
+    (write-file file)))
+
+(defun replall--regexp (file lst)
+  (with-temp-buffer
+    (insert-file-contents file)
+    (goto-char (point-min))
+    (dolist (pair lst)
+      (while (re-search-forward (car pair) nil t)
+        (replace-match (cadr pair)))
+      (goto-char (point-min)))
+    (write-file file)))
+
+(defun replall-string-in-curr-buffer ()
+  (interactive)
+  (let ((curr-file (buffer-file-name (current-buffer)))
+        (repl-list (replall--get-repl-string-list)))
+    (replall--string curr-file repl-list)))
+
+(defun replall-regexp-in-curr-buffer ()
+  (interactive)
+  (let ((curr-file (buffer-file-name (current-buffer)))
+        (repl-list (replall--get-repl-regexp-list)))
+    (replall--regexp curr-file repl-list)))
+
+(defun replall-string-in-file (file repl)
+  (interactive "fchoose a file to be processed: ")
+  (let ((repl-list (replall--get-repl-string-list)))
+    (replall--string file repl-list)))
+
+(defun replall-regexp-in-file (file repl)
+  (interactive "fchoose a file to be processed: ")
+  (let ((repl-list (replall--get-repl-regexp-list)))
+    (replall--regexp file repl-list)))
+
+(defun replall--get-real-files-in-dir (dir)
+  (let ((real-files)
+        (files (directory-files dir)))
+    (dolist (file files)
+      (when (not (or (string= "." (substring file 0 1))
+                     (string= "#" (substring file 0 1))
+                     (string= "~" (substring file -1))))
+        (push file real-files)))
+    real-files))
+
+(defun replall-string-in-directory (dir)
+  (interactive "Dchoose a directory to be processed: ")
+  (let* ((repl-list (replall--get-repl-string-list))
+         (real-files (replall--get-real-files-in-dir dir)))
+    (dolist (file real-files)
+      (replall--string (concat dir file) repl-list))))
+
+(defun replall-regexp-in-directory (dir)
+  (interactive "Dchoose a directory to be processed: ")
+  (let* ((repl-list (replall--get-repl-regexp-list))
+         (real-files (replall--get-real-files-in-dir dir)))
+    (dolist (file real-files)
+      (replall--regexp (concat dir file) repl-list))))
+
+(defun replall-string (type)
+  (interactive "sreplace string: 1.in current buffer  2.in a file  3.in a directory (input 1~3): ")
+  (cond
+   ((string= type "1")
+    (replall-string-in-curr-buffer))
+   ((string= type "2")
+    (call-interactively #'replall-string-in-file))
+   ((string= type "3")
+    (call-interactively #'replall-string-in-directory))
+   (t (message "please input 1~3!"))))
+
+(defun replall-regexp (type)
+  (interactive "sreplace regexp: 1.in current buffer  2.in a file  3.in a directory (input 1~3): ")
+  (cond
+   ((string= type "1")
+    (replall-regexp-in-curr-buffer))
+   ((string= type "2")
+    (call-interactively #'replall-regexp-in-file))
+   ((string= type "3")
+    (call-interactively #'replall-regexp-in-directory))
+   (t (message "please input 1~3!"))))
+#+end_src
+
+** 缩进 indent
+
+#+begin_src emacs-lisp :tangle yes
+;; refresh-file: format/indent elisp file
+;; {{{
+;; https://github.com/manateelazycat/lazycat-emacs/blob/master/site-lisp/extensions/lazycat/basic-toolkit.el
+(defun refresh-file ()
+  "Automatic reload current file."
+  (interactive)
+  (cond ((eq major-mode 'emacs-lisp-mode)
+         (indent-buffer)
+         (indent-comment-buffer)
+         (save-buffer)
+         (load-file (buffer-file-name)))
+        ((member major-mode '(lisp-mode c-mode perl-mode))
+         (indent-buffer)
+         (indent-comment-buffer)
+         (save-buffer))
+        ((member major-mode '(haskell-mode sh-mode))
+         (indent-comment-buffer)
+         (save-buffer))
+        ((derived-mode-p 'scss-mode)
+         (require 'css-sort)
+         (css-sort))
+        (t (message "Current mode is not supported, so not reload"))))
+(defun indent-buffer ()
+  "Automatic format current buffer."
+  (interactive)
+  (if (derived-mode-p 'python-mode)
+      (message "Don't indent python buffer, it will mess up the code syntax.")
+    (save-excursion
+      (indent-region (point-min) (point-max) nil)
+      (delete-trailing-whitespace)
+      (untabify (point-min) (point-max)))))
+(defun indent-comment-buffer ()
+  "Indent comment of buffer."
+  (interactive)
+  (indent-comment-region (point-min) (point-max)))
+
+(defun indent-comment-region (start end)
+  "Indent region."
+  (interactive "r")
+  (save-excursion
+    (setq end (copy-marker end))
+    (goto-char start)
+    (while (< (point) end)
+      (if (comment-search-forward end t)
+          (comment-indent)
+        (goto-char end))
+      )
+    )
+  )
+;; }}}
+#+end_src
+
+** 折叠 fold
+
+#+begin_src emacs-lisp :tangle yes
+;; fold
+;; {{{
+(add-hook 'prog-mode 'hs-minor-mode)
+(add-to-list 'hs-special-modes-alist
+             '(emacs-lisp-mode "{" "}" ";;" nil nil))
+(keymap-global-set "C-c TAB" #'hs-toggle-hiding)
+(keymap-global-set "M-+" #'hs-show-all)
+;; }}}
+#+end_src
+
+** isearch
+
+[[https://pengpengxp.github.io/emacs/emacs_isearch_summary.html][一份isearch的使用总结]]
+
+#+begin_src emacs-lisp :tangle yes
+;; isearch
+;; {{{
+;; M-<: first match
+;; M->: last  match
+(keymap-set isearch-mode-map "C-c" 'isearch-cancel)
+(keymap-set isearch-mode-map "DEL" 'isearch-del-char)
+(keymap-set isearch-mode-map "s-v" 'isearch-yank-kill)
+(setq isearch-lazy-count t) ;; anzu
+(setq isearch-allow-motion t)
+;; 这样可以在 literal 的 isearch 中，把空格直接当成正则里面的 .* 匹配
+(setq isearch-lax-whitespace t)
+(setq isearch-regexp-lax-whitespace t)
+(setq search-whitespace-regexp ".*")
+(setq isearch-regexp-lax-whitespace nil) ; 在搜正则时不开启这个功能，空格就是空格
+;;
+;; 自动 wrap
+(defadvice isearch-search (after isearch-no-fail activate)
+  (unless isearch-success
+    (ad-disable-advice 'isearch-search 'after 'isearch-no-fail)
+    (ad-activate 'isearch-search)
+    (isearch-repeat (if isearch-forward 'forward))
+    (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
+    (ad-activate 'isearch-search)))
+;;
+;; 重新输入并搜索
+(defmacro isearch-quit-and-run (&rest body)
+  "Quit the minibuffer and run BODY afterwards."
+  (declare (indent 0))
+  `(progn
+     (put 'quit 'error-message "")
+     (run-at-time nil nil
+                  (lambda ()
+                    (put 'quit 'error-message "Quit")
+                    (with-demoted-errors "Error: %S"
+                      ,@body)))
+     (isearch-cancel)))
+
+(defun my/rerun-isearch ()
+  "rerun isearch from the original place."
+  (interactive)
+  (isearch-quit-and-run
+    (isearch-forward)))
+;; }}}
+#+end_src
+
+** ido & fido-vertical-mode
+
+#+begin_src emacs-lisp :tangle yes
+;; ido
+;; {{{
+(use-package ido
+  :config
+  (setq ido-vertical-mode t)
+  (setq ido-enable-flex-matching t)
   )
 ;; }}}
 #+end_src
@@ -849,7 +1935,6 @@ Version 2018-06-18 2021-09-30"
 (my/set-initial-frame)
 #+end_src
 
-
 #+begin_src emacs-lisp :tangle no
 (frame-height)
 (frame-width)
@@ -932,705 +2017,279 @@ i.e. change right window to bottom, or change bottom window to right."
 (keymap-global-set "H-w H-w" #'my-toggle-vertical-horizontal-split)
 #+end_src
 
-** 折叠 fold
+** mode-line
 
 #+begin_src emacs-lisp :tangle yes
-;; fold
+;; mode-line
 ;; {{{
-(add-hook 'prog-mode 'hs-minor-mode)
-(add-to-list 'hs-special-modes-alist
-             '(emacs-lisp-mode "{" "}" ";;" nil nil))
-(keymap-global-set "C-c TAB" #'hs-toggle-hiding)
-(keymap-global-set "M-+" #'hs-show-all)
+(display-battery-mode t)    ;; display battery status
+(setq column-number-mode t) ;; 在 mode line 数字形式显示光标所在列
 ;; }}}
 #+end_src
 
-** 光标和选区 cursor/region/selection
+** Open App
 
 #+begin_src emacs-lisp :tangle yes
-;; cursor
+;; open app
 ;; {{{
-;; cursor move
-;; [Emacs 一行内移动 cursor 的最佳方案是什么？ - Emacs China](https://emacs-china.org/t/emacs-cursor/6753/12)
-;; make cursor the width of the character it is under i.e. full width of a TAB
-(setq x-stretch-cursor t) ;; When on a tab, make the cursor the tab length.
-;; cursor line: 光标所在行显示/高亮
-;; (global-hl-line-mode t) ;; highlight current line
-(custom-set-faces '(hl-line ((t (:background "grey")))))
-(delete-selection-mode t) ;; 删除选中的文字或选中文字后输入时替换选中的文字
-(global-subword-mode)     ;; camelCase and superword-mode
+(defun mac-launchpad/string-ends-with (s ending)
+  "Return non-nil if string S ends with ENDING."
+  (cond ((>= (length s) (length ending))
+         (let ((elength (length ending)))
+           (string= (substring s (- 0 elength)) ending)))
+        (t nil)))
+
+(defun mac-launchpad/find-mac-apps (folder)
+  (let* ((files (directory-files folder))
+         (without-dots (cl-delete-if (lambda (f) (or (string= "." f) (string= ".." f))) files))
+         (all-files (mapcar (lambda (f) (file-name-as-directory (concat (file-name-as-directory folder) f))) without-dots))
+         (result (cl-delete-if-not (lambda (s) (mac-launchpad/string-ends-with s ".app/")) all-files)))
+    result))
+
+(defun mac-launchpad ()
+  (interactive)
+  (let* ((apps (mac-launchpad/find-mac-apps "/Applications"))
+         (to-launch (completing-read "launch: " apps)))
+    (shell-command (format "defaults read \"%s\"Contents/Info.plist CFBundleIdentifier | xargs open -b" to-launch))))
+
+;; (keymap-global-set "C-c C-l" #'mac-launchpad)
 ;; }}}
 #+end_src
 
-#+begin_src emacs-lisp :tangle yes
-(put 'narrow-to-region 'disabled nil)
-;; (put 'dired-find-alternate-file 'disabled nil)
-;; (put 'downcase-region 'disabled nil)
-;; (put 'upcase-region 'disabled nil)
-;; (put 'list-timers 'disabled nil)
-#+end_src
+** Open in ...
 
-#+begin_src emacs-lisp :tangle no
-(setq
- scroll-margin 1
- scroll-step 1
- )
-#+end_src
-
-** 右键菜单 context menu
-
-#+begin_src emacs-lisp :tangle no
-(add-hook 'text-mode-hook 'context-menu-mode)
-(add-hook 'shell-mode-hook 'context-menu-mode)
-(add-hook 'dired-mode-hook 'context-menu-mode)
-
-(require 'dictionary)
-
-(defun my-context-menu (menu click)
-  "My context menu"
-  (define-key-after menu [dictionary-lookup]
-    '(menu-item "Dict" dictionary-search-word-at-mouse
-                :help "Look up in dictionary"))
-  menu)
-
-;; hook into context menu
-(add-hook 'context-menu-functions #'my-context-menu)
-#+end_src
-
-** Alfred Search                                                      :macOS:
+*** 图表、音频、视频与 PDF
 
 #+begin_src emacs-lisp :tangle yes
-;; Alfred
-;; {{{
-;; https://github.com/xuchunyang/emacs.d/blob/master/lisp/alfred.el
-(defun my/alfred-search (b e)
-  "Activate Alfred with selected text."
-  (interactive "r")
-  (do-applescript
-   (format "tell application id \"com.runningwithcrayons.Alfred\" to search \"%s\""
-           (mapconcat ;; In AppleScript String, " and \ are speical characters
-            (lambda (char)
-              (pcase char
-                (?\" (string ?\\ ?\"))
-                (?\\ (string ?\\ ?\\))
-                (_   (string char)))
-              )
-            (buffer-substring b e) "")
-           )
-   )
+(defun my/webkit-open-local-file (fpath)
+  (interactive "fEnter file path: ")
+  (when (member (substring fpath -4 nil) '("html" ".pdf" ".mp4"))
+    (xwidget-webkit-browse-url
+     (concat "file://" (expand-file-name fpath)))
+    )
   )
+#+end_src
+
+*** System file manager
+
+#+begin_src emacs-lisp :tangle yes
+(defun my/dired-open-in-file-manager ()
+  "Show current file in desktop.
+This command can be called when in a file buffer or in `dired'."
+  (interactive)
+  (let (($path (if (buffer-file-name) (buffer-file-name) default-directory)))
+    (cond
+     ((string-equal system-type "windows-nt")
+      (shell-command
+       (format "PowerShell -Command Start-Process Explorer -FilePath %s"
+               (shell-quote-argument default-directory))))
+     ((string-equal system-type "darwin")
+      (if (eq major-mode 'dired-mode)
+          (let (($files (dired-get-marked-files )))
+            (if (eq (length $files) 0)
+                (shell-command (concat "open " (shell-quote-argument (expand-file-name default-directory ))))
+              (shell-command (concat "open -R " (shell-quote-argument (car (dired-get-marked-files )))))))
+        (shell-command
+         (concat "open -R " (shell-quote-argument $path)))))
+     ((string-equal system-type "gnu/linux")
+      (let ((process-connection-type nil)
+            (openFileProgram (if (file-exists-p "/usr/bin/gvfs-open")
+                                 "/usr/bin/gvfs-open"
+                               "/usr/bin/xdg-open")))
+        (start-process "" nil openFileProgram (shell-quote-argument $path)))))))
+(keymap-set dired-mode-map "e" #'my/dired-open-in-file-manager)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+;; http://xahlee.info/emacs/emacs/emacs_dired_open_file_in_ext_apps.html
+(defun my/dired-open-in-file-manager ()
+  "Show current file in desktop.
+ (Mac Finder, Windows Explorer, Linux file manager)
+ This command can be called when in a file or in `dired'.
+URL `http://ergoemacs.org/emacs/emacs_dired_open_file_in_ext_apps.html'
+Version 2018-01-13 adapted by Karl Voit 2018-07-01"
+  (interactive)
+  (let (($path (file-truename (if (buffer-file-name) (buffer-file-name) default-directory ))))
+    (cond
+     ((string-equal system-type "windows-nt")
+      (w32-shell-execute "explore" (replace-regexp-in-string "/" "\\" $path t t)))
+     ((string-equal system-type "darwin")
+      (if (eq major-mode 'dired-mode)
+          (let (($files (dired-get-marked-files )))
+            (if (eq (length $files) 0)
+                (shell-command
+                 (concat "open " (shell-quote-argument default-directory)))
+              (shell-command
+               (concat "open -R " (shell-quote-argument (car (dired-get-marked-files )))))))
+        (shell-command
+         (concat "open -R " $path))))
+     ((string-equal system-type "gnu/linux")
+      (let (
+            (process-connection-type nil)
+            (openFileProgram (if (file-exists-p "/usr/bin/thunar")
+                                 "/usr/bin/thunar"
+                               "/usr/bin/xdg-open")))
+        (start-process "" nil openFileProgram $path))
+      ;; (shell-command "xdg-open .") ;; 2013-02-10 this sometimes froze emacs till the folder is closed. eg with nautilus
+      ))))
+#+end_src
+
+*** Default app
+
+#+begin_src emacs-lisp :tangle yes
+;; open in default app
+;; {{{
+;; https://emacs-china.org/t/pdf/14954/5
+(defun my/open-with (arg)
+  "使用外部程序打开浏览的文件或者当前光标下的链接.
+处于 dired mode 时, 打开当前光标下的文件;
+若当前光标下存在链接，使用外部程序打开链接;
+使用 prefix ARG 时指定使用的外部程序."
+  (interactive "P")
+  (let ((current-file-name
+         (cond ((eq major-mode 'dired-mode) (dired-get-file-for-visit))
+               ((help-at-pt-string)
+                (pcase (cdr (split-string (help-at-pt-string) ":" t " "))
+                  ((or `(,path) `(,(pred (string= "file")) ,path) `(,_ ,path ,_))
+                   (expand-file-name path))
+                  (`(,proto ,path) (concat proto ":" path))))
+               (t (or (thing-at-point 'url) buffer-file-name))))
+        (program (if arg
+                     (read-shell-command "Open current file with: ")
+                   "open")))
+    (call-process program nil 0 nil current-file-name)))
 ;; }}}
 #+end_src
 
-** 触控板和鼠标 touchpad/trackpad & mouse
+#+begin_src emacs-lisp :tangle no
+(defun my-open-in-external-app (&optional file)
+  "Open the current FILE or dired marked files in external app.
+   The app is chosen from your OS's preference."
+  (interactive)
+  (message "%s" (concat "my-open-in-external-app called with \"" file "\" as argument"))
+  ;; FIXXME: add check if FILE is an existing file; show error message if not
+  (let ( doIt
+         (myFileList
+          (cond
+           ((string-equal major-mode "dired-mode") (dired-get-marked-files))
+           ((not file) (list (buffer-file-name)))
+           (file (list file)))))
+
+    (setq doIt (if (<= (length myFileList) 5)
+                   t
+                 (y-or-n-p "Open more than 5 files? ") ) )
+
+    (when doIt
+      (cond
+       ((my-system-type-is-windows)
+        (mapc (lambda (fPath) (w32-shell-execute "open" (replace-regexp-in-string "/" "\\" fPath t t)) ) myFileList))
+       ((string-equal system-type "darwin")
+        (mapc (lambda (fPath) (shell-command (format "open \"%s\"" fPath)) )  myFileList) )
+       ((my-system-type-is-gnu)
+        (mapc (lambda (fPath) (let ((process-connection-type nil)) (start-process "" nil "xdg-open" fPath)) ) myFileList)
+        ) ) ) ) )
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(defun my-dired-open-in-external-app ()
+  "Open the current file or dired marked files in external app.
+The app is chosen from your OS's preference.
+URL `http://ergoemacs.org/emacs/emacs_dired_open_file_in_ext_apps.html'
+Version 2016-10-15"
+  (interactive)
+  (let* (
+         ($file-list
+          (if (string-equal major-mode "dired-mode")
+              (dired-get-marked-files)
+            (list (buffer-file-name))))
+         ($do-it-p (if (<= (length $file-list) 5)
+                       t
+                     (y-or-n-p "Open more than 5 files? "))))
+    (when $do-it-p
+      (cond
+       ((string-equal system-type "windows-nt")
+        (mapc
+         (lambda ($fpath)
+           (w32-shell-execute "open" (replace-regexp-in-string "/" "\\" $fpath t t))) $file-list))
+       ((string-equal system-type "darwin")
+        (mapc
+         (lambda ($fpath)
+           (shell-command
+            (concat "open " (shell-quote-argument $fpath))))  $file-list))
+       ((string-equal system-type "gnu/linux")
+        (mapc
+         (lambda ($fpath) (let ((process-connection-type nil))
+                            (start-process "" nil "xdg-open" $fpath))) $file-list))))))
+#+end_src
+
+*** neovide
 
 #+begin_src emacs-lisp :tangle yes
-;; touchpad/trackpad & mouse
+;; Neovide
 ;; {{{
-(setq mouse-wheel-tilt-scroll t) ; Make the direction sane on an apple trackpad
-(setq mouse-wheel-flip-direction t)
-;;
-;; (defun mouse-hover-tooltip (&optional arg)
-;;   "Show mouse hover help info using pos-tip-show."
+(defun my/open-in-neovide ()
+  (interactive)
+  (start-process-shell-command "neovide"
+                               nil
+                               (concat "neovide "
+                                       "+"
+                                       (int-to-string (line-number-at-pos))
+                                       " "
+                                       (buffer-file-name)
+                                       )))
+;; }}}
+#+end_src
+
+*** obsidian
+
+#+begin_src emacs-lisp :tangle yes
+;; Obsidian
+;; {{{
+;; https://emacs-china.org/t/emacs-obsidian/22504/11?u=suliveevil
+(defun my/open-in-obsidian () ;; 在 Obsidian 中打开当前 Emacs 正在编辑的文件
+  (interactive)
+  (browse-url-xdg-open
+   (concat "obsidian://open?path=" (url-hexify-string (buffer-file-name)))))
+;; }}}
+#+end_src
+
+*** vscode
+
+#+begin_src emacs-lisp :tangle yes
+;; Visual Studio Code
+;; {{{
+;; https://github.com/pietroiusti/.emacs.d/blob/master/custom-functions.el
+(defun my/open-in-vscode ()
+  (interactive)
+  (start-process-shell-command "code"
+                               nil
+                               (concat "code --goto "
+                                       (buffer-file-name)
+                                       ":"
+                                       (int-to-string (line-number-at-pos))
+                                       ":"
+                                       (int-to-string (current-column)))))
+;; (w32-shell-execute "open" "vscode-path" (format "-g %s:%s:%s" (buffer-file-name) (int-to-string (line-number-at-pos)) (int-to-string (current-column))))
+;; better solution
+;; https://emacs-china.org/t/leader-vscode/19166/29
+;; (defun my/open-in-vscode ()
+;;   "Open current file with vscode."
 ;;   (interactive)
-;;   (let ((help (help-at-pt-kbd-string)))
-;;     (if help
-;;         (pos-tip-show help nil nil nil 0)
-;;       (if (not arg) (message "No local help at point"))))
-;;   (unwind-protect
-;;       (push (read-event) unread-command-events)
-;;     (pos-tip-hide)))
+;;   (let ((line (number-to-string (line-number-at-pos)))
+;;         (column (number-to-string (current-column))))
+;;     (apply 'call-process "code" nil nil nil (list (concat buffer-file-name ":" line ":" column) "--goto"))))
+;; (keymap-set global-map "C-c C" #'my/open-in-vscode)
 ;; }}}
 #+end_src
 
-** 字符 Character & Text/String
-*** unicode
-
-#+begin_src emacs-lisp :tangle yes
-;; unicode
-;; {{{
-;; https://www.unicode.org/Public/UCD/latest/ucd/UnicodeData.txt
-(when (file-exists-p "~/.config/emacs/assets/unicode/UnicodeData.txt")
-  (setq describe-char-unicodedata-file
-        "~/.config/emacs/assets/unicode/UnicodeData.txt")
-  )
-;; }}}
-#+end_src
-
-*** 空白字符/不可见字符
-
-#+begin_src emacs-lisp :tangle yes
-;; 不可见字符: zero-width characters ->​<-
-;; {{{
-;; http://xahlee.info/emacs/emacs/elisp_unicode_replace_invisible_chars.html
-(defun xah-replace-invisible-char ()
-  "Query replace some invisible Unicode chars.
-The chars replaced are:
- LEFT-TO-RIGHT MARK           (8206, #x200e)
- OBJECT REPLACEMENT CHARACTER (65532, #xfffc)
- RIGHT-TO-LEFT MARK           (8207, #x200f)
- RIGHT-TO-LEFT OVERRIDE       (8238, #x202e)
- ZERO WIDTH NO-BREAK SPACE    (65279, #xfeff)
- ZERO WIDTH SPACE             (codepoint 8203, #x200b)
-
-Search begins at buffer beginning. (respects `narrow-to-region')
-
-URL `http://xahlee.info/emacs/emacs/elisp_unicode_replace_invisible_chars.html'
-Version: 2018-09-07 2022-09-13"
-  (interactive)
-  (let ((case-replace nil)
-        (case-fold-search nil)
-        ($p0 (point)))
-    (goto-char (point-min))
-    (while (re-search-forward
-            "\ufeff\\|\u200b\\|\u200f\\|\u202e\\|\u200e\\|\ufffc"
-            nil t)
-      (replace-match ""))
-    (goto-char $p0))
-  )
-;; }}}
-#+end_src
-
-#+begin_src emacs-lisp :tangle yes
-;; see invisible chars
-;; {{{
-;; https://emacs-china.org/t/topic/19557
-(defun my/see-invisible-chars ()
-  "Highlight ZERO WIDTH chars in all buffers."
-  (interactive)
-  (let ((charnames (list
-                    "BYTE ORDER MARK"
-                    "LEFT-TO-RIGHT EMBEDDING"
-                    "LEFT-TO-RIGHT MARK"
-                    "OBJECT REPLACEMENT CHARACTER"
-                    "RIGHT-TO-LEFT MARK"
-                    "RIGHT-TO-LEFT OVERRIDE"
-                    "ZERO WIDTH JOINER"
-                    "ZERO WIDTH NO-BREAK SPACE"
-                    "ZERO WIDTH NON-JOINER"
-                    "ZERO WIDTH SPACE"
-                    )))
-    (set-face-background 'glyphless-char "RoyalBlue1")
-    (dolist (name charnames)
-      ;; see info node "info:elisp#Glyphless Chars" for available values
-      (set-char-table-range glyphless-char-display
-                            (char-from-name name) "fuck"))
-    )
-  )
-;; }}}
-#+end_src
-
-
-
-#+begin_src emacs-lisp :tangle yes
-(keymap-global-set "H-SPC H-SPC" (lambda () (interactive) (insert "\u200b")))
-;; (define-key org-mode-map (kbd "H-SPC H-SPC")
-;;             (lambda () (interactive) (insert "\u200b")))
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-;;(when (or (my-system-type-is-gnu) (my-system-is-blanche))
-;; (add-to-list post-command-hook 'whitespace-mode) ; FIXME
-(whitespace-mode)
-;; only show bad whitespace
-(setq whitespace-style '(
-                         trailing
-                         space-before-tab
-                         indentation
-                         empty
-                         space-after-tab
-                         )
-      )
-;;(face trailing lines-tail) whitespace-line-column 80) ;; highlight long lines tails (setq whitespace-style
-;;  )
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-(setq-default indent-tabs-mode nil)     ; do not insert tabs when indenting by default
-(setq tab-width 4)                      ; 4 spaces by default
-
-(defun my/infer-indentation-style ()
-  ;; if our source file uses tabs, we use tabs, if spaces spaces, and if
-  ;; neither, we use the current indent-tabs-mode
-  (let ((space-count (how-many "^  " (point-min) (point-max)))
-        (tab-count (how-many "^\t" (point-min) (point-max))))
-    (if (> space-count tab-count) (setq indent-tabs-mode nil))
-    (if (> tab-count space-count) (setq indent-tabs-mode t)))
-  )
-#+end_src
-
-*** 括号自动补全
-
-
-#+begin_src emacs-lisp :tangle yes
-;; pair completion
-(use-package electric-pair-mode
-  :ensure nil
-  :hook (prog-mode . electric-pair-mode)
-  )
-#+end_src
-
-*** Text Case
-
-Title Capitalization
-
-
-#+begin_src emacs-lisp :tangle yes
-;; additionally to the list defined in title-capitalization:
-(defvar my-do-not-capitalize-words '("suliveevil")
-  "Personal list of words that doesn't get capitalized in titles.")
-
-(defun text-case-title-capitalization (beg end)
-  "Proper English title capitalization of a marked region"
-  ;; - before: the presentation of this heading of my own from my keyboard and yet
-  ;; - after:  The Presentation of This Heading of My Own from My Keyboard and Yet
-  ;; - before: a a a a a a a a
-  ;; - after:  A a a a a a a A
-  (interactive "r")
-  (save-excursion
-    (let* (
-           ;; basic list of words which don't get capitalized according to simplified rules:
-           ;; http://karl-voit.at/2015/05/25/elisp-title-capitalization/
-           (do-not-capitalize-basic-words '(
-                                            "a"
-                                            "ago"
-                                            "an"
-                                            "and"
-                                            "as"
-                                            "at"
-                                            "but"
-                                            "by"
-                                            "es"
-                                            "for"
-                                            "from"
-                                            "in"
-                                            "into"
-                                            "it"
-                                            "n"
-                                            "next"
-                                            "nor"
-                                            "of"
-                                            "off"
-                                            "on"
-                                            "onto"
-                                            "or"
-                                            "over"
-                                            "past"
-                                            "s"
-                                            "so"
-                                            "t"
-                                            "the"
-                                            "till"
-                                            "to"
-                                            "up"
-                                            "yet"))
-           ;; if user has defined 'my-do-not-capitalize-words, append to basic list:
-           (do-not-capitalize-words (if (boundp 'my-do-not-capitalize-words)
-                                        (append do-not-capitalize-basic-words my-do-not-capitalize-words )
-                                      do-not-capitalize-basic-words
-                                      )
-                                    )
-           )
-      ;; go to begin of first word:
-      (goto-char beg)
-      (capitalize-word 1)
-      ;; go through the region, word by word:
-      (while (< (point) end)
-        (skip-syntax-forward "^w" end)
-        (let ((word (thing-at-point 'word)))
-          (if (stringp word)
-              ;; capitalize current word except it is list member:
-              (if (member (downcase word) do-not-capitalize-words)
-                  (downcase-word 1)
-                (capitalize-word 1)))))
-      ;; capitalize last word in any case:
-      (backward-word 1)
-      (if (and (>= (point) beg)
-               (not (member (or (thing-at-point 'word) "s")
-                            '("n" "t" "es" "s"))))
-          (capitalize-word 1))))
-  )
-#+end_src
-
-
-
-*** 跳转
-
-
-#+begin_src emacs-lisp :tangle yes
-;; goto-char by Oliver Scholz
-;; {{{
-(defun my/go-to-char (n char)
-  "Move forward to Nth occurence of CHAR.
-Typing `wy-go-to-char-key' again will move forwad to the next Nth
-occurence of CHAR."
-  (interactive "p\ncGo to char: ")
-  (search-forward (string char) nil nil n)
-  (while (char-equal (read-char)
-                     char)
-    (search-forward (string char) nil nil n))
-  (setq unread-command-events (list last-input-event)))
-
-(keymap-set global-map "C-c a" #'my/go-to-char)
-;; similar work
-;; [go-to-char.el - EmacsWiki](https://www.emacswiki.org/emacs/go-to-char.el)
-;; [joseph-go-to-char - EmacsWiki](https://www.emacswiki.org/emacs/joseph-go-to-char)
-;; [doitian/iy-go-to-char: Go to next CHAR which is similar to "f" and "t" in vim](https://github.com/doitian/iy-go-to-char)
-;; }}}
-#+end_src
-
-*** 数字
-
-#+begin_src emacs-lisp :tangle no
-(defun my-thousands-separate (num)
-  "Formats the (possibly floating point) number with a thousands
-separator."
-  (let* ((nstr (number-to-string num))
-         (dot-ind (string-match "\\." nstr))
-         (nstr-no-decimal (if dot-ind
-                              (substring nstr 0 dot-ind)
-                            nstr))
-         (nrest (if dot-ind
-                    (substring nstr dot-ind)
-                  nil))
-         (pretty nil)
-         (cnt 0))
-    (dolist (c (reverse (append nstr-no-decimal nil)))
-      (if (and (zerop (% cnt 3)) (> cnt 0))
-          (setq pretty (cons ?, pretty)))
-      (setq pretty (cons c pretty))
-      (setq cnt (1+ cnt)))
-    (concat pretty nrest))
-  )
-#+end_src
-
-
-** 单词 Word
-
-
-
-** 行 line
-
-#+begin_src emacs-lisp :tangle yes
-;; line
-;; {{{
-;; wrap/truncate
-(setq-default truncate-lines t)
-(setq word-wrap-by-category t) ;; improves CJK + Latin word-wrapping
-(setq scroll-margin 5)
-(global-display-line-numbers-mode 1)
-(setq display-line-numbers-width-start t)
-(setq display-line-numbers-grow-only t)    ;; do not shrink line number width
-(setq display-line-numbers-type 'relative) ;; 相对行号
-;; new line
-;; https://github.com/manateelazycat/open-newline
-(defun open-newline-above (arg)
-  "Move to the previous line (like vi) and then opens a line."
-  (interactive "p")
-  (beginning-of-line)
-  (open-line arg)
-  (if (not (member major-mode '(haskell-mode org-mode literate-haskell-mode)))
-      (indent-according-to-mode)
-    (beginning-of-line)))
-(keymap-global-set "C-c O" #'open-newline-above)
-(defun open-newline-below (arg)
-  "Move to the next line (like vi) and then opens a line."
-  (interactive "p")
-  (end-of-line)
-  (open-line arg)
-  (call-interactively 'next-line arg)
-  (if (not (member major-mode '(haskell-mode org-mode literate-haskell-mode)))
-      (indent-according-to-mode)
-    (beginning-of-line)))
-(keymap-global-set "C-c C-o" #'open-newline-below)
-;; }}}
-#+end_src
-
-** 列 column
-
-#+begin_src emacs-lisp :tangle yes
-;; column
-;; {{{
-(setq-default fill-column 80) ;; M-x set-fill-column RET
-(add-hook 'after-init-hook 'global-display-fill-column-indicator-mode)
-;; }}}
-#+end_src
-
-** 句子 sentence
-
-#+begin_src emacs-lisp :tangle yes
-;; sentence: 断句
-;; {{{
-(setq sentence-end "\\([。！？]\\|……\\|[.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*")
-;; (setq sentence-end-double-space nil)
-;; }}}
-#+end_src
-
-** 段落 paragraph
-
-#+begin_src emacs-lisp :tangle yes
-(defun my-fill-or-unfill ()
-  "Like `fill-paragraph', but unfill if used twice."
-  (interactive)
-  (let ((fill-column
-         (if (eq last-command 'my-fill-or-unfill)
-             (progn (setq this-command nil)
-                    (point-max))
-           fill-column)))
-    (call-interactively 'fill-paragraph nil (vector nil t))))
-
-(global-set-key [remap fill-paragraph]
-                'my-fill-or-unfill)
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-;; https://www.emacswiki.org/emacs/UnfillParagraph
-(defun unfill-paragraph (&optional region)
-  "Takes a multi-line paragraph and makes it into a single line of text."
-  (interactive (progn (barf-if-buffer-read-only) '(t)))
-  (let ((fill-column (point-max))
-        ;; This would override `fill-column' if it's an integer.
-        (emacs-lisp-docstring-fill-column t))
-    (fill-paragraph nil region))
-  )
-#+end_src
-
-** ido & fido-vertical-mode
-
-#+begin_src emacs-lisp :tangle yes
-;; ido
-;; {{{
-(use-package ido
-  :config
-  (setq ido-vertical-mode t)
-  (setq ido-enable-flex-matching t)
-  )
-;; }}}
-#+end_src
-
-** isearch
-
-[[https://pengpengxp.github.io/emacs/emacs_isearch_summary.html][一份isearch的使用总结]]
-
-#+begin_src emacs-lisp :tangle yes
-;; isearch
-;; {{{
-;; M-<: first match
-;; M->: last  match
-(keymap-set isearch-mode-map "C-c" 'isearch-cancel)
-(keymap-set isearch-mode-map "DEL" 'isearch-del-char)
-(keymap-set isearch-mode-map "s-v" 'isearch-yank-kill)
-(setq isearch-lazy-count t) ;; anzu
-(setq isearch-allow-motion t)
-;; 这样可以在 literal 的 isearch 中，把空格直接当成正则里面的 .* 匹配
-(setq isearch-lax-whitespace t)
-(setq isearch-regexp-lax-whitespace t)
-(setq search-whitespace-regexp ".*")
-(setq isearch-regexp-lax-whitespace nil) ; 在搜正则时不开启这个功能，空格就是空格
-;;
-;; 自动 wrap
-(defadvice isearch-search (after isearch-no-fail activate)
-  (unless isearch-success
-    (ad-disable-advice 'isearch-search 'after 'isearch-no-fail)
-    (ad-activate 'isearch-search)
-    (isearch-repeat (if isearch-forward 'forward))
-    (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
-    (ad-activate 'isearch-search)))
-;;
-;; 重新输入并搜索
-(defmacro isearch-quit-and-run (&rest body)
-  "Quit the minibuffer and run BODY afterwards."
-  (declare (indent 0))
-  `(progn
-     (put 'quit 'error-message "")
-     (run-at-time nil nil
-                  (lambda ()
-                    (put 'quit 'error-message "Quit")
-                    (with-demoted-errors "Error: %S"
-                      ,@body)))
-     (isearch-cancel)))
-
-(defun my/rerun-isearch ()
-  "rerun isearch from the original place."
-  (interactive)
-  (isearch-quit-and-run
-    (isearch-forward)))
-;; }}}
-#+end_src
-
-** Snippet
-
-*** abbrev
-
-#+begin_src emacs-lisp :tangle no
-
-#+end_src
-
-*** skeleton
-
-
-*** tempo
-
-** minibuffer                                                         :FIXME:
-
-
-#+begin_src emacs-lisp :tangle yes
-(keymap-set minibuffer-mode-map "H-j" #'next-line)
-(keymap-set minibuffer-mode-map "H-k" #'previous-line)
-#+end_src
-
-[[https://robbmann.io/posts/emacs-29-completions/][The *Completions* Buffer Gets a Big Upgrade in Emacs 29 · robbmann]]
-
-[[https://robbmann.io/emacsd/][My Literate .emacs.d · robbmann]] [[https://github.com/renzmann/.emacs.d][renzmann/.emacs.d]]
-
-#+begin_src emacs-lisp :tangle yes
-;; minibuffer
-;; {{{
-;; completion window
-(add-to-list 'display-buffer-alist
-             '("\\*Completions\\*"
-               (display-buffer-reuse-window display-buffer-in-side-window)
-               (side . bottom)
-               (slot . 0)))
-;; case: ignore case
-(setq completion-ignore-case t
-      read-buffer-completion-ignore-case t    ;; default nil
-      read-file-name-completion-ignore-case t ;; default t
-      )
-;; completion style
-(setq completion-styles '(substring initials partial-completion flex basic))
-(setq completion-cycle-threshold 10)
-(setq completions-format 'one-column)
-(setq completions-header-format nil)
-(setq completions-max-height 20)
-(setq completion-auto-select nil)
-(setq enable-recursive-minibuffers t)
-(setq completion-auto-help 'always)
-(setq completion-auto-select 'second-tab)
-
-;; (keymap-set minibuffer-mode-map "TAB" #'minibuffer-complete)
-;; (keymap-set minibuffer-local-map "C-<tab>" #'dabbrev-expand)
-
-;; Up/down when completing in the minibuffer
-(define-key minibuffer-local-map (kbd "C-p") #'minibuffer-previous-completion)
-(define-key minibuffer-local-map (kbd "C-n") #'minibuffer-next-completion)
-
-;; Up/down when competing in a normal buffer
-(define-key completion-in-region-mode-map (kbd "C-p") #'minibuffer-previous-completion)
-(define-key completion-in-region-mode-map (kbd "C-n") #'minibuffer-next-completion)
-
-(defun my/sort-by-alpha-length (elems)
-  "Sort ELEMS first alphabetically, then by length."
-  (sort elems (lambda (c1 c2)
-                (or (string-version-lessp c1 c2)
-                    (< (length c1) (length c2))))))
-
-(defun my/sort-by-history (elems)
-  "Sort ELEMS by minibuffer history.
-Use `mct-sort-sort-by-alpha-length' if no history is available."
-  (if-let ((hist (and (not (eq minibuffer-history-variable t))
-                      (symbol-value minibuffer-history-variable))))
-      (minibuffer--sort-by-position hist elems)
-    (my/sort-by-alpha-length elems)))
-
-(defun my/completion-category ()
-  "Return completion category."
-  (when-let ((window (active-minibuffer-window)))
-    (with-current-buffer (window-buffer window)
-      (completion-metadata-get
-       (completion-metadata (buffer-substring-no-properties
-                             (minibuffer-prompt-end)
-                             (max (minibuffer-prompt-end) (point)))
-                            minibuffer-completion-table
-                            minibuffer-completion-predicate)
-       'category))))
-
-(defun my/sort-multi-category (elems)
-  "Sort ELEMS per completion category."
-  (pcase (my/completion-category)
-    ('nil elems) ; no sorting
-    ('kill-ring elems)
-    ('project-file (my/sort-by-alpha-length elems))
-    (_ (my/sort-by-history elems))))
-
-(setq completions-sort #'my/sort-multi-category)
-;; }}}
-#+end_src
-
-
-** abbrev/dabbrev Completion
-
-#+begin_src emacs-lisp :tangle yes
-;; completion: buffer and minibuffer
-;; {{{
-;; dabbrev: dynamic abbreviation expand
-(keymap-global-set               "C-<tab>" #'dabbrev-expand)
-
-;; hippie-expand
-(keymap-global-set "M-/" #'hippie-expand)
-;; }}}
-#+end_src
-
-** indent
-
-#+begin_src emacs-lisp :tangle yes
-;; refresh-file: format/indent elisp file
-;; {{{
-;; https://github.com/manateelazycat/lazycat-emacs/blob/master/site-lisp/extensions/lazycat/basic-toolkit.el
-(defun refresh-file ()
-  "Automatic reload current file."
-  (interactive)
-  (cond ((eq major-mode 'emacs-lisp-mode)
-         (indent-buffer)
-         (indent-comment-buffer)
-         (save-buffer)
-         (load-file (buffer-file-name)))
-        ((member major-mode '(lisp-mode c-mode perl-mode))
-         (indent-buffer)
-         (indent-comment-buffer)
-         (save-buffer))
-        ((member major-mode '(haskell-mode sh-mode))
-         (indent-comment-buffer)
-         (save-buffer))
-        ((derived-mode-p 'scss-mode)
-         (require 'css-sort)
-         (css-sort))
-        (t (message "Current mode is not supported, so not reload"))))
-(defun indent-buffer ()
-  "Automatic format current buffer."
-  (interactive)
-  (if (derived-mode-p 'python-mode)
-      (message "Don't indent python buffer, it will mess up the code syntax.")
-    (save-excursion
-      (indent-region (point-min) (point-max) nil)
-      (delete-trailing-whitespace)
-      (untabify (point-min) (point-max)))))
-(defun indent-comment-buffer ()
-  "Indent comment of buffer."
-  (interactive)
-  (indent-comment-region (point-min) (point-max)))
-
-(defun indent-comment-region (start end)
-  "Indent region."
-  (interactive "r")
-  (save-excursion
-    (setq end (copy-marker end))
-    (goto-char start)
-    (while (< (point) end)
-      (if (comment-search-forward end t)
-          (comment-indent)
-        (goto-char end))
-      )
-    )
-  )
-;; }}}
-#+end_src
-
-
-** org-mode
+* org-mode
 
 #+begin_src emacs-lisp :tangle yes
 (use-package org
+  :bind
+  (:map org-mode-map
+        ("C-c l" . org-store-link)
+        )
   ;; :init (setq org-fold-core-style "overlays")
   :config
   (setq org-image-actual-width nil)
@@ -1639,7 +2298,19 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
   )
 #+end_src
 
-*** 标签 tag
+** keymap
+
+#+begin_src emacs-lisp :tangle yes
+;; org-mode: keymap
+;; {{{
+;; (setq org-startup-indented t)
+;; (keymap-global-set "C-c l"   #'org-store-link) ; C-c C-l org-insert-link
+(keymap-global-set "C-c n o" #'org-id-get-create)
+(keymap-global-set "C-c H-i" #'org-insert-structure-template)
+;; }}}
+#+end_src
+
+** 标签 tag
 
 #+begin_src emacs-lisp :tangle yes
 (defun my/sparse-tree-with-tag-filter()
@@ -1662,14 +2333,14 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
 
 #+end_src
 
-*** UI
+** UI
 
 #+begin_src emacs-lisp :tangle yes
 ;; (setq org-hide-leading-stars t)   ; Omit headline-asterisks except the last one
 (setq org-src-fontify-natively t) ; code block syntax highlight
 #+end_src
 
-*** org modules
+** org modules
 
 #+begin_src emacs-lisp :tangle no
 (setq org-modules (quote
@@ -1684,30 +2355,15 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
       )
 #+end_src
 
-*** keymap
-
-#+begin_src emacs-lisp :tangle yes
-;; org-mode: keymap
-;; {{{
-;; (setq org-startup-indented t)
-;; (keymap-global-set "C-c l"   #'org-store-link) ; C-c C-l org-insert-link
-(keymap-global-set "C-c n o" #'org-id-get-create)
-(keymap-global-set "C-c H-i" #'org-insert-structure-template)
-;; }}}
-#+end_src
-
-*** narrow
-
+** narrow
 
 光标位置：在代码块内 (org-in-src-block-p)，在代码块外
 当前状态：org-mode, org-src-mode (org-src-mode)
-
 
 | 光标位置 | mode         | 切换                |
 | 代码块内 | org-src-mode | org-edit-src-exit   |
 | 代码块外 |              | show-heading-tidily |
 | 代码块内 |              | org-edit-special    |
-
 
 #+begin_src emacs-lisp :tangle yes
 ;; org-mode: head/title
@@ -1759,11 +2415,14 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
 ;; }}}
 #+end_src
 
-*** head/title
+** head/title
 
-*** code block
+** code block
 
 #+begin_src emacs-lisp :tangle yes
+(setq org-src-fontify-natively 1)         ;代码块语法高亮
+(setq org-src-tab-acts-natively 1)        ;开启代码块语法缩进/格式化
+(setq org-edit-src-content-indentation 0) ;代码块初始缩进范围
 (setq org-src-lang-modes
       '(
         ("C" . c)
@@ -1784,6 +2443,9 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
         ("sqlite" . sql)
         ("toml" . conf-toml)
         ))
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
 (setq org-babel-python-command "python3")
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -1811,9 +2473,6 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
    (sql         .       t)
    (sqlite      .       t)
    ))
-(setq org-src-fontify-natively 1)         ;代码块语法高亮
-(setq org-src-tab-acts-natively 1)        ;开启代码块语法缩进/格式化
-(setq org-edit-src-content-indentation 0) ;代码块初始缩进范围
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
@@ -1834,7 +2493,7 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
 ;; }}}
 #+end_src
 
-*** Link
+** Link
 
 #+begin_src emacs-lisp :tangle yes
 (setq my-linkcolor-org "wheat3")
@@ -1925,9 +2584,9 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
 (my-set-linkcolors) ;; set colors when loading
 #+end_src
 
-*** URL
+** URL
 
-**** URL Title                                                        :FIXME:
+*** URL Title                                                        :FIXME:
 
 #+begin_src emacs-lisp :tangle no
 (defun my/org-get-url-page-title (url)
@@ -1951,7 +2610,7 @@ from: http://www.opensubscriber.com/message/help-gnu-emacs@gnu.org/14332449.html
   )
 #+end_src
 
-**** Linkify                                                          :FIXME:
+*** Linkify                                                          :FIXME:
 
 #+begin_src emacs-lisp :tangle no
 (defun my/org-url-linkify ()
@@ -1992,7 +2651,13 @@ Adapted code from: http://ergoemacs.org/emacs/elisp_html-linkify.html"
 
 #+end_src
 
-*** 图像
+** 图像
+
+#+begin_src emacs-lisp :tangle yes
+(defadvice org-toggle-inline-images (after org-open-at-point activate)
+  (if smooth-scrolling-mode (smooth-scrolling-mode -1)
+        (smooth-scrolling-mode 1)))
+#+end_src
 
 #+begin_src emacs-lisp :tangle no
 ;; https://stackoverflow.com/a/73426792
@@ -2036,7 +2701,7 @@ Adapted code from: http://ergoemacs.org/emacs/elisp_html-linkify.html"
                                  ) org-file-apps )))))
 #+end_src
 
-*** todo
+** org-todo
 
 #+begin_src emacs-lisp :tangle no
 (setq org-use-fast-todo-selection t)
@@ -2055,7 +2720,15 @@ Adapted code from: http://ergoemacs.org/emacs/elisp_html-linkify.html"
 #+begin_src emacs-lisp :tangle no
 (setq org-todo-keywords (quote
                          (
-                          (sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "WAITING(w@/!)" "SOMEDAY(S!)" "|" "DONE(d!/!)" "CANCELLED(c@/!)")
+                          (sequence
+			   "TODO(t)"
+			   "NEXT(n)"
+			   "STARTED(s)"
+			   "WAITING(w@/!)"
+			   "SOMEDAY(S!)"
+			   "|"
+			   "DONE(d!/!)"
+			   "CANCELLED(c@/!)")
                           )
                          )
       )
@@ -2063,7 +2736,8 @@ Adapted code from: http://ergoemacs.org/emacs/elisp_html-linkify.html"
 
 #+begin_src emacs-lisp :tangle no
 (setq org-todo-keyword-faces
-      (quote (("TODO"      :foreground "lightblue"    :weight bold)
+      (quote (
+	      ("TODO"      :foreground "lightblue"    :weight bold)
               ("NEXT"      :foreground "red"          :weight bold)
               ("STARTED"   :foreground "red"          :weight bold)
               ("DONE"      :foreground "forest green" :weight bold)
@@ -2078,10 +2752,13 @@ Adapted code from: http://ergoemacs.org/emacs/elisp_html-linkify.html"
               ("REJECTED"  :foreground "forest green" :weight bold)
               ("OPEN"      :foreground "blue"         :weight bold)
               ("CLOSED"    :foreground "forest green" :weight bold)
-              ("PHONE"     :foreground "forest green" :weight bold))))
+              ("PHONE"     :foreground "forest green" :weight bold)
+	      )))
 #+end_src
 
-*** org-babel-tangle
+** org-agenda
+
+** org-babel-tangle
 
 #+begin_src emacs-lisp :tangle no
 (defun org-babel-tangle-config ()
@@ -2107,7 +2784,7 @@ Adapted code from: http://ergoemacs.org/emacs/elisp_html-linkify.html"
 ;; End:
 #+end_src
 
-*** org-capture
+** org-capture
 
 #+begin_src emacs-lisp :tangle no
 (use-package org-capture
@@ -2154,340 +2831,59 @@ Adapted code from: http://ergoemacs.org/emacs/elisp_html-linkify.html"
   )
 #+end_src
 
-** mode-line
-
-#+begin_src emacs-lisp :tangle yes
-;; mode-line
-;; {{{
-(display-battery-mode t)    ;; display battery status
-(setq column-number-mode t) ;; 在 mode line 数字形式显示光标所在列
-;; }}}
+#+begin_src emacs-lisp :tangle no
+(with-eval-after-load 'org
+  (setq org-capture-templates
+        '(("i" "Inbox"
+           plain (file+olp+datetree (lambda () (concat my-galaxy "/inbox/inbox.org")))
+           "**** %?\n%U\n" :time-prompt t :tree-type week)
+          ("p" "Daily Plan"
+           plain (file+olp+datetree (lambda () (concat my-galaxy "/inbox/plan.org")))
+           "- [ ] %?\n%U\n" :time-prompt t :tree-type week)
+          ("r" "Reflection"
+           plain
+           (file+olp+datetree (lambda () (concat my-galaxy "/roam/main/reflection.org")))
+           (file "~/.emacs.d/template/tpl-daily-reflection")
+           :time-prompt t :tree-type week)
+          ("a" "Anki Deck")
+          ("ae" "Deck: English"
+           entry (file (lambda ()
+                         (concat my-galaxy "/anki/anki_english.org")))
+           "* %?\n" :jump-to-captured t)
+          ("ac" "Deck: Civil Engineering"
+           entry (file (lambda ()
+                         (concat my-galaxy "/anki/anki_engineering.org")))
+           "* %?\n" :jump-to-captured t)
+          ("s" "Code snippets"
+           entry (file (lambda ()
+                         (concat my-galaxy "/scripts/snippets.org")))
+           "* %?\t%^g\n#+BEGIN_SRC %^{language}\n\n#+END_SRC")
+          ;; ("l" "Lists")
+          ("m" "Movie"
+           entry (file+headline (lambda () (concat my-galaxy "/roam/main/movie.org")) "Movie list")
+           "* %?
+:PROPERTIES:
+:GENRE: %^{Film genre|Action|Adventure|Comedy|Drama|Fantasy|Horror|Musicals|Mystery|Romance|Science fiction|Sports|Thriller}
+:COUNTRY:
+:SCORE:
+:PLOT: %^{PLOT}
+:END:"))))
 #+end_src
 
-** Open App
+** org-refile
 
-#+begin_src emacs-lisp :tangle yes
-;; open app
-;; {{{
-(defun mac-launchpad/string-ends-with (s ending)
-  "Return non-nil if string S ends with ENDING."
-  (cond ((>= (length s) (length ending))
-         (let ((elength (length ending)))
-           (string= (substring s (- 0 elength)) ending)))
-        (t nil)))
+* 游戏 Game
 
-(defun mac-launchpad/find-mac-apps (folder)
-  (let* ((files (directory-files folder))
-         (without-dots (cl-delete-if (lambda (f) (or (string= "." f) (string= ".." f))) files))
-         (all-files (mapcar (lambda (f) (file-name-as-directory (concat (file-name-as-directory folder) f))) without-dots))
-         (result (cl-delete-if-not (lambda (s) (mac-launchpad/string-ends-with s ".app/")) all-files)))
-    result))
+** 俄罗斯方块 Tetris
 
-(defun mac-launchpad ()
-  (interactive)
-  (let* ((apps (mac-launchpad/find-mac-apps "/Applications"))
-         (to-launch (completing-read "launch: " apps)))
-    (shell-command (format "defaults read \"%s\"Contents/Info.plist CFBundleIdentifier | xargs open -b" to-launch))))
+* macOS
 
-
-;; (keymap-global-set "C-c C-l" #'mac-launchpad)
-;; }}}
-#+end_src
-
-** Open in App
-
-*** open in default app
-
-#+begin_src emacs-lisp :tangle yes
-;; open in default app
-;; {{{
-;; https://emacs-china.org/t/pdf/14954/5
-(defun my/open-with (arg)
-  "使用外部程序打开浏览的文件或者当前光标下的链接.
-处于 dired mode 时, 打开当前光标下的文件;
-若当前光标下存在链接，使用外部程序打开链接;
-使用 prefix ARG 时指定使用的外部程序."
-  (interactive "P")
-  (let ((current-file-name
-         (cond ((eq major-mode 'dired-mode) (dired-get-file-for-visit))
-               ((help-at-pt-string)
-                (pcase (cdr (split-string (help-at-pt-string) ":" t " "))
-                  ((or `(,path) `(,(pred (string= "file")) ,path) `(,_ ,path ,_))
-                   (expand-file-name path))
-                  (`(,proto ,path) (concat proto ":" path))))
-               (t (or (thing-at-point 'url) buffer-file-name))))
-        (program (if arg
-                     (read-shell-command "Open current file with: ")
-                   "open")))
-    (call-process program nil 0 nil current-file-name)))
-;; }}}
-#+end_src
+** macOS Spell Dictionary
 
 #+begin_src emacs-lisp :tangle no
-(defun my-open-in-external-app (&optional file)
-  "Open the current FILE or dired marked files in external app.
-   The app is chosen from your OS's preference."
-  (interactive)
-  (message "%s" (concat "my-open-in-external-app called with \"" file "\" as argument"))
-  ;; FIXXME: add check if FILE is an existing file; show error message if not
-  (let ( doIt
-         (myFileList
-          (cond
-           ((string-equal major-mode "dired-mode") (dired-get-marked-files))
-           ((not file) (list (buffer-file-name)))
-           (file (list file)))))
-
-    (setq doIt (if (<= (length myFileList) 5)
-                   t
-                 (y-or-n-p "Open more than 5 files? ") ) )
-
-    (when doIt
-      (cond
-       ((my-system-type-is-windows)
-        (mapc (lambda (fPath) (w32-shell-execute "open" (replace-regexp-in-string "/" "\\" fPath t t)) ) myFileList))
-       ((string-equal system-type "darwin")
-        (mapc (lambda (fPath) (shell-command (format "open \"%s\"" fPath)) )  myFileList) )
-       ((my-system-type-is-gnu)
-        (mapc (lambda (fPath) (let ((process-connection-type nil)) (start-process "" nil "xdg-open" fPath)) ) myFileList)
-        ) ) ) ) )
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-(defun my-dired-open-in-external-app ()
-  "Open the current file or dired marked files in external app.
-The app is chosen from your OS's preference.
-URL `http://ergoemacs.org/emacs/emacs_dired_open_file_in_ext_apps.html'
-Version 2016-10-15"
-  (interactive)
-  (let* (
-         ($file-list
-          (if (string-equal major-mode "dired-mode")
-              (dired-get-marked-files)
-            (list (buffer-file-name))))
-         ($do-it-p (if (<= (length $file-list) 5)
-                       t
-                     (y-or-n-p "Open more than 5 files? "))))
-    (when $do-it-p
-      (cond
-       ((string-equal system-type "windows-nt")
-        (mapc
-         (lambda ($fpath)
-           (w32-shell-execute "open" (replace-regexp-in-string "/" "\\" $fpath t t))) $file-list))
-       ((string-equal system-type "darwin")
-        (mapc
-         (lambda ($fpath)
-           (shell-command
-            (concat "open " (shell-quote-argument $fpath))))  $file-list))
-       ((string-equal system-type "gnu/linux")
-        (mapc
-         (lambda ($fpath) (let ((process-connection-type nil))
-                            (start-process "" nil "xdg-open" $fpath))) $file-list))))))
-#+end_src
-
-*** open in system file manager
-
-#+begin_src emacs-lisp :tangle yes
-(defun my/dired-open-in-file-manager ()
-  "Show current file in desktop.
- (Mac Finder, Windows Explorer, Linux file manager)
- This command can be called when in a file or in `dired'.
-URL `http://ergoemacs.org/emacs/emacs_dired_open_file_in_ext_apps.html'
-Version 2018-01-13 adapted by Karl Voit 2018-07-01"
-  (interactive)
-  (let (($path (file-truename (if (buffer-file-name) (buffer-file-name) default-directory ))))
-    (cond
-     ((string-equal system-type "windows-nt")
-      (w32-shell-execute "explore" (replace-regexp-in-string "/" "\\" $path t t)))
-     ((string-equal system-type "darwin")
-      (if (eq major-mode 'dired-mode)
-          (let (($files (dired-get-marked-files )))
-            (if (eq (length $files) 0)
-                (shell-command
-                 (concat "open " (shell-quote-argument default-directory)))
-              (shell-command
-               (concat "open -R " (shell-quote-argument (car (dired-get-marked-files )))))))
-        (shell-command
-         (concat "open -R " $path))))
-     ((string-equal system-type "gnu/linux")
-      (let (
-            (process-connection-type nil)
-            (openFileProgram (if (file-exists-p "/usr/bin/thunar")
-                                 "/usr/bin/thunar"
-                               "/usr/bin/xdg-open")))
-        (start-process "" nil openFileProgram $path))
-      ;; (shell-command "xdg-open .") ;; 2013-02-10 this sometimes froze emacs till the folder is closed. eg with nautilus
-      ))))
-#+end_src
-
-** package
-
-#+begin_src emacs-lisp :tangle no
-
-#+end_src
-
-*** package list                                                      :FIXME:
-
-
-#+begin_src emacs-lisp :tangle no
-(add-to-list 'package-selected-packages
-             '(
-               ;; org-auto-tangle
-               ;; sis
-               ace-pinyin
-               ace-window
-               all-the-icons-completion
-               all-the-icons-dired
-               applescript-mode
-               auto-dark
-               benchmark-init
-               closql
-               color-theme-sanityinc-solarized
-               color-theme-sanityinc-tomorrow
-               consult
-               consult-org-roam
-               csv-mode
-               d2-mode
-               deadgrep
-               diff-hl
-               doom-modeline
-               el-fetch
-               elfeed
-               elfeed-dashboard
-               elfeed-org
-               elisp-demos
-               elisp-depmap
-               embark
-               epkg
-               exec-path-from-shell
-               expand-region
-               free-keys
-               fuck
-               goggles
-               goto-line-preview
-               graphviz-dot-mode
-               helpful
-               highlight-parentheses
-               keycast
-               lsp-bridge
-               magit-delta
-               magit-section
-               marginalia
-               markdown-mode
-               mermaid-mode
-               moom
-               multiple-cursors
-               mybigword
-               nov
-               nov-xwidget
-               olivetti
-               opencc
-               orderless
-               org-auto-tangle
-               org-modern
-               org-roam
-               org-roam-ui
-               org-similarity
-               org-sticky-header
-               origami
-               osm
-               osx-dictionary
-               pangu-spacing
-               parrot
-               pcre2el
-               pyim
-               ;; pyim-basedict
-               request
-               rfc-mode
-               semantic-mode
-               shrface
-               simple-httpd
-               solarized-theme
-               subed
-               symbol-overlay
-               topsy
-               ts-fold
-               vertico
-               vertico-posframe
-               wucuo
-               yasnippet
-               )
-             )
-#+end_src
-
-*** initialize
-
-#+begin_src emacs-lisp :tangle yes
-;; package.el: mirror 插件镜像
+;; macOS spell
 ;; {{{
-;; GitHub connection: https://github.com/hedzr/mirror-list
-;; (require 'package)
-;; 代理
-;; (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
-;; (setq url-proxy-services '(("no_proxy" . "^\\(192\\.168\\..*\\)")
-;;                            ("http" . "<代理 IP>:<代理端口号>")
-;;                            ("https" . "<代理 IP>:<代理端口号>")))
-;;
-;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-;;
-;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
-;; and `package-pinned-packages`. Most users will not need or want to do this.
-;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-;;
-;; emacs-eask/archives: Magic to prevent refreshing package archives failure
-;; https://github.com/emacs-eask/archives
-;;
-(package-initialize) ;; pair with (setq package-enable-at-startup nil) ;; early-init
-;; 防止反复调用 package-refresh-contents 影响加载速度
-(when (not package-archive-contents)
-  (package-refresh-contents))
-;; }}}
-#+end_src
-
-** profile
-
-#+begin_src emacs-lisp :tangle yes
-;; profile: benchmark-init
-;; {{{
-(require 'benchmark-init-modes)
-(require 'benchmark-init)
-(benchmark-init/activate)
-;; To disable collection of benchmark data after init is done.
-(add-hook 'after-init-hook 'benchmark-init/deactivate)
-;; }}}
-#+end_src
-
-** package dependency graph
-
-#+begin_src emacs-lisp :tangle yes
-;; package dependency graph (Graphviz)
-;; {{{
-;; https://emacs-china.org/t/package/22775/2?u=suliveevil
-;; https://www.gnu.org/software/emacs/manual/html_mono/cl.html#Loop-Facility
-;; (defun get-pkg-reqs-alist ()
-(defun my/emacs-package-dependency ()
-  (interactive)
-  (cl-loop for pkg-and-desc in package-alist
-           for pkg = (car pkg-and-desc)
-           for desc = (cadr pkg-and-desc)
-           for req-names = (cl-loop for it in (package-desc-reqs desc) collect (car it))
-           collect (cons pkg req-names)))
-;; (setq info (get-pkg-reqs-alist))
-
-(setq info (my/emacs-package-dependency))
-
-;; (with-temp-file "/tmp/g.dot"
-(with-temp-file (expand-file-name
-                 "assets/emacs-package-dependency.dot"
-                 (concat user-emacs-directory)
-                 )
-  (insert "digraph G {")
-  (insert (mapconcat #'identity
-                     (cl-loop for pkg-reqs in info
-                              for pkg = (car pkg-reqs)
-                              for reqs = (cdr pkg-reqs)
-                              nconcing (cl-loop for req in reqs
-                                                collect (format "\"%s\" -> \"%s\";\n" pkg req)))))
-  (insert "}"))
+;; ~/Library/Spelling/LocalDictionary
 ;; }}}
 #+end_src
 
@@ -2567,25 +2963,32 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 ;; }}}
 #+end_src
 
-** open in...
-
-*** Neovide
+** Alfred Search                                                      :macOS:
 
 #+begin_src emacs-lisp :tangle yes
-;; Neovide
+;; Alfred
 ;; {{{
-(defun my/open-in-neovide ()
-  (interactive)
-  (start-process-shell-command "neovide"
-                               nil
-                               (concat "neovide "
-                                       "+"
-                                       (int-to-string (line-number-at-pos))
-                                       " "
-                                       (buffer-file-name)
-                                       )))
+;; https://github.com/xuchunyang/emacs.d/blob/master/lisp/alfred.el
+(defun my/alfred-search (b e)
+  "Activate Alfred with selected text."
+  (interactive "r")
+  (do-applescript
+   (format "tell application id \"com.runningwithcrayons.Alfred\" to search \"%s\""
+           (mapconcat ;; In AppleScript String, " and \ are speical characters
+            (lambda (char)
+              (pcase char
+                (?\" (string ?\\ ?\"))
+                (?\\ (string ?\\ ?\\))
+                (_   (string char)))
+              )
+            (buffer-substring b e) "")
+           )
+   )
+  )
 ;; }}}
 #+end_src
+
+** Open in...
 
 *** MacVim
 
@@ -2607,51 +3010,47 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 ;; }}}
 #+end_src
 
-*** VSCode
+* test
 
-#+begin_src emacs-lisp :tangle yes
-;; Visual Studio Code
-;; {{{
-;; https://github.com/pietroiusti/.emacs.d/blob/master/custom-functions.el
-(defun my/open-in-vscode ()
-  (interactive)
-  (start-process-shell-command "code"
-                               nil
-                               (concat "code --goto "
-                                       (buffer-file-name)
-                                       ":"
-                                       (int-to-string (line-number-at-pos))
-                                       ":"
-                                       (int-to-string (current-column)))))
-;; (w32-shell-execute "open" "vscode-path" (format "-g %s:%s:%s" (buffer-file-name) (int-to-string (line-number-at-pos)) (int-to-string (current-column))))
-;; better solution
-;; https://emacs-china.org/t/leader-vscode/19166/29
-;; (defun my/open-in-vscode ()
-;;   "Open current file with vscode."
+** search/match
+
+#+begin_src emacs-lisp :tangle no
+
+;; (defun language-detect-zh ()
 ;;   (interactive)
-;;   (let ((line (number-to-string (line-number-at-pos)))
-;;         (column (number-to-string (current-column))))
-;;     (apply 'call-process "code" nil nil nil (list (concat buffer-file-name ":" line ":" column) "--goto"))))
-;; (keymap-set global-map "C-c C" #'my/open-in-vscode)
-;; }}}
+;;   (let ((zh-words 0) (en-words 0))
+;;     (with-temp-buffer
+;;       (insert (format (thing-at-point 'paragraph)))
+;;       (goto-char (point-min))
+;;       (while (< (point) (point-max))
+;;         (let ((ch (char-to-string (char-after))))
+;;           (cond
+;;            ((string-match "\\cC" ch)
+;;             (let ((start-point (point)))
+;;               (forward-word)
+;;               (setq zh-words (+ zh-words (- (point) start-point)))))
+;;            ((string-match "[a-zA-Z]" ch)
+;;             (forward-word)
+;;             (setq en-words (1+ en-words)))
+;;            (t
+;;             (forward-char))))))
+;;     (if (< en-words zh-words)
+;;      (message "中文")
+;;       (message "English")
+;;         ;; (cons "zh-CN" "en")
+;;       ;; (cons "en" "zh-CN")
+;;       )
+;;     )
+;;   )
+
+;; test my little functions
+
+;; test emacs config
+;; (require semantic-mode)
+;; (semantic-mode 1)
+;; (semantic-stickyfunc-mode 1)
+
 #+end_src
-
-*** Obsidian
-
-#+begin_src emacs-lisp :tangle yes
-;; Obsidian
-;; {{{
-;; https://emacs-china.org/t/emacs-obsidian/22504/11?u=suliveevil
-(defun my/open-in-obsidian () ;; 在 Obsidian 中打开当前 Emacs 正在编辑的文件
-  (interactive)
-  (browse-url-xdg-open
-   (concat "obsidian://open?path=" (url-hexify-string (buffer-file-name)))))
-;; }}}
-#+end_src
-
-** 游戏 Game
-
-*** 俄罗斯方块 Tetris
 
 ** split config
 
@@ -2698,51 +3097,19 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 #+end_src
 
 
-* test
-
-#+begin_src emacs-lisp :tangle yes
-
-;; (defun language-detect-zh ()
-;;   (interactive)
-;;   (let ((zh-words 0) (en-words 0))
-;;     (with-temp-buffer
-;;       (insert (format (thing-at-point 'paragraph)))
-;;       (goto-char (point-min))
-;;       (while (< (point) (point-max))
-;;         (let ((ch (char-to-string (char-after))))
-;;           (cond
-;;            ((string-match "\\cC" ch)
-;;             (let ((start-point (point)))
-;;               (forward-word)
-;;               (setq zh-words (+ zh-words (- (point) start-point)))))
-;;            ((string-match "[a-zA-Z]" ch)
-;;             (forward-word)
-;;             (setq en-words (1+ en-words)))
-;;            (t
-;;             (forward-char))))))
-;;     (if (< en-words zh-words)
-;;      (message "中文")
-;;       (message "English")
-;;         ;; (cons "zh-CN" "en")
-;;       ;; (cons "en" "zh-CN")
-;;       )
-;;     )
-;;   )
-
-;; test my little functions
-
-;; test emacs config
-;; (require semantic-mode)
-;; (semantic-mode 1)
-;; (semantic-stickyfunc-mode 1)
-
-#+end_src
-
-
-
 * Package (ELPA/MELPA)
 
+** macOS :macOS:
 
+*** osx-dictionary
+
+#+begin_src emacs-lisp :tangle no
+;; dictionary: Apple 词典: osx-dictionary
+;; {{{
+;; (require 'osx-dictionary)
+(keymap-global-set "C-c d" #'osx-dictionary-search-word-at-point)
+;; }}}
+#+end_src
 ** package database
 
 #+begin_src emacs-lisp :tangle yes
@@ -3054,7 +3421,8 @@ elisp-depmap
   (:map emacs-lisp-mode-map
         ("C-c C-d C-d" . describe-function)
         ("C-c C-d d" . describe-function)
-        ("C-c C-k" . eval-buffer)))
+        ("C-c C-k" . eval-buffer))
+  )
 
 (use-package highlight-defined
   :ensure t
@@ -3100,7 +3468,6 @@ elisp-depmap
   (nameless-global-aliases '())
   (nameless-private-prefix t))
 
-
 (use-package erefactor
   :ensure t
   :defer t)
@@ -3133,6 +3500,8 @@ elisp-depmap
 #+begin_src emacs-lisp :tangle yes
 (use-package vundo
   :ensure nil
+  :bind
+  ("C-x u" . vundo)
   )
 #+end_src
 
@@ -3282,6 +3651,18 @@ git-auto-commit
 
 ** 搜索工具
 
+*** wgrep
+
+#+begin_src emacs-lisp :tangle yes
+(use-package wgrep
+  :ensure nil
+  :bind
+  (:map grep-mode-map
+        ("C-c C-q" . wgrep-change-to-wgrep-mode)
+        )
+  )
+#+end_src
+
 *** ripgrep: deadgrep
 
 #+begin_src emacs-lisp :tangle yes
@@ -3308,32 +3689,21 @@ git-auto-commit
 ;; }}}
 #+end_src
 
-
-
 *** khoj
 
 Natural Language Search
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 ;; khoj
 ;; {{{
 ;; Install Khoj Package from MELPA Stable
 (use-package khoj
   :ensure nil
   :defer t
-  :bind ("C-c n s" . 'khoj))
+  :bind ("C-c n l" . 'khoj))
 ;; }}}
 #+end_src
 
-** macOS 词典.app                                                     :macOS:
-
-#+begin_src emacs-lisp :tangle yes
-;; dictionary: Apple 词典: osx-dictionary
-;; {{{
-;; (require 'osx-dictionary)
-(keymap-global-set "C-c d" #'osx-dictionary-search-word-at-point)
-;; }}}
-#+end_src
 ** 拼音搜索
 
 *** pinyinlib
@@ -3541,7 +3911,6 @@ Natural Language Search
 
 ** emacs-rime
 
-
 #+begin_src emacs-lisp :tangle no
 (defun change-cursor-color-on-input-method ()
   "Set cursor color depending on whether an input method is used or not."
@@ -3648,6 +4017,8 @@ Natural Language Search
 (setq ispell-program-name "aspell")
 ;; You could add extra option "--camel-case" for camel case code spell checking if Aspell 0.60.8+ is installed
 ;; @see https://github.com/redguardtoo/emacs.d/issues/796
+
+;; FIXME args-out-of-range
 (setq ispell-extra-args '(
                           "--sug-mode=ultra"
                           "--lang=en_US"
@@ -3655,12 +4026,8 @@ Natural Language Search
                           "--run-together"
                           "--run-together-limit=16"
                           ))
-;; ispell-personal-dictionary
-;; }}}
 
-;; macOS spell
-;; {{{
-;; ~/Library/Spelling/LocalDictionary
+;; ispell-personal-dictionary
 ;; }}}
 
 ;; wucuo
@@ -4189,7 +4556,9 @@ https://github.com/logangrado/hideshow-orgmode
 ;; symbol-overlay
 ;; {{{
 (use-package symbol-overlay
-  :bind(("M-i"  . symbol-overlay-put)
+  :bind(
+        ("M-i"  . symbol-overlay-put)
+        ("M-I" . symbol-overlay-remove-all)
         ("M-n"  . symbol-overlay-switch-forward)
         ("M-p"  . symbol-overlay-switch-backward)
         ("<f7>" . symbol-overlay-mode)
@@ -4207,6 +4576,10 @@ https://github.com/logangrado/hideshow-orgmode
         ("w" . symbol-overlay-save-symbol)
         )
   )
+;; }}}
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
 ;; (require 'symbol-overlay)
 ;; (keymap-global-set "M-i"  #'symbol-overlay-put)
 ;; (keymap-global-set "M-n"  #'symbol-overlay-switch-forward)
@@ -4223,7 +4596,6 @@ https://github.com/logangrado/hideshow-orgmode
 ;; (keymap-set symbol-overlay-mode "s" symbol-overlay-isearch-literally)
 ;; (keymap-set symbol-overlay-mode "t" symbol-overlay-toggle-in-scope)
 ;; (keymap-set symbol-overlay-mode "w" symbol-overlay-save-symbol)
-;; }}}
 #+end_src
 
 ** consult
@@ -4234,7 +4606,10 @@ https://github.com/logangrado/hideshow-orgmode
 ;; Example configuration for Consult
 (use-package consult
   ;; Replace bindings. Lazily loaded due by `use-package'.
-  :bind (;; C-c bindings (mode-specific-map)
+  :bind (
+         ("C-c r e" . consult-grep)
+         ("C-c r g" . consult-ripgrep)
+         ;; C-c bindings (mode-specific-map)
          ("C-c h" . consult-history)
          ("C-c m c" . consult-mode-command)
          ("C-c k" . consult-kmacro)
@@ -4267,7 +4642,6 @@ https://github.com/logangrado/hideshow-orgmode
          ("M-s g" . consult-grep)
          ("M-s G" . consult-git-grep)
          ("M-s r" . consult-ripgrep)
-         ("C-c r g" . consult-ripgrep)
          ("M-s l" . consult-line)
          ("M-s L" . consult-line-multi)
          ("M-s k" . consult-keep-lines)
@@ -4455,7 +4829,6 @@ https://github.com/logangrado/hideshow-orgmode
 ;; }}}
 #+end_src
 
-
 ** marginalia
 
 #+begin_src emacs-lisp :tangle yes
@@ -4493,8 +4866,34 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; }}}
 #+end_src
 
-
 ** embark
+
+#+begin_src emacs-lisp :tangle yes
+(use-package embark
+  :ensure t
+
+  :bind
+  (
+   ("C-." . embark-act)         ;; pick some comfortable binding
+   ("C-;" . embark-dwim)        ;; good alternative: M-.
+   ("C-h B" . embark-bindings)  ;; alternative for `describe-bindings'
+   :map minibuffer-mode-map
+   ("H-o" . embark-export)
+   )
+  :init
+
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command)
+
+  :config
+
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none))))
+  )
+#+end_src
 
 #+begin_src emacs-lisp :tangle no
 (use-package embark-consult
@@ -4503,8 +4902,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   )
 #+end_src
 
-** Diff
-
+** 文件对比/文本对比 Diff
 
 ** org-download
 
@@ -4549,7 +4947,6 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   )
 #+end_src
 
-
 ** org-crypt
 
 #+begin_src emacs-lisp :tangle no
@@ -4558,8 +4955,6 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 #+end_src
 
 ** org-import-calendar
-
-
 
 ** org-roam
 
@@ -4576,6 +4971,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   :after org
   :bind (
          ("C-c n a" . org-roam-alias-add)
+	 ("C-c n A" . org-roam-alias-remove)
          ("C-c n c" . org-roam-capture)
          ("C-c n f" . org-roam-node-find)
          ("C-c n g" . org-roam-graph)
@@ -4584,9 +4980,16 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
          ("C-c n j" . org-roam-dailies-capture-today) ;; Dailies
          ("C-c n l" . org-roam-buffer-toggle)
          ("C-c n o" . org-id-get-create)
+	 ("C-c n r" . org-roam-node-random)
          ("C-c n t" . org-roam-tag-add)
+	 ("C-c n T" . org-roam-tag-remove)
          )
   :config
+  (setq org-roam-db-gc-threshold most-positive-fixnum)
+  (setq org-roam-mode-sections
+      '((org-roam-backlinks-section :unique t)
+        org-roam-reflinks-section
+        org-roam-unlinked-references-section))
   (setq org-roam-completion-everywhere t)
   (setq org-roam-file-extensions '("org" "md")) ;; enable Org-roam for markdown
   ;; (setq org-roam-node-display-template "${title:50} ${tags:30}")
@@ -4631,8 +5034,6 @@ org-protocol://roam-node?node=uuid"
         :function org-roam-protocol-open-node)
       org-protocol-protocol-alist)
 #+end_src
-
-
 
 #+begin_src emacs-lisp :tangle no
 ;; org-roam: node directory                                                       ; FIXME
@@ -4688,7 +5089,6 @@ org-protocol://roam-node?node=uuid"
 ;;       "${title:30} ${backlinkscount:5} ${tags:30} ${directories:15}")
 ;; }}}
 #+end_src
-
 
 *** completion
 
@@ -4934,6 +5334,28 @@ org-protocol://roam-node?node=uuid"
 *** UI & ORUI
 
 #+begin_src emacs-lisp :tangle yes
+;; org-roam-ui
+;; {{{
+(use-package org-roam-ui
+  :after org-roam
+  ;; normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+  ;; a hookable mode anymore, you're advised to pick something yourself
+  ;; if you don't care about startup time, use
+  ;; :hook (after-init . org-roam-ui-mode)
+  :bind (
+	 ("C-c n u" . org-roam-ui-open)
+	 ("C-c n z" . org-roam-ui-node-zoom)
+         )
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t)
+  )
+;; }}}
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
 ;; org-roam: UI
 ;; {{{
 ;; (custom-set-faces
@@ -4943,24 +5365,6 @@ org-protocol://roam-node?node=uuid"
 ;; (defface my-org-id-link '((t :inherit org-link :slant italic))
 ;;   "Face for org-id links."
 ;;   :group 'org-faces)
-;; }}}
-
-;; org-roam-ui
-;; {{{
-(use-package org-roam-ui
-  :after org-roam
-  ;; normally we'd recommend hooking orui after org-roam, but since org-roam does not have
-  ;; a hookable mode anymore, you're advised to pick something yourself
-  ;; if you don't care about startup time, use
-  ;; :hook (after-init . org-roam-ui-mode)
-  :bind (("C-c G" . org-roam-ui-open)
-         )
-  :config
-  (setq org-roam-ui-sync-theme t
-        org-roam-ui-follow t
-        org-roam-ui-update-on-save t
-        org-roam-ui-open-on-start t)
-  )
 ;; }}}
 #+end_src
 
@@ -4992,10 +5396,10 @@ org-protocol://roam-node?node=uuid"
   ;; :after (org consult)
   :bind
   ;; Define some convenient keybindings as an addition
-  ("C-c n F" . consult-org-roam-file-find)
   ("C-c n b" . consult-org-roam-backlinks)
   ("C-c n l" . consult-org-roam-forward-links)
-  ;; ("C-c n s" . consult-org-roam-search)
+  ("C-c n s" . consult-org-roam-search)
+  ("C-c n F" . consult-org-roam-file-find)
   :custom
   ;; Use `ripgrep' for searching with `consult-org-roam-search'
   (consult-org-roam-grep-func #'consult-ripgrep)
@@ -5013,7 +5417,6 @@ org-protocol://roam-node?node=uuid"
   )
 ;; }}}
 #+end_src
-
 
 #+begin_src emacs-lisp :tangle no
 (require 'consult-org-roam)
@@ -5059,7 +5462,6 @@ org-protocol://roam-node?node=uuid"
 ;; }}}
 #+end_src
 
-
 ** org-ref
 
 ** org-mind-map
@@ -5097,20 +5499,6 @@ org-protocol://roam-node?node=uuid"
   :config
   (setq rfc-mode-directory (expand-file-name "~/Documents/GitHub/RFC-all/txt/"))
   (setq rfc-mode-index-path (concat rfc-mode-directory"rfc-index.txt"))
-  )
-;; }}}
-#+end_src
-
-** 跟随系统 UI
-
-#+begin_src emacs-lisp :tangle yes
-;; auto-dark
-;; {{{
-(use-package auto-dark
-  :init (auto-dark-mode t)
-  :config
-  (setq auto-dark-allow-osascript t
-        auto-dark-dark-theme 'solarized-dark)
   )
 ;; }}}
 #+end_src
@@ -5214,6 +5602,22 @@ org-protocol://roam-node?node=uuid"
 ;; ;; }}}
 #+end_src
 
+*** auto-dark
+
+主题跟随系统 UI
+
+#+begin_src emacs-lisp :tangle yes
+;; auto-dark
+;; {{{
+(use-package auto-dark
+  :init (auto-dark-mode t)
+  :config
+  (setq auto-dark-allow-osascript t
+        auto-dark-dark-theme 'solarized-dark)
+  )
+;; }}}
+#+end_src
+
 ** 图表
 
 *** Graphviz
@@ -5227,6 +5631,17 @@ org-protocol://roam-node?node=uuid"
 #+end_src
 
 *** PlantUML
+
+#+begin_src emacs-lisp :tangle no
+(add-hook 'org-mode-hook (lambda ()
+                           (require 'plantuml)))
+(with-eval-after-load 'plantuml
+  (setq plantuml-jar-path
+        (concat
+         (string-trim
+          (shell-command-to-string "readlink -f $(brew --prefix plantuml)"))
+         "/libexec/plantuml.jar")))
+#+end_src
 
 *** D2
 
@@ -5406,7 +5821,6 @@ org-protocol://roam-node?node=uuid"
 ;; ;; }}}
 #+end_src
 
-
 *** 速读 speed-reading
 
 https://github.com/zk-phi/spray
@@ -5445,6 +5859,22 @@ https://github.com/zk-phi/spray
 #+end_src
 
 * Package (Git and elsewhere)
+** macOS :macOS:
+
+*** org-mac-link
+
+#+begin_src emacs-lisp :tangle yes
+;; org-mac-link
+;; {{{
+(use-package org-mac-link
+  :ensure nil
+  :bind (
+         ("H-i H-i" . org-mac-link-get-link)
+         )
+  )
+;; }}}
+#+end_src
+
 ** mode
 *** mode-minder
 
@@ -5470,26 +5900,10 @@ https://github.com/zk-phi/spray
 ;;      ))
 #+end_src
 
-** macOS App 交互                                                     :macOS:
-
-
+** browser-hist
 
 #+begin_src emacs-lisp :tangle yes
-;; org-mac-link
-;; {{{
-(use-package org-mac-link
-  :ensure nil
-  :bind (
-         ("H-i H-i" . org-mac-link-get-link)
-         )
-  )
-;; }}}
-#+end_src
 
-*** browser-hist
-
-#+begin_src emacs-lisp :tangle yes
-(setq browser-hist-default-browser 'safari) ; FIXME
 (use-package browser-hist
   :ensure nil
   :init(use-package sqlite)
@@ -5503,7 +5917,7 @@ https://github.com/zk-phi/spray
           (firefox . "$HOME/Library/Application Support/Firefox/Profiles/*.default-release/places.sqlite")
           (safari . "$HOME/Library/Safari/History.db")
           ))
-
+  (setq browser-hist-default-browser 'safari) ; FIXME
   :commands
   (browser-hist-search)
   )
@@ -5759,7 +6173,6 @@ https://github.com/zk-phi/spray
 
 *** lsp-bridge
 
-
 #+begin_src emacs-lisp :tangle yes
 ;; lsp-bridge                                        ; FIXME
 ;; {{{
@@ -5861,8 +6274,6 @@ https://github.com/zk-phi/spray
 (global-lsp-bridge-mode)
 #+end_src
 
-
-
 ** Unicode
 
 #+begin_src emacs-lisp :tangle yes
@@ -5875,20 +6286,17 @@ https://github.com/zk-phi/spray
 
 ** org-auto-tangle
 
-谁在自动导出时给文件开始位置添加了一个 feff 字符？
+~~谁在自动导出时给文件开始位置添加了一个 feff 字符？~~
 
 #+begin_src emacs-lisp :tangle yes
 ;; org-auto-tangle
 ;; {{{
 (use-package org-auto-tangle
-  :defer t
   :ensure nil
   :hook (org-mode . org-auto-tangle-mode)
   )
 ;; }}}
 #+end_src
-
-
 
 ** 折叠
 
@@ -5901,7 +6309,6 @@ https://github.com/zk-phi/spray
 ;; (add-hook 'tree-sitter-after-on-hook #'ts-fold-indicators-mode)
 ;; }}}
 #+end_src
-
 
 ** Diff
 
@@ -5962,8 +6369,6 @@ https://github.com/zk-phi/spray
 
 *** Video
 
-
-
 ** 图表
 
 *** D2
@@ -5996,6 +6401,10 @@ https://github.com/zk-phi/spray
 
 ** 阅读
 
+*** dictionary-overlay
+
+*** nov-xwidget
+
 #+begin_src emacs-lisp :tangle yes
 (use-package nov-xwidget
   :ensure nil
@@ -6005,7 +6414,6 @@ https://github.com/zk-phi/spray
   (define-key nov-mode-map (kbd "o") 'nov-xwidget-view)
   (add-hook 'nov-mode-hook 'nov-xwidget-inject-all-files))
 #+end_src
-
 
 ** 图像
 
@@ -6017,24 +6425,13 @@ https://github.com/zk-phi/spray
   )
 ;; }}}
 
-
 #+end_src
-
 
 * File End
 
 #+begin_src emacs-lisp :tangle yes
-;;; init.el ends here
+;;; init.el ends here.
 #+end_src
-
-
-* Software
-
-** 快捷指令
-
-** Alfred
-
-
 
 * Misc
 
@@ -6044,4 +6441,4 @@ https://github.com/zk-phi/spray
 
 [[https://karl-voit.at/2017/06/03/emacs-org/][My Emacs Configuration In Org-mode]]
 
-[[https://emacs-china.org/t/org-mode-python/16834][org-mode 记录学习时间，用python数据可视化 - Emacs China]]
+[[https://emacs-china.org/t/org-mode-python/16834][org-mode 记录学习时间，用 python数据可视化 - Emacs China]]

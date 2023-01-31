@@ -1,9 +1,13 @@
-;; -*- coding: utf-8; lexical-binding: t; -*-
+;; -*- coding: utf-8; lexical-binding: t; no-byte-compile: t -*-
 ;; -*- origami-fold-style: triple-braces -*-
-;;; early-init.el --- Emacs 27+ pre-initialisation config
-;; Code loaded before the package system and GUI is initialized.
 
+;;; Commentary:
+
+;; early-init.el --- Emacs 27+ pre-initialisation config
+;; Code loaded before the package system and GUI is initialized.
 ;; Date: 2023-01-06 07:23:09 +0800
+
+;;; Code:
 
 (setq inhibit-automatic-native-compilation t)
 
@@ -147,7 +151,7 @@
         (width . 97)
         (left . 700)
         (top . 20)
-	(alpha . (95 .80))
+        (alpha . (95 .80))
         ;; (vertical-scroll-bars . nil)
         ;; (horizontal-scroll-bars . nil)
         ;; (tool-bar-lines . 0)
