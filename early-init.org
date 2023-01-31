@@ -14,29 +14,33 @@ sibling file: [[file:init.org][init.el config]]
 ** File header
 
 #+begin_src emacs-lisp :tangle yes
-  ;; -*- coding: utf-8; lexical-binding: t; -*-
-  ;; -*- origami-fold-style: triple-braces -*-
-  ;;; early-init.el --- Emacs 27+ pre-initialisation config
-  ;; Code loaded before the package system and GUI is initialized.
+;; -*- coding: utf-8; lexical-binding: t; no-byte-compile: t -*-
+;; -*- origami-fold-style: triple-braces -*-
 
-  ;; Date: 2023-01-06 07:23:09 +0800
+;;; Commentary:
+
+;; early-init.el --- Emacs 27+ pre-initialisation config
+;; Code loaded before the package system and GUI is initialized.
+;; Date: 2023-01-06 07:23:09 +0800
+
+;;; Code:
 #+end_src
 
 ** Garbage Collection
 
 #+begin_src emacs-lisp :tangle no
-  ;; Increase the GC threshold for faster startup
-  ;; The default is 800 kilobytes.  Measured in bytes.
-  (setq gc-cons-threshold (* 500 1024 1024)) ;; 500 MiB
+;; Increase the GC threshold for faster startup
+;; The default is 800 kilobytes.  Measured in bytes.
+(setq gc-cons-threshold (* 500 1024 1024)) ;; 500 MiB
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
-  ;; Don't collect garbage when init
-  (setq gc-cons-threshold most-positive-fixnum) ;; 2^61 on my device
+;; Don't collect garbage when init
+(setq gc-cons-threshold most-positive-fixnum) ;; 2^61 on my device
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
-  (setq gc-cons-percentage 0.6)
+(setq gc-cons-percentage 0.6)
 #+end_src
 
 ** native-compilation
@@ -48,118 +52,118 @@ sibling file: [[file:init.org][init.el config]]
 ** Profile
 
 #+begin_src emacs-lisp :tangle yes
-  ;; Profile emacs startup
-  (add-hook 'emacs-startup-hook
-            (lambda ()
-              (message "*** Emacs loaded in %s with %d garbage collections."
-                       (format "%.2f seconds"
-                               (float-time
-                                (time-subtract after-init-time before-init-time)))
-                       gcs-done)))
+;; Profile emacs startup
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (message "*** Emacs loaded in %s with %d garbage collections."
+                     (format "%.2f seconds"
+                             (float-time
+                              (time-subtract after-init-time before-init-time)))
+                     gcs-done)))
 #+end_src
 
 #+begin_src emacs-lisp
-  ;; profile
-  ;; {{{
-  ;; M-x profiler-start
-  ;; M-x profiler-report
-  ;; profiler-report-render-calltree
-  (defconst my/before-load-init-time (current-time))
+;; profile
+;; {{{
+;; M-x profiler-start
+;; M-x profiler-report
+;; profiler-report-render-calltree
+(defconst my/before-load-init-time (current-time))
 
-  ;;;###autoload
-  (defun my/load-init-time ()
-    "Loading time of user init files including time for `after-init-hook'."
-    (let ((time1 (float-time
-                  (time-subtract after-init-time my/before-load-init-time)))
-          (time2 (float-time
-                  (time-subtract (current-time) my/before-load-init-time))))
-      (message (concat "Loading init files: %.0f [msec], "
-                       "of which %.f [msec] for `after-init-hook'.")
-               (* 1000 time1) (* 1000 (- time2 time1)))))
-  (add-hook 'after-init-hook #'my/load-init-time t)
+;;;###autoload
+(defun my/load-init-time ()
+  "Loading time of user init files including time for `after-init-hook'."
+  (let ((time1 (float-time
+                (time-subtract after-init-time my/before-load-init-time)))
+        (time2 (float-time
+                (time-subtract (current-time) my/before-load-init-time))))
+    (message (concat "Loading init files: %.0f [msec], "
+                     "of which %.f [msec] for `after-init-hook'.")
+             (* 1000 time1) (* 1000 (- time2 time1)))))
+(add-hook 'after-init-hook #'my/load-init-time t)
 
-  (defvar my/tick-previous-time my/before-load-init-time)
+(defvar my/tick-previous-time my/before-load-init-time)
 
-  ;;;###autoload
-  (defun my/tick-init-time (msg)
-    "Tick boot sequence at loading MSG."
-    (when my/loading-profile-p
-      (let ((ctime (current-time)))
-        (message "---- %5.2f[ms] %s"
-                 (* 1000 (float-time
-                          (time-subtract ctime my/tick-previous-time)))
-                 msg)
-        (setq my/tick-previous-time ctime))))
+;;;###autoload
+(defun my/tick-init-time (msg)
+  "Tick boot sequence at loading MSG."
+  (when my/loading-profile-p
+    (let ((ctime (current-time)))
+      (message "---- %5.2f[ms] %s"
+               (* 1000 (float-time
+                        (time-subtract ctime my/tick-previous-time)))
+               msg)
+      (setq my/tick-previous-time ctime))))
 
-  (defun my/emacs-init-time ()
-    "Emacs booting time in msec."
-    (interactive)
-    (message "Emacs booting time: %.0f [msec] = `emacs-init-time'."
-             (* 1000
-                (float-time (time-subtract
-                             after-init-time
-                             before-init-time)))))
+(defun my/emacs-init-time ()
+  "Emacs booting time in msec."
+  (interactive)
+  (message "Emacs booting time: %.0f [msec] = `emacs-init-time'."
+           (* 1000
+              (float-time (time-subtract
+                           after-init-time
+                           before-init-time)))))
 
-  (add-hook 'after-init-hook #'my/emacs-init-time)
-  ;; }}}
+(add-hook 'after-init-hook #'my/emacs-init-time)
+;; }}}
 #+end_src
 
 ** Emacs.app
 
 #+begin_src emacs-lisp
-  ;; Emacs
-  ;; {{{
-  (let* ((emacs-Res "/Applications/Emacs.app/Contents/Resources/")
-         (emacs-git "~/Documents/emacs/") ; emacs-git /src/ source
-         (emacs-src (if (file-exists-p (concat emacs-Res "src/"))
-                        emacs-Res
-                      emacs-git)))
-    (setq source-directory emacs-src)
-    (setq find-function-C-source-directory (concat emacs-src "src/")))
-  ;; }}}
+;; Emacs
+;; {{{
+(let* ((emacs-Res "/Applications/Emacs.app/Contents/Resources/")
+       (emacs-git "~/Documents/emacs/") ; emacs-git /src/ source
+       (emacs-src (if (file-exists-p (concat emacs-Res "src/"))
+                      emacs-Res
+                    emacs-git)))
+  (setq source-directory emacs-src)
+  (setq find-function-C-source-directory (concat emacs-src "src/")))
+;; }}}
 #+end_src
 
 ** Startup
 
 #+begin_src emacs-lisp :tangle yes
-  ;; startup
-  ;; {{{
-  (setq initial-major-mode 'fundamental-mode)
-  (setq inhibit-startup-screen t)
-  (setq inhibit-startup-echo-area-message (user-login-name))
-  ;; }}}
+;; startup
+;; {{{
+(setq initial-major-mode 'fundamental-mode)
+(setq inhibit-startup-screen t)
+(setq inhibit-startup-echo-area-message (user-login-name))
+;; }}}
 #+end_src
 
 ** OS & GUI detection
 
 #+begin_src emacs-lisp :tangle no
-  (defconst *is-mac* (eq system-type 'darwin))
-  (defconst *is-linux* (eq system-type 'gnu/linux))
-  (defconst *is-windows* (or (eq system-type 'ms-dos) (eq system-type 'windows-nt)))
+(defconst *is-mac* (eq system-type 'darwin))
+(defconst *is-linux* (eq system-type 'gnu/linux))
+(defconst *is-windows* (or (eq system-type 'ms-dos) (eq system-type 'windows-nt)))
 #+end_src
 
 
 ** Backtrace & debug: warning error
 
 #+begin_src emacs-lisp :tangle yes
-  ;; debug warning and error
-  ;; {{{
-  ;; debug
-  (setq debug-on-error t)
-  ;; warning
-  (setq byte-compile-warnings nil)
-  (setq native-comp-async-report-warnings-errors nil)
-  ;; (add-to-list 'warning-suppress-log-types '((defvaralias))) ; FIXME
-  ;; error
-  ;; }}}
+;; debug warning and error
+;; {{{
+;; debug
+(setq debug-on-error t)
+;; warning
+(setq byte-compile-warnings nil)
+(setq native-comp-async-report-warnings-errors nil)
+;; (add-to-list 'warning-suppress-log-types '((defvaralias))) ; FIXME
+;; error
+;; }}}
 #+end_src
 
 ** Confirm before quit
 
 #+begin_src emacs-lisp :tangle yes
-  (setq confirm-kill-emacs (lambda (prompt) (y-or-n-p-with-timeout "确认退出？" 10 "y")))
-  ;; (setq confirm-kill-emacs 'yes-or-no-p)
-  (setq use-short-answers t) ;; use y/n instead of yes/no
+(setq confirm-kill-emacs (lambda (prompt) (y-or-n-p-with-timeout "确认退出？" 10 "y")))
+;; (setq confirm-kill-emacs 'yes-or-no-p)
+(setq use-short-answers t) ;; use y/n instead of yes/no
 #+end_src
 
 ** custom-file
@@ -208,7 +212,7 @@ sibling file: [[file:init.org][init.el config]]
 ** Version Control & symlink
 
 #+begin_src emacs-lisp :tangle yes
-  (setq vc-follow-symlinks t)
+(setq vc-follow-symlinks t)
 #+end_src
 
 
@@ -220,29 +224,29 @@ sibling file: [[file:init.org][init.el config]]
 ;;   \C-v   scroll up
 ;;   \C-t   transpose-chars
 (dolist (key '("\C-v" "\C-t"))
-    (global-unset-key key))
+  (global-unset-key key))
 #+end_src
 
 *** remap Physical keys
 
 #+begin_src emacs-lisp :tangle yes
-  ;; keymap
-  ;; {{{
-  ;; bind: 全局按键/快捷键 (Global key bindings)
-  (setq echo-keystrokes 0.1)
-  (setq mac-command-modifier       'super   ;; s: super(Command/Win)
-        mac-control-modifier       'control ;; C: Ctrl
-        mac-option-modifier        'meta    ;; M: Meta (Option/Alt)
-        mac-right-command-modifier 'hyper   ;; H: hyper (reachable for thumb)
-        mac-right-option-modifier  'none    ;; Leave Option to macOS
-        mac-right-control-modifier 'control ;; C: Ctrl
-        ;; mac-function-modifier            ;; Function Key
-        ;;                                  ;; A: Alt (redundant and not used)
-        ;;                                  ;; H: Hyper
-        ;;                                  ;; S: Shift
-        )
+;; keymap
+;; {{{
+;; bind: 全局按键/快捷键 (Global key bindings)
+(setq echo-keystrokes 0.1)
+(setq mac-command-modifier       'super   ;; s: super(Command/Win)
+      mac-control-modifier       'control ;; C: Ctrl
+      mac-option-modifier        'meta    ;; M: Meta (Option/Alt)
+      mac-right-command-modifier 'hyper   ;; H: hyper (reachable for thumb)
+      mac-right-option-modifier  'none    ;; Leave Option to macOS
+      mac-right-control-modifier 'control ;; C: Ctrl
+      ;; mac-function-modifier            ;; Function Key
+      ;;                                  ;; A: Alt (redundant and not used)
+      ;;                                  ;; H: Hyper
+      ;;                                  ;; S: Shift
+      )
 
-  ;; }}}
+;; }}}
 #+end_src
 
 *** basic keybinding
@@ -288,32 +292,32 @@ sibling file: [[file:init.org][init.el config]]
 *** repeat-mode
 
 #+begin_src emacs-lisp
-  ;; key
-  ;; {{{
+;; key
+;; {{{
 
-  ;; repeat-mode
-  (setq repeat-mode t)
-  (defvar org-mode-navigation-repeat-map
-    "Keymap to repeat `org-mode' navigation key sequences.  Used in `repeat-mode'."
-    ;; org-mode C-c C-n 或 C-p 或 C-f 或 C-b 或 C-i 或 C-u
-    (let ((map (make-sparse-keymap)))
-      (define-key map (kbd "C-n") #'org-next-visible-heading)
-      (define-key map (kbd "C-p") #'org-previous-visible-heading)
-      (define-key map (kbd "C-f") #'org-forward-heading-same-level)
-      (define-key map (kbd "C-b") #'org-backward-heading-same-level)
-      (define-key map (kbd "C-u") #'org-up-heading)
-      (define-key map (kbd "C-i") #'org-down-heading)
-      (--each '(
-                org-next-visible-heading
-                org-previous-visible-heading
-                org-forward-heading-same-level
-                org-backward-heading-same-level
-                org-up-heading org-down-heading)
-              (put it 'repeat-map 'org-mode-navigation-repeat-map)
-              )
-      map)
-    )
-  ;; }}}
+;; repeat-mode
+(setq repeat-mode t)
+(defvar org-mode-navigation-repeat-map
+  "Keymap to repeat `org-mode' navigation key sequences.  Used in `repeat-mode'."
+  ;; org-mode C-c C-n 或 C-p 或 C-f 或 C-b 或 C-i 或 C-u
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-n") #'org-next-visible-heading)
+    (define-key map (kbd "C-p") #'org-previous-visible-heading)
+    (define-key map (kbd "C-f") #'org-forward-heading-same-level)
+    (define-key map (kbd "C-b") #'org-backward-heading-same-level)
+    (define-key map (kbd "C-u") #'org-up-heading)
+    (define-key map (kbd "C-i") #'org-down-heading)
+    (--each '(
+              org-next-visible-heading
+              org-previous-visible-heading
+              org-forward-heading-same-level
+              org-backward-heading-same-level
+              org-up-heading org-down-heading)
+      (put it 'repeat-map 'org-mode-navigation-repeat-map)
+      )
+    map)
+  )
+;; }}}
 #+end_src
 
 *** universal-argument
@@ -373,7 +377,7 @@ sibling file: [[file:init.org][init.el config]]
         (width . 97)
         (left . 700)
         (top . 20)
-	(alpha . (95 .80))
+        (alpha . (95 .80))
         ;; (vertical-scroll-bars . nil)
         ;; (horizontal-scroll-bars . nil)
         ;; (tool-bar-lines . 0)
@@ -413,89 +417,89 @@ sibling file: [[file:init.org][init.el config]]
 ** package & package mirror
 
 #+begin_src emacs-lisp :tangle yes
-  ;; package: package-enable-at-startup is before init but after early-init
-  ;; {{{
-  (setq package-enable-at-startup nil) ;; don't enable at startup, pair with (package-initialize)
-  ;; }}}
+;; package: package-enable-at-startup is before init but after early-init
+;; {{{
+(setq package-enable-at-startup nil) ;; don't enable at startup, pair with (package-initialize)
+;; }}}
 
-  ;; package
-  ;; {{{
-  (setq package-archives
-        '(
-          ("elpa"                . "https://elpa.gnu.org/packages/")
-          ("melpa"               . "http://melpa.org/packages/")
-          ;; ("elpa-devel"          . "https://elpa.gnu.org/devel/")
-          ;; ("jcs-elpa"            . "https://jcs-emacs.github.io/jcs-elpa/packages/")
-          ;; ("gnu"                 . "http://elpa.gnu.org/packages/")
-          ;; ("gnu-devel"           . "https://elpa.gnu.org/devel/")
-          ;; ("gnu-tsinghua"        . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-          ;; ("gnu-ustc"            . "http://mirrors.ustc.edu.cn/elpa/gnu/")
-          ;; ("melpa-stable"        . "https://stable.melpa.org/packages/")
-          ;; ("melpa-tsinghua"      . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-          ;; ("melpa-ustc"          . "http://mirrors.ustc.edu.cn/elpa/melpa/")
-          ;; ("nongnu"              . "https://elpa.nongnu.org/nongnu/")
-          ;; ("nongnu-devel"        . "https://elpa.nongnu.org/devel/")
-          ;; ("nongnu-ustc"         . "http://mirrors.ustc.edu.cn/elpa/nongnu/")
-          ))
-  ;; (setq package-archive-priorities
-  ;; '(
-  ;;         ("elpa"                       . 22)
-  ;;         ("nongnu"                     . 21)
-  ;;         ("gnu"                        . 17)
-  ;;         ("gnu-devel"                  . 18)
-  ;;         ("gnu-tsinghua"               . 50)
-  ;;         ("gnu-ustc"                   . 49)
-  ;;         ("melpa"                      . 51)
-  ;;         ("melpa-stable"               . 14)
-  ;;         ("melpa-tsinghua"             . 48)
-  ;;         ("melpa-ustc"                 . 47)
-  ;;         ("nongnu"                     . 10)
-  ;;         ("nongnu-devel"               . 11)
-  ;;         ("nongnu-ustc"                . 46)
-  ;;         ("jcs-elpa"                   . 7)
-  ;;   )
-  ;; )
-  ;; }}}
+;; package
+;; {{{
+(setq package-archives
+      '(
+        ("elpa"                . "https://elpa.gnu.org/packages/")
+        ("melpa"               . "http://melpa.org/packages/")
+        ;; ("elpa-devel"          . "https://elpa.gnu.org/devel/")
+        ;; ("jcs-elpa"            . "https://jcs-emacs.github.io/jcs-elpa/packages/")
+        ;; ("gnu"                 . "http://elpa.gnu.org/packages/")
+        ;; ("gnu-devel"           . "https://elpa.gnu.org/devel/")
+        ;; ("gnu-tsinghua"        . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+        ;; ("gnu-ustc"            . "http://mirrors.ustc.edu.cn/elpa/gnu/")
+        ;; ("melpa-stable"        . "https://stable.melpa.org/packages/")
+        ;; ("melpa-tsinghua"      . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+        ;; ("melpa-ustc"          . "http://mirrors.ustc.edu.cn/elpa/melpa/")
+        ;; ("nongnu"              . "https://elpa.nongnu.org/nongnu/")
+        ;; ("nongnu-devel"        . "https://elpa.nongnu.org/devel/")
+        ;; ("nongnu-ustc"         . "http://mirrors.ustc.edu.cn/elpa/nongnu/")
+        ))
+;; (setq package-archive-priorities
+;; '(
+;;         ("elpa"                       . 22)
+;;         ("nongnu"                     . 21)
+;;         ("gnu"                        . 17)
+;;         ("gnu-devel"                  . 18)
+;;         ("gnu-tsinghua"               . 50)
+;;         ("gnu-ustc"                   . 49)
+;;         ("melpa"                      . 51)
+;;         ("melpa-stable"               . 14)
+;;         ("melpa-tsinghua"             . 48)
+;;         ("melpa-ustc"                 . 47)
+;;         ("nongnu"                     . 10)
+;;         ("nongnu-devel"               . 11)
+;;         ("nongnu-ustc"                . 46)
+;;         ("jcs-elpa"                   . 7)
+;;   )
+;; )
+;; }}}
 #+end_src
 
 ** package load-path
 
 #+begin_src emacs-lisp :tangle yes
-  ;; package: add other source packages to load path
-  ;; {{{
-  (require 'cl-lib)
-  (defun add-subdirs-to-load-path (search-dir)
-    (interactive)
-    (let* ((dir (file-name-as-directory search-dir)))
-      (dolist (subdir
-               ;; 过滤出不必要的目录，提升 Emacs 启动速度
-               (cl-remove-if
-                #'(lambda (subdir)
-                    (or
-                     ;; 不是目录的文件都移除
-                     (not (file-directory-p (concat dir subdir)))
-                     ;; 父目录、 语言相关和版本控制目录都移除
-                     (member subdir '("." ".."
-                                      "dist" "node_modules" "__pycache__"
-                                      "RCS" "CVS" "rcs" "cvs" ".git" ".github"))))
-                (directory-files dir)))
-        (let ((subdir-path (concat dir (file-name-as-directory subdir))))
-          ;; 目录下有 .el .so .dll 文件的路径才添加到 `load-path' 中，提升 Emacs 启动速度
-          (when (cl-some #'(lambda (subdir-file)
-                             (and (file-regular-p (concat subdir-path subdir-file))
-                                  ;; .so .dll 文件指非 Elisp 语言编写的 Emacs 动态库
-                                  (member (file-name-extension subdir-file) '("el" "so" "dll"))))
-                         (directory-files subdir-path))
+;; package: add other source packages to load path
+;; {{{
+(require 'cl-lib)
+(defun add-subdirs-to-load-path (search-dir)
+  (interactive)
+  (let* ((dir (file-name-as-directory search-dir)))
+    (dolist (subdir
+             ;; 过滤出不必要的目录，提升 Emacs 启动速度
+             (cl-remove-if
+              #'(lambda (subdir)
+                  (or
+                   ;; 不是目录的文件都移除
+                   (not (file-directory-p (concat dir subdir)))
+                   ;; 父目录、 语言相关和版本控制目录都移除
+                   (member subdir '("." ".."
+                                    "dist" "node_modules" "__pycache__"
+                                    "RCS" "CVS" "rcs" "cvs" ".git" ".github"))))
+              (directory-files dir)))
+      (let ((subdir-path (concat dir (file-name-as-directory subdir))))
+        ;; 目录下有 .el .so .dll 文件的路径才添加到 `load-path' 中，提升 Emacs 启动速度
+        (when (cl-some #'(lambda (subdir-file)
+                           (and (file-regular-p (concat subdir-path subdir-file))
+                                ;; .so .dll 文件指非 Elisp 语言编写的 Emacs 动态库
+                                (member (file-name-extension subdir-file) '("el" "so" "dll"))))
+                       (directory-files subdir-path))
 
-            ;; 注意：`add-to-list' 函数的第三个参数必须为 t ，表示加到列表末尾
-            ;; 这样 Emacs 会从父目录到子目录的顺序搜索 Elisp 插件，顺序反过来会导致 Emacs 无法正常启动
-            (add-to-list 'load-path subdir-path t))
+          ;; 注意：`add-to-list' 函数的第三个参数必须为 t ，表示加到列表末尾
+          ;; 这样 Emacs 会从父目录到子目录的顺序搜索 Elisp 插件，顺序反过来会导致 Emacs 无法正常启动
+          (add-to-list 'load-path subdir-path t))
 
-          ;; 继续递归搜索子目录
-          (add-subdirs-to-load-path subdir-path)))))
+        ;; 继续递归搜索子目录
+        (add-subdirs-to-load-path subdir-path)))))
 
-  (add-subdirs-to-load-path "~/.config/emacs/lib")
-  ;; }}}
+(add-subdirs-to-load-path "~/.config/emacs/lib")
+;; }}}
 #+end_src
 
 ** file load-path
@@ -530,10 +534,9 @@ sibling file: [[file:init.org][init.el config]]
 * File End
 
 #+begin_src emacs-lisp :tangle yes
-  ;;; early-init.el ends here
+;;; early-init.el ends here
 #+end_src
 
 * misc
 
 [[https://emacs-china.org/t/emacs-q-emacs/18380][速度突破裸配置／emacs -Q 的极限：emacs 启动时间只够你眨眼？ - Emacs China]]
-
