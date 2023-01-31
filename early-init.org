@@ -501,22 +501,23 @@ sibling file: [[file:init.org][init.el config]]
 ** file load-path
 
 #+begin_src emacs-lisp :tangle no
-  ;; file load-path
-  (defun add-files-to-load-path (folder)
-    "Add FOLDER and its subdirectories to `load-path'."
-    (let ((base folder))
-      (unless (member base load-path)
-        (add-to-list 'load-path base))
-      (dolist (f (directory-files base))
-        (let ((name (concat base "/" f)))
-          (when (and (file-directory-p name)
-                     (not (equal f ".."))
-                     (not (equal f ".")))
-            (unless (member base load-path)
-              (add-to-list 'load-path name)))))))
+;; file load-path
+;; {{{
+(defun add-files-to-load-path (folder)
+  "Add FOLDER and its subdirectories to `load-path'."
+  (let ((base folder))
+    (unless (member base load-path)
+      (add-to-list 'load-path base))
+    (dolist (f (directory-files base))
+      (let ((name (concat base "/" f)))
+        (when (and (file-directory-p name)
+                   (not (equal f ".."))
+                   (not (equal f ".")))
+          (unless (member base load-path)
+            (add-to-list 'load-path name)))))))
 
-  ;; (add-files-to-load-path (expand-file-name "site-lisp" user-emacs-directory))
-  ;; }}}
+;; (add-files-to-load-path (expand-file-name "site-lisp" user-emacs-directory))
+;; }}}
 #+end_src
 
 

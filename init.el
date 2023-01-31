@@ -100,6 +100,7 @@
 (setq read-process-output-max #x10000) ;; 64kb
 ;; }}}
 
+(keymap-global-set "C-c H-k" #'browse-kill-ring)
 ;; zap-up-to-char
 (keymap-global-set "M-z" #'zap-up-to-char)
 
@@ -177,6 +178,22 @@
   :ensure nil
   :hook (after-init . save-place-mode)
   )
+
+;; random function
+;; {{{
+(defun describe-random-interactive-function ()
+  "Show the documentation for a random interactive function.
+Consider only documented, non-obsolete functions."
+  (interactive)
+  (let (result)
+    (mapatoms
+     (lambda (s)
+       (when (and (commandp s)
+                  (documentation s t)
+                  (null (get s 'byte-obsolete-info)))
+         (setq result (cons s result)))))
+    (describe-function (elt result (random (length result))))))
+;; }}}
 
 ;; warn when opening files bigger than 100 MB
 (setq large-file-warning-threshold (* 100 1000 1000))
@@ -419,9 +436,9 @@ Version 2018-06-18 2021-09-30"
    ("C-x s" . eshell)
    ;; :map eshell-mode-map
    ;; (
-    ;;("C-l" . eshell-clear)
-    ;; ("C-r" . helm-eshell-history)
-    ;; )
+   ;;("C-l" . eshell-clear)
+   ;; ("C-r" . helm-eshell-history)
+   ;; )
    )
   )
 
@@ -548,6 +565,72 @@ i.e. change right window to bottom, or change bottom window to right."
 ;;     (pos-tip-hide)))
 ;; }}}
 
+;; unicode
+;; {{{
+;; https://www.unicode.org/Public/UCD/latest/ucd/UnicodeData.txt
+(when (file-exists-p "~/.config/emacs/assets/unicode/UnicodeData.txt")
+  (setq describe-char-unicodedata-file
+        "~/.config/emacs/assets/unicode/UnicodeData.txt")
+  )
+;; }}}
+
+;; 不可见字符: zero-width characters ->​<-
+;; {{{
+;; http://xahlee.info/emacs/emacs/elisp_unicode_replace_invisible_chars.html
+(defun xah-replace-invisible-char ()
+  "Query replace some invisible Unicode chars.
+The chars replaced are:
+ LEFT-TO-RIGHT MARK           (8206, #x200e)
+ OBJECT REPLACEMENT CHARACTER (65532, #xfffc)
+ RIGHT-TO-LEFT MARK           (8207, #x200f)
+ RIGHT-TO-LEFT OVERRIDE       (8238, #x202e)
+ ZERO WIDTH NO-BREAK SPACE    (65279, #xfeff)
+ ZERO WIDTH SPACE             (codepoint 8203, #x200b)
+
+Search begins at buffer beginning. (respects `narrow-to-region')
+
+URL `http://xahlee.info/emacs/emacs/elisp_unicode_replace_invisible_chars.html'
+Version: 2018-09-07 2022-09-13"
+  (interactive)
+  (let ((case-replace nil)
+        (case-fold-search nil)
+        ($p0 (point)))
+    (goto-char (point-min))
+    (while (re-search-forward
+            "\ufeff\\|\u200b\\|\u200f\\|\u202e\\|\u200e\\|\ufffc"
+            nil t)
+      (replace-match ""))
+    (goto-char $p0))
+  )
+;; }}}
+
+;; see invisible chars
+;; {{{
+;; https://emacs-china.org/t/topic/19557
+(defun my/see-invisible-chars ()
+  "Highlight ZERO WIDTH chars in all buffers."
+  (interactive)
+  (let ((charnames (list
+                    "BYTE ORDER MARK"
+                    "LEFT-TO-RIGHT EMBEDDING"
+                    "LEFT-TO-RIGHT MARK"
+                    "OBJECT REPLACEMENT CHARACTER"
+                    "RIGHT-TO-LEFT MARK"
+                    "RIGHT-TO-LEFT OVERRIDE"
+                    "ZERO WIDTH JOINER"
+                    "ZERO WIDTH NO-BREAK SPACE"
+                    "ZERO WIDTH NON-JOINER"
+                    "ZERO WIDTH SPACE"
+                    )))
+    (set-face-background 'glyphless-char "RoyalBlue1")
+    (dolist (name charnames)
+      ;; see info node "info:elisp#Glyphless Chars" for available values
+      (set-char-table-range glyphless-char-display
+                            (char-from-name name) "fuck"))
+    )
+  )
+;; }}}
+
 (keymap-global-set "H-SPC H-SPC" (lambda () (interactive) (insert "\u200b")))
 ;; (define-key org-mode-map (kbd "H-SPC H-SPC")
 ;;             (lambda () (interactive) (insert "\u200b")))
@@ -556,7 +639,7 @@ i.e. change right window to bottom, or change bottom window to right."
 (use-package electric-pair-mode
   :ensure nil
   :hook (prog-mode . electric-pair-mode)
-)
+  )
 
 ;; additionally to the list defined in title-capitalization:
 (defvar my-do-not-capitalize-words '("suliveevil")
@@ -1554,7 +1637,7 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
   :custom
   (avy-background t)
   (avy-keys '(?a ?s ?d ?f ?g ?h ?j ?l ?q ?e ?r ?u ?i ?p ?n))
- )
+  )
 ;; https://karthinks.com/software/avy-can-do-anything
 (keymap-global-set "H-j H-j"     #'avy-goto-char)
 (keymap-global-set "H-j 2"     #'avy-goto-char-2)
@@ -1565,29 +1648,29 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 ;; }}}
 
 (use-package puni
- :ensure nil
- )
+  :ensure nil
+  )
 
 (use-package parrot
   :defer 2
   :bind (
-	 ;;
+         ;;
          ("H-w r" . parrot-rotate-prev-word-at-point)
          ("H-w t" . parrot-rotate-next-word-at-point)
-	 ;;
-	 ("H-k H-k" . parrot-rotate-next-word-at-point)
-	 ("H-k H-j" . parrot-rotate-prev-word-at-point)
+         ;;
+         ("H-k H-k" . parrot-rotate-next-word-at-point)
+         ("H-k H-j" . parrot-rotate-prev-word-at-point)
          )
   :config
   (parrot-mode)
   (parrot-set-parrot-type 'emacs)
   (setq parrot-rotate-dict
         '(
-	  ;; personal setting
-	  (:rot ("¥" "$" "￥"))
-	  (:rot ("nil" "t"))
-	  (:rot ("setq" "defvar"))
-	  ;;
+          ;; personal setting
+          (:rot ("¥" "$" "￥"))
+          (:rot ("nil" "t"))
+          (:rot ("setq" "defvar"))
+          ;;
           (:rot ("alpha" "beta") :caps t :lower nil)
           ;; => rotations are "Alpha" "Beta"
 
@@ -1648,7 +1731,7 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 
 (use-package vundo
   :ensure nil
- )
+  )
 
 ;; difftastic + magit
 ;; {{{
@@ -1656,7 +1739,7 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 (use-package magit
   ;; :defer 2
   :bind (("C-x g"   . magit-status)
-	 ("C-c v g" . magit-status)
+         ("C-c v g" . magit-status)
          ("H-m H-m" . magit-status))
   :config
   (defun my/magit--with-difftastic (buffer command)
@@ -2406,7 +2489,7 @@ When fixing a typo, avoid pass camel case option to cli program."
          ("M-s g" . consult-grep)
          ("M-s G" . consult-git-grep)
          ("M-s r" . consult-ripgrep)
-	 ("C-c r g" . consult-ripgrep)
+         ("C-c r g" . consult-ripgrep)
          ("M-s l" . consult-line)
          ("M-s L" . consult-line-multi)
          ("M-s k" . consult-keep-lines)
@@ -2652,8 +2735,8 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 (use-package org-roam
   ;; :defer 1
   :init
-   (setq org-roam-directory "~/org-roam")
-   (setq org-roam-db-location "~/org-roam/org-roam.db")
+  (setq org-roam-directory "~/org-roam")
+  (setq org-roam-db-location "~/org-roam/org-roam.db")
   :after org
   :bind (
          ("C-c n a" . org-roam-alias-add)
@@ -3094,37 +3177,6 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   )
 ;; }}}
 
-;; shrface eww nov
-;; {{{
-(use-package shrface
-  :defer t
-  :config
-  (shrface-basic)
-  (shrface-trial)
-  (shrface-default-keybindings) ; setup default keybindings
-  (setq shrface-href-versatile t))
-(use-package eww
-  :defer t
-  :init
-  (add-hook 'eww-after-render-hook #'shrface-mode)
-  :config
-  (require 'shrface))
-(use-package nov
-  :defer t
-  :mode ("\\.[eE][pP][uU][bB]\\'" . nov-mode)
-  :init
-  (add-hook 'nov-mode-hook #'shrface-mode)
-  :config
-  ((setq nov-text-width 80)
-   (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
-   (add-to-list 'auto-mode-alist '("\\.epub$" . nov-mode))
-   (require 'shrface)
-   (setq nov-shr-rendering-functions '((img . nov-render-img) (title . nov-render-title)))
-   (setq nov-shr-rendering-functions (append nov-shr-rendering-functions shr-external-rendering-functions))
-   )
-  )
-;; }}}
-
 (use-package mode-minder
   :ensure nil
   )
@@ -3157,13 +3209,13 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   ("H-s H-s" . browser-hist-search)
   :config
   (setq browser-hist-db-paths
-      '(
-	(chrome . "$HOME/Library/Application Support/Google/Chrome/Default/History")
-        (brave . "$HOME/Library/Application Support/BraveSoftware/Brave-Browser/Default/History")
-        (firefox . "$HOME/Library/Application Support/Firefox/Profiles/*.default-release/places.sqlite")
-	(safari . "$HOME/Library/Safari/History.db")
-      ))
-    
+        '(
+          (chrome . "$HOME/Library/Application Support/Google/Chrome/Default/History")
+          (brave . "$HOME/Library/Application Support/BraveSoftware/Brave-Browser/Default/History")
+          (firefox . "$HOME/Library/Application Support/Firefox/Profiles/*.default-release/places.sqlite")
+          (safari . "$HOME/Library/Safari/History.db")
+          ))
+
   :commands
   (browser-hist-search)
   )
@@ -3252,7 +3304,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
           ;; right-char
           ;; rjsx-electric-gt
           ;; rjsx-electric-lt
-	  org-self-insert-command
+          org-self-insert-command
           self-insert-command
           ;; shellcop-erase-buffer
           ;; smarter-move-beginning-of-line
@@ -3365,22 +3417,22 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 
 (use-package diff-lisp
   :ensure nil
-  :defer t
-  )
-(defvar diff-lisp-set-a-and-b nil)
-(defun diff-lisp-set-a-and-b ()
-  (interactive)
-  (if (eq diff-lisp-set-a-and-b nil)
+  :config
+  (defvar diff-lisp-set-a-and-b nil)
+  (defun diff-lisp-set-a-and-b ()
+    (interactive)
+    (if (eq diff-lisp-set-a-and-b nil)
+        (progn
+          (diff-lisp-mark-selected-text-as-a)
+          (setq diff-lisp-set-a-and-b t)
+          )
       (progn
-        (diff-lisp-mark-selected-text-as-a)
-        (setq diff-lisp-set-a-and-b t)
-        )
-    (progn
-      (diff-lisp-diff-a-and-b)
-      (setq diff-lisp-set-a-and-b nil)
-      ))
+        (diff-lisp-diff-a-and-b)
+        (setq diff-lisp-set-a-and-b nil)
+        ))
+    )
+  (keymap-global-set "s-/" #'diff-lisp-set-a-and-b)
   )
-(keymap-global-set "s-/" #'diff-lisp-set-a-and-b)
 
 ;; subed: subtitle edit
 ;; {{{
