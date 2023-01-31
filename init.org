@@ -121,7 +121,7 @@ https://www.bing.com
 ;; {{{
 (set-face-attribute 'default nil
                     :family "Sarasa Mono SC Nerd"
-                    :height 140 ;; 更改显示字体大小
+                    :height 140 ; 更改显示字体大小
                     )
 (global-font-lock-mode t) ;; turn on syntax highlighting for all buffers
 ;; }}}
@@ -144,24 +144,69 @@ https://www.bing.com
 #+begin_src emacs-lisp :tangle yes
 ;; tree-sitter
 ;; {{{
+;; Use the built-in treesit and load all language grammars
+(use-package treesit
+  :ensure nil
+  :custom
+  ;; Load languages directly from the repository after making them
+  (treesit-extra-load-path '("~/.config/emacs/tree-sitter/"))
+  :config
+  ;; Replace relevant modes with the treesitter variant
+  (dolist (mode
+           '(
+             (bash-mode       . bash-ts-mode)
+             (c-mode          . c-ts-mode)
+             (cmake-mode      . cmake-ts-mode)
+             (conf-toml-mode  . toml-ts-mode)
+             (csharp-mode     . csharp-ts-mode)
+             (css-mode        . css-ts-mode)
+             (dockerfile-mode . dockerfile-ts-mode)
+             (java-mode       . java-ts-mode)
+             (javascript-mode . js-ts-mode)
+             (js-json-mode    . json-ts-mode)
+             (js-mode         . js-ts-mode)
+             (python-mode     . python-ts-mode)
+             (ruby-mode       . ruby-ts-mode)
+             (sh-mode         . bash-ts-mode)
+             (typescript-mode . typescript-ts-mode)
+             ;; (c++-mode        . c++-ts-mode) ; FIXME
+             ;; (go-mode         . go-ts-mode) ; FIXME
+             ))
+    (add-to-list 'major-mode-remap-alist mode)
+    )
+  )
+;; }}}
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+;; tree-sitter
+;; {{{
 (require 'treesit)
 ;; (tree-sitter-load 'elisp "elisp")
 ;; (add-to-list 'tree-sitter-major-mode-language-alist '(emacs-lisp-mode . elisp))
 (when (treesit-available-p)
   (setq major-mode-remap-alist
-        '((c-mode          . c-ts-mode)
+        '(
+          (bash-mode       . bash-ts-mode)
+          (c-mode          . c-ts-mode)
           (cmake-mode      . cmake-ts-mode)
-          ;; (c++-mode        . c++-ts-mode)
           (conf-toml-mode  . toml-ts-mode)
           (csharp-mode     . csharp-ts-mode)
           (css-mode        . css-ts-mode)
+          (dockerfile-mode . dockerfile-ts-mode)
           (java-mode       . java-ts-mode)
-          (js-mode         . js-ts-mode)
           (javascript-mode . js-ts-mode)
           (js-json-mode    . json-ts-mode)
+          (js-mode         . js-ts-mode)
           (python-mode     . python-ts-mode)
           (ruby-mode       . ruby-ts-mode)
-          (sh-mode         . bash-ts-mode))))
+          (sh-mode         . bash-ts-mode)
+          (typescript-mode . typescript-ts-mode)
+          ;; (c++-mode        . c++-ts-mode) ; FIXME
+          ;; (go-mode         . go-ts-mode) ; FIXME
+          )
+        )
+  )
 ;; }}}
 #+end_src
 
@@ -283,6 +328,12 @@ https://www.bing.com
   :ensure nil
   :hook (after-init . save-place-mode)
   )
+#+end_src
+
+** eldoc help and man pages
+
+#+begin_src emacs-lisp :tangle no
+(use-package man)
 #+end_src
 
 ** repeat-mode
@@ -808,12 +859,41 @@ i.e. change right window to bottom, or change bottom window to right."
 (delete-selection-mode t) ;; 删除选中的文字或选中文字后输入时替换选中的文字
 (global-subword-mode)     ;; camelCase and superword-mode
 ;; }}}
-
-
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
 (put 'narrow-to-region 'disabled nil)
+;; (put 'dired-find-alternate-file 'disabled nil)
+;; (put 'downcase-region 'disabled nil)
+;; (put 'upcase-region 'disabled nil)
+;; (put 'list-timers 'disabled nil)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(setq
+ scroll-margin 1
+ scroll-step 1
+ )
+#+end_src
+
+** 右键菜单 context menu
+
+#+begin_src emacs-lisp :tangle no
+(add-hook 'text-mode-hook 'context-menu-mode)
+(add-hook 'shell-mode-hook 'context-menu-mode)
+(add-hook 'dired-mode-hook 'context-menu-mode)
+
+(require 'dictionary)
+
+(defun my-context-menu (menu click)
+  "My context menu"
+  (define-key-after menu [dictionary-lookup]
+    '(menu-item "Dict" dictionary-search-word-at-mouse
+                :help "Look up in dictionary"))
+  menu)
+
+;; hook into context menu
+(add-hook 'context-menu-functions #'my-context-menu)
 #+end_src
 
 ** Alfred Search                                                      :macOS:
@@ -887,6 +967,20 @@ i.e. change right window to bottom, or change bottom window to right."
       )
 ;;(face trailing lines-tail) whitespace-line-column 80) ;; highlight long lines tails (setq whitespace-style
 ;;  )
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(setq-default indent-tabs-mode nil)     ; do not insert tabs when indenting by default
+(setq tab-width 4)                      ; 4 spaces by default
+
+(defun my/infer-indentation-style ()
+  ;; if our source file uses tabs, we use tabs, if spaces spaces, and if
+  ;; neither, we use the current indent-tabs-mode
+  (let ((space-count (how-many "^  " (point-min) (point-max)))
+        (tab-count (how-many "^\t" (point-min) (point-max))))
+    (if (> space-count tab-count) (setq indent-tabs-mode nil))
+    (if (> tab-count space-count) (setq indent-tabs-mode t)))
+  )
 #+end_src
 
 *** 括号自动补全
@@ -1113,6 +1207,17 @@ separator."
                 'my-fill-or-unfill)
 #+end_src
 
+#+begin_src emacs-lisp :tangle no
+;; https://www.emacswiki.org/emacs/UnfillParagraph
+(defun unfill-paragraph (&optional region)
+  "Takes a multi-line paragraph and makes it into a single line of text."
+  (interactive (progn (barf-if-buffer-read-only) '(t)))
+  (let ((fill-column (point-max))
+        ;; This would override `fill-column' if it's an integer.
+        (emacs-lisp-docstring-fill-column t))
+    (fill-paragraph nil region))
+  )
+#+end_src
 
 ** ido & fido-vertical-mode
 
@@ -2500,10 +2605,14 @@ Version 2018-01-13 adapted by Karl Voit 2018-07-01"
 
 #+begin_src emacs-lisp :tangle yes
 (use-package which-key
-  :defer 1
+  :hook (after-init . which-key-mode)
   :config
+  (setq
+   which-key-idle-delay 1.6
+   which-key-idle-secondary-delay 0.4
+   which-key-show-operator-state-maps t
+   )
   (which-key-mode)
-  (setq which-key-idle-secondary-delay 0.5)
   (which-key-posframe-mode)
   )
 #+end_src
@@ -2609,7 +2718,13 @@ https://github.com/joddie/macrostep
 
 [[https://github.com/AmaiKinono/puni][AmaiKinono/puni]]: Structured editing (soft deletion, expression navigating & manipulating) that supports many major modes out
 
-*** 近义词/反义词
+#+begin_src emacs-lisp :tangle yes
+(use-package puni
+ :ensure nil
+ )
+#+end_src
+
+*** 近义词/反义词等 parrot
 
 [[https://github.com/dp12/parrot][dp12/parrot: A package to rotate text and party with parrots at the same time]]
 
@@ -2986,6 +3101,8 @@ https://github.com/Fuco1/dired-hacks
 ;; (add-hook 'magit-mode-hook (lambda () (magit-delta-mode +1)))
 ;; ;; }}}
 #+end_src
+
+git-auto-commit
 
 ** 搜索工具
 
@@ -3660,10 +3777,12 @@ binky-mode
 (use-package helpful
   :bind
   ("C-h f" . helpful-function)
+  ("C-h h" . #'helpful-at-point)
   ([remap describe-symbol] . helpful-symbol)
   ([remap describe-variable] . helpful-variable)
   ([remap describe-command] . helpful-command)
-  ([remap describe-key] . helpful-key))
+  ([remap describe-key] . helpful-key)
+  )
 ;; Note that the built-in `describe-function' includes both functions
 ;; and macros. `helpful-function' is functions only, so we provide
 ;; `helpful-callable' as a drop-in replacement.
@@ -3857,6 +3976,22 @@ binky-mode
 https://github.com/logangrado/hideshow-orgmode
 
 ** 选择
+*** selected
+
+#+begin_src emacs-lisp :tangle no
+(use-package selected
+  :diminish selected-minor-mode
+  :demand t                             ; So we can use global mode enable in :config
+  :commands (selected-global-mode selected-minor-mode) ; redundant?
+  :bind ( :map selected-keymap           ; bindings for all active regions
+          ("q" . selected-off)
+          ("u" . upcase-region)
+          ("d" . downcase-region))
+
+  :config
+  (selected-global-mode)
+  )
+#+end_src
 
 *** expand-region
 
@@ -4156,6 +4291,7 @@ https://github.com/logangrado/hideshow-orgmode
   ;; :bind (("C-M-a" . marginalia-cycle)
   ;;        :map minibuffer-local-map
   ;;        ("C-M-a" . marginalia-cycle))
+  ;; :custom (marginalia-align 'right)
   :init
   ;; The :init configuration is always executed (Not lazy!)
   ;; Must be in the :init section of use-package such that the mode gets
@@ -4179,6 +4315,16 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
      (marginalia-annotate-binding cand)
      (marginalia--documentation (marginalia--function-doc sym)))))
 ;; }}}
+#+end_src
+
+
+** embark
+
+#+begin_src emacs-lisp :tangle no
+(use-package embark-consult
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode)
+  )
 #+end_src
 
 ** Diff
@@ -4774,6 +4920,7 @@ org-protocol://roam-node?node=uuid"
   :defer t
   :config
   (setq rfc-mode-directory (expand-file-name "~/Documents/GitHub/RFC-all/txt/"))
+  (setq rfc-mode-index-path (concat rfc-mode-directory"rfc-index.txt"))
   )
 ;; }}}
 #+end_src
@@ -4852,12 +4999,14 @@ org-protocol://roam-node?node=uuid"
 
 ** 光标跳转
 
+*** goto-line-preview
+
 #+begin_src emacs-lisp :tangle yes
 ;; goto-line-preview
 ;; {{{
 (use-package goto-line-preview
   :bind
-  ;; ([remap goto-line] . goto-line-preview)
+  ([remap goto-line] . goto-line-preview)
   ("C-c H-l" . goto-line-preview)
   )
 ;; }}}
@@ -4918,7 +5067,10 @@ org-protocol://roam-node?node=uuid"
          ("C-c m v" . osm-server)
          ("C-c m t" . osm-goto)
          ("C-c m x" . osm-gpx-show)
-         ("C-c m j" . osm-bookmark-jump))
+         ("C-c m j" . osm-bookmark-jump)
+         :map osm-mode-map
+         ("q" . (lambda() (interactive) (quit-window t)))
+         )
 
   :custom
   ;; Take a look at the customization group `osm' for more options.
@@ -4974,17 +5126,19 @@ org-protocol://roam-node?node=uuid"
 ;; elfeed-dashboard
 (use-package elfeed-dashboard
   :ensure nil
+  :after elfeed
   )
 
 ;;elfeed-org
 (use-package elfeed-org
   :ensure nil
+  :after elfeed
   :hook (elfeed-dashboard-mode . elfeed-org)
   )
 ;; }}}
 #+end_src
 
-*** nov + shrface + eww
+*** nov + shrface + eww :FIXME:
 
 #+begin_src emacs-lisp :tangle yes
 ;; shrface eww nov
@@ -5106,6 +5260,14 @@ https://github.com/zk-phi/spray
 #+end_src
 
 * Package (Git and elsewhere)
+** mode
+*** mode-minder
+
+#+begin_src emacs-lisp :tangle yes
+(use-package mode-minder
+  :ensure nil
+  )
+#+end_src
 
 ** explain-pause-mode
 
@@ -5163,11 +5325,24 @@ https://github.com/zk-phi/spray
 #+end_src
 
 ** 字符
+
+*** 字符统计 word count
+
 [[https://github.com/LdBeth/advance-words-count.el][LdBeth/advance-words-count.el: Extended `count-words' function]]
 
 #+begin_src emacs-lisp :tangle yes
 (require 'advance-words-count)
 (require 'advance-wc-mode)
+#+end_src
+
+*** Fuck
+
+#+begin_src emacs-lisp :tangle no
+;; fuck
+;; {{{
+(require 'fuck)
+(keymap-global-set "H-k" #'fuck)
+;; }}}
 #+end_src
 
 ** 快捷键历史记录
@@ -5502,16 +5677,6 @@ https://github.com/zk-phi/spray
 #+end_src
 
 
-
-** Fuck
-
-#+begin_src emacs-lisp :tangle no
-;; fuck
-;; {{{
-(require 'fuck)
-(keymap-global-set "H-k" #'fuck)
-;; }}}
-#+end_src
 
 ** Unicode
 

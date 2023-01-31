@@ -58,3 +58,6 @@
 [submodule "lib/diff-lisp"]
 	path = lib/diff-lisp
 	url = git@github.com:redguardtoo/diff-lisp.git
+[submodule "lib/mode-minder"]
+	path = lib/mode-minder
+	url = git@github.com:jdtsmith/mode-minder.git

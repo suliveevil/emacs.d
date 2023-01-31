@@ -165,14 +165,14 @@ sibling file: [[file:init.org][init.el config]]
 ** custom-file
 
 #+begin_src emacs-lisp :tangle yes
-  ;; custome-file
-  ;; {{{
-  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-  (unless (file-exists-p custom-file)
-    (write-region "" nil custom-file))
-  (when (file-exists-p custom-file)
-    (load custom-file))
-  ;; }}}
+;; custome-file
+;; {{{
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(unless (file-exists-p custom-file)
+  (write-region "" nil custom-file))
+(when (file-exists-p custom-file)
+  (load custom-file))
+;; }}}
 #+end_src
 
 
@@ -268,11 +268,13 @@ sibling file: [[file:init.org][init.el config]]
 ;; {{{
 (keymap-global-set "s-a" #'mark-whole-buffer)
 (keymap-global-set "s-c" #'kill-ring-save)          ;; M-w     copy       复制
+;; clipboard-kill-ring-save
 (keymap-global-set "s-q" #'save-buffers-kill-emacs) ;;         copy       复制
 (keymap-global-set "s-v" #'yank)                    ;; C-y     paste/yank 粘贴
 (keymap-global-set "s-w" #'delete-frame)            ;;
 (keymap-global-set "s-s" #'save-buffer)             ;; C-x C-s save       保存
 (keymap-global-set "s-x" #'kill-region)             ;; C-w     cut        剪切
+;; clipboard-kill-region
 (keymap-global-set "s-z" #'undo)                    ;; C-_     undo       撤销
 (keymap-global-set "s-Z" #'undo-redo)               ;; C-M-_   undo-redo  重做
 ;;
@@ -398,11 +400,14 @@ sibling file: [[file:init.org][init.el config]]
 ** user name & email
 
 #+begin_src emacs-lisp :tangle yes
-  ;; email
-  ;; {{{
-  (setq user-mail-address "suliveevil@qq.com")
-  (setq user-full-name "suliveevil")
-  ;; }}}
+;; user name & email
+;; {{{
+(setq user-full-name "suliveevil")
+(setq user-mail-address "suliveevil@qq.com")
+;; user-domain          ""
+;; user-organisation    ""
+;; user-gpg-encrypt-key ""
+;; }}}
 #+end_src
 
 ** package & package mirror
