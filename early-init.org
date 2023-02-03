@@ -39,21 +39,19 @@ sibling file: [[file:init.org][init.el config]]
 
 
 #+begin_src emacs-lisp :tangle yes
-(setq gc-cons-threshold (* 500 1024 1024)) ; 500 MiB
+(setq gc-cons-threshold most-positive-fixnum) ; Don't collect garbage when init
+;; (setq gc-cons-threshold (* 500 1024 1024)) ; 500 MiB
 
-;; Restore after startup
+;; Restore/decrease GC after startup
 (add-hook 'after-init-hook
           (lambda ()
-            (setq gc-cons-threshold 800000) ; default 800000
+            (setq gc-cons-threshold (* 10 1024 1024)) ; default 800000
             (message "gc-cons-threshold restored to %S"
                      gc-cons-threshold)))
 #+end_src
 
 
 #+begin_src emacs-lisp :tangle no
-;; Don't collect garbage when init
-(setq gc-cons-threshold most-positive-fixnum) ;; 2^61 on my device
-
 ;; Increase the GC threshold for faster startup
 ;; The default is 800 kilobytes.  Measured in bytes.
 (setq gc-cons-threshold (* 500 1024 1024)) ;; 500 MiB
@@ -64,6 +62,12 @@ sibling file: [[file:init.org][init.el config]]
 (setq gc-cons-percentage 0.6)
 #+end_src
 
+** load
+
+#+begin_src emacs-lisp :tangle yes
+(setq load-prefer-newer t)
+#+end_src
+
 ** native-compilation
 
 #+begin_src emacs-lisp :tangle yes
@@ -71,6 +75,10 @@ sibling file: [[file:init.org][init.el config]]
 #+end_src
 
 ** Profile
+
+#+begin_src sh :tangle no
+open -b org.gnu.Emacs --args -q --eval='(message "%s" (emacs-init-time))'
+#+end_src
 
 #+begin_src emacs-lisp :tangle yes
 ;; Profile emacs startup
@@ -396,21 +404,28 @@ sibling file: [[file:init.org][init.el config]]
 ** UI
 
 #+begin_src emacs-lisp :tangle yes
+;; https://emacs-china.org/t/emacs/22375/2
+;; (push '(menu-bar-lines . 0) default-frame-alist) ; 菜单栏
+;; (push '(vertical-scroll-bars) default-frame-alist) ; 滚动条
+;; (push '(tool-bar-lines . 0) default-frame-alist) ; (tool-bar-mode -1) ; 工具栏
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
 ;; UI
 ;; {{{
 ;; (push '(fullscreen . maximized) default-frame-alist)
 (setq default-frame-alist
-      '((height . 46)
+      '(
+	(height . 46)
         (width . 97)
         (left . 700)
         (top . 20)
         (alpha . (95 .80))
         ;; (vertical-scroll-bars . nil)
         ;; (horizontal-scroll-bars . nil)
-        ;; (tool-bar-lines . 0)
+        (tool-bar-lines . 0)
         ))
 (setq inhibit-splash-screen t)        ;; 禁用欢迎界面
-(tool-bar-mode -1)          ;; 工具栏
 (set-fringe-mode 10)        ;;
 (global-visual-line-mode 1) ;;
 (setq visible-bell t)       ;; 关闭提示声音
