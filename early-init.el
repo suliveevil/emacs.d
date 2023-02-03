@@ -15,14 +15,17 @@
       )
   )
 
-(setq gc-cons-threshold (* 500 1024 1024)) ; 500 MiB
+(setq gc-cons-threshold most-positive-fixnum) ; Don't collect garbage when init
+;; (setq gc-cons-threshold (* 500 1024 1024)) ; 500 MiB
 
-;; Restore after startup
+;; Restore/decrease GC after startup
 (add-hook 'after-init-hook
           (lambda ()
-            (setq gc-cons-threshold 800000) ; default 800000
+            (setq gc-cons-threshold (* 10 1024 1024)) ; default 800000
             (message "gc-cons-threshold restored to %S"
                      gc-cons-threshold)))
+
+(setq load-prefer-newer t)
 
 (setq inhibit-automatic-native-compilation t)
 
@@ -164,21 +167,26 @@
 
 ;; }}}
 
+;; https://emacs-china.org/t/emacs/22375/2
+;; (push '(menu-bar-lines . 0) default-frame-alist) ; 菜单栏
+;; (push '(vertical-scroll-bars) default-frame-alist) ; 滚动条
+;; (push '(tool-bar-lines . 0) default-frame-alist) ; (tool-bar-mode -1) ; 工具栏
+
 ;; UI
 ;; {{{
 ;; (push '(fullscreen . maximized) default-frame-alist)
 (setq default-frame-alist
-      '((height . 46)
+      '(
+	(height . 46)
         (width . 97)
         (left . 700)
         (top . 20)
         (alpha . (95 .80))
         ;; (vertical-scroll-bars . nil)
         ;; (horizontal-scroll-bars . nil)
-        ;; (tool-bar-lines . 0)
+        (tool-bar-lines . 0)
         ))
 (setq inhibit-splash-screen t)        ;; 禁用欢迎界面
-(tool-bar-mode -1)          ;; 工具栏
 (set-fringe-mode 10)        ;;
 (global-visual-line-mode 1) ;;
 (setq visible-bell t)       ;; 关闭提示声音

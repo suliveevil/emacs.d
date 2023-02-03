@@ -90,7 +90,7 @@ Select a playlist entry and play it." t)
 Turn on loop for playlist." t)
 (autoload 'empv-playlist-loop-off "empv" "\
 Turn off loop for playlist." t)
-(autoload 'empv-playtlist-save-to-file "empv" "\
+(autoload 'empv-playlist-save-to-file "empv" "\
 Save the current playlist to FILENAME.
 
 (fn FILENAME)" t)
