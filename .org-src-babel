@@ -1,1 +1,26 @@
-re="(([\u2e80-\u9fff]+)([\n\r]{1,2})?([\s\t])?(([\u2e80-\u9fff]+)|(\w)+)([\s\t])?)"
+(require 'yasnippet)
+(yas-global-mode 1)
+(require 'lsp-bridge)
+(global-lsp-bridge-mode)
+;; (keymap-set acm-mode-map "ESC"       'acm-hide)   ; FIXME
+(keymap-unset acm-mode-map "SPC")
+(keymap-unset acm-mode-map "RET")
+(keymap-unset acm-mode-map "TAB")
+(keymap-unset acm-mode-map "<tab>")
+;; complete
+(keymap-set acm-mode-map "SPC" 'acm-complete)
+(keymap-set acm-mode-map "RET" 'acm-complete)
+;; select 方案一
+(keymap-set acm-mode-map "TAB" 'acm-select-next)
+(keymap-set acm-mode-map "<backtab>" 'acm-select-prev)
+;; (keymap-set acm-mode-map "H-TAB"       'acm-select-next)
+;; select 方案二
+(keymap-set acm-mode-map "H-j" 'acm-select-next)
+(keymap-set acm-mode-map "H-k" 'acm-select-prev)
+;; select 方案三
+;; (keymap-set acm-mode-map "RET"     'acm-select-next)
+;; (keymap-set acm-mode-map "<tab>"     'acm-select-prev)
+;; abort
+(keymap-set acm-mode-map "C-j" 'acm-insert-common)
+;; hide
+(keymap-set acm-mode-map "<escape>" 'acm-hide)

@@ -1,0 +1,2 @@
+;;; Generated package description from consult-eglot.el  -*- no-byte-compile: t -*-
+(define-package "consult-eglot" "20230204.1550" "A consulting-read interface for eglot" '((emacs "27.1") (eglot "1.7") (consult "0.31") (project "0.3.0")) :commit "a577cac39800ec3d5d3461f405eebe6913ec38d6" :authors '(("mohsin kaleem" . "mohkale@kisara.moe")) :maintainer '("Mohsin Kaleem") :keywords '("tools" "completion" "lsp") :url "https://github.com/mohkale/consult-eglot")
