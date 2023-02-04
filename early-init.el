@@ -25,7 +25,8 @@
             (message "gc-cons-threshold restored to %S"
                      gc-cons-threshold)))
 
-(setq load-prefer-newer t)
+;; (setq load-prefer-newer t)
+(setq load-prefer-newer noninteractive)
 
 (setq inhibit-automatic-native-compilation t)
 
@@ -44,6 +45,8 @@
 (setq inhibit-startup-screen t)
 (setq inhibit-startup-echo-area-message (user-login-name))
 ;; }}}
+
+(setq python-shell-interpreter "python3")
 
 ;; debug warning and error
 ;; {{{
@@ -167,11 +170,6 @@
 
 ;; }}}
 
-;; https://emacs-china.org/t/emacs/22375/2
-;; (push '(menu-bar-lines . 0) default-frame-alist) ; 菜单栏
-;; (push '(vertical-scroll-bars) default-frame-alist) ; 滚动条
-;; (push '(tool-bar-lines . 0) default-frame-alist) ; (tool-bar-mode -1) ; 工具栏
-
 ;; UI
 ;; {{{
 ;; (push '(fullscreen . maximized) default-frame-alist)
@@ -184,8 +182,9 @@
         (alpha . (95 .80))
         ;; (vertical-scroll-bars . nil)
         ;; (horizontal-scroll-bars . nil)
-        (tool-bar-lines . 0)
+        ;; (tool-bar-lines . 0)
         ))
+(push '(tool-bar-mode . nil) default-frame-alist)
 (setq inhibit-splash-screen t)        ;; 禁用欢迎界面
 (set-fringe-mode 10)        ;;
 (global-visual-line-mode 1) ;;

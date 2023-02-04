@@ -379,8 +379,10 @@ Consider only documented, non-obsolete functions."
 (use-package autorevert
   :ensure nil
   :diminish
-  :hook (on-first-file . global-auto-revert-mode)
-  :custom (auto-revert-verbose nil)
+  :hook
+  (on-first-file . global-auto-revert-mode)
+  :custom
+  (auto-revert-verbose nil)
   ;; :config (global-auto-revert-mode 1)
   )
 
@@ -878,6 +880,24 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
   )
 ;; }}}
 
+(use-package eglot
+  :ensure nil
+  :defer 1
+  :bind
+  (
+   :map eglot-mode-map
+   ("C-c l a" . eglot-code-actions)
+   ("C-c l r" . eglot-rename)
+   ("C-c l f" . eglot-format)
+   ("C-c l d" . eldoc)
+   )
+  :config
+  (setq read-process-output-max (* 1024 1024))
+  (setq eglot-events-buffer-size 0)
+  (add-to-list 'eglot-ignored-server-capabilities :documentHighlightProvider)
+  ;; (add-to-list 'eglot-server-programs '(rust-mode . ("rust-analyzer")))
+  )
+
 ;; https://github.com/Eason0210/.emacs.d/
 (use-package emacs
   :ensure nil
@@ -1273,6 +1293,17 @@ occurence of CHAR."
       '(buffer-file-name (:eval (abbreviate-file-name buffer-file-name))
                          (dired-directory dired-directory "%b")))
 ;; }}}
+
+(use-package windmove
+  :ensure nil
+  :bind
+  (
+   ("C-c <left>" . windmove-left)
+   ("C-c <right>" . windmove-right)
+   ("C-c <up>" . windmove-up)
+   ("C-c <down>" . windmove-down)
+   )
+  )
 
 (defun my/toggle-fullscreen ()
   (interactive)
@@ -2208,13 +2239,10 @@ all open tasks in current Org buffer
   )
 ;; }}}
 
-;; avy
-;; {{{
-;; https://karthinks.com/software/avy-can-do-anything
 (use-package avy
   :ensure nil
   :bind
-  ;; avy-goto-char-timer
+  ;; ("" . avy-goto-char-timer)
   ("H-j H-j"   . avy-goto-char)
   ("H-j 2"     . avy-goto-char-2)
   ("H-j H-k"   . avy-goto-line)
@@ -2235,7 +2263,6 @@ all open tasks in current Org buffer
     t)
   (setf (alist-get ?e avy-dispatch-alist) 'avy-action-embark)
   )
-;; }}}
 
 ;; goto-line-preview
 ;; {{{
@@ -2245,6 +2272,92 @@ all open tasks in current Org buffer
   ("C-c H-l" . goto-line-preview)
   )
 ;; }}}
+
+(use-package puni
+  :ensure nil
+  :defer t
+  )
+
+(use-package parrot
+  ;; :defer t
+  :bind (
+         ;;
+         ("H-r k" . parrot-rotate-prev-word-at-point)
+         ("H-k H-j" . parrot-rotate-prev-word-at-point)
+         ("H-r j" . parrot-rotate-next-word-at-point)
+         ("H-k H-k" . parrot-rotate-next-word-at-point)
+
+         )
+  :config
+  (parrot-mode)
+  (parrot-set-parrot-type 'emacs)
+  (setq parrot-rotate-dict
+        '(
+          ;; personal setting
+          (:rot ("¥" "$" "￥"))
+          (:rot ("nil" "t"))
+          (:rot ("setq" "defvar"))
+          ;;
+          (:rot ("alpha" "beta") :caps t :lower nil)
+          ;; => rotations are "Alpha" "Beta"
+
+          (:rot ("snek" "snake" "stawp"))
+          ;; => rotations are "snek" "snake" "stawp"
+
+          (:rot ("yes" "no") :caps t :upcase t)
+          ;; => rotations are "yes" "no", "Yes" "No", "YES" "NO"
+
+          (:rot ("&" "|"))
+          ;; => rotations are "&" "|"
+
+          ;; default dictionary starts here ('v')
+          (:rot ("begin" "end") :caps t :upcase t)
+          (:rot ("enable" "disable") :caps t :upcase t)
+          (:rot ("enter" "exit") :caps t :upcase t)
+          (:rot ("forward" "backward") :caps t :upcase t)
+          (:rot ("front" "rear" "back") :caps t :upcase t)
+          (:rot ("get" "set") :caps t :upcase t)
+          (:rot ("high" "low") :caps t :upcase t)
+          (:rot ("in" "out") :caps t :upcase t)
+          (:rot ("left" "right") :caps t :upcase t)
+          (:rot ("min" "max") :caps t :upcase t)
+          (:rot ("on" "off") :caps t :upcase t)
+          (:rot ("prev" "next"))
+          (:rot ("start" "stop") :caps t :upcase t)
+          (:rot ("true" "false") :caps t :upcase t)
+          (:rot ("&&" "||"))
+          (:rot ("==" "!="))
+          (:rot ("." "->"))
+          (:rot ("if" "cond" "else" "elif"))
+          (:rot ("ifdef" "ifndef"))
+          (:rot ("int8_t" "int16_t" "int32_t" "int64_t"))
+          (:rot ("uint8_t" "uint16_t" "uint32_t" "uint64_t"))
+          (:rot ("0" "1" "2" "3" "4" "5" "6" "7" "8" "9"))
+          (:rot ("1st" "2nd" "3rd" "4th" "5th" "6th" "7th" "8th" "9th" "10th"))
+          )
+        )
+  )
+
+;; pangu-spacing
+;; {{{
+(use-package pangu-spacing
+  :defer 3
+  :config
+  (global-pangu-spacing-mode 1)
+  (setq pangu-spacing-real-insert-separtor t)
+  )
+;; }}}
+
+(use-package visual-regexp
+  :ensure nil
+  :defer 1
+  :bind
+  (
+   ("C-c r e" . vr/query-replace)
+   ("C-c r r" . vr/replace)
+   ("C-c m m" . vr/mc-mark)        ; for multiple-cursors
+   )
+  )
 
 ;; expand-region
 ;; {{{
@@ -2514,92 +2627,6 @@ When fixing a typo, avoid pass camel case option to cli program."
       )
 ;; }}}
 
-(use-package puni
-  :ensure nil
-  :defer t
-  )
-
-(use-package parrot
-  ;; :defer t
-  :bind (
-         ;;
-         ("H-r k" . parrot-rotate-prev-word-at-point)
-         ("H-k H-j" . parrot-rotate-prev-word-at-point)
-         ("H-r j" . parrot-rotate-next-word-at-point)
-         ("H-k H-k" . parrot-rotate-next-word-at-point)
-
-         )
-  :config
-  (parrot-mode)
-  (parrot-set-parrot-type 'emacs)
-  (setq parrot-rotate-dict
-        '(
-          ;; personal setting
-          (:rot ("¥" "$" "￥"))
-          (:rot ("nil" "t"))
-          (:rot ("setq" "defvar"))
-          ;;
-          (:rot ("alpha" "beta") :caps t :lower nil)
-          ;; => rotations are "Alpha" "Beta"
-
-          (:rot ("snek" "snake" "stawp"))
-          ;; => rotations are "snek" "snake" "stawp"
-
-          (:rot ("yes" "no") :caps t :upcase t)
-          ;; => rotations are "yes" "no", "Yes" "No", "YES" "NO"
-
-          (:rot ("&" "|"))
-          ;; => rotations are "&" "|"
-
-          ;; default dictionary starts here ('v')
-          (:rot ("begin" "end") :caps t :upcase t)
-          (:rot ("enable" "disable") :caps t :upcase t)
-          (:rot ("enter" "exit") :caps t :upcase t)
-          (:rot ("forward" "backward") :caps t :upcase t)
-          (:rot ("front" "rear" "back") :caps t :upcase t)
-          (:rot ("get" "set") :caps t :upcase t)
-          (:rot ("high" "low") :caps t :upcase t)
-          (:rot ("in" "out") :caps t :upcase t)
-          (:rot ("left" "right") :caps t :upcase t)
-          (:rot ("min" "max") :caps t :upcase t)
-          (:rot ("on" "off") :caps t :upcase t)
-          (:rot ("prev" "next"))
-          (:rot ("start" "stop") :caps t :upcase t)
-          (:rot ("true" "false") :caps t :upcase t)
-          (:rot ("&&" "||"))
-          (:rot ("==" "!="))
-          (:rot ("." "->"))
-          (:rot ("if" "cond" "else" "elif"))
-          (:rot ("ifdef" "ifndef"))
-          (:rot ("int8_t" "int16_t" "int32_t" "int64_t"))
-          (:rot ("uint8_t" "uint16_t" "uint32_t" "uint64_t"))
-          (:rot ("0" "1" "2" "3" "4" "5" "6" "7" "8" "9"))
-          (:rot ("1st" "2nd" "3rd" "4th" "5th" "6th" "7th" "8th" "9th" "10th"))
-          )
-        )
-  )
-
-;; pangu-spacing
-;; {{{
-(use-package pangu-spacing
-  :defer 3
-  :config
-  (global-pangu-spacing-mode 1)
-  (setq pangu-spacing-real-insert-separtor t)
-  )
-;; }}}
-
-(use-package visual-regexp
-  :ensure nil
-  :defer 1
-  :bind
-  (
-   ("C-c r e" . vr/query-replace)
-   ("C-c r r" . vr/replace)
-   ("C-c m m" . vr/mc-mark)        ; for multiple-cursors
-   )
-  )
-
 ;; pyim
 ;; {{{
 (use-package pyim
@@ -2680,8 +2707,8 @@ When fixing a typo, avoid pass camel case option to cli program."
   :ensure nil
   :init
   (setq completion-styles '(basic partial-completion orderless))
-  ;; (setq completion-styles '(orderless basic initials substring partial-completion flex)
-  (setq orderless-component-separator "[ &]") ; & is for company because space will break completion
+  ;; (setq completion-styles
+  ;;       '(orderless basic initials substring partial-completion flex)
   (setq completion-category-defaults nil)
   (setq completion-category-overrides nil)
   ;; (setq completion-category-overrides '(
@@ -2690,6 +2717,7 @@ When fixing a typo, avoid pass camel case option to cli program."
   ;;                                     )
   ;;                                    )
   ;;    )
+  (setq orderless-component-separator "[ &]") ; & is for company because space will break completion
   ;; :config
   ;; ;; make completion support pinyin, refer to
   ;; ;; https://emacs-china.org/t/vertico/17913/2
@@ -2903,12 +2931,10 @@ When fixing a typo, avoid pass camel case option to cli program."
   :ensure nil
   ;; :diminish yas-minor-mode
   :hook
-  (
-   (after-init . yas-reload-all)
-   ((prog-mode LaTeX-mode org-mode) . yas-minor-mode)
-   )
+  (after-init . yas-reload-all)
+  ;; ((prog-mode LaTeX-mode org-mode) . yas-minor-mode)
   :config
-  ;; (yas-global-mode 1)
+  (yas-global-mode 1)
   ;; Suppress warning for yasnippet code.
   (require 'warnings)
   (add-to-list 'warning-suppress-types '(yasnippet backquote-change))
@@ -2927,6 +2953,11 @@ When fixing a typo, avoid pass camel case option to cli program."
   ;;   )
   )
 ;; }}}
+
+(use-package posframe
+  :ensure nil
+  :defer 1
+  )
 
 ;; sticky header: topsy
 ;; {{{
@@ -2978,8 +3009,8 @@ When fixing a typo, avoid pass camel case option to cli program."
 ;; highlight-parentheses
 ;; {{{
 (use-package highlight-parentheses
-  ;; :defer 1
-  :hook (after-init . highlight-parentheses-mode)
+  :defer 1
+  ;; :hook (after-init . highlight-parentheses-mode)
   :config
   (setq  highlight-parentheses-colors ; 括号颜色（由内向外）
          '(
@@ -2991,9 +3022,7 @@ When fixing a typo, avoid pass camel case option to cli program."
            "red1"
            ;; "pink" ; only six colors supported ?
            ))
-  ;; (global-highlight-parentheses-mode)
-  ;; (global-highlight-parentheses-mode t)
-  ;; (setq global-highlight-parentheses-mode t)
+  (global-highlight-parentheses-mode t)
   )
 
 ;; Apple Six Colors
@@ -3095,7 +3124,7 @@ When fixing a typo, avoid pass camel case option to cli program."
          ([remap Info-search] . consult-info)
          ;; C-x bindings (ctl-x-map)
          ("C-x M-:" . consult-complex-command) ;; orig. repeat-complex-command
-         ;; ("C-x b" . consult-buffer)            ;; orig. switch-to-buffer
+         ("C-x b" . consult-buffer)            ;; orig. switch-to-buffer
          ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
          ("C-x 5 b" . consult-buffer-other-frame) ;; orig. switch-to-buffer-other-frame
          ("C-x r b" . consult-bookmark)           ;; orig. bookmark-jump
@@ -3235,14 +3264,15 @@ When fixing a typo, avoid pass camel case option to cli program."
 
 ;; Configure directory extension.
 (use-package vertico-directory
-  :after vertico
   :ensure nil
+  :after vertico
   ;; Tidy shadowed file names
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy)
   ;; More convenient directory navigation commands
   :bind
   (
    :map vertico-map
+   ("H-k" . vertico-directory-up)
    ("RET" . vertico-directory-enter)
    ("DEL" . vertico-directory-delete-char)
    ("M-DEL" . vertico-directory-delete-word)
@@ -3307,6 +3337,7 @@ When fixing a typo, avoid pass camel case option to cli program."
 ;; {{{
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia
+  :ensure nil
   ;; Either bind `marginalia-cycle' globally or only in the minibuffer
   ;; :bind (("C-M-a" . marginalia-cycle)
   ;;        :map minibuffer-local-map
@@ -3318,22 +3349,22 @@ When fixing a typo, avoid pass camel case option to cli program."
   ;; enabled right away. Note that this forces loading the package.
   ;; (marginalia-mode)
   :hook (after-init . marginalia-mode)
-  )
-;;
-;; https://emacs-china.org/t/21-emacs-vertico-orderless-marginalia-embark-consult/19683/
-(defun marginalia-annotate-command (cand)
-  "Annotate command CAND with its documentation string.
+  :config
+  ;; https://emacs-china.org/t/21-emacs-vertico-orderless-marginalia-embark-consult/19683/
+  (defun marginalia-annotate-command (cand)
+    "Annotate command CAND with its documentation string.
 Similar to `marginalia-annotate-symbol', but does not show symbol class."
-  (when-let* ((sym (intern-soft cand))
-              (mode (if (boundp sym)
-                        sym
-                      (lookup-minor-mode-from-indicator cand))))
-    (concat
-     (if (and (boundp mode) (symbol-value mode))
-         (propertize " On" 'face 'marginalia-on)
-       (propertize " Off" 'face 'marginalia-off))
-     (marginalia-annotate-binding cand)
-     (marginalia--documentation (marginalia--function-doc sym)))))
+    (when-let* ((sym (intern-soft cand))
+                (mode (if (boundp sym)
+                          sym
+                        (lookup-minor-mode-from-indicator cand))))
+      (concat
+       (if (and (boundp mode) (symbol-value mode))
+           (propertize " On" 'face 'marginalia-on)
+         (propertize " Off" 'face 'marginalia-off))
+       (marginalia-annotate-binding cand)
+       (marginalia--documentation (marginalia--function-doc sym)))))
+  )
 ;; }}}
 
 (use-package embark
@@ -3896,7 +3927,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 
 (use-package mode-minder
   :ensure nil
-  :defer t
+  :defer 3
   )
 
 (use-package explain-pause-mode
@@ -4069,46 +4100,6 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   :bind
   ("C-c w c" . advance-words-count)
   )
-
-;; lsp-bridge                                        ; FIXME
-;; {{{
-(use-package lsp-bridge
-  :ensure nil
-  ;; :after (yasnippet)
-  :hook
-  ((prog-mode org-mode) . lsp-bridge-mode)
-  ;; :defer 1
-  :bind
-  (
-   :map acm-mode-map
-   ("<escape>" . acm-hide)
-   ("C-j"       . acm-insert-common)
-   ;; complete
-   ("SPC"       . acm-complete)
-   ("RET"       . acm-complete)
-   ;; ([remap yas-expand] . acm-complete)
-   ;; select
-   ("TAB"       . acm-select-next)
-   ("<backtab>" . acm-select-prev)
-   ;; ("H-TAB" . acm-select-prev)
-   ("H-j"       . acm-select-next)
-   ("H-k" . acm-select-prev)
-   )
-  :init
-  (require 'yasnippet)
-  (yas-global-mode 1)
-  (setq-default lsp-bridge-enable-mode-line nil)
-  :config
-  ;; (setq lsp-bridge-use-ds-pinyin-in-org-mode t)
-  ;; (setq lsp-bridge-use-wenls-in-org-mode t)
-  (setq acm-enable-quick-access t)
-  (setq acm-quick-access-modifier 'meta)
-  ;; lsp-bridge-org-babel-lang-list ; default: clojure latex python
-  (add-to-list 'lsp-bridge-org-babel-lang-list "emacs-lisp")
-  (add-to-list 'lsp-bridge-org-babel-lang-list "shell")
-  ;; (global-lsp-bridge-mode)
-  )
-;; }}}
 
 ;; unicode
 ;; {{{

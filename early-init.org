@@ -65,7 +65,8 @@ sibling file: [[file:init.org][init.el config]]
 ** load
 
 #+begin_src emacs-lisp :tangle yes
-(setq load-prefer-newer t)
+;; (setq load-prefer-newer t)
+(setq load-prefer-newer noninteractive)
 #+end_src
 
 ** native-compilation
@@ -171,6 +172,11 @@ open -b org.gnu.Emacs --args -q --eval='(message "%s" (emacs-init-time))'
 (defconst *is-windows* (or (eq system-type 'ms-dos) (eq system-type 'windows-nt)))
 #+end_src
 
+*** python
+
+#+begin_src emacs-lisp :tangle yes
+(setq python-shell-interpreter "python3")
+#+end_src
 
 ** Backtrace & debug: warning error
 
@@ -403,11 +409,13 @@ open -b org.gnu.Emacs --args -q --eval='(message "%s" (emacs-init-time))'
 
 ** UI
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 ;; https://emacs-china.org/t/emacs/22375/2
 ;; (push '(menu-bar-lines . 0) default-frame-alist) ; 菜单栏
 ;; (push '(vertical-scroll-bars) default-frame-alist) ; 滚动条
 ;; (push '(tool-bar-lines . 0) default-frame-alist) ; (tool-bar-mode -1) ; 工具栏
+(push '(scroll-bar-mode . nil) default-frame-alist)
+(push '(menu-bar-mode . nil) default-frame-alist)
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
@@ -423,8 +431,9 @@ open -b org.gnu.Emacs --args -q --eval='(message "%s" (emacs-init-time))'
         (alpha . (95 .80))
         ;; (vertical-scroll-bars . nil)
         ;; (horizontal-scroll-bars . nil)
-        (tool-bar-lines . 0)
+        ;; (tool-bar-lines . 0)
         ))
+(push '(tool-bar-mode . nil) default-frame-alist)
 (setq inhibit-splash-screen t)        ;; 禁用欢迎界面
 (set-fringe-mode 10)        ;;
 (global-visual-line-mode 1) ;;
@@ -566,6 +575,15 @@ open -b org.gnu.Emacs --args -q --eval='(message "%s" (emacs-init-time))'
 ;; }}}
 #+end_src
 
+#+begin_src emacs-lisp :tangle no
+;; https://github.com/cabins/emacs.d/
+;; update load-path to make customized lisp codes work
+(dolist (folder
+         (directory-files (concat user-emacs-directory "lisp")
+                          t
+                          directory-files-no-dot-files-regexp))
+  (add-to-list 'load-path folder))
+#+end_src
 
 ** Emacs Server and Client
 
