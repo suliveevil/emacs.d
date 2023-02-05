@@ -104,22 +104,6 @@ Consider only documented, non-obsolete functions."
              )
 #+end_src
 
-#+begin_src emacs-lisp :tangle no
-(defvar my-emacs-uptime-log (locate-user-emacs-file "uptime.log")
-  "Log file for `my-log-emacs-uptime'.")
-(defun my-log-emacs-uptime ()
-  "Write emacs uptime to `my-emacs-uptime-log'. Use with `kill-emacs-hook'."
-  (with-temp-buffer
-    (insert
-     (format-time-string "%Y-%m-%d %H:%M:%S" before-init-time)
-     " to "
-     (format-time-string "%Y-%m-%d %H:%M:%S" (current-time))
-     " = "
-     (emacs-uptime)
-     "\n")
-    (append-to-file nil nil my-emacs-uptime-log)))
-(add-hook 'kill-emacs-hook 'my-log-emacs-uptime)
-#+end_src
 
 ** File Header
 
@@ -359,10 +343,11 @@ Consider only documented, non-obsolete functions."
 #+begin_src emacs-lisp :tangle yes
 (use-package repeat
   :ensure nil
-  :init
-  (put 'other-window 'repeat-map nil)
+  :hook (after-init . repeat-mode)
   :bind
   ("M-o" . other-window)
+  :init
+  (put 'other-window 'repeat-map nil)
   )
 #+end_src
 
@@ -603,47 +588,47 @@ open -n /Applications/Emacs.app --args -q --eval='(message "%s" (emacs-init-time
 *** treesit
 
 #+begin_src emacs-lisp :tangle yes
-;; tree-sitter
-;; {{{
-;; Use the built-in treesit and load all language grammars
-(use-package treesit
-  :when (and (fboundp 'treesit-available-p)
-             (treesit-available-p))
-  :ensure nil
-  :defer 1
-  :custom
-  ;; Load languages directly from the repository after making them
-  (treesit-extra-load-path '("~/.config/emacs/tree-sitter/"))
-  (major-mode-remap-alist
-   '(
-     (c-mode          . c-ts-mode)
-     (c++-mode        . c++-ts-mode)
-     (csharp-mode     . csharp-ts-mode)
-     (conf-toml-mode  . toml-ts-mode)
-     (css-mode        . css-ts-mode)
-     (java-mode       . java-ts-mode)
-     (js-mode         . js-ts-mode)
-     (js-json-mode    . json-ts-mode)
-     (python-mode     . python-ts-mode)
-     (ruby-mode       . ruby-ts-mode)
-     (sh-mode         . bash-ts-mode)
-     ))
-  :config
+  ;; tree-sitter
+  ;; {{{
+  ;; Use the built-in treesit and load all language grammars
+  (use-package treesit
+    :when (and (fboundp 'treesit-available-p) (treesit-available-p))
+    :ensure nil
+    :defer 1
+    :hook (emacs-lisp-mode . (lambda () (treesit-parser-create 'elisp)))
+    :config
+    ;; Load languages directly from the repository after making them
+    (setq treesit-extra-load-path
+	  (expand-file-name "tree-sitter" user-emacs-directory))
 
-  (add-to-list 'auto-mode-alist
-               '("\\(?:CMakeLists\\.txt\\|\\.cmake\\)\\'" . cmake-ts-mode))
-  (add-to-list 'auto-mode-alist
-               '("\\.rs\\'" . rust-ts-mode))
-  (add-to-list 'auto-mode-alist
-               '("\\.ts\\'" . typescript-ts-mode))
-  (add-to-list 'auto-mode-alist
-               '("\\.tsx\\'" . tsx-ts-mode))
-  (add-to-list 'auto-mode-alist
-               '("\\.ya?ml\\'" . yaml-ts-mode))
-  )
+    (add-to-list
+     'major-mode-remap-alist
+     '(
+       (c-mode . c-ts-mode)
+       (c++-mode . c++-ts-mode)
+       (csharp-mode . csharp-ts-mode)
+       (conf-toml-mode . toml-ts-mode)
+       (css-mode . css-ts-mode)
+       (java-mode . java-ts-mode)
+       (js-mode . js-ts-mode)
+       (js-json-mode . json-ts-mode)
+       (python-mode . python-ts-mode)
+       (ruby-mode . ruby-ts-mode)
+       (sh-mode . bash-ts-mode)))
+    (add-to-list
+     'auto-mode-alist
+     '(
+       ("\\(?:CMakeLists\\.txt\\|\\.cmake\\)\\'" . cmake-ts-mode)
+       ("\\.rs\\'" . rust-ts-mode)
+       ("\\.ts\\'" . typescript-ts-mode)
+       ("\\.tsx\\'" . tsx-ts-mode)
+       ("\\.ya?ml\\'" . yaml-ts-mode)
+       ))
 
-(add-hook 'emacs-lisp-mode-hook #'(lambda () (treesit-parser-create 'elisp)))
-;; }}}
+    ;; (add-hook 'emacs-lisp-mode-hook
+    ;;   #'(lambda () (treesit-parser-create 'elisp)))
+    )
+    ;; }}}
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
@@ -818,15 +803,34 @@ timezone
 (use-package iso8601
   :ensure nil
   :defer t
-  :bind
-  ("C-c D" . my/date-and-time-iso8601)
+  :hook (kill-emacs . my-log-emacs-uptime)
+  :bind ("C-c D" . my/date-and-time-iso8601)
   :config
   (defun my/date-and-time-iso8601 ()
     (interactive)
-    (insert (format-time-string "%FT%T%z"))
-    )
-  )
+    (insert (format-time-string "%FT%T%z")))
+
+  ;; https://emacsredux.com/blog/2014/12/23/uptime/
+  (defvar my/emacs-uptime-log
+    ;; (locate-user-emacs-file "uptime.log")
+    (expand-file-name "assets/uptime.org" user-emacs-directory)
+    "Log file for `my/log-emacs-uptime'.")
+  (defun my-log-emacs-uptime ()
+    "Write emacs uptime to `my/emacs-uptime-log'. Use with `kill-emacs-hook'."
+    (with-temp-buffer
+      (insert
+       (format-time-string "%FT%T%z" before-init-time)
+       " to "
+       (format-time-string "%FT%T%z" (current-time))
+       " = "
+       (emacs-uptime)
+       "\n")
+      (append-to-file nil nil my/emacs-uptime-log))))
 ;; }}}
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+
 #+end_src
 
 ** 字体、语法、拼写 font syntax spell
@@ -866,7 +870,7 @@ timezone
   :ensure nil
   :defer t
   :bind
-  ("C-c H-k" . yank-from-kill-ring)
+  ;; ("C-c H-k" . yank-from-kill-ring)
   ("M-z" . zap-up-to-char)
   )
 #+end_src
@@ -1010,6 +1014,14 @@ desktop
      "url"
      ;; Folders on macOS end
      ))
+  :config
+  (recentf-mode +1)
+  (defun my/recentf-ido-find-file ()
+    "Find a recent file using ido."
+    (interactive)
+    (let ((file (ido-completing-read "Choose recent file: " recentf-list nil t)))
+      (when file
+        (find-file file))))
   )
 #+end_src
 
@@ -1028,6 +1040,212 @@ desktop
 
 #+begin_src emacs-lisp :tangle no
 ;; multisession
+#+end_src
+
+** 缓冲区 buffer
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package emacs
+    :ensure nil
+    :bind
+    (
+     ("C-c b f" . next-buffer)
+     ("C-c b b" . previous-buffer)
+     ("C-c b l" . list-buffers)
+     ;; esc-map
+     ;; ("M-b f" . next-buffer)
+     ;; ("M-b b" . previous-buffer)
+     ;; ("M-b l" . list-buffers)
+     )
+    )
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(use-package uniquify
+  :defer t
+  )
+#+end_src
+
+*** 行 line
+
+#+begin_src emacs-lisp :tangle yes
+;; line
+;; {{{
+(use-package display-line-numbers
+  :ensure nil
+  :hook
+  (prog-mode . display-line-numbers-mode)
+  ;; (after-init . global-display-line-numbers-mode)
+  :bind
+  ("C-c O"   . open-newline-above)
+  ("C-c C-o" . open-newline-below)
+  :config
+  (setq-default display-line-numbers-widen t) ; Keep line numbers inside a narrow
+  (setq display-line-numbers-width-start t)
+  (setq display-line-numbers-grow-only t)    ;; do not shrink line number width
+  (setq display-line-numbers-type 'relative) ;; 相对行号
+
+  ;; new line
+  ;; https://github.com/manateelazycat/open-newline
+
+  (defun open-newline-above (arg)
+    "Move to the previous line (like vi) and then opens a line."
+    (interactive "p")
+    (beginning-of-line)
+    (open-line arg)
+    (if (not (member major-mode '(haskell-mode org-mode literate-haskell-mode)))
+        (indent-according-to-mode)
+      (beginning-of-line)))
+
+  (defun open-newline-below (arg)
+    "Move to the next line (like vi) and then opens a line."
+    (interactive "p")
+    (end-of-line)
+    (open-line arg)
+    (call-interactively 'next-line arg)
+    (if (not (member major-mode '(haskell-mode org-mode literate-haskell-mode)))
+        (indent-according-to-mode)
+      (beginning-of-line)))
+  )
+;; }}}
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(use-package emacs
+  :ensure nil
+  ;; :bind
+  ;; (
+  ;;  fill-paragraph
+  ;;  )
+  :init
+  ;; wrap/truncate: word-wrap-mode
+  ;; (setq-default truncate-lines t)
+  (setq word-wrap-by-category t) ;; improves CJK + Latin word-wrapping
+  )
+
+;; (use-package simple
+;;   :ensure nil
+;;   :bind
+;;   (
+;;    ;; toggle-word-wrap
+;;    )
+;;   )
+#+end_src
+
+*** 列 column 
+
+#+begin_src emacs-lisp :tangle yes
+(use-package display-fill-column-indicator
+  :ensure nil
+  :hook
+  (after-init . global-display-fill-column-indicator-mode)
+  ;; (add-hook 'prog-mode-hook 'display-fill-column-indicator-mode)
+  )
+#+end_src
+
+*** kill buffer
+
+#+begin_src emacs-lisp :tangle yes
+;; kill buffer
+;; {{{
+(use-package emacs
+  :ensure nil
+  :bind
+  ("C-c K" . my/kill-all-other-buffers)
+  :config
+  (setq confirm-kill-processes nil)
+  (defun my/kill-all-other-buffers ()
+    (interactive)
+    (mapc 'kill-buffer (cdr (buffer-list (current-buffer))))
+    )
+  )
+;; }}}
+#+end_src
+
+*** side-buffer
+
+#+begin_src emacs-lisp :tangle yes
+;; side buffer
+;; {{{
+(use-package emacs
+  :ensure nil
+  :bind
+  ("C-c B" . my/side-buffer)
+  :config
+  (defun my/side-buffer ()
+    (interactive)
+    (let ((other (buffer-name (window-buffer (next-window)))))
+      (delete-other-windows)
+      (set-frame-width (selected-frame)
+                       (+ (frame-width (selected-frame)) (window-width)))
+      (split-window-horizontally)
+      (split-window-vertically)
+      (with-selected-window (next-window)
+        (set-window-buffer (selected-window) other))
+      (with-selected-window (previous-window)
+        (set-window-buffer (selected-window) "*Scratch*")))
+    )
+  )
+;; }}}
+#+end_src
+
+*** ibuffer
+
+#+begin_src emacs-lisp :tangle yes
+;; ibuffer
+;; {{{
+(use-package ibuffer
+  :ensure nil
+  :bind ("C-x C-b" . ibuffer)
+  ;; :custom
+  ;; (ibuffer-formats
+  ;;  '((mark modified read-only locked " "
+  ;;          (name 35 35 :left :elide)
+  ;;          " "
+  ;;          (size 9 -1 :right)
+  ;;          " "
+  ;;          (mode 16 16 :left :elide)
+  ;;          " " filename-and-process)
+  ;;    (mark " "
+  ;;          (name 16 -1)
+  ;;          " " filename)))
+  :config
+  (setq ibuffer-saved-filter-groups
+        (quote (("default"
+                 ("dired" (mode . dired-mode))
+                 ("emacs" (or
+                           (mode . emacs-lisp-mode)
+                           (name . "^\\*scratch\\*$")
+                           (name . "^\\*Messages\\*$")
+                           ))
+                 ("org" (or (mode . org-mode)
+                            (mode . org-agenda-mode)
+                            (mode . org-src-mode)
+                            ))
+                 ;;               ("erc" (mode . erc-mode))
+
+                 ("planner" (or
+                             (name . "^\\*Calendar\\*$")
+                             (name . "^diary$")
+                             (mode . muse-mode)))
+                 ("PDF"    (mode . pdf-view-mode))
+                 ("python" (mode . python-mode))
+                 ;; ("gnus" (or
+                 ;;          (mode . message-mode)
+                 ;;          (mode . bbdb-mode)
+                 ;;          (mode . mail-mode)
+                 ;;          (mode . gnus-group-mode)
+                 ;;          (mode . gnus-summary-mode)
+                 ;;          (mode . gnus-article-mode)
+                 ;;          (name . "^\\.bbdb$")
+                 ;;          (name . "^\\.newsrc-dribble")))
+                 ))))
+
+  (add-hook 'ibuffer-mode-hook
+            (lambda ()
+              (ibuffer-switch-to-saved-filter-groups "default")))
+  )
+;; }}}
 #+end_src
 
 ** 文件 file
@@ -1402,213 +1620,23 @@ If no file is associated, just close buffer without prompt for save."
 ;; }}}
 #+end_src
 
-** 缓冲区 buffer
-
-#+begin_src emacs-lisp :tangle yes
-  (use-package emacs
-    :ensure nil
-    :bind
-    (
-     ("C-c b f" . next-buffer)
-     ("C-c b b" . previous-buffer)
-     ("C-c b l" . list-buffers)
-     ;; esc-map
-     ;; ("M-b f" . next-buffer)
-     ;; ("M-b b" . previous-buffer)
-     ;; ("M-b l" . list-buffers)
-     )
-    )
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-(use-package uniquify
-  :defer t
-  )
-#+end_src
-
-*** 行 line
-
-#+begin_src emacs-lisp :tangle yes
-;; line
-;; {{{
-(use-package display-line-numbers
-  :ensure nil
-  :hook
-  (prog-mode . display-line-numbers-mode)
-  ;; (after-init . global-display-line-numbers-mode)
-  :bind
-  ("C-c O"   . open-newline-above)
-  ("C-c C-o" . open-newline-below)
-  :config
-  (setq-default display-line-numbers-widen t) ; Keep line numbers inside a narrow
-  (setq display-line-numbers-width-start t)
-  (setq display-line-numbers-grow-only t)    ;; do not shrink line number width
-  (setq display-line-numbers-type 'relative) ;; 相对行号
-
-  ;; new line
-  ;; https://github.com/manateelazycat/open-newline
-
-  (defun open-newline-above (arg)
-    "Move to the previous line (like vi) and then opens a line."
-    (interactive "p")
-    (beginning-of-line)
-    (open-line arg)
-    (if (not (member major-mode '(haskell-mode org-mode literate-haskell-mode)))
-        (indent-according-to-mode)
-      (beginning-of-line)))
-
-  (defun open-newline-below (arg)
-    "Move to the next line (like vi) and then opens a line."
-    (interactive "p")
-    (end-of-line)
-    (open-line arg)
-    (call-interactively 'next-line arg)
-    (if (not (member major-mode '(haskell-mode org-mode literate-haskell-mode)))
-        (indent-according-to-mode)
-      (beginning-of-line)))
-  )
-;; }}}
-#+end_src
+** 文件夹
 
 #+begin_src emacs-lisp :tangle yes
 (use-package emacs
   :ensure nil
-  ;; :bind
-  ;; (
-  ;;  fill-paragraph
-  ;;  )
   :init
-  ;; wrap/truncate: word-wrap-mode
-  ;; (setq-default truncate-lines t)
-  (setq word-wrap-by-category t) ;; improves CJK + Latin word-wrapping
-  )
+  ;; https://emacsredux.com/blog/2022/06/12/auto-create-missing-directories/
+  (defun my/auto-create-missing-dirs ()
+    (let ((target-dir (file-name-directory buffer-file-name)))
+      (unless (file-exists-p target-dir)
+        (make-directory target-dir t))))
 
-;; (use-package simple
-;;   :ensure nil
-;;   :bind
-;;   (
-;;    ;; toggle-word-wrap
-;;    )
-;;   )
-#+end_src
-
-*** 列 column 
-
-#+begin_src emacs-lisp :tangle yes
-(use-package display-fill-column-indicator
-  :ensure nil
-  :hook
-  (after-init . global-display-fill-column-indicator-mode)
-  ;; (add-hook 'prog-mode-hook 'display-fill-column-indicator-mode)
+  (add-to-list 'find-file-not-found-functions #'my/auto-create-missing-dirs)
   )
 #+end_src
 
-*** kill buffer
-
-#+begin_src emacs-lisp :tangle yes
-;; kill buffer
-;; {{{
-(use-package emacs
-  :ensure nil
-  :bind
-  ("C-c K" . my/kill-all-other-buffers)
-  :config
-  (setq confirm-kill-processes nil)
-  (defun my/kill-all-other-buffers ()
-    (interactive)
-    (mapc 'kill-buffer (cdr (buffer-list (current-buffer))))
-    )
-  )
-;; }}}
-#+end_src
-
-*** side-buffer
-
-#+begin_src emacs-lisp :tangle yes
-;; side buffer
-;; {{{
-(use-package emacs
-  :ensure nil
-  :bind
-  ("C-c B" . my/side-buffer)
-  :config
-  (defun my/side-buffer ()
-    (interactive)
-    (let ((other (buffer-name (window-buffer (next-window)))))
-      (delete-other-windows)
-      (set-frame-width (selected-frame)
-                       (+ (frame-width (selected-frame)) (window-width)))
-      (split-window-horizontally)
-      (split-window-vertically)
-      (with-selected-window (next-window)
-        (set-window-buffer (selected-window) other))
-      (with-selected-window (previous-window)
-        (set-window-buffer (selected-window) "*Scratch*")))
-    )
-  )
-;; }}}
-#+end_src
-
-*** ibuffer
-
-#+begin_src emacs-lisp :tangle yes
-;; ibuffer
-;; {{{
-(use-package ibuffer
-  :ensure nil
-  :bind ("C-x C-b" . ibuffer)
-  ;; :custom
-  ;; (ibuffer-formats
-  ;;  '((mark modified read-only locked " "
-  ;;          (name 35 35 :left :elide)
-  ;;          " "
-  ;;          (size 9 -1 :right)
-  ;;          " "
-  ;;          (mode 16 16 :left :elide)
-  ;;          " " filename-and-process)
-  ;;    (mark " "
-  ;;          (name 16 -1)
-  ;;          " " filename)))
-  :config
-  (setq ibuffer-saved-filter-groups
-        (quote (("default"
-                 ("dired" (mode . dired-mode))
-                 ("emacs" (or
-                           (mode . emacs-lisp-mode)
-                           (name . "^\\*scratch\\*$")
-                           (name . "^\\*Messages\\*$")
-                           ))
-                 ("org" (or (mode . org-mode)
-                            (mode . org-agenda-mode)
-                            (mode . org-src-mode)
-                            ))
-                 ;;               ("erc" (mode . erc-mode))
-
-                 ("planner" (or
-                             (name . "^\\*Calendar\\*$")
-                             (name . "^diary$")
-                             (mode . muse-mode)))
-                 ("PDF"    (mode . pdf-view-mode))
-                 ("python" (mode . python-mode))
-                 ;; ("gnus" (or
-                 ;;          (mode . message-mode)
-                 ;;          (mode . bbdb-mode)
-                 ;;          (mode . mail-mode)
-                 ;;          (mode . gnus-group-mode)
-                 ;;          (mode . gnus-summary-mode)
-                 ;;          (mode . gnus-article-mode)
-                 ;;          (name . "^\\.bbdb$")
-                 ;;          (name . "^\\.newsrc-dribble")))
-                 ))))
-
-  (add-hook 'ibuffer-mode-hook
-            (lambda ()
-              (ibuffer-switch-to-saved-filter-groups "default")))
-  )
-;; }}}
-#+end_src
-
-** 文件夹 dired & wdired
+*** dired & wdired
 
 #+begin_src emacs-lisp :tangle yes
 ;; dired
@@ -1815,7 +1843,7 @@ project."
       read-buffer-completion-ignore-case t    ;; default nil
       read-file-name-completion-ignore-case t ;; default t
       )
-;; completion style
+;; completion style, fido-mode override completion-styles
 (setq completion-styles '(substring initials partial-completion flex basic))
 (setq completion-cycle-threshold 10)
 (setq completions-format 'one-column)
@@ -1866,6 +1894,58 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
 (setq completions-sort #'my/sort-multi-category)
 #+end_src
 
+*** icomplete
+
+fido: icomplete-fido-mode
+fido-vertical-mode
+
+#+begin_src emacs-lisp :tangle no
+(use-package icomplete
+  :ensure nil
+  :defer t
+  :hook (icomplete-mode . fido-vertico-mode)
+  ;; :config
+  ;; (fido-vertical-mode +1)
+  )
+#+end_src
+
+*** ido & fido
+
+
+#+begin_src emacs-lisp :tangle yes
+(use-package ido
+  :ensure nil
+  :defer 1
+  :bind ("C-c p" . ido-switch-buffer)
+  :config
+  (setq ido-vertical-mode t)
+  (setq ido-enable-flex-matching t)
+  (setq ido-decorations
+        ;; order matters
+        '(
+          "{"                 ; "\n=> "
+          "}"                 ; ""
+          " | "               ; "\n"
+          " | ..."            ; ""
+          "["
+          "]"
+          " [No match]"
+          " [Matched]"
+          " [Not readable]"
+          " [Too big]"
+          " [Confirm]"
+          ))
+  (setq ido-ignore-buffers
+        '("\\` "
+          "^ "
+          "*Completions*"
+          "*Shell Command Output*"
+          "*Messages*"
+          "Async Shell Command"
+          ))
+  )
+#+end_src
+
 ** 补全、代码片段与模板 Completion Snippet and Template
 
 completion: buffer and minibuffer
@@ -1882,10 +1962,12 @@ completion: buffer and minibuffer
 
 *** abbrev/dabbrev Completion
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp :tangle yes
 (use-package abbrev
   :ensure nil
-  :defer t
+  :defer 1
+  :config
+  (setq abbrev-suggest t)
   )
 #+end_src
 
@@ -1895,7 +1977,10 @@ completion: buffer and minibuffer
 (use-package dabbrev
   :ensure nil
   :bind
-  ("C-<tab>" . dabbrev-expand)
+  (
+   ("C-<tab>" . dabbrev-expand)
+   ("H-<tab>" . dabbrev-expand)
+   )
   :custom
   (dabbrev-ignored-buffer-regexps '("\\.\\(?:pdf\\|jpe?g\\|png\\)\\'"))
   ;; :config
@@ -2065,10 +2150,12 @@ completion: buffer and minibuffer
 ;; unicode
 ;; {{{
 ;; https://www.unicode.org/Public/UCD/latest/ucd/UnicodeData.txt
-(when (file-exists-p "~/.config/emacs/assets/unicode/UnicodeData.txt")
+(when (file-exists-p
+       (expand-file-name "assets/unicode/UnicodeData.txt"
+                         user-emacs-directory))
   (setq describe-char-unicodedata-file
-        "~/.config/emacs/assets/unicode/UnicodeData.txt")
-  )
+        (expand-file-name "assets/unicode/UnicodeData.txt"
+                          user-emacs-directory)))
 ;; }}}
 #+end_src
 
@@ -2735,7 +2822,7 @@ surrounded by word boundaries."
 ;; macroexp
 #+end_src
 
-** 对齐与缩进 align & indent
+** 对齐与缩进 align & lint/ indent
 
 #+begin_src emacs-lisp :tangle no
 (use-package align
@@ -2931,28 +3018,6 @@ alias ets="emacs --debug-init --no-init-file --no-splash --background-color whit
   )
 #+end_src
 
-** ido & fido-vertical-mode
-
-#+begin_src emacs-lisp :tangle yes
-;; ido
-;; {{{
-(use-package ido
-  :ensure nil
-  :defer 1
-  :bind ("C-c p" . ido-switch-buffer)
-  :config (setq ido-vertical-mode t) (setq ido-enable-flex-matching t)
-  (setq ido-ignore-buffers
-        '("\\` "
-          "^ "
-          "*Completions*"
-          "*Shell Command Output*"
-          "*Messages*"
-          "Async Shell Command"
-          ))
-  )
-;; }}}
-#+end_src
-
 ** Shell Terminal
 
 *** comint
@@ -3106,9 +3171,18 @@ frameset
 ;; frame
 ;; {{{
 (setq frame-size-history t)
+
+;; (setq frame-title-format
+;;       '(buffer-file-name
+;;         (:eval (abbreviate-file-name buffer-file-name))
+;;         (dired-directory dired-directory "%b")))
+
+;; https://emacsredux.com/blog/2013/04/07/display-visited-files-path-in-the-frame-title/
 (setq frame-title-format
-      '(buffer-file-name (:eval (abbreviate-file-name buffer-file-name))
-                         (dired-directory dired-directory "%b")))
+      '((:eval
+         (if (buffer-file-name)
+             (abbreviate-file-name (buffer-file-name))
+           "%b"))))
 ;; }}}
 #+end_src
 
@@ -3223,9 +3297,9 @@ windmove
 (use-package emacs
   :ensure nil
   :bind
-  ("H-w H-w" . my-toggle-vertical-horizontal-split)
+  ("H-w H-w" . my/toggle-vertical-horizontal-split)
   :config
-  (defun my-toggle-vertical-horizontal-split ()
+  (defun my/toggle-vertical-horizontal-split ()
     "Switch window split from horizontally to vertically, or vice versa.
 
 i.e. change right window to bottom, or change bottom window to right."
@@ -3239,15 +3313,14 @@ i.e. change right window to bottom, or change bottom window to right."
                  (neighbour-dir (cdr dirs))
                  (next-win (windmove-find-other-window nextdir win))
                  (neighbour1 (windmove-find-other-window neighbour-dir win))
-                 (neighbour2 (if next-win (with-selected-window
-                                              next-win
-                                            (windmove-find-other-window
-                                             neighbour-dir
-                                             next-win))
-                               )))
+                 (neighbour2
+                  (if next-win
+                      (with-selected-window next-win
+                        (windmove-find-other-window neighbour-dir next-win)))))
             ;;(message "win: %s\nnext-win: %s\nneighbour1: %s\nneighbour2:%s" win next-win neighbour1 neighbour2)
-            (setq done (and (eq neighbour1 neighbour2)
-                            (not (eq (minibuffer-window) next-win))))
+            (setq done
+                  (and (eq neighbour1 neighbour2)
+                       (not (eq (minibuffer-window) next-win))))
             (if done
                 (let* ((other-buf (window-buffer next-win)))
                   (delete-window next-win)
@@ -3255,9 +3328,7 @@ i.e. change right window to bottom, or change bottom window to right."
                       (split-window-vertically)
                     (split-window-horizontally))
                   (set-window-buffer
-                   (windmove-find-other-window neighbour-dir)
-                   other-buf)))
-            ))))))
+                   (windmove-find-other-window neighbour-dir) other-buf)))))))))
 #+end_src
 
 ** mode-line
@@ -3992,49 +4063,50 @@ all open tasks in current Org buffer
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
-(use-package org-src
-  :ensure nil
-  :defer t
-  :bind
-  (
-   :map org-mode-map
-   ("s-]" . (lambda () (interactive)
-              (my/org-2every-src-block
-               'org-babel-remove-result)))
-   ("C-c e" . org-edit-special)
-   ("s-l" . org-edit-special)
-   ("s-j" . org-babel-next-src-block)
-   ("s-k" . org-babel-previous-src-block)
-   :map org-src-mode-map
-   ("C-c e" . org-edit-src-exit)
-   ("s-l" . org-edit-src-exit)
-   ("s-s" . org-edit-src-exit)   
-   )
-  :config
-  (setq org-src-fontify-natively 1)         ;代码块语法高亮
-  (setq org-src-tab-acts-natively 1)        ;开启代码块语法缩进/格式化
-  (setq org-edit-src-content-indentation 0) ;代码块初始缩进范围
-  (setq org-src-lang-modes
-        '(
-          ("C" . c)
-          ("C++" . c++)
-          ("asymptote" . asy)
-          ("bash" . sh)
-          ("beamer" . latex)
-          ("calc" . fundamental)
-          ("cpp" . c++)
-          ("desktop" . conf-desktop)
-          ("ditaa" . artist)
-          ("dot"  . graphviz-dot)
-          ("elisp" . emacs-lisp)
-          ("json"  . json-ts)
-          ("ocaml" . tuareg)
-          ("screen" . shell-script)
-          ("shell" . sh)
-          ("sqlite" . sql)
-          ("toml" . conf-toml)
-          ))
-  )
+  (use-package org-src
+    :ensure nil
+    :defer t
+    :bind
+    (
+     :map org-mode-map
+     ("s-]" . (lambda () (interactive)
+		(my/org-2every-src-block
+		 'org-babel-remove-result)))
+     ("C-c e" . org-edit-special)
+     ("s-l" . org-edit-special)
+     ("H-l" . org-edit-special)
+     ("s-j" . org-babel-next-src-block)
+     ("s-k" . org-babel-previous-src-block)
+     :map org-src-mode-map
+     ("C-c e" . org-edit-src-exit)
+     ("s-l" . org-edit-src-exit)
+     ("s-s" . org-edit-src-exit)   
+     )
+    :config
+    (setq org-src-fontify-natively 1)         ;代码块语法高亮
+    (setq org-src-tab-acts-natively 1)        ;开启代码块语法缩进/格式化
+    (setq org-edit-src-content-indentation 0) ;代码块初始缩进范围
+    (setq org-src-lang-modes
+	  '(
+	    ("C" . c)
+	    ("C++" . c++)
+	    ("asymptote" . asy)
+	    ("bash" . sh)
+	    ("beamer" . latex)
+	    ("calc" . fundamental)
+	    ("cpp" . c++)
+	    ("desktop" . conf-desktop)
+	    ("ditaa" . artist)
+	    ("dot"  . graphviz-dot)
+	    ("elisp" . emacs-lisp)
+	    ("json"  . json-ts)
+	    ("ocaml" . tuareg)
+	    ("screen" . shell-script)
+	    ("shell" . sh)
+	    ("sqlite" . sql)
+	    ("toml" . conf-toml)
+	    ))
+    )
 #+end_src
 
 ** Link
@@ -4520,15 +4592,15 @@ https://pank.eu/blog/pretty-babel-src-blocks.html
 
 #+begin_src emacs-lisp :tangle no
 (defun org-babel-tangle-config ()
-  (when (string-equal (buffer-file-name)
-                      (expand-file-name "~/.config/emacs/init.org"))
+  (when (string-equal
+         (buffer-file-name)
+         (expand-file-name "init.org" user-emacs-directory))
     (let ((org-config-babel-evaluate nil))
       (org-babel-tangle))))
 
-(add-hook 'org-mode-hook
-          (lambda ()
-            (add-hook 'after-save-hook #'org-babel-tangle-config)))
-
+(add-hook
+ 'org-mode-hook
+ (lambda () (add-hook 'after-save-hook #'org-babel-tangle-config)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -4973,14 +5045,13 @@ run-with-timer
 #+begin_src emacs-lisp :tangle no
 ;; package config
 ;; {{{
-;; (add-to-list 'load-path "~/.config/emacs/init-package.el")
-;; (require 'init-package) ;; packages installed by package.el
+(add-to-list
+ 'load-path (expand-file-name "init-package.el" user-emacs-directory))
+(require 'init-package) ;; packages installed by package.el
 ;; }}}
-(add-to-list 'load-path (expand-file-name
-                         "init-pac.el"
-                         (concat user-emacs-directory)
-                         )
-             )
+
+(add-to-list
+ 'load-path (expand-file-name "init-pac.el" (concat user-emacs-directory)))
 ;; require is based on file name instead of what is `provide'?
 (require 'init-pac) ; packages configuration
 #+end_src
@@ -4988,15 +5059,12 @@ run-with-timer
 *** require package (in lib/) config
 
 #+begin_src emacs-lisp :tangle no
-;; package out of package.el :FIXME:
+;; package out of package.el (elpa/melpa) :FIXME:
 ;; {{{
-(add-to-list 'load-path (expand-file-name
-                         "init-lib.el"
-                         (concat user-emacs-directory)
-                         )
-             )
+(add-to-list
+ 'load-path (expand-file-name "init-lib.el" (concat user-emacs-directory)))
 ;; }}}
-(require 'init-lib)     ; packages (out of elpa/melpa) configuration
+(require 'init-lib)
 #+end_src
 
 *** test
@@ -5260,21 +5328,22 @@ variables such as `exec-path'."
 elisp-depmap
 
 #+begin_src emacs-lisp :tangle yes
-
 (use-package elisp-depmap
-  :ensure nil
-  :init
-  ;; read-symbol-positions-list is deleted from Emacs 29
-  (defvar read-symbol-positions-list nil)
-  :bind (
-         ("C-c H-d" . elisp-depmap-graphviz-digraph)
-         ("C-c H-g" . elisp-depmap-graphviz)
-         ("C-c H-s" . elisp-depmap-makesummarytable)
-         )
-  :config
-  (setq elisp-depmap-parse-hashtablesize 1024)
-  ;; (elisp-depmap-exec-file "~/.config/emacs/assets/elisp-dep-ana.dot")
+ :ensure nil
+ :init
+ ;; read-symbol-positions-list is deleted from Emacs 29
+ (defvar read-symbol-positions-list nil)
+ :bind
+ (
+  ("C-c H-d" . elisp-depmap-graphviz-digraph)
+  ("C-c H-g" . elisp-depmap-graphviz)
+  ("C-c H-s" . elisp-depmap-makesummarytable)
   )
+ :config
+ (setq elisp-depmap-parse-hashtablesize 1024)
+ (setq elisp-depmap-exec-file
+       (expand-file-name "assets/elisp-dep-ana.dot" user-emacs-directory))
+ )
 #+end_src
 
 *** 辅助编辑
@@ -5365,6 +5434,8 @@ elisp-depmap
   (elisp-autofmt-mode elisp-autofmt-buffer)
   :hook (emacs-lisp-mode . elisp-autofmt-mode)
   :config
+  (setq elisp-autofmt-cache-directory
+        (expand-file-name "var/elisp-autofmt-cache" user-emacs-directory))
   (setq elisp-autofmt-python-bin "/opt/homebrew/bin/python3")
   )
 #+end_src
@@ -5468,7 +5539,7 @@ elisp-depmap
   :defer t
   :config
   (setq rfc-mode-directory (expand-file-name "~/Documents/GitHub/RFC-all/txt/"))
-  (setq rfc-mode-index-path (concat rfc-mode-directory"rfc-index.txt"))
+  (setq rfc-mode-index-path (concat rfc-mode-directory "rfc-index.txt"))
   )
 ;; }}}
 #+end_src
@@ -5615,6 +5686,8 @@ supports many major modes out of box.
 #+begin_src emacs-lisp :tangle yes
 (use-package parrot
   ;; :defer t
+  :ensure nil
+  :hook (after-init . parrot-mode)
   :bind (
          ;;
          ("H-r k" . parrot-rotate-prev-word-at-point)
@@ -5624,7 +5697,6 @@ supports many major modes out of box.
 
          )
   :config
-  (parrot-mode)
   (parrot-set-parrot-type 'emacs)
   (setq parrot-rotate-dict
         '(
@@ -6169,10 +6241,14 @@ When fixing a typo, avoid pass camel case option to cli program."
    :map vertico-map
    ([backtab] . vertico-previous)
    ("<tab>" . vertico-insert)    ; Choose selected candidate
-   ("<escape>" . minibuffer-keyboard-quit) ; Close minibuffer
+   ;; ("<escape>" . minibuffer-keyboard-quit) ; Close minibuffer
+   ("<escape>" . vertico-exit)
+   :map minibuffer-local-map
+   ("M-h" . backward-kill-word)
    )
   :init
   (fido-mode -1)
+  (fido-vertical-mode -1)
   (vertico-mode)
   (vertico-mouse-mode)
   ;; (setq vertico-scroll-margin 0) ; Different scroll margin
@@ -6314,7 +6390,10 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
    ("C-c H-f H-d" . consult-find)
    ("C-c H-r H-e" . consult-grep)
    ("C-c H-r H-g" . consult-ripgrep)
-   ("C-x H-l" . consult-focus-lines)
+   ("C-c H-l" . consult-line)
+   ("C-c H-j" . consult-goto-line)
+   ("C-c H-k" . consult-mark)
+   ;; ("C-x H-l" . consult-focus-lines)
    ;; C-c bindings (mode-specific-map)
    ("C-c M-x" . consult-mode-command)
    ("C-c h" . consult-history)
@@ -6350,7 +6429,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
    ("M-s g" . consult-grep)
    ("M-s G" . consult-git-grep)
    ("M-s r" . consult-ripgrep)
-   ("M-s l" . consult-line)
+   ("M-s l" . consult-line) ; goto line with string
    ("M-s L" . consult-line-multi)
    ("M-s k" . consult-keep-lines)
    ("M-s u" . consult-focus-lines)
@@ -6416,7 +6495,10 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
    consult-bookmark consult-recent-file consult-xref
    consult--source-bookmark consult--source-file-register
    consult--source-recent-file consult--source-project-recent-file
+   consult-completion-in-region
    :preview-key (kbd "M-.")
+   ;; :completion-styles (basic partial-completion flex) ; FIXME
+   ;; :cycle-threshold 3
    )
 
   ;; Optionally configure the narrowing key.
@@ -7369,7 +7451,7 @@ binky-mode
 (use-package browse-kill-ring
   :ensure nil
   :bind
-  ("C-c H-k" . browse-kill-ring)
+  ;; ("C-c H-k" . browse-kill-ring)
   :load-path  (lambda ()
                 (expand-file-name
                  (concat
@@ -7566,22 +7648,22 @@ binky-mode
 ;; (add-hook 'after-init-hook #'doom-modeline-mode)
 ;; (setq doom-modeline-support-imenu t)
 (use-package doom-modeline
+  :ensure nil
   ;; :init (doom-modeline-mode 1)
   :hook (after-init . doom-modeline-mode)
   :custom
   ;; Don't compact font caches during GC. Windows Laggy Issue
   (inhibit-compacting-font-caches t)
   :config
-  (setq doom-modeline-minor-modes nil)
-  (setq doom-modeline-icon t)
-  (setq doom-modeline-major-mode-color-icon t)
-  (setq doom-modeline-height 18)
-  (setq doom-modeline-window-width-limit 85)
-  (setq doom-modeline-icon (display-graphic-p))
-  (setq find-file-visit-truename t)
-  (setq doom-modeline-highlight-modified-buffer-name t)
-  (setq doom-modeline-project-detection 'auto) ;auto/project
   (setq doom-modeline-buffer-file-name-style 'relative-to-project)
+  (setq doom-modeline-height 18)
+  (setq doom-modeline-highlight-modified-buffer-name t)
+  (setq doom-modeline-icon (display-graphic-p))
+  (setq doom-modeline-major-mode-color-icon t)
+  (setq doom-modeline-minor-modes nil)
+  (setq doom-modeline-project-detection 'auto) ;auto/project
+  (setq doom-modeline-window-width-limit 85)
+  (setq find-file-visit-truename t)
   )
 ;; }}}
 #+end_src
@@ -8302,28 +8384,16 @@ org-protocol://roam-node?node=uuid"
 
 ** UI
 
-#+begin_src emacs-lisp :tangle no
-;; ;; olivetti
-;; ;; {{{
-;; ;; https://emacs-china.org/t/emacs/19797/4
-;; (use-package olivetti
-;;   :diminish
-;;   :bind ("<f8>" . olivetti-mode)
-;;   :init
-;;   (setq olivetti-body-width 90)         ; default: fill-column+2
-;;   (defun xs-toggle-olivetti-for-org ()
-;;     "if current buffer is org and only one visible buffer
-;;   enable olivetti mode"
-;;     (if (and (eq (buffer-local-value 'major-mode (current-buffer)) 'org-mode)
-;;              (or (eq (length (window-list nil nil nil)) 1)
-;;                  (window-at-side-p (frame-first-window) 'right))) ;; frame-first-window 的 mode 是 org-mode 并且没有右边 window
-;;         (olivetti-mode 1)
-;;       (olivetti-mode 0)
-;;       (when (eq (buffer-local-value 'major-mode (current-buffer)) 'org-mode)
-;;         (visual-line-mode 1))))
-;;   (add-hook 'org-mode-hook #'xs-toggle-olivetti-for-org)
-;;   (add-hook 'window-configuration-change-hook #'xs-toggle-olivetti-for-org))
-;; ;; }}}
+*** nyan-mode
+
+#+begin_src emacs-lisp :tangle yes
+(use-package nyan-mode
+  :ensure nil
+  :hook (doom-modeline-mode . nyan-mode)
+  :config
+  (setq nyan-animate-nyancat t
+        nyan-wavy-trail t)
+)
 #+end_src
 
 *** auto-dark
@@ -8378,16 +8448,18 @@ org-protocol://roam-node?node=uuid"
 
 *** D2
 
-*** screenshot
+*** frameshot
+
+*** screenshot :FIXME:
+
+Doesn't work on macOS: =(void-function x-export-frames)=
 
 #+begin_src emacs-lisp :tangle no
-(defun my/screenshot-on-buffer-creation ()
-  (setq display-fill-column-indicator-column nil)
-  (setq line-spacing nil))
-
 (use-package screenshot
   :ensure nil
   :defer t
+  :screenshot
+  (commands)
   :hook
   ((screenshot-buffer-creation-hook . my/screenshot-on-buffer-creation))
   :config
@@ -8396,13 +8468,17 @@ org-protocol://roam-node?node=uuid"
   (setq screenshot-max-width 80)
   (setq screenshot-truncate-lines-p nil)
   (setq screenshot-text-only-p nil)
-  ;; (setq screenshot-font-family "Berkeley Mono")
+  (setq screenshot-font-family "SF Mono")
   (setq screenshot-font-size 10)
   (setq screenshot-border-width 16)
   (setq screenshot-radius 0)
   (setq screenshot-shadow-radius 0)
   (setq screenshot-shadow-offset-horizontal 0)
   (setq screenshot-shadow-offset-vertical 0)
+
+  (defun my/screenshot-on-buffer-creation ()
+    (setq display-fill-column-indicator-column nil)
+    (setq line-spacing nil))
   )
 #+end_src
 
@@ -8447,7 +8523,6 @@ org-protocol://roam-node?node=uuid"
 #+end_src
 
 ** 阅读
-
 *** mybigword
 
 #+begin_src emacs-lisp :tangle yes
@@ -8470,6 +8545,32 @@ org-protocol://roam-node?node=uuid"
 ;; }}}
 #+end_src
 
+*** olivetti
+
+#+begin_src emacs-lisp :tangle no
+;; ;; olivetti
+;; ;; {{{
+;; ;; https://emacs-china.org/t/emacs/19797/4
+;; (use-package olivetti
+;;   :diminish
+;;   :bind ("<f8>" . olivetti-mode)
+;;   :init
+;;   (setq olivetti-body-width 90)         ; default: fill-column+2
+;;   (defun xs-toggle-olivetti-for-org ()
+;;     "if current buffer is org and only one visible buffer
+;;   enable olivetti mode"
+;;     (if (and (eq (buffer-local-value 'major-mode (current-buffer)) 'org-mode)
+;;              (or (eq (length (window-list nil nil nil)) 1)
+;;                  (window-at-side-p (frame-first-window) 'right))) ;; frame-first-window 的 mode 是 org-mode 并且没有右边 window
+;;         (olivetti-mode 1)
+;;       (olivetti-mode 0)
+;;       (when (eq (buffer-local-value 'major-mode (current-buffer)) 'org-mode)
+;;         (visual-line-mode 1))))
+;;   (add-hook 'org-mode-hook #'xs-toggle-olivetti-for-org)
+;;   (add-hook 'window-configuration-change-hook #'xs-toggle-olivetti-for-org))
+;; ;; }}}
+#+end_src
+
 ** 网页浏览、信息订阅
 
 *** 必应词典: bing-dict
@@ -8484,7 +8585,7 @@ org-protocol://roam-node?node=uuid"
   (setq bing-dict-pronunciation-style 'uk) ; us uk
   (setq bing-dict-vocabulary-file
         (expand-file-name
-         "vocabulary.org"
+         "assets/vocabulary.org"
          (concat user-emacs-directory))
         )
   (setq bing-dict-vocabulary-save t)
@@ -8528,7 +8629,8 @@ org-protocol://roam-node?node=uuid"
   ;; :hook (elfeed-dashboard-mode . elfeed-org)
   :config
   (elfeed-org)
-  (setq rmh-elfeed-org-files (list "~/.config/emacs/elfeed.org"))
+  (setq rmh-elfeed-org-files
+        (list (expand-file-name "assets/elfeed.org" user-emacs-directory)))
   )
 ;; }}}
 #+end_src
@@ -8704,8 +8806,11 @@ crontab: "/Applications/Emacs.app/Contents/MacOS/bin/emacsclient --socket-name=/
 #+begin_src emacs-lisp :tangle yes
 (use-package explain-pause-mode
   :ensure nil
-  :defer t
+  :defer 2
+  :config
+  (setq explain-pause-top-auto-refresh-interval 0.1)
   )
+
 ;; (run-with-idle-timer
 ;;  1 nil
 ;;  #'(lambda ()

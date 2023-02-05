@@ -120,6 +120,7 @@ digraph G {"khoj" -> "emacs";
 "color-theme-sanityinc-solarized" -> "cl-lib";
 "sis" -> "emacs";
 "sis" -> "terminal-focus-reporting";
+"nyan-mode" -> "emacs";
 "doom-modeline" -> "emacs";
 "doom-modeline" -> "compat";
 "doom-modeline" -> "shrink-path";

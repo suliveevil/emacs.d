@@ -382,20 +382,21 @@ open -b org.gnu.Emacs --args -q --eval='(message "%s" (emacs-init-time))'
 #+begin_src emacs-lisp :tangle yes
 ;; 快速打开文件
 ;; {{{
-(defun my/open-init-file() ;; Emacs init
+(defun my/open-init-file () ;; Emacs init
   (interactive)
-  (find-file-other-window user-init-file))
+  (find-file-other-window user-init-file)
+  (delete-other-windows)
+  )
+
 (keymap-global-set "C-c E" #'my/open-init-file)
 
-(defun my/open-init-org() ;; Emacs init
+(defun my/open-init-org () ;; Emacs init
   (interactive)
   (find-file-other-window
-   (expand-file-name
-    "init.org"
-    (concat user-emacs-directory)
-    )
-   )
+   (expand-file-name "init.org" (concat user-emacs-directory)))
+  (delete-other-windows)
   )
+
 (keymap-global-set "C-c H-e" #'my/open-init-org)
 ;; (defun open-goku-file()      ;; Emacs early-init
 ;;   (interactive)
@@ -403,6 +404,22 @@ open -b org.gnu.Emacs --args -q --eval='(message "%s" (emacs-init-time))'
 ;;   (find-file "~/.config/goku/karabiner.edn")
 ;; )
 
+(defun my/find-shell-init-file ()
+  "Edit the shell init file (bashrc/zshrc) in another window."
+  (interactive)
+  (let* ((shell (car (reverse (split-string (getenv "SHELL") "/"))))
+         (shell-init-file
+          (cond
+           ((string-equal "zsh" shell)
+            ".zshrc")
+           ((string-equal "bash" shell)
+            ".bashrc")
+           (t
+            (error "Unknown shell")))))
+    (find-file-other-window
+     (expand-file-name shell-init-file (getenv "HOME"))))
+  (delete-other-windows)
+  )
 ;; }}}
 #+end_src
 
@@ -429,7 +446,7 @@ open -b org.gnu.Emacs --args -q --eval='(message "%s" (emacs-init-time))'
         (left . 700)
         (top . 20)
         (alpha . (95 .80))
-        ;; (vertical-scroll-bars . nil)
+        (vertical-scroll-bars . nil)
         ;; (horizontal-scroll-bars . nil)
         (tool-bar-lines . 0)
         ))
@@ -549,7 +566,7 @@ open -b org.gnu.Emacs --args -q --eval='(message "%s" (emacs-init-time))'
         ;; 继续递归搜索子目录
         (add-subdirs-to-load-path subdir-path)))))
 
-(add-subdirs-to-load-path "~/.config/emacs/lib")
+(add-subdirs-to-load-path (expand-file-name "lib" user-emacs-directory))
 ;; }}}
 #+end_src
 
