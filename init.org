@@ -40,6 +40,42 @@ https://www.bing.com
 
 * init
 
+#+begin_src emacs-lisp :tangle yes
+;; random function
+;; {{{
+(defun describe-random-interactive-function ()
+  "Show the documentation for a random interactive function.
+Consider only documented, non-obsolete functions."
+  (interactive)
+  (let (result)
+    (mapatoms
+     (lambda (s)
+       (when (and (commandp s)
+                  (documentation s t)
+                  (null (get s 'byte-obsolete-info)))
+         (setq result (cons s result)))))
+    (describe-function (elt result (random (length result))))))
+;; }}}
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(defvar initial-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-c c") 'lisp-interaction-mode)
+    (define-key map (kbd "C-c C-c") 'lisp-interaction-mode)
+    map)
+  "Keymap for `initial-mode'.")
+(define-derived-mode
+  initial-mode
+  nil
+  "Initial"
+  "Major mode for start up buffer.\\{initial-mode-map}"
+  (setq-local text-mode-variant t)
+  (setq-local indent-line-function 'indent-relative))
+(setq initial-major-mode 'initial-mode)
+(setq initial-scratch-message "")
+#+end_src
+
 #+begin_src emacs-lisp :tangle no
 ;; test
 ;; {{{
@@ -66,6 +102,23 @@ https://www.bing.com
                          (concat user-emacs-directory)
                          )
              )
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(defvar my-emacs-uptime-log (locate-user-emacs-file "uptime.log")
+  "Log file for `my-log-emacs-uptime'.")
+(defun my-log-emacs-uptime ()
+  "Write emacs uptime to `my-emacs-uptime-log'. Use with `kill-emacs-hook'."
+  (with-temp-buffer
+    (insert
+     (format-time-string "%Y-%m-%d %H:%M:%S" before-init-time)
+     " to "
+     (format-time-string "%Y-%m-%d %H:%M:%S" (current-time))
+     " = "
+     (emacs-uptime)
+     "\n")
+    (append-to-file nil nil my-emacs-uptime-log)))
+(add-hook 'kill-emacs-hook 'my-log-emacs-uptime)
 #+end_src
 
 ** File Header
@@ -313,8 +366,7 @@ https://www.bing.com
   )
 #+end_src
 
-
-#+begin_src emacs-lisp :tangle yes 
+#+begin_src emacs-lisp :tangle yes
 (defvar isearch-repeat-map
   (let ((map (make-sparse-keymap)))
     (keymap-set map "s" #'isearch-repeat-forward)
@@ -330,7 +382,6 @@ https://www.bing.com
 #+begin_src emacs-lisp :tangle no
 
 #+end_src
-
 
 *** viper
 
@@ -366,6 +417,17 @@ t-mouse
 ;;       (push (read-event) unread-command-events)
 ;;     (pos-tip-hide)))
 ;; }}}
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(xterm-mouse-mode 1)
+;; menu-bar-mode
+
+;; (add-hook 'after-make-frame-functions
+;;   (lambda ()
+;;     ;; we do something only in terminal Emacs
+;;     (unless (display-graphics-p)
+;;       (xterm-mouse-mode 1)))
 #+end_src
 
 *** 右键菜单 context menu
@@ -417,7 +479,6 @@ imenu
 ;; (global-hl-line-mode t) ;; highlight current line
 (custom-set-faces '(hl-line ((t (:background "grey")))))
 (delete-selection-mode t) ;; 删除选中的文字或选中文字后输入时替换选中的文字
-(global-subword-mode)     ;; camelCase and superword-mode
 ;; }}}
 #+end_src
 
@@ -442,7 +503,6 @@ imenu
 
 ;; vcursor
 #+end_src
-
 
 global-hi-lock-mode
 
@@ -642,10 +702,7 @@ open -n /Applications/Emacs.app --args -q --eval='(message "%s" (emacs-init-time
 ;; }}}
 #+end_src
 
-
 *** ebrowse
-
-
 
 *** etags
 
@@ -657,16 +714,15 @@ help
 
 #+end_src
 
-
 ehelp
 
 eldoc
 
 #+begin_src emacs-lisp :tangle no
 (use-package eldoc
-    :ensure nil
-    :after flymake
-    )
+  :ensure nil
+  :after flymake
+  )
 #+end_src
 
 info
@@ -675,7 +731,6 @@ info
 
 #+end_src
 
-
 info-look
 
 info-xref
@@ -683,24 +738,6 @@ info-xref
 informat
 
 woman
-
-#+begin_src emacs-lisp :tangle yes
-;; random function
-;; {{{
-(defun describe-random-interactive-function ()
-  "Show the documentation for a random interactive function.
-Consider only documented, non-obsolete functions."
-  (interactive)
-  (let (result)
-    (mapatoms
-     (lambda (s)
-       (when (and (commandp s)
-                  (documentation s t)
-                  (null (get s 'byte-obsolete-info)))
-         (setq result (cons s result)))))
-    (describe-function (elt result (random (length result))))))
-;; }}}
-#+end_src
 
 #+begin_src emacs-lisp :tangle no
 (use-package man
@@ -794,6 +831,8 @@ timezone
 
 ** 字体、语法、拼写 font syntax spell
 
+[[https://emacsredux.com/blog/2021/12/22/check-if-a-font-is-available-with-emacs-lisp/][Check if a Font is Available with Emacs Lisp | Emacs Redux]]
+
 #+begin_src emacs-lisp :tangle yes
 ;; font and syntax
 ;; {{{
@@ -807,9 +846,9 @@ timezone
 
 #+begin_src emacs-lisp :tangle no
 (use-package flymake
-    :ensure nil
-    :defer t
-    )
+  :ensure nil
+  :defer t
+  )
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
@@ -985,7 +1024,6 @@ desktop
   )
 #+end_src
 
-
 *** multisession
 
 #+begin_src emacs-lisp :tangle no
@@ -1127,7 +1165,6 @@ so-long
 ;; }}}
 #+end_src
 
-
 *** find file/grep file
 
 #+begin_src emacs-lisp :tangle no
@@ -1161,8 +1198,6 @@ so-long
 
 ;; find-dired
 #+end_src
-
-
 
 #+begin_src emacs-lisp :tangle yes
 (use-package ffap
@@ -1315,7 +1350,6 @@ Version 2018-06-18 2021-09-30"
 ;; }}}
 #+end_src
 
-
 *** rename file
 
 #+begin_src emacs-lisp :tangle yes
@@ -1368,6 +1402,212 @@ If no file is associated, just close buffer without prompt for save."
 ;; }}}
 #+end_src
 
+** 缓冲区 buffer
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package emacs
+    :ensure nil
+    :bind
+    (
+     ("C-c b f" . next-buffer)
+     ("C-c b b" . previous-buffer)
+     ("C-c b l" . list-buffers)
+     ;; esc-map
+     ;; ("M-b f" . next-buffer)
+     ;; ("M-b b" . previous-buffer)
+     ;; ("M-b l" . list-buffers)
+     )
+    )
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(use-package uniquify
+  :defer t
+  )
+#+end_src
+
+*** 行 line
+
+#+begin_src emacs-lisp :tangle yes
+;; line
+;; {{{
+(use-package display-line-numbers
+  :ensure nil
+  :hook
+  (prog-mode . display-line-numbers-mode)
+  ;; (after-init . global-display-line-numbers-mode)
+  :bind
+  ("C-c O"   . open-newline-above)
+  ("C-c C-o" . open-newline-below)
+  :config
+  (setq-default display-line-numbers-widen t) ; Keep line numbers inside a narrow
+  (setq display-line-numbers-width-start t)
+  (setq display-line-numbers-grow-only t)    ;; do not shrink line number width
+  (setq display-line-numbers-type 'relative) ;; 相对行号
+
+  ;; new line
+  ;; https://github.com/manateelazycat/open-newline
+
+  (defun open-newline-above (arg)
+    "Move to the previous line (like vi) and then opens a line."
+    (interactive "p")
+    (beginning-of-line)
+    (open-line arg)
+    (if (not (member major-mode '(haskell-mode org-mode literate-haskell-mode)))
+        (indent-according-to-mode)
+      (beginning-of-line)))
+
+  (defun open-newline-below (arg)
+    "Move to the next line (like vi) and then opens a line."
+    (interactive "p")
+    (end-of-line)
+    (open-line arg)
+    (call-interactively 'next-line arg)
+    (if (not (member major-mode '(haskell-mode org-mode literate-haskell-mode)))
+        (indent-according-to-mode)
+      (beginning-of-line)))
+  )
+;; }}}
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(use-package emacs
+  :ensure nil
+  ;; :bind
+  ;; (
+  ;;  fill-paragraph
+  ;;  )
+  :init
+  ;; wrap/truncate: word-wrap-mode
+  ;; (setq-default truncate-lines t)
+  (setq word-wrap-by-category t) ;; improves CJK + Latin word-wrapping
+  )
+
+;; (use-package simple
+;;   :ensure nil
+;;   :bind
+;;   (
+;;    ;; toggle-word-wrap
+;;    )
+;;   )
+#+end_src
+
+*** 列 column 
+
+#+begin_src emacs-lisp :tangle yes
+(use-package display-fill-column-indicator
+  :ensure nil
+  :hook
+  (after-init . global-display-fill-column-indicator-mode)
+  ;; (add-hook 'prog-mode-hook 'display-fill-column-indicator-mode)
+  )
+#+end_src
+
+*** kill buffer
+
+#+begin_src emacs-lisp :tangle yes
+;; kill buffer
+;; {{{
+(use-package emacs
+  :ensure nil
+  :bind
+  ("C-c K" . my/kill-all-other-buffers)
+  :config
+  (setq confirm-kill-processes nil)
+  (defun my/kill-all-other-buffers ()
+    (interactive)
+    (mapc 'kill-buffer (cdr (buffer-list (current-buffer))))
+    )
+  )
+;; }}}
+#+end_src
+
+*** side-buffer
+
+#+begin_src emacs-lisp :tangle yes
+;; side buffer
+;; {{{
+(use-package emacs
+  :ensure nil
+  :bind
+  ("C-c B" . my/side-buffer)
+  :config
+  (defun my/side-buffer ()
+    (interactive)
+    (let ((other (buffer-name (window-buffer (next-window)))))
+      (delete-other-windows)
+      (set-frame-width (selected-frame)
+                       (+ (frame-width (selected-frame)) (window-width)))
+      (split-window-horizontally)
+      (split-window-vertically)
+      (with-selected-window (next-window)
+        (set-window-buffer (selected-window) other))
+      (with-selected-window (previous-window)
+        (set-window-buffer (selected-window) "*Scratch*")))
+    )
+  )
+;; }}}
+#+end_src
+
+*** ibuffer
+
+#+begin_src emacs-lisp :tangle yes
+;; ibuffer
+;; {{{
+(use-package ibuffer
+  :ensure nil
+  :bind ("C-x C-b" . ibuffer)
+  ;; :custom
+  ;; (ibuffer-formats
+  ;;  '((mark modified read-only locked " "
+  ;;          (name 35 35 :left :elide)
+  ;;          " "
+  ;;          (size 9 -1 :right)
+  ;;          " "
+  ;;          (mode 16 16 :left :elide)
+  ;;          " " filename-and-process)
+  ;;    (mark " "
+  ;;          (name 16 -1)
+  ;;          " " filename)))
+  :config
+  (setq ibuffer-saved-filter-groups
+        (quote (("default"
+                 ("dired" (mode . dired-mode))
+                 ("emacs" (or
+                           (mode . emacs-lisp-mode)
+                           (name . "^\\*scratch\\*$")
+                           (name . "^\\*Messages\\*$")
+                           ))
+                 ("org" (or (mode . org-mode)
+                            (mode . org-agenda-mode)
+                            (mode . org-src-mode)
+                            ))
+                 ;;               ("erc" (mode . erc-mode))
+
+                 ("planner" (or
+                             (name . "^\\*Calendar\\*$")
+                             (name . "^diary$")
+                             (mode . muse-mode)))
+                 ("PDF"    (mode . pdf-view-mode))
+                 ("python" (mode . python-mode))
+                 ;; ("gnus" (or
+                 ;;          (mode . message-mode)
+                 ;;          (mode . bbdb-mode)
+                 ;;          (mode . mail-mode)
+                 ;;          (mode . gnus-group-mode)
+                 ;;          (mode . gnus-summary-mode)
+                 ;;          (mode . gnus-article-mode)
+                 ;;          (name . "^\\.bbdb$")
+                 ;;          (name . "^\\.newsrc-dribble")))
+                 ))))
+
+  (add-hook 'ibuffer-mode-hook
+            (lambda ()
+              (ibuffer-switch-to-saved-filter-groups "default")))
+  )
+;; }}}
+#+end_src
+
 ** 文件夹 dired & wdired
 
 #+begin_src emacs-lisp :tangle yes
@@ -1409,7 +1649,7 @@ If no file is associated, just close buffer without prompt for save."
     (if (file-directory-p (dired-file-name-at-point))
         (dired-find-file)
       (dired-find-file-other-window)))
-  
+
   ;; https://www.n16f.net/blog/decluttering-dired-for-peace-of-mind/
   (setq my/dired-minimal-view t)
 
@@ -1527,235 +1767,9 @@ project."
   )
 #+end_src
 
-** 缓冲区 buffer
-
-#+begin_src emacs-lisp :tangle no
-(use-package uniquify
-  :defer t
-  )
-#+end_src
-
-*** kill buffer
-
-#+begin_src emacs-lisp :tangle yes
-;; kill buffer
-;; {{{
-(use-package emacs
-  :ensure nil
-  :bind
-  ("C-c K" . my/kill-all-other-buffers)
-  :config
-  (defun my/kill-all-other-buffers ()
-    (interactive)
-    (mapc 'kill-buffer (cdr (buffer-list (current-buffer))))
-    )
-  )
-;; }}}
-#+end_src
-
-*** side-buffer
-
-#+begin_src emacs-lisp :tangle yes
-;; side buffer
-;; {{{
-(use-package emacs
-  :ensure nil
-  :bind
-  ("C-c B" . my/side-buffer)
-  :config
-  (defun my/side-buffer ()
-    (interactive)
-    (let ((other (buffer-name (window-buffer (next-window)))))
-      (delete-other-windows)
-      (set-frame-width (selected-frame)
-                       (+ (frame-width (selected-frame)) (window-width)))
-      (split-window-horizontally)
-      (split-window-vertically)
-      (with-selected-window (next-window)
-        (set-window-buffer (selected-window) other))
-      (with-selected-window (previous-window)
-        (set-window-buffer (selected-window) "*Scratch*")))
-    )
-  )
-;; }}}
-#+end_src
-
-*** ibuffer
-
-#+begin_src emacs-lisp :tangle yes
-;; ibuffer
-;; {{{
-(use-package ibuffer
-  :ensure nil
-  :bind ("C-x C-b" . ibuffer)
-  ;; :custom
-  ;; (ibuffer-formats
-  ;;  '((mark modified read-only locked " "
-  ;;          (name 35 35 :left :elide)
-  ;;          " "
-  ;;          (size 9 -1 :right)
-  ;;          " "
-  ;;          (mode 16 16 :left :elide)
-  ;;          " " filename-and-process)
-  ;;    (mark " "
-  ;;          (name 16 -1)
-  ;;          " " filename)))
-  :config
-  (setq ibuffer-saved-filter-groups
-        (quote (("default"
-                 ("dired" (mode . dired-mode))
-                 ("emacs" (or
-                           (mode . emacs-lisp-mode)
-                           (name . "^\\*scratch\\*$")
-                           (name . "^\\*Messages\\*$")
-                           ))
-                 ("org" (or (mode . org-mode)
-                            (mode . org-agenda-mode)
-                            (mode . org-src-mode)
-                            ))
-                 ;;               ("erc" (mode . erc-mode))
-
-                 ("planner" (or
-                             (name . "^\\*Calendar\\*$")
-                             (name . "^diary$")
-                             (mode . muse-mode)))
-                 ("PDF"    (mode . pdf-view-mode))
-                 ("python" (mode . python-mode))
-                 ;; ("gnus" (or
-                 ;;          (mode . message-mode)
-                 ;;          (mode . bbdb-mode)
-                 ;;          (mode . mail-mode)
-                 ;;          (mode . gnus-group-mode)
-                 ;;          (mode . gnus-summary-mode)
-                 ;;          (mode . gnus-article-mode)
-                 ;;          (name . "^\\.bbdb$")
-                 ;;          (name . "^\\.newsrc-dribble")))
-                 ))))
-
-  (add-hook 'ibuffer-mode-hook
-            (lambda ()
-              (ibuffer-switch-to-saved-filter-groups "default")))
-  )
-;; }}}
-#+end_src
+** minibuffer                                                         :FIXME:
 
 *** mibuffer
-
-#+begin_src emacs-lisp :tangle no
-(use-package mibuffer
-  :ensure nil
-  )
-#+end_src
-
-*** 单词 Word
-
-#+begin_src emacs-lisp :tangle no
-;; subword
-#+end_src
-
-*** 行 line
-
-#+begin_src emacs-lisp :tangle yes
-;; line
-;; {{{
-(use-package display-line-numbers
-  :ensure nil
-  :hook
-  (prog-mode . display-line-numbers-mode)
-  ;; (after-init . global-display-line-numbers-mode)
-  :bind
-  ("C-c O"   . open-newline-above)
-  ("C-c C-o" . open-newline-below)
-  :config
-  (setq-default display-line-numbers-widen t) ; Keep line numbers inside a narrow
-  (setq display-line-numbers-width-start t)
-  (setq display-line-numbers-grow-only t)    ;; do not shrink line number width
-  (setq display-line-numbers-type 'relative) ;; 相对行号
-
-  ;; new line
-  ;; https://github.com/manateelazycat/open-newline
-
-  (defun open-newline-above (arg)
-    "Move to the previous line (like vi) and then opens a line."
-    (interactive "p")
-    (beginning-of-line)
-    (open-line arg)
-    (if (not (member major-mode '(haskell-mode org-mode literate-haskell-mode)))
-        (indent-according-to-mode)
-      (beginning-of-line)))
-
-  (defun open-newline-below (arg)
-    "Move to the next line (like vi) and then opens a line."
-    (interactive "p")
-    (end-of-line)
-    (open-line arg)
-    (call-interactively 'next-line arg)
-    (if (not (member major-mode '(haskell-mode org-mode literate-haskell-mode)))
-        (indent-according-to-mode)
-      (beginning-of-line)))
-  )
-;; }}}
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-;; (use-package word-wrap-mode)
-;; wrap/truncate
-(setq-default truncate-lines t)
-(setq word-wrap-by-category t) ;; improves CJK + Latin word-wrapping
-#+end_src
-
-*** 列、句子、段落 column sentence paragraph
-
-#+begin_src emacs-lisp :tangle yes
-;; display-fill-column-indicator
-;; {{{
-(use-package display-fill-column-indicator
-  :ensure nil
-  :hook
-  (after-init . global-display-fill-column-indicator-mode)
-  ;; (add-hook 'prog-mode-hook 'display-fill-column-indicator-mode)
-  :bind
-  (
-   ([remap fill-paragraph] . my/toggle-fill-unfill)
-   )
-  :config
-  (setq-default fill-column 80) ;; M-x set-fill-column RET
-
-  (defun my/toggle-fill-unfill ()
-    "Like `fill-paragraph', but unfill if used twice."
-    (interactive)
-    (let ((fill-column
-           (if (eq last-command 'my-fill-or-unfill)
-               (progn (setq this-command nil)
-                      (point-max))
-             fill-column)))
-      (call-interactively 'fill-paragraph nil (vector nil t))))
-
-  ;; https://www.emacswiki.org/emacs/UnfillParagraph
-  (defun my/unfill-paragraph (&optional region)
-    "Takes a multi-line paragraph and makes it into a single line of text."
-    (interactive (progn (barf-if-buffer-read-only) '(t)))
-    (let ((fill-column (point-max))
-          ;; This would override `fill-column' if it's an integer.
-          (emacs-lisp-docstring-fill-column t))
-      (fill-paragraph nil region))
-    )
-  )
-;; }}}
-#+end_src
-
-
-#+begin_src emacs-lisp :tangle yes
-;; sentence: 断句
-;; {{{
-(setq sentence-end
-      "\\([。！？]\\|……\\|[.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*"
-      )
-;; (setq sentence-end-double-space nil)
-;; }}}
-#+end_src
-
-** minibuffer                                                         :FIXME:
 
 #+begin_src emacs-lisp :tangle yes
 ;; minibuffer
@@ -1855,6 +1869,16 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
 ** 补全、代码片段与模板 Completion Snippet and Template
 
 completion: buffer and minibuffer
+
+*** 括号自动补全
+
+#+begin_src emacs-lisp :tangle yes
+;; pair completion
+(use-package electric-pair-mode ; elec-pair
+  :ensure nil
+  :hook (after-init . electric-pair-mode)
+  )
+#+end_src
 
 *** abbrev/dabbrev Completion
 
@@ -1961,31 +1985,31 @@ completion: buffer and minibuffer
    ("C-c l f f" . eglot-format)
    ("C-c l f"   . eglot-format)
    ("C-c l r"   . eglot-rename)
+   )
+  :hook
+  (
+   (c++-mode . eglot-ensure)
+   (c++-ts-mode . eglot-ensure)
+   (c-mode . eglot-ensure)
+   (c-ts-mode . eglot-ensure)
+   (java-mode . eglot-ensure)
+   (java-ts-mode . eglot-ensure)
+   (js-mode . eglot-ensure)
+   (js-ts-mode . eglot-ensure)
+   (python-mode . eglot-ensure)
+   (python-ts-mode . eglot-ensure)
+   (typescript-mode . eglot-ensure)
+   (typescript-ts-base-mode . eglot-ensure)
+   )
+  :custom
+  (eglot-autoshutdown t)
+  (eglot-extend-to-xref t)
+  :config
+  (setq read-process-output-max (* 1024 1024))
+  (setq eglot-events-buffer-size 0)
+  (add-to-list 'eglot-ignored-server-capabilities :documentHighlightProvider)
+  ;; (add-to-list 'eglot-server-programs '(rust-mode . ("rust-analyzer")))
   )
-:hook
-(
- (c++-mode . eglot-ensure)
- (c++-ts-mode . eglot-ensure)
- (c-mode . eglot-ensure)
- (c-ts-mode . eglot-ensure)
- (java-mode . eglot-ensure)
- (java-ts-mode . eglot-ensure)
- (js-mode . eglot-ensure)
- (js-ts-mode . eglot-ensure)
- (python-mode . eglot-ensure)
- (python-ts-mode . eglot-ensure)
- (typescript-mode . eglot-ensure)
- (typescript-ts-base-mode . eglot-ensure)
- )
-:custom
-(eglot-autoshutdown t)
-(eglot-extend-to-xref t)
-:config
-(setq read-process-output-max (* 1024 1024))
-(setq eglot-events-buffer-size 0)
-(add-to-list 'eglot-ignored-server-capabilities :documentHighlightProvider)
-;; (add-to-list 'eglot-server-programs '(rust-mode . ("rust-analyzer")))
-)
 #+end_src
 
 ** 基本编辑
@@ -2028,6 +2052,8 @@ completion: buffer and minibuffer
   (read-extended-command-predicate #'command-completion-default-include-p)
   :config
   (column-number-mode t)
+  (setq tab-always-indent 'complete) ; free the M-TAB keybinding
+  ;; electric-indent-mode
   )
 #+end_src
 
@@ -2123,21 +2149,20 @@ Version: 2018-09-07 2022-09-13"
 
 #+begin_src emacs-lisp :tangle no
 ;;(when (or (my-system-type-is-gnu) (my-system-is-blanche))
-;; (add-to-list post-command-hook 'whitespace-mode) ; FIXME
-(whitespace-mode)
-;; only show bad whitespace
-(setq whitespace-style '(
-                         trailing
-                         space-before-tab
-                         indentation
-                         empty
-                         space-after-tab
-                         ))
+;; (add-to-list post-command-hook 'whitespace-mode))
+(use-package whitespace
+  :ensure nil
+  :defer t
+  :config
+  (setq whitespace-line-column 80) ; highlight long lines tails
+  ;;(face trailing lines-tail)
+  ;; only show bad whitespace
+  (setq whitespace-style
+        '(trailing space-before-tab indentation empty space-after-tab))
 
-;;(face trailing lines-tail) whitespace-line-column 80)
-;; highlight long lines tails
-
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+  (whitespace-mode) ; (global-whitespace-mode +1)
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
+  )
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
@@ -2154,13 +2179,79 @@ Version: 2018-09-07 2022-09-13"
   )
 #+end_src
 
-*** 括号自动补全
+*** 数字
+
+#+begin_src emacs-lisp :tangle no
+(defun my-thousands-separate (num)
+  "Formats the (possibly floating point) number with a thousands
+separator."
+  (let* ((nstr (number-to-string num))
+         (dot-ind (string-match "\\." nstr))
+         (nstr-no-decimal (if dot-ind
+                              (substring nstr 0 dot-ind)
+                            nstr))
+         (nrest (if dot-ind
+                    (substring nstr dot-ind)
+                  nil))
+         (pretty nil)
+         (cnt 0))
+    (dolist (c (reverse (append nstr-no-decimal nil)))
+      (if (and (zerop (% cnt 3)) (> cnt 0))
+          (setq pretty (cons ?, pretty)))
+      (setq pretty (cons c pretty))
+      (setq cnt (1+ cnt)))
+    (concat pretty nrest))
+  )
+#+end_src
+
+*** 单词 Word
 
 #+begin_src emacs-lisp :tangle yes
-;; pair completion
-(use-package electric-pair-mode ; elec-pair
+(use-package subword
+  ;; camelCase and superword-mode
   :ensure nil
-  :hook (after-init . electric-pair-mode)
+  :defer 1
+  :config
+  (global-subword-mode)
+  )
+#+end_src
+
+*** 句子、段落 sentence paragraph
+
+#+begin_src emacs-lisp :tangle yes
+(use-package emacs
+  :ensure nil
+    :bind
+  (
+   ([remap fill-paragraph] . my/toggle-fill-unfill)
+   )
+  :config
+  (setq-default fill-column 80) ;; M-x set-fill-column RET
+
+  (defun my/toggle-fill-unfill ()
+    "Like `fill-paragraph', but unfill if used twice."
+    (interactive)
+    (let ((fill-column
+           (if (eq last-command 'my-fill-or-unfill)
+               (progn (setq this-command nil)
+                      (point-max))
+             fill-column)))
+      (call-interactively 'fill-paragraph nil (vector nil t))))
+
+  ;; https://www.emacswiki.org/emacs/UnfillParagraph
+  (defun my/unfill-paragraph (&optional region)
+    "Takes a multi-line paragraph and makes it into a single line of text."
+    (interactive (progn (barf-if-buffer-read-only) '(t)))
+    (let ((fill-column (point-max))
+          ;; This would override `fill-column' if it's an integer.
+          (emacs-lisp-docstring-fill-column t))
+      (fill-paragraph nil region))
+    )
+  ;; sentence: 断句
+(setq sentence-end
+      "\\([。！？]\\|……\\|[.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*"
+      )
+;; (setq sentence-end-double-space nil)
   )
 #+end_src
 
@@ -2275,11 +2366,11 @@ Version: 2018-09-07 2022-09-13"
 (use-package emacs
   :ensure nil
   :bind
-  ("C-c g a" . my/go-to-char)
+  ([remap goto-char] . my/goto-char)
   :config
-  (defun my/go-to-char (n char)
+  (defun my/goto-char (n char)
     "Move forward to Nth occurence of CHAR.
-Typing `wy-go-to-char-key' again will move forwad to the next Nth
+Typing `my/goto-char-key' again will move forwad to the next Nth
 occurence of CHAR."
     (interactive "p\ncGo to char: ")
     (search-forward (string char) nil nil n)
@@ -2318,29 +2409,155 @@ occurence of CHAR."
 (add-hook 'occur-mode-find-occurrence-hook #'my/recenter-line-near-top-fn)
 #+end_src
 
-*** 数字
+** 查找搜索替换 find/grep search match replace
+*** isearch
+
+[[https://pengpengxp.github.io/emacs/emacs_isearch_summary.html][一份isearch的使用总结]]
+
+#+begin_src emacs-lisp :tangle yes
+;; isearch
+;; {{{
+;; M-<: first match
+;; M->: last  match
+(use-package isearch
+  :ensure nil
+  :defer t
+  :bind
+  (
+   :map isearch-mode-map
+   ("C-c" . isearch-cancel)
+   ("DEL" . isearch-del-char)
+   ("s-v" . isearch-yank-kill)
+   )
+  :config
+  (setq isearch-lazy-count t) ; anzu
+  (setq isearch-allow-motion t)
+  ;; 这样可以在 literal 的 isearch 中，把空格直接当成正则里面的 .* 匹配
+  (setq isearch-lax-whitespace t)
+  (setq isearch-regexp-lax-whitespace t)
+  (setq search-whitespace-regexp ".*")
+  (setq isearch-regexp-lax-whitespace nil) ; 正则搜索时不开启这个功能，空格就是空格
+  (setq isearch-motion-changes-direction t)
+  ;;
+  ;; 自动 wrap
+  (defadvice isearch-search (after isearch-no-fail activate)
+    (unless isearch-success
+      (ad-disable-advice 'isearch-search 'after 'isearch-no-fail)
+      (ad-activate 'isearch-search)
+      (isearch-repeat (if isearch-forward 'forward))
+      (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
+      (ad-activate 'isearch-search)))
+  ;;
+  ;; 重新输入并搜索
+  (defmacro isearch-quit-and-run (&rest body)
+    "Quit the minibuffer and run BODY afterwards."
+    (declare (indent 0))
+    `(progn
+       (put 'quit 'error-message "")
+       (run-at-time nil nil
+                    (lambda ()
+                      (put 'quit 'error-message "Quit")
+                      (with-demoted-errors "Error: %S"
+                        ,@body)))
+       (isearch-cancel)))
+
+  (defun my/rerun-isearch ()
+    "rerun isearch from the original place."
+    (interactive)
+    (isearch-quit-and-run
+      (isearch-forward)))
+  )
+;; }}}
+#+end_src
 
 #+begin_src emacs-lisp :tangle no
-(defun my-thousands-separate (num)
-  "Formats the (possibly floating point) number with a thousands
-separator."
-  (let* ((nstr (number-to-string num))
-         (dot-ind (string-match "\\." nstr))
-         (nstr-no-decimal (if dot-ind
-                              (substring nstr 0 dot-ind)
-                            nstr))
-         (nrest (if dot-ind
-                    (substring nstr dot-ind)
-                  nil))
-         (pretty nil)
-         (cnt 0))
-    (dolist (c (reverse (append nstr-no-decimal nil)))
-      (if (and (zerop (% cnt 3)) (> cnt 0))
-          (setq pretty (cons ?, pretty)))
-      (setq pretty (cons c pretty))
-      (setq cnt (1+ cnt)))
-    (concat pretty nrest))
+;; isearchb
+
+;; misearch
+#+end_src
+
+*** 正则表达式 regexp: re-builder
+
+#+begin_src emacs-lisp :tangle no
+(use-package re-builder
+  :ensure nil
+  :bind
+  (
+   ("C-M-%" . re-builder)
+   :map reb-mode-map
+   ("RET" . reb-replace-regexp)
+   :map reb-lisp-mode-map
+   ("RET" . reb-replace-regexp)
+   )
+  :config
+  (defvar my/re-builder-positions nil
+    "Store point and region bounds before calling re-builder")
+
+  (advice-add 're-builder
+              :before
+              (defun my/re-builder-save-state (&rest _)
+                "Save into `my/re-builder-positions' the point and region
+positions before calling `re-builder'."
+                (setq my/re-builder-positions
+                      (cons (point)
+                            (when (region-active-p)
+                              (list (region-beginning)
+                                    (region-end)))))))
+
+  (defun reb-replace-regexp (&optional delimited)
+    "Run `query-replace-regexp' with the contents of re-builder. With
+non-nil optional argument DELIMITED, only replace matches
+surrounded by word boundaries."
+    (interactive "P")
+    (reb-update-regexp)
+    (let* ((re (reb-target-binding reb-regexp))
+           (replacement (query-replace-read-to
+                         re
+                         (concat "Query replace"
+                                 (if current-prefix-arg
+                                     (if
+                                         (eq current-prefix-arg '-)
+                                         " backward"
+                                       " word")
+                                   "")
+                                 " regexp"
+                                 (if (with-selected-window
+                                         reb-target-window
+                                       (region-active-p))
+                                     " in region"
+                                   ""))
+                         t))
+           (pnt (car my/re-builder-positions))
+           (beg (cadr my/re-builder-positions))
+           (end (caddr my/re-builder-positions)))
+      (with-selected-window reb-target-window
+        (goto-char pnt) ; replace with (goto-char (match-beginning 0)) if you want
+                                        ; to control where in the buffer the replacement starts
+                                        ; with re-builder
+        (setq my/re-builder-positions nil)
+        (reb-quit)
+        (query-replace-regexp re replacement delimited beg end))))
   )
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(use-package regi
+  :ensure nil
+  :defer t
+  )
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(use-package rx
+  :ensure nil
+  :defer t
+  )
+#+end_src
+
+*** grep
+
+#+begin_src emacs-lisp :tangle no
+;; grep
 #+end_src
 
 *** 批量替换 batch replace
@@ -2508,160 +2725,6 @@ separator."
    (t (message "please input 1~3!"))))
 #+end_src
 
-
-** 查找与搜索
-
-*** 正则表达式 regexp: re-builder
-
-#+begin_src emacs-lisp :tangle no
-(use-package re-builder
-  :ensure nil
-  :bind
-  (
-   ("C-M-%" . re-builder)
-   :map reb-mode-map
-   ("RET" . reb-replace-regexp)
-   :map reb-lisp-mode-map
-   ("RET" . reb-replace-regexp)
-   )
-  :config
-  (defvar my/re-builder-positions nil
-    "Store point and region bounds before calling re-builder")
-
-  (advice-add 're-builder
-              :before
-              (defun my/re-builder-save-state (&rest _)
-                "Save into `my/re-builder-positions' the point and region
-positions before calling `re-builder'."
-                (setq my/re-builder-positions
-                      (cons (point)
-                            (when (region-active-p)
-                              (list (region-beginning)
-                                    (region-end)))))))
-
-  (defun reb-replace-regexp (&optional delimited)
-    "Run `query-replace-regexp' with the contents of re-builder. With
-non-nil optional argument DELIMITED, only replace matches
-surrounded by word boundaries."
-    (interactive "P")
-    (reb-update-regexp)
-    (let* ((re (reb-target-binding reb-regexp))
-           (replacement (query-replace-read-to
-                         re
-                         (concat "Query replace"
-                                 (if current-prefix-arg
-                                     (if
-                                         (eq current-prefix-arg '-)
-                                         " backward"
-                                       " word")
-                                   "")
-                                 " regexp"
-                                 (if (with-selected-window
-                                         reb-target-window
-                                       (region-active-p))
-                                     " in region"
-                                   ""))
-                         t))
-           (pnt (car my/re-builder-positions))
-           (beg (cadr my/re-builder-positions))
-           (end (caddr my/re-builder-positions)))
-      (with-selected-window reb-target-window
-        (goto-char pnt) ; replace with (goto-char (match-beginning 0)) if you want
-                                        ; to control where in the buffer the replacement starts
-                                        ; with re-builder
-        (setq my/re-builder-positions nil)
-        (reb-quit)
-        (query-replace-regexp re replacement delimited beg end))))
-  )
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-(use-package regi
-  :ensure nil
-  :defer t
-  )
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-(use-package rx
-  :ensure nil
-  :defer t
-  )
-#+end_src
-
-*** grep
-
-#+begin_src emacs-lisp :tangle no
-;; grep
-#+end_src
-
-*** isearch
-
-[[https://pengpengxp.github.io/emacs/emacs_isearch_summary.html][一份isearch的使用总结]]
-
-#+begin_src emacs-lisp :tangle yes
-;; isearch
-;; {{{
-;; M-<: first match
-;; M->: last  match
-(use-package isearch
-  :ensure nil
-  :defer t
-  :bind
-  (
-   :map isearch-mode-map
-   ("C-c" . isearch-cancel)
-   ("DEL" . isearch-del-char)
-   ("s-v" . isearch-yank-kill)
-   )
-  :config
-  (setq isearch-lazy-count t) ; anzu
-  (setq isearch-allow-motion t)
-  ;; 这样可以在 literal 的 isearch 中，把空格直接当成正则里面的 .* 匹配
-  (setq isearch-lax-whitespace t)
-  (setq isearch-regexp-lax-whitespace t)
-  (setq search-whitespace-regexp ".*")
-  (setq isearch-regexp-lax-whitespace nil) ; 正则搜索时不开启这个功能，空格就是空格
-  (setq isearch-motion-changes-direction t)
-  ;;
-  ;; 自动 wrap
-  (defadvice isearch-search (after isearch-no-fail activate)
-    (unless isearch-success
-      (ad-disable-advice 'isearch-search 'after 'isearch-no-fail)
-      (ad-activate 'isearch-search)
-      (isearch-repeat (if isearch-forward 'forward))
-      (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
-      (ad-activate 'isearch-search)))
-  ;;
-  ;; 重新输入并搜索
-  (defmacro isearch-quit-and-run (&rest body)
-    "Quit the minibuffer and run BODY afterwards."
-    (declare (indent 0))
-    `(progn
-       (put 'quit 'error-message "")
-       (run-at-time nil nil
-                    (lambda ()
-                      (put 'quit 'error-message "Quit")
-                      (with-demoted-errors "Error: %S"
-                        ,@body)))
-       (isearch-cancel)))
-
-  (defun my/rerun-isearch ()
-    "rerun isearch from the original place."
-    (interactive)
-    (isearch-quit-and-run
-      (isearch-forward)))
-  )
-;; }}}
-#+end_src
-
-
-#+begin_src emacs-lisp :tangle no
-;; isearchb
-
-;; misearch
-#+end_src
-
 ** 宏 macro
 
 #+begin_src emacs-lisp :tangle no
@@ -2679,6 +2742,36 @@ surrounded by word boundaries."
   :ensure nil
   :defer t
   )
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+;; https://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
+(defun my/smarter-move-beginning-of-line (arg)
+  "Move point back to indentation of beginning of line.
+
+Move point to the first non-whitespace character on this line.
+If point is already there, move to the beginning of the line.
+Effectively toggle between the first non-whitespace character and
+the beginning of the line.
+
+If ARG is not nil or 1, move forward ARG - 1 lines first.  If
+point reaches the beginning or end of the buffer, stop there."
+  (interactive "^p")
+  (setq arg (or arg 1))
+
+  ;; Move lines first
+  (when (/= arg 1)
+    (let ((line-move-visual nil))
+      (forward-line (1- arg))))
+
+  (let ((orig-point (point)))
+    (back-to-indentation)
+    (when (= orig-point (point))
+      (move-beginning-of-line 1))))
+
+;; remap C-a to `my/smarter-move-beginning-of-line'
+(global-set-key [remap move-beginning-of-line]
+                'my/smarter-move-beginning-of-line)
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
@@ -2838,26 +2931,25 @@ alias ets="emacs --debug-init --no-init-file --no-splash --background-color whit
   )
 #+end_src
 
-
 ** ido & fido-vertical-mode
 
 #+begin_src emacs-lisp :tangle yes
 ;; ido
 ;; {{{
 (use-package ido
- :ensure nil
- :defer 1
- :bind ("C-c p" . ido-switch-buffer)
- :config (setq ido-vertical-mode t) (setq ido-enable-flex-matching t)
- (setq ido-ignore-buffers
-       '("\\` "
-         "^ "
-         "*Completions*"
-         "*Shell Command Output*"
-         "*Messages*"
-         "Async Shell Command"
-         ))
- )
+  :ensure nil
+  :defer 1
+  :bind ("C-c p" . ido-switch-buffer)
+  :config (setq ido-vertical-mode t) (setq ido-enable-flex-matching t)
+  (setq ido-ignore-buffers
+        '("\\` "
+          "^ "
+          "*Completions*"
+          "*Shell Command Output*"
+          "*Messages*"
+          "Async Shell Command"
+          ))
+  )
 ;; }}}
 #+end_src
 
@@ -2876,8 +2968,6 @@ alias ets="emacs --debug-init --no-init-file --no-splash --background-color whit
 #+end_src
 
 locate
-
-
 
 #+begin_src emacs-lisp :tangle no
 (use-package term
@@ -2986,7 +3076,6 @@ locate
                         (all-completions filename obarray #'functionp))
                    completions)))))))
 #+end_src
-
 
 *** executable
 
@@ -3349,7 +3438,6 @@ i.e. change right window to bottom, or change bottom window to right."
 
 ;; socks
 #+end_src
-
 
 #+begin_src emacs-lisp :tangle no
 (use-package eww
@@ -3920,6 +4008,7 @@ all open tasks in current Org buffer
    :map org-src-mode-map
    ("C-c e" . org-edit-src-exit)
    ("s-l" . org-edit-src-exit)
+   ("s-s" . org-edit-src-exit)   
    )
   :config
   (setq org-src-fontify-natively 1)         ;代码块语法高亮
@@ -3947,7 +4036,6 @@ all open tasks in current Org buffer
           ))
   )
 #+end_src
-
 
 ** Link
 
@@ -4554,7 +4642,6 @@ https://pank.eu/blog/pretty-babel-src-blocks.html
 
 ** org-refile
 
-
 * 游戏 Game
 ** 5x5
 
@@ -4564,19 +4651,15 @@ https://pank.eu/blog/pretty-babel-src-blocks.html
 
 ** dunnet
 
-
 ** gomuku
 
-
 ** hanoi
-
 
 ** life: Conway's Game of Life
 
 ** 摩斯电码 morse
 
 ** pong
-
 
 ** solitaire
 
@@ -4602,84 +4685,114 @@ https://pank.eu/blog/pretty-babel-src-blocks.html
 *** OCR
 
 #+begin_src emacs-lisp :tangle yes
-;; Siri Shortcuts: OCR
-;; {{{
-(defun my/siri-ocr ()
-  (interactive)
-  (shell-command "shortcuts run \"OCR Selected Area\"")
-  (do-applescript "tell application id \"org.gnu.Emacs\" to activate")
+(use-package simple
+  :ensure nil
+  :bind
+  ("C-c H-o" . my/siri-ocr)
+  :custom
+  (async-shell-command-buffer 'new-buffer)
+  (tab-always-indent 'complete) ; free the M-TAB keybinding
+  :config
+  ;; Siri Shortcuts: OCR
+  (defun my/siri-ocr ()
+    (interactive)
+    (shell-command "shortcuts run \"OCR Selected Area\"")
+    (do-applescript "tell application id \"org.gnu.Emacs\" to activate")
+    ;; (shell-command "pbpaste &")
+    )
   )
-(keymap-global-set "C-c H-o" #'my/siri-ocr)
-;; }}}
 #+end_src
 
 *** Translate
 
 #+begin_src emacs-lisp :tangle yes
-;; Siri Shortcuts: Translate
-;; {{{
-(add-to-list 'display-buffer-alist
-             (cons
-              "\\*Async Shell Command\\*.*"
-              (cons #'display-buffer-no-window nil)))
-
-(defun my/siri-translate ()
-  (interactive)
-  (let
-      ((tempfile
-        (make-temp-file "siri-translate-" nil ".txt")
-        ))
-    (write-region
-     (format "%s" (thing-at-point 'paragraph))
-     nil
-     tempfile)
-    (end-of-paragraph-text)             ; jump to end of paragraph
-    (shell-command
-     (format "shortcuts run \"Translate File\" -i %s &" tempfile))
+(use-package simple
+  :ensure nil
+  :bind
+  ;; ("C-c C-t" . my/siri-translate)
+  ;; ("C-c C-e" . my/siri-translate2english)
+  ("H-t H-t" . my/translate-language-to-zh-or-zh-to-english)
+  :custom
+  (async-shell-command-buffer 'new-buffer)
+  (tab-always-indent 'complete) ; free the M-TAB keybinding
+  :config
+  ;; Siri Shortcuts: Translate
+  (defun my/siri-ocr ()
+    (interactive)
+    (shell-command "shortcuts run \"OCR Selected Area\"")
+    (do-applescript "tell application id \"org.gnu.Emacs\" to activate")
+    ;; (shell-command "pbpaste &")
     )
-  (shell-command "open -b org.gnu.Emacs")
-  )
+  (add-to-list 'display-buffer-alist
+               (cons
+                "\\*Async Shell Command\\*.*"
+                (cons #'display-buffer-no-window nil)))
 
-;; (keymap-global-set "C-c C-t" #'my/siri-translate)
-
-(defun my/siri-translate2english ()
-  (interactive)
-  (let
-      ((tempfile
-        (make-temp-file "siri-translate-" nil ".txt")
-        ))
-    (write-region
-     (format "%s" (thing-at-point 'paragraph))
-     nil
-     tempfile)
-    (end-of-paragraph-text)             ; jump to end of paragraph
-    (shell-command
-     (format "shortcuts run \"Translate File 2 English\" -i %s &" tempfile))
-    )
-  (shell-command "open -b org.gnu.Emacs")
-  )
-
-;; (keymap-global-set "C-c C-e" #'my/siri-translate2english)
-
-(defun language-to-zh-or-zh-to-english ()
-  (interactive) ;; 测试
-  (let ((string (thing-at-point 'paragraph)))
-    (if (eq (string-match "\\cC" string) nil)
-        (my/siri-translate)
-      (my/siri-translate2english)
+  (defun my/siri-translate ()
+    (interactive)
+    (let
+        ((tempfile
+          (make-temp-file "siri-translate-" nil ".txt")
+          ))
+      (write-region
+       (format "%s" (thing-at-point 'paragraph))
+       nil
+       tempfile)
+      (end-of-paragraph-text)             ; jump to end of paragraph
+      (shell-command
+       (format "shortcuts run \"Translate File\" -i %s &" tempfile))
       )
+    (shell-command "open -b org.gnu.Emacs")
+    ;; (shell-command "pbpaste &")
+    )
+
+  (defun my/siri-translate2english ()
+    (interactive)
+    (let
+        ((tempfile
+          (make-temp-file "siri-translate-" nil ".txt")
+          ))
+      (write-region
+       (format "%s" (thing-at-point 'paragraph))
+       nil
+       tempfile)
+      (end-of-paragraph-text)             ; jump to end of paragraph
+      (shell-command
+       (format "shortcuts run \"Translate File 2 English\" -i %s &" tempfile))
+      )
+    (shell-command "open -b org.gnu.Emacs")
+    ;; (shell-command "pbpaste &")
+    )
+
+  (defun my/translate-language-to-zh-or-zh-to-english ()
+    (interactive) ; 测试
+    (let ((string (thing-at-point 'paragraph)))
+      (if (eq (string-match "\\cC" string) nil)
+          (my/siri-translate)
+        (my/siri-translate2english)
+        ))
     )
   )
-
-(keymap-global-set "H-t H-t" #'language-to-zh-or-zh-to-english)
-;; }}}
 #+end_src
 
 ** 网络搜索
+
 #+begin_src emacs-lisp :tangle yes
-(defun my/open-microsoft-bing ()
-  (interactive)
-  (xwidget-webkit-browse-url "https://www.bing.com" t)
+(use-package xwidget
+  :ensure nil
+  :bind
+  (
+   ("M-s e" . my/open-microsoft-bing) ; open search engine
+   :map xwidget-webkit-mode-map
+   ("C-h b" . describe-bindings)
+   ;; :map xwidget-webkit-edit-mode-map
+   )
+  :config
+  ;; bing search
+  (defun my/open-microsoft-bing ()
+    (interactive)
+    (xwidget-webkit-browse-url "https://www.bing.com" t)
+    )
   )
 #+end_src
 
@@ -4747,7 +4860,7 @@ https://pank.eu/blog/pretty-babel-src-blocks.html
 #+begin_src emacs-lisp :tangle no
 
 (define-prefix-command 'my-keymap) ; create a new prefix map
-(global-set-key "\C-e" my-keymap) ; bind the new keymap to C-e 
+(global-set-key "\C-e" my-keymap) ; bind the new keymap to C-e
 ;; bind the individual commands:
 (define-key my-keymap "e" 'move-end-of-line)
 (define-key my-keymap "r" 'end-of-buffer)
@@ -4796,20 +4909,20 @@ run-with-timer
 (defun toggle-evilmode ()
   (interactive)
   (if (bound-and-true-p evil-local-mode)
+      (progn
+                                        ; go emacs
+        (evil-local-mode (or -1 1))
+        (undo-tree-mode (or -1 1))
+        (set-variable 'cursor-type 'bar)
+        )
     (progn
-      ; go emacs
-      (evil-local-mode (or -1 1))
-      (undo-tree-mode (or -1 1))
-      (set-variable 'cursor-type 'bar)
-    )
-    (progn
-      ; go evil
+                                        ; go evil
       (evil-local-mode (or 1 1))
       (set-variable 'cursor-type 'box)
+      )
     )
   )
-)
- 
+
 (global-set-key (kbd "M-u") 'toggle-evilmode)
 #+end_src
 
@@ -4897,7 +5010,6 @@ run-with-timer
 (require 'init-test)    ; test my little functions
 #+end_src
 
-
 * Package (ELPA/MELPA)
 
 ** emacs-everywhere
@@ -4939,7 +5051,6 @@ run-with-timer
 [[https://emacs-china.org/t/topic/5507][Mac 下给 Emacs 设置 PATH 和 exec-path - Emacs China]]
 
 =~/.profile= : [[https://emacs-china.org/t/emacs-mac-port-profile/2895/30][Emacs Mac Port 能自动从 ~/.profile 继承环境变量 - Emacs China]]
-
 
 #+begin_src emacs-lisp :tangle yes
 ;; exec-path-from-shell
@@ -5053,7 +5164,6 @@ variables such as `exec-path'."
  "/Users/n/.cask/bin:/opt/theos/bin:/Users/n/wsybin:/usr/local/opt/coreutils/libexec/gnubin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Applications/Server.app/Contents/ServerRoot/usr/bin:/Applications/Server.app/Contents/ServerRoot/usr/sbin:/usr/local/git/bin:/Users/n/.rvm/bin"
  )
 #+end_src
-
 
 #+begin_src emacs-lisp :tangle no
 ;; {{{
@@ -5468,16 +5578,16 @@ https://karthinks.com/software/avy-can-do-anything
   )
 #+end_src
 
-
 *** goto-line-preview
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 ;; goto-line-preview
 ;; {{{
 (use-package goto-line-preview
+  :ensure nil
+  :defer 2
   :bind
   ([remap goto-line] . goto-line-preview)
-  ("C-c H-l" . goto-line-preview)
   )
 ;; }}}
 #+end_src
@@ -5750,7 +5860,6 @@ re="(([\u2e80-\u9fff]+)([\n\r]{1,2})?([\s\t])?(([\u2e80-\u9fff]+)|(\w)+)([\s\t])
 ;; }}}
 #+end_src
 
-
 *** separedit
 
 #+begin_src emacs-lisp :tangle no
@@ -5803,12 +5912,12 @@ re="(([\u2e80-\u9fff]+)([\n\r]{1,2})?([\s\t])?(([\u2e80-\u9fff]+)|(\w)+)([\s\t])
         (separedit-abort)))))
 
 (define-key emacs-lisp-mode-map (kbd "C-x C-e")
-  (lambda ()
-    (interactive)
-    (call-interactively
-     (if (separedit--point-at-comment)
-         #'separedit/eval-last-sexp-in-comment
-       #'eval-last-sexp))))
+            (lambda ()
+              (interactive)
+              (call-interactively
+               (if (separedit--point-at-comment)
+                   #'separedit/eval-last-sexp-in-comment
+                 #'eval-last-sexp))))
 #+end_src
 
 #+begin_src emacs-lisp :tangle no
@@ -6197,68 +6306,71 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; Example configuration for Consult
 (use-package consult
   :ensure nil
-  :defer 1
+  ;; :defer 1
+  :after org
   ;; Replace bindings. Lazily loaded due by `use-package'.
-  :bind (
-         ("C-c H-f H-d" . consult-find)
-         ("C-c H-r H-e" . consult-grep)
-         ("C-c H-r H-g" . consult-ripgrep)
-         ("C-x H-l" . consult-focus-lines)
-         ;; C-c bindings (mode-specific-map)
-         ("C-c M-x" . consult-mode-command)
-         ("C-c h" . consult-history)
-         ("C-c k" . consult-kmacro)
-         ("C-c i" . consult-info)
-         ([remap Info-search] . consult-info)
-         ;; C-x bindings (ctl-x-map)
-         ("C-x M-:" . consult-complex-command) ;; orig. repeat-complex-command
-         ("C-x b" . consult-buffer)            ;; orig. switch-to-buffer
-         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
-         ("C-x 5 b" . consult-buffer-other-frame) ;; orig. switch-to-buffer-other-frame
-         ("C-x r b" . consult-bookmark)           ;; orig. bookmark-jump
-         ("C-x p b" . consult-project-buffer) ;; orig. project-switch-to-buffer
-         ;; Custom M-# bindings for fast register access
-         ("M-#" . consult-register-load)
-         ("M-'" . consult-register-store) ;; orig. abbrev-prefix-mark (unrelated)
-         ("C-M-#" . consult-register)
-         ;; Other custom bindings
-         ("M-y" . consult-yank-pop) ;; orig. yank-pop
-         ;; M-g bindings (goto-map)
-         ("M-g e" . consult-compile-error)
-         ("M-g f" . consult-flymake)     ;; Alternative: consult-flycheck
-         ("M-g g" . consult-goto-line)   ;; orig. goto-line
-         ("M-g M-g" . consult-goto-line) ;; orig. goto-line
-         ("M-g o" . consult-outline)     ;; Alternative: consult-org-heading
-         ("M-g m" . consult-mark)
-         ("M-g k" . consult-global-mark)
-         ("M-g i" . consult-imenu)
-         ("M-g I" . consult-imenu-multi)
-         ;; M-s bindings (search-map)
-         ("M-s d" . consult-find)
-         ("M-s D" . consult-locate)
-         ("M-s g" . consult-grep)
-         ("M-s G" . consult-git-grep)
-         ("M-s r" . consult-ripgrep)
-         ("M-s l" . consult-line)
-         ("M-s L" . consult-line-multi)
-         ("M-s k" . consult-keep-lines)
-         ("M-s u" . consult-focus-lines)
-         ;; Isearch integration
-         ("M-s e" . consult-isearch-history)
-         :map isearch-mode-map
-         ("M-e" . consult-isearch-history)   ;; orig. isearch-edit-string
-         ("M-s e" . consult-isearch-history) ;; orig. isearch-edit-string
-         ("M-s l" . consult-line) ;; needed by consult-line to detect isearch
-         ("M-s L" . consult-line-multi) ;; needed by consult-line to detect isearch
-         ;; Minibuffer history
-         :map minibuffer-local-map
-         ("M-s" . consult-history)  ;; orig. next-matching-history-element
-         ("H-r" . consult-history) ;; orig. previous-matching-history-element
-         :map org-mode-map
-         ("C-c C-j"  . consult-org-heading)
-         :map prog-mode-map
-         ("C-c C-j"  . consult-outline)
-         )
+  :bind
+  (
+   ("C-c H-f H-d" . consult-find)
+   ("C-c H-r H-e" . consult-grep)
+   ("C-c H-r H-g" . consult-ripgrep)
+   ("C-x H-l" . consult-focus-lines)
+   ;; C-c bindings (mode-specific-map)
+   ("C-c M-x" . consult-mode-command)
+   ("C-c h" . consult-history)
+   ("C-c k" . consult-kmacro)
+   ("C-c i" . consult-info)
+   ([remap Info-search] . consult-info)
+   ;; C-x bindings (ctl-x-map)
+   ([remap repeat-complex-command] . consult-complex-command)
+   ("C-x b" . consult-buffer)            ;; orig. switch-to-buffer
+   ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+   ("C-x 5 b" . consult-buffer-other-frame) ;; orig. switch-to-buffer-other-frame
+   ("C-x r b" . consult-bookmark)           ;; orig. bookmark-jump
+   ("C-x p b" . consult-project-buffer) ;; orig. project-switch-to-buffer
+   ;; Custom M-# bindings for fast register access
+   ("M-#" . consult-register-load)
+   ("M-'" . consult-register-store) ;; orig. abbrev-prefix-mark (unrelated)
+   ("C-M-#" . consult-register)
+   ;; Other custom bindings
+   ("M-y" . consult-yank-pop) ;; orig. yank-pop
+   ;; M-g bindings (goto-map)
+   ("M-g e" . consult-compile-error)
+   ("M-g f" . consult-flymake)     ;; Alternative: consult-flycheck
+   ("M-g g" . consult-goto-line)   ;; orig. goto-line
+   ("M-g M-g" . consult-goto-line) ;; orig. goto-line
+   ("M-g o" . consult-outline)     ;; Alternative: consult-org-heading
+   ("M-g m" . consult-mark)
+   ("M-g k" . consult-global-mark)
+   ("M-g i" . consult-imenu)
+   ("M-g I" . consult-imenu-multi)
+   ;; M-s bindings (search-map)
+   ("M-s d" . consult-find)
+   ("M-s D" . consult-locate)
+   ("M-s g" . consult-grep)
+   ("M-s G" . consult-git-grep)
+   ("M-s r" . consult-ripgrep)
+   ("M-s l" . consult-line)
+   ("M-s L" . consult-line-multi)
+   ("M-s k" . consult-keep-lines)
+   ("M-s u" . consult-focus-lines)
+   ;; Isearch integration
+   ;; ("M-s e" . consult-isearch-history)
+   ("M-s s" . consult-isearch-history)
+   :map isearch-mode-map
+   ("M-e" . consult-isearch-history)   ;; orig. isearch-edit-string
+   ;; ("M-s e" . consult-isearch-history) ;; orig. isearch-edit-string
+   ("M-s l" . consult-line) ;; needed by consult-line to detect isearch
+   ("M-s L" . consult-line-multi) ;; needed by consult-line to detect isearch
+   ;; Minibuffer history
+   :map minibuffer-local-map
+   ("M-s" . consult-history)  ;; orig. next-matching-history-element
+   ("H-r" . consult-history) ;; orig. previous-matching-history-element
+   :map org-mode-map
+   ([remap org-goto]  . consult-org-heading) ; C-c C-j
+   :map prog-mode-map
+   ("C-c C-j"  . consult-outline)
+   )
   ;; Enable automatic preview at point in the *Completions* buffer. This is
   ;; relevant when you use the default completion UI.
   :hook (completion-list-mode . consult-preview-at-point-mode)
@@ -6348,7 +6460,6 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
       )
 #+end_src
 
-
 #+begin_src emacs-lisp :tangle no
 (use-package consult-project-extra
   :straight t
@@ -6435,7 +6546,6 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
  'eglot-managed-mode-hook
  (lambda ()
    (add-to-list 'company-backends '(company-capf :with company-yasnippet))))
-
 
 ;; for corfu
 (use-package cape)
@@ -6738,49 +6848,49 @@ company-quickhelp
 
 #+begin_src emacs-lisp :tangle no
 (use-package
- orderless
- :config
- (defmacro dispatch: (regexp style)
-   (cl-flet
-    ((symcat (a b) (intern (concat a (symbol-name b)))))
-    `(defun ,(symcat "dispatch:" style) (pattern _index _total)
-       (when (string-match ,regexp pattern)
-         (cons ',(symcat "orderless-" style) (match-string 1 pattern))))))
- (cl-flet
-  ((pre/post (str) (format "^%s\\(.*\\)$\\|^\\(?1:.*\\)%s$" str str)))
-  (dispatch: (pre/post "=") literal)
-  (dispatch: (pre/post "`") regexp)
-  (dispatch:
-   (pre/post
-    (if (or minibuffer-completing-file-name (derived-mode-p 'eshell-mode))
-        "%"
-      "[%.]"))
-   initialism))
- (dispatch: "^{\\(.*\\)}$" flex)
- (dispatch: "^\\([^][^\\+*]*[./-][^][\\+*$]*\\)$" prefixes)
- (dispatch: "^!\\(.+\\)$" without-literal)
+  orderless
+  :config
+  (defmacro dispatch: (regexp style)
+    (cl-flet
+        ((symcat (a b) (intern (concat a (symbol-name b)))))
+      `(defun ,(symcat "dispatch:" style) (pattern _index _total)
+         (when (string-match ,regexp pattern)
+           (cons ',(symcat "orderless-" style) (match-string 1 pattern))))))
+  (cl-flet
+      ((pre/post (str) (format "^%s\\(.*\\)$\\|^\\(?1:.*\\)%s$" str str)))
+    (dispatch: (pre/post "=") literal)
+    (dispatch: (pre/post "`") regexp)
+    (dispatch:
+     (pre/post
+      (if (or minibuffer-completing-file-name (derived-mode-p 'eshell-mode))
+          "%"
+        "[%.]"))
+     initialism))
+  (dispatch: "^{\\(.*\\)}$" flex)
+  (dispatch: "^\\([^][^\\+*]*[./-][^][\\+*$]*\\)$" prefixes)
+  (dispatch: "^!\\(.+\\)$" without-literal)
 
- (orderless-define-completion-style
-  +orderless-with-initialism
-  (orderless-matching-styles
-   '(orderless-initialism orderless-literal orderless-regexp)))
- :custom
- (completion-styles '(orderless basic))
- (completion-category-defaults nil)
- (completion-category-overrides
-  '((file (styles partial-completion))
-    (command (styles +orderless-with-initialism))
-    (variable (styles +orderless-with-initialism))
-    (symbol (styles +orderless-with-initialism))
-    (eglot (styles +orderless-with-initialism))))
- (orderless-style-dispatchers
-  '(dispatch:literal
-    dispatch:regexp
-    dispatch:without-literal
-    dispatch:initialism
-    dispatch:flex
-    dispatch:prefixes))
- (orderless-component-separator #'orderless-escapable-split-on-space))
+  (orderless-define-completion-style
+      +orderless-with-initialism
+    (orderless-matching-styles
+     '(orderless-initialism orderless-literal orderless-regexp)))
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-defaults nil)
+  (completion-category-overrides
+   '((file (styles partial-completion))
+     (command (styles +orderless-with-initialism))
+     (variable (styles +orderless-with-initialism))
+     (symbol (styles +orderless-with-initialism))
+     (eglot (styles +orderless-with-initialism))))
+  (orderless-style-dispatchers
+   '(dispatch:literal
+     dispatch:regexp
+     dispatch:without-literal
+     dispatch:initialism
+     dispatch:flex
+     dispatch:prefixes))
+  (orderless-component-separator #'orderless-escapable-split-on-space))
 #+end_src
 
 *** isearch-mb
@@ -7511,8 +7621,6 @@ binky-mode
 #+end_src
 
 *** rainbow-delimiters
-
-
 
 *** rainbow-blocks
 ** 折叠
@@ -8992,7 +9100,7 @@ Track Emacs commands frequency
    ;; ([remap yas-expand] . acm-complete)
    ;; select
    ("TAB"       . acm-select-next)
-   ("<tab>"       . acm-select-next)   
+   ("<tab>"       . acm-select-next)
    ("<backtab>" . acm-select-prev)
    ;; ("H-TAB"    . acm-select-prev)
    ("H-j"       . acm-select-next)
@@ -9008,7 +9116,7 @@ Track Emacs commands frequency
    ;; ("s-C-p" . lsp-bridge-jump-to-prev-diagnostic)
    )
   :init
-  (setq-default lsp-bridge-enable-mode-line nil)  
+  (setq-default lsp-bridge-enable-mode-line nil)
   :config
   (require 'yasnippet)
   (yas-global-mode 1)
@@ -9056,7 +9164,6 @@ Track Emacs commands frequency
 ;; (define-key map "\M-l" #'acm-hide)
 ;; (define-key map "\C-g" #'acm-hide)
 #+end_src
-
 
 ** Unicode
 
@@ -9177,7 +9284,6 @@ Track Emacs commands frequency
 ;;       (d2 . t)))
 ;; }}}
 #+end_src
-
 
 *** image-roll
 

@@ -22,6 +22,15 @@ This is intended for use by batch processing scripts,
 where loading changes back into the buffer is not important.")
 (autoload 'elisp-autofmt-buffer "elisp-autofmt" "\
 Auto format the current buffer." t)
+(autoload 'elisp-autofmt-region "elisp-autofmt" "\
+Auto format the active region of the current buffer.
+Optionally use BEG & END, otherwise an active region is required.
+
+(fn &optional BEG END)" t)
+(autoload 'elisp-autofmt-region-dwim "elisp-autofmt" "\
+Context sensitive auto formatting of the current buffer.
+When there is an active region, this is used,
+otherwise format the surrounding S-expression." t)
 (autoload 'elisp-autofmt-check-elisp-autofmt-exists "elisp-autofmt" "\
 Return non-nil when `.elisp-autofmt' is found in a parent directory.")
 (autoload 'elisp-autofmt-list-of-strings-p "elisp-autofmt" "\
