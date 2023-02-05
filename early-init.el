@@ -182,7 +182,7 @@
         (alpha . (95 .80))
         ;; (vertical-scroll-bars . nil)
         ;; (horizontal-scroll-bars . nil)
-        ;; (tool-bar-lines . 0)
+        (tool-bar-lines . 0)
         ))
 (push '(tool-bar-mode . nil) default-frame-alist)
 (setq inhibit-splash-screen t)        ;; 禁用欢迎界面

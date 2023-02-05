@@ -411,9 +411,9 @@ open -b org.gnu.Emacs --args -q --eval='(message "%s" (emacs-init-time))'
 
 #+begin_src emacs-lisp :tangle no
 ;; https://emacs-china.org/t/emacs/22375/2
-;; (push '(menu-bar-lines . 0) default-frame-alist) ; 菜单栏
-;; (push '(vertical-scroll-bars) default-frame-alist) ; 滚动条
-;; (push '(tool-bar-lines . 0) default-frame-alist) ; (tool-bar-mode -1) ; 工具栏
+(push '(menu-bar-lines . 0) default-frame-alist) ; 菜单栏
+(push '(vertical-scroll-bars) default-frame-alist) ; 滚动条
+(push '(tool-bar-lines . 0) default-frame-alist) ; (tool-bar-mode -1) ; 工具栏
 (push '(scroll-bar-mode . nil) default-frame-alist)
 (push '(menu-bar-mode . nil) default-frame-alist)
 #+end_src
@@ -431,7 +431,7 @@ open -b org.gnu.Emacs --args -q --eval='(message "%s" (emacs-init-time))'
         (alpha . (95 .80))
         ;; (vertical-scroll-bars . nil)
         ;; (horizontal-scroll-bars . nil)
-        ;; (tool-bar-lines . 0)
+        (tool-bar-lines . 0)
         ))
 (push '(tool-bar-mode . nil) default-frame-alist)
 (setq inhibit-splash-screen t)        ;; 禁用欢迎界面
