@@ -1,3 +1,19 @@
+;; random function
+;; {{{
+(defun describe-random-interactive-function ()
+  "Show the documentation for a random interactive function.
+Consider only documented, non-obsolete functions."
+  (interactive)
+  (let (result)
+    (mapatoms
+     (lambda (s)
+       (when (and (commandp s)
+                  (documentation s t)
+                  (null (get s 'byte-obsolete-info)))
+         (setq result (cons s result)))))
+    (describe-function (elt result (random (length result))))))
+;; }}}
+
 ;; -*- coding: utf-8; lexical-binding: t; -*-
 ;; -*- origami-fold-style: triple-braces -*-
 ;;; init.el
@@ -124,6 +140,15 @@
 ;;     (pos-tip-hide)))
 ;; }}}
 
+(xterm-mouse-mode 1)
+;; menu-bar-mode
+
+;; (add-hook 'after-make-frame-functions
+;;   (lambda ()
+;;     ;; we do something only in terminal Emacs
+;;     (unless (display-graphics-p)
+;;       (xterm-mouse-mode 1)))
+
 ;; cursor
 ;; {{{
 ;; cursor move
@@ -135,7 +160,6 @@
 ;; (global-hl-line-mode t) ;; highlight current line
 (custom-set-faces '(hl-line ((t (:background "grey")))))
 (delete-selection-mode t) ;; 删除选中的文字或选中文字后输入时替换选中的文字
-(global-subword-mode)     ;; camelCase and superword-mode
 ;; }}}
 
 (put 'narrow-to-region 'disabled nil)
@@ -219,22 +243,6 @@
   )
 
 (add-hook 'emacs-lisp-mode-hook #'(lambda () (treesit-parser-create 'elisp)))
-;; }}}
-
-;; random function
-;; {{{
-(defun describe-random-interactive-function ()
-  "Show the documentation for a random interactive function.
-Consider only documented, non-obsolete functions."
-  (interactive)
-  (let (result)
-    (mapatoms
-     (lambda (s)
-       (when (and (commandp s)
-                  (documentation s t)
-                  (null (get s 'byte-obsolete-info)))
-         (setq result (cons s result)))))
-    (describe-function (elt result (random (length result))))))
 ;; }}}
 
 ;; time
@@ -593,6 +601,180 @@ If no file is associated, just close buffer without prompt for save."
   (setq delete-by-moving-to-trash t))
 ;; }}}
 
+(use-package emacs
+  :ensure nil
+  :bind
+  (
+   ("C-c b f" . next-buffer)
+   ("C-c b b" . previous-buffer)
+   ("C-c b l" . list-buffers)
+   ;; esc-map
+   ;; ("M-b f" . next-buffer)
+   ;; ("M-b b" . previous-buffer)
+   ;; ("M-b l" . list-buffers)
+   )
+  )
+
+;; line
+;; {{{
+(use-package display-line-numbers
+  :ensure nil
+  :hook
+  (prog-mode . display-line-numbers-mode)
+  ;; (after-init . global-display-line-numbers-mode)
+  :bind
+  ("C-c O"   . open-newline-above)
+  ("C-c C-o" . open-newline-below)
+  :config
+  (setq-default display-line-numbers-widen t) ; Keep line numbers inside a narrow
+  (setq display-line-numbers-width-start t)
+  (setq display-line-numbers-grow-only t)    ;; do not shrink line number width
+  (setq display-line-numbers-type 'relative) ;; 相对行号
+
+  ;; new line
+  ;; https://github.com/manateelazycat/open-newline
+
+  (defun open-newline-above (arg)
+    "Move to the previous line (like vi) and then opens a line."
+    (interactive "p")
+    (beginning-of-line)
+    (open-line arg)
+    (if (not (member major-mode '(haskell-mode org-mode literate-haskell-mode)))
+        (indent-according-to-mode)
+      (beginning-of-line)))
+
+  (defun open-newline-below (arg)
+    "Move to the next line (like vi) and then opens a line."
+    (interactive "p")
+    (end-of-line)
+    (open-line arg)
+    (call-interactively 'next-line arg)
+    (if (not (member major-mode '(haskell-mode org-mode literate-haskell-mode)))
+        (indent-according-to-mode)
+      (beginning-of-line)))
+  )
+;; }}}
+
+(use-package emacs
+  :ensure nil
+  ;; :bind
+  ;; (
+  ;;  fill-paragraph
+  ;;  )
+  :init
+  ;; wrap/truncate: word-wrap-mode
+  ;; (setq-default truncate-lines t)
+  (setq word-wrap-by-category t) ;; improves CJK + Latin word-wrapping
+  )
+
+;; (use-package simple
+;;   :ensure nil
+;;   :bind
+;;   (
+;;    ;; toggle-word-wrap
+;;    )
+;;   )
+
+(use-package display-fill-column-indicator
+  :ensure nil
+  :hook
+  (after-init . global-display-fill-column-indicator-mode)
+  ;; (add-hook 'prog-mode-hook 'display-fill-column-indicator-mode)
+  )
+
+;; kill buffer
+;; {{{
+(use-package emacs
+  :ensure nil
+  :bind
+  ("C-c K" . my/kill-all-other-buffers)
+  :config
+  (setq confirm-kill-processes nil)
+  (defun my/kill-all-other-buffers ()
+    (interactive)
+    (mapc 'kill-buffer (cdr (buffer-list (current-buffer))))
+    )
+  )
+;; }}}
+
+;; side buffer
+;; {{{
+(use-package emacs
+  :ensure nil
+  :bind
+  ("C-c B" . my/side-buffer)
+  :config
+  (defun my/side-buffer ()
+    (interactive)
+    (let ((other (buffer-name (window-buffer (next-window)))))
+      (delete-other-windows)
+      (set-frame-width (selected-frame)
+                       (+ (frame-width (selected-frame)) (window-width)))
+      (split-window-horizontally)
+      (split-window-vertically)
+      (with-selected-window (next-window)
+        (set-window-buffer (selected-window) other))
+      (with-selected-window (previous-window)
+        (set-window-buffer (selected-window) "*Scratch*")))
+    )
+  )
+;; }}}
+
+;; ibuffer
+;; {{{
+(use-package ibuffer
+  :ensure nil
+  :bind ("C-x C-b" . ibuffer)
+  ;; :custom
+  ;; (ibuffer-formats
+  ;;  '((mark modified read-only locked " "
+  ;;          (name 35 35 :left :elide)
+  ;;          " "
+  ;;          (size 9 -1 :right)
+  ;;          " "
+  ;;          (mode 16 16 :left :elide)
+  ;;          " " filename-and-process)
+  ;;    (mark " "
+  ;;          (name 16 -1)
+  ;;          " " filename)))
+  :config
+  (setq ibuffer-saved-filter-groups
+        (quote (("default"
+                 ("dired" (mode . dired-mode))
+                 ("emacs" (or
+                           (mode . emacs-lisp-mode)
+                           (name . "^\\*scratch\\*$")
+                           (name . "^\\*Messages\\*$")
+                           ))
+                 ("org" (or (mode . org-mode)
+                            (mode . org-agenda-mode)
+                            (mode . org-src-mode)
+                            ))
+                 ;;               ("erc" (mode . erc-mode))
+
+                 ("planner" (or
+                             (name . "^\\*Calendar\\*$")
+                             (name . "^diary$")
+                             (mode . muse-mode)))
+                 ("PDF"    (mode . pdf-view-mode))
+                 ("python" (mode . python-mode))
+                 ;; ("gnus" (or
+                 ;;          (mode . message-mode)
+                 ;;          (mode . bbdb-mode)
+                 ;;          (mode . mail-mode)
+                 ;;          (mode . gnus-group-mode)
+                 ;;          (mode . gnus-summary-mode)
+                 ;;          (mode . gnus-article-mode)
+                 ;;          (name . "^\\.bbdb$")
+                 ;;          (name . "^\\.newsrc-dribble")))
+                 ))))
+
+  (add-hook 'ibuffer-mode-hook
+            (lambda ()
+              (ibuffer-switch-to-saved-filter-groups "default")))
+  )
+;; }}}
+
 ;; dired
 ;; {{{
 (use-package dired
@@ -631,7 +813,7 @@ If no file is associated, just close buffer without prompt for save."
     (if (file-directory-p (dired-file-name-at-point))
         (dired-find-file)
       (dired-find-file-other-window)))
-  
+
   ;; https://www.n16f.net/blog/decluttering-dired-for-peace-of-mind/
   (setq my/dired-minimal-view t)
 
@@ -726,182 +908,6 @@ project."
   )
 ;; }}}
 
-;; kill buffer
-;; {{{
-(use-package emacs
-  :ensure nil
-  :bind
-  ("C-c K" . my/kill-all-other-buffers)
-  :config
-  (defun my/kill-all-other-buffers ()
-    (interactive)
-    (mapc 'kill-buffer (cdr (buffer-list (current-buffer))))
-    )
-  )
-;; }}}
-
-;; side buffer
-;; {{{
-(use-package emacs
-  :ensure nil
-  :bind
-  ("C-c B" . my/side-buffer)
-  :config
-  (defun my/side-buffer ()
-    (interactive)
-    (let ((other (buffer-name (window-buffer (next-window)))))
-      (delete-other-windows)
-      (set-frame-width (selected-frame)
-                       (+ (frame-width (selected-frame)) (window-width)))
-      (split-window-horizontally)
-      (split-window-vertically)
-      (with-selected-window (next-window)
-        (set-window-buffer (selected-window) other))
-      (with-selected-window (previous-window)
-        (set-window-buffer (selected-window) "*Scratch*")))
-    )
-  )
-;; }}}
-
-;; ibuffer
-;; {{{
-(use-package ibuffer
-  :ensure nil
-  :bind ("C-x C-b" . ibuffer)
-  ;; :custom
-  ;; (ibuffer-formats
-  ;;  '((mark modified read-only locked " "
-  ;;          (name 35 35 :left :elide)
-  ;;          " "
-  ;;          (size 9 -1 :right)
-  ;;          " "
-  ;;          (mode 16 16 :left :elide)
-  ;;          " " filename-and-process)
-  ;;    (mark " "
-  ;;          (name 16 -1)
-  ;;          " " filename)))
-  :config
-  (setq ibuffer-saved-filter-groups
-        (quote (("default"
-                 ("dired" (mode . dired-mode))
-                 ("emacs" (or
-                           (mode . emacs-lisp-mode)
-                           (name . "^\\*scratch\\*$")
-                           (name . "^\\*Messages\\*$")
-                           ))
-                 ("org" (or (mode . org-mode)
-                            (mode . org-agenda-mode)
-                            (mode . org-src-mode)
-                            ))
-                 ;;               ("erc" (mode . erc-mode))
-
-                 ("planner" (or
-                             (name . "^\\*Calendar\\*$")
-                             (name . "^diary$")
-                             (mode . muse-mode)))
-                 ("PDF"    (mode . pdf-view-mode))
-                 ("python" (mode . python-mode))
-                 ;; ("gnus" (or
-                 ;;          (mode . message-mode)
-                 ;;          (mode . bbdb-mode)
-                 ;;          (mode . mail-mode)
-                 ;;          (mode . gnus-group-mode)
-                 ;;          (mode . gnus-summary-mode)
-                 ;;          (mode . gnus-article-mode)
-                 ;;          (name . "^\\.bbdb$")
-                 ;;          (name . "^\\.newsrc-dribble")))
-                 ))))
-
-  (add-hook 'ibuffer-mode-hook
-            (lambda ()
-              (ibuffer-switch-to-saved-filter-groups "default")))
-  )
-;; }}}
-
-;; line
-;; {{{
-(use-package display-line-numbers
-  :ensure nil
-  :hook
-  (prog-mode . display-line-numbers-mode)
-  ;; (after-init . global-display-line-numbers-mode)
-  :bind
-  ("C-c O"   . open-newline-above)
-  ("C-c C-o" . open-newline-below)
-  :config
-  (setq-default display-line-numbers-widen t) ; Keep line numbers inside a narrow
-  (setq display-line-numbers-width-start t)
-  (setq display-line-numbers-grow-only t)    ;; do not shrink line number width
-  (setq display-line-numbers-type 'relative) ;; 相对行号
-
-  ;; new line
-  ;; https://github.com/manateelazycat/open-newline
-
-  (defun open-newline-above (arg)
-    "Move to the previous line (like vi) and then opens a line."
-    (interactive "p")
-    (beginning-of-line)
-    (open-line arg)
-    (if (not (member major-mode '(haskell-mode org-mode literate-haskell-mode)))
-        (indent-according-to-mode)
-      (beginning-of-line)))
-
-  (defun open-newline-below (arg)
-    "Move to the next line (like vi) and then opens a line."
-    (interactive "p")
-    (end-of-line)
-    (open-line arg)
-    (call-interactively 'next-line arg)
-    (if (not (member major-mode '(haskell-mode org-mode literate-haskell-mode)))
-        (indent-according-to-mode)
-      (beginning-of-line)))
-  )
-;; }}}
-
-;; display-fill-column-indicator
-;; {{{
-(use-package display-fill-column-indicator
-  :ensure nil
-  :hook
-  (after-init . global-display-fill-column-indicator-mode)
-  ;; (add-hook 'prog-mode-hook 'display-fill-column-indicator-mode)
-  :bind
-  (
-   ([remap fill-paragraph] . my/toggle-fill-unfill)
-   )
-  :config
-  (setq-default fill-column 80) ;; M-x set-fill-column RET
-
-  (defun my/toggle-fill-unfill ()
-    "Like `fill-paragraph', but unfill if used twice."
-    (interactive)
-    (let ((fill-column
-           (if (eq last-command 'my-fill-or-unfill)
-               (progn (setq this-command nil)
-                      (point-max))
-             fill-column)))
-      (call-interactively 'fill-paragraph nil (vector nil t))))
-
-  ;; https://www.emacswiki.org/emacs/UnfillParagraph
-  (defun my/unfill-paragraph (&optional region)
-    "Takes a multi-line paragraph and makes it into a single line of text."
-    (interactive (progn (barf-if-buffer-read-only) '(t)))
-    (let ((fill-column (point-max))
-          ;; This would override `fill-column' if it's an integer.
-          (emacs-lisp-docstring-fill-column t))
-      (fill-paragraph nil region))
-    )
-  )
-;; }}}
-
-;; sentence: 断句
-;; {{{
-(setq sentence-end
-      "\\([。！？]\\|……\\|[.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*"
-      )
-;; (setq sentence-end-double-space nil)
-;; }}}
-
 ;; minibuffer
 ;; {{{
 (use-package minibuffer
@@ -987,6 +993,12 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
 
 (setq completions-sort #'my/sort-multi-category)
 
+;; pair completion
+(use-package electric-pair-mode ; elec-pair
+  :ensure nil
+  :hook (after-init . electric-pair-mode)
+  )
+
 ;; abbrev/dabbrev: dynamic abbreviation expand
 ;; {{{
 (use-package dabbrev
@@ -1056,6 +1068,8 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
   (read-extended-command-predicate #'command-completion-default-include-p)
   :config
   (column-number-mode t)
+  (setq tab-always-indent 'complete) ; free the M-TAB keybinding
+  ;; electric-indent-mode
   )
 
 ;; unicode
@@ -1130,10 +1144,47 @@ Version: 2018-09-07 2022-09-13"
   ("H-SPC H-SPC" . (lambda () (interactive) (insert "\u200b")))
   )
 
-;; pair completion
-(use-package electric-pair-mode ; elec-pair
+(use-package subword
+  ;; camelCase and superword-mode
   :ensure nil
-  :hook (after-init . electric-pair-mode)
+  :defer 1
+  :config
+  (global-subword-mode)
+  )
+
+(use-package emacs
+  :ensure nil
+    :bind
+  (
+   ([remap fill-paragraph] . my/toggle-fill-unfill)
+   )
+  :config
+  (setq-default fill-column 80) ;; M-x set-fill-column RET
+
+  (defun my/toggle-fill-unfill ()
+    "Like `fill-paragraph', but unfill if used twice."
+    (interactive)
+    (let ((fill-column
+           (if (eq last-command 'my-fill-or-unfill)
+               (progn (setq this-command nil)
+                      (point-max))
+             fill-column)))
+      (call-interactively 'fill-paragraph nil (vector nil t))))
+
+  ;; https://www.emacswiki.org/emacs/UnfillParagraph
+  (defun my/unfill-paragraph (&optional region)
+    "Takes a multi-line paragraph and makes it into a single line of text."
+    (interactive (progn (barf-if-buffer-read-only) '(t)))
+    (let ((fill-column (point-max))
+          ;; This would override `fill-column' if it's an integer.
+          (emacs-lisp-docstring-fill-column t))
+      (fill-paragraph nil region))
+    )
+  ;; sentence: 断句
+(setq sentence-end
+      "\\([。！？]\\|……\\|[.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*"
+      )
+;; (setq sentence-end-double-space nil)
   )
 
 ;; additionally to the list defined in title-capitalization:
@@ -1234,11 +1285,11 @@ Version: 2018-09-07 2022-09-13"
 (use-package emacs
   :ensure nil
   :bind
-  ("C-c g a" . my/go-to-char)
+  ([remap goto-char] . my/goto-char)
   :config
-  (defun my/go-to-char (n char)
+  (defun my/goto-char (n char)
     "Move forward to Nth occurence of CHAR.
-Typing `wy-go-to-char-key' again will move forwad to the next Nth
+Typing `my/goto-char-key' again will move forwad to the next Nth
 occurence of CHAR."
     (interactive "p\ncGo to char: ")
     (search-forward (string char) nil nil n)
@@ -1406,19 +1457,19 @@ occurence of CHAR."
 ;; ido
 ;; {{{
 (use-package ido
- :ensure nil
- :defer 1
- :bind ("C-c p" . ido-switch-buffer)
- :config (setq ido-vertical-mode t) (setq ido-enable-flex-matching t)
- (setq ido-ignore-buffers
-       '("\\` "
-         "^ "
-         "*Completions*"
-         "*Shell Command Output*"
-         "*Messages*"
-         "Async Shell Command"
-         ))
- )
+  :ensure nil
+  :defer 1
+  :bind ("C-c p" . ido-switch-buffer)
+  :config (setq ido-vertical-mode t) (setq ido-enable-flex-matching t)
+  (setq ido-ignore-buffers
+        '("\\` "
+          "^ "
+          "*Completions*"
+          "*Shell Command Output*"
+          "*Messages*"
+          "Async Shell Command"
+          ))
+  )
 ;; }}}
 
 ;; https://www.n16f.net/blog/eshell-key-bindings-and-completion/
@@ -1875,6 +1926,7 @@ all open tasks in current Org buffer
    :map org-src-mode-map
    ("C-c e" . org-edit-src-exit)
    ("s-l" . org-edit-src-exit)
+   ("s-s" . org-edit-src-exit)   
    )
   :config
   (setq org-src-fontify-natively 1)         ;代码块语法高亮
@@ -2113,77 +2165,106 @@ all open tasks in current Org buffer
                            ))
   )
 
-;; Siri Shortcuts: OCR
-;; {{{
-(defun my/siri-ocr ()
-  (interactive)
-  (shell-command "shortcuts run \"OCR Selected Area\"")
-  (do-applescript "tell application id \"org.gnu.Emacs\" to activate")
-  )
-(keymap-global-set "C-c H-o" #'my/siri-ocr)
-;; }}}
-
-;; Siri Shortcuts: Translate
-;; {{{
-(add-to-list 'display-buffer-alist
-             (cons
-              "\\*Async Shell Command\\*.*"
-              (cons #'display-buffer-no-window nil)))
-
-(defun my/siri-translate ()
-  (interactive)
-  (let
-      ((tempfile
-        (make-temp-file "siri-translate-" nil ".txt")
-        ))
-    (write-region
-     (format "%s" (thing-at-point 'paragraph))
-     nil
-     tempfile)
-    (end-of-paragraph-text)             ; jump to end of paragraph
-    (shell-command
-     (format "shortcuts run \"Translate File\" -i %s &" tempfile))
+(use-package simple
+  :ensure nil
+  :bind
+  ("C-c H-o" . my/siri-ocr)
+  :custom
+  (async-shell-command-buffer 'new-buffer)
+  (tab-always-indent 'complete) ; free the M-TAB keybinding
+  :config
+  ;; Siri Shortcuts: OCR
+  (defun my/siri-ocr ()
+    (interactive)
+    (shell-command "shortcuts run \"OCR Selected Area\"")
+    (do-applescript "tell application id \"org.gnu.Emacs\" to activate")
+    ;; (shell-command "pbpaste &")
     )
-  (shell-command "open -b org.gnu.Emacs")
   )
 
-;; (keymap-global-set "C-c C-t" #'my/siri-translate)
-
-(defun my/siri-translate2english ()
-  (interactive)
-  (let
-      ((tempfile
-        (make-temp-file "siri-translate-" nil ".txt")
-        ))
-    (write-region
-     (format "%s" (thing-at-point 'paragraph))
-     nil
-     tempfile)
-    (end-of-paragraph-text)             ; jump to end of paragraph
-    (shell-command
-     (format "shortcuts run \"Translate File 2 English\" -i %s &" tempfile))
+(use-package simple
+  :ensure nil
+  :bind
+  ;; ("C-c C-t" . my/siri-translate)
+  ;; ("C-c C-e" . my/siri-translate2english)
+  ("H-t H-t" . my/translate-language-to-zh-or-zh-to-english)
+  :custom
+  (async-shell-command-buffer 'new-buffer)
+  (tab-always-indent 'complete) ; free the M-TAB keybinding
+  :config
+  ;; Siri Shortcuts: Translate
+  (defun my/siri-ocr ()
+    (interactive)
+    (shell-command "shortcuts run \"OCR Selected Area\"")
+    (do-applescript "tell application id \"org.gnu.Emacs\" to activate")
+    ;; (shell-command "pbpaste &")
     )
-  (shell-command "open -b org.gnu.Emacs")
-  )
+  (add-to-list 'display-buffer-alist
+               (cons
+                "\\*Async Shell Command\\*.*"
+                (cons #'display-buffer-no-window nil)))
 
-;; (keymap-global-set "C-c C-e" #'my/siri-translate2english)
-
-(defun language-to-zh-or-zh-to-english ()
-  (interactive) ;; 测试
-  (let ((string (thing-at-point 'paragraph)))
-    (if (eq (string-match "\\cC" string) nil)
-        (my/siri-translate)
-      (my/siri-translate2english)
+  (defun my/siri-translate ()
+    (interactive)
+    (let
+        ((tempfile
+          (make-temp-file "siri-translate-" nil ".txt")
+          ))
+      (write-region
+       (format "%s" (thing-at-point 'paragraph))
+       nil
+       tempfile)
+      (end-of-paragraph-text)             ; jump to end of paragraph
+      (shell-command
+       (format "shortcuts run \"Translate File\" -i %s &" tempfile))
       )
+    (shell-command "open -b org.gnu.Emacs")
+    ;; (shell-command "pbpaste &")
+    )
+
+  (defun my/siri-translate2english ()
+    (interactive)
+    (let
+        ((tempfile
+          (make-temp-file "siri-translate-" nil ".txt")
+          ))
+      (write-region
+       (format "%s" (thing-at-point 'paragraph))
+       nil
+       tempfile)
+      (end-of-paragraph-text)             ; jump to end of paragraph
+      (shell-command
+       (format "shortcuts run \"Translate File 2 English\" -i %s &" tempfile))
+      )
+    (shell-command "open -b org.gnu.Emacs")
+    ;; (shell-command "pbpaste &")
+    )
+
+  (defun my/translate-language-to-zh-or-zh-to-english ()
+    (interactive) ; 测试
+    (let ((string (thing-at-point 'paragraph)))
+      (if (eq (string-match "\\cC" string) nil)
+          (my/siri-translate)
+        (my/siri-translate2english)
+        ))
     )
   )
 
-(keymap-global-set "H-t H-t" #'language-to-zh-or-zh-to-english)
-;; }}}
-
-(defun my/open-microsoft-bing ()
-  (interactive)
-  (xwidget-webkit-browse-url "https://www.bing.com" t)
+(use-package xwidget
+  :ensure nil
+  :bind
+  (
+   ("M-s e" . my/open-microsoft-bing) ; open search engine
+   :map xwidget-webkit-mode-map
+   ("C-h b" . describe-bindings)
+   ;; :map xwidget-webkit-edit-mode-map
+   )
+  :config
+  ;; bing search
+  (defun my/open-microsoft-bing ()
+    (interactive)
+    (xwidget-webkit-browse-url "https://www.bing.com" t)
+    )
   )
 
 ;; Alfred
@@ -2455,15 +2536,6 @@ all open tasks in current Org buffer
     t)
   (setf (alist-get ?e avy-dispatch-alist) 'avy-action-embark)
   )
-
-;; goto-line-preview
-;; {{{
-(use-package goto-line-preview
-  :bind
-  ([remap goto-line] . goto-line-preview)
-  ("C-c H-l" . goto-line-preview)
-  )
-;; }}}
 
 (use-package puni
   :ensure nil
@@ -2949,68 +3021,71 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; Example configuration for Consult
 (use-package consult
   :ensure nil
-  :defer 1
+  ;; :defer 1
+  :after org
   ;; Replace bindings. Lazily loaded due by `use-package'.
-  :bind (
-         ("C-c H-f H-d" . consult-find)
-         ("C-c H-r H-e" . consult-grep)
-         ("C-c H-r H-g" . consult-ripgrep)
-         ("C-x H-l" . consult-focus-lines)
-         ;; C-c bindings (mode-specific-map)
-         ("C-c M-x" . consult-mode-command)
-         ("C-c h" . consult-history)
-         ("C-c k" . consult-kmacro)
-         ("C-c i" . consult-info)
-         ([remap Info-search] . consult-info)
-         ;; C-x bindings (ctl-x-map)
-         ("C-x M-:" . consult-complex-command) ;; orig. repeat-complex-command
-         ("C-x b" . consult-buffer)            ;; orig. switch-to-buffer
-         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
-         ("C-x 5 b" . consult-buffer-other-frame) ;; orig. switch-to-buffer-other-frame
-         ("C-x r b" . consult-bookmark)           ;; orig. bookmark-jump
-         ("C-x p b" . consult-project-buffer) ;; orig. project-switch-to-buffer
-         ;; Custom M-# bindings for fast register access
-         ("M-#" . consult-register-load)
-         ("M-'" . consult-register-store) ;; orig. abbrev-prefix-mark (unrelated)
-         ("C-M-#" . consult-register)
-         ;; Other custom bindings
-         ("M-y" . consult-yank-pop) ;; orig. yank-pop
-         ;; M-g bindings (goto-map)
-         ("M-g e" . consult-compile-error)
-         ("M-g f" . consult-flymake)     ;; Alternative: consult-flycheck
-         ("M-g g" . consult-goto-line)   ;; orig. goto-line
-         ("M-g M-g" . consult-goto-line) ;; orig. goto-line
-         ("M-g o" . consult-outline)     ;; Alternative: consult-org-heading
-         ("M-g m" . consult-mark)
-         ("M-g k" . consult-global-mark)
-         ("M-g i" . consult-imenu)
-         ("M-g I" . consult-imenu-multi)
-         ;; M-s bindings (search-map)
-         ("M-s d" . consult-find)
-         ("M-s D" . consult-locate)
-         ("M-s g" . consult-grep)
-         ("M-s G" . consult-git-grep)
-         ("M-s r" . consult-ripgrep)
-         ("M-s l" . consult-line)
-         ("M-s L" . consult-line-multi)
-         ("M-s k" . consult-keep-lines)
-         ("M-s u" . consult-focus-lines)
-         ;; Isearch integration
-         ("M-s e" . consult-isearch-history)
-         :map isearch-mode-map
-         ("M-e" . consult-isearch-history)   ;; orig. isearch-edit-string
-         ("M-s e" . consult-isearch-history) ;; orig. isearch-edit-string
-         ("M-s l" . consult-line) ;; needed by consult-line to detect isearch
-         ("M-s L" . consult-line-multi) ;; needed by consult-line to detect isearch
-         ;; Minibuffer history
-         :map minibuffer-local-map
-         ("M-s" . consult-history)  ;; orig. next-matching-history-element
-         ("H-r" . consult-history) ;; orig. previous-matching-history-element
-         :map org-mode-map
-         ("C-c C-j"  . consult-org-heading)
-         :map prog-mode-map
-         ("C-c C-j"  . consult-outline)
-         )
+  :bind
+  (
+   ("C-c H-f H-d" . consult-find)
+   ("C-c H-r H-e" . consult-grep)
+   ("C-c H-r H-g" . consult-ripgrep)
+   ("C-x H-l" . consult-focus-lines)
+   ;; C-c bindings (mode-specific-map)
+   ("C-c M-x" . consult-mode-command)
+   ("C-c h" . consult-history)
+   ("C-c k" . consult-kmacro)
+   ("C-c i" . consult-info)
+   ([remap Info-search] . consult-info)
+   ;; C-x bindings (ctl-x-map)
+   ([remap repeat-complex-command] . consult-complex-command)
+   ("C-x b" . consult-buffer)            ;; orig. switch-to-buffer
+   ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+   ("C-x 5 b" . consult-buffer-other-frame) ;; orig. switch-to-buffer-other-frame
+   ("C-x r b" . consult-bookmark)           ;; orig. bookmark-jump
+   ("C-x p b" . consult-project-buffer) ;; orig. project-switch-to-buffer
+   ;; Custom M-# bindings for fast register access
+   ("M-#" . consult-register-load)
+   ("M-'" . consult-register-store) ;; orig. abbrev-prefix-mark (unrelated)
+   ("C-M-#" . consult-register)
+   ;; Other custom bindings
+   ("M-y" . consult-yank-pop) ;; orig. yank-pop
+   ;; M-g bindings (goto-map)
+   ("M-g e" . consult-compile-error)
+   ("M-g f" . consult-flymake)     ;; Alternative: consult-flycheck
+   ("M-g g" . consult-goto-line)   ;; orig. goto-line
+   ("M-g M-g" . consult-goto-line) ;; orig. goto-line
+   ("M-g o" . consult-outline)     ;; Alternative: consult-org-heading
+   ("M-g m" . consult-mark)
+   ("M-g k" . consult-global-mark)
+   ("M-g i" . consult-imenu)
+   ("M-g I" . consult-imenu-multi)
+   ;; M-s bindings (search-map)
+   ("M-s d" . consult-find)
+   ("M-s D" . consult-locate)
+   ("M-s g" . consult-grep)
+   ("M-s G" . consult-git-grep)
+   ("M-s r" . consult-ripgrep)
+   ("M-s l" . consult-line)
+   ("M-s L" . consult-line-multi)
+   ("M-s k" . consult-keep-lines)
+   ("M-s u" . consult-focus-lines)
+   ;; Isearch integration
+   ;; ("M-s e" . consult-isearch-history)
+   ("M-s s" . consult-isearch-history)
+   :map isearch-mode-map
+   ("M-e" . consult-isearch-history)   ;; orig. isearch-edit-string
+   ;; ("M-s e" . consult-isearch-history) ;; orig. isearch-edit-string
+   ("M-s l" . consult-line) ;; needed by consult-line to detect isearch
+   ("M-s L" . consult-line-multi) ;; needed by consult-line to detect isearch
+   ;; Minibuffer history
+   :map minibuffer-local-map
+   ("M-s" . consult-history)  ;; orig. next-matching-history-element
+   ("H-r" . consult-history) ;; orig. previous-matching-history-element
+   :map org-mode-map
+   ([remap org-goto]  . consult-org-heading) ; C-c C-j
+   :map prog-mode-map
+   ("C-c C-j"  . consult-outline)
+   )
   ;; Enable automatic preview at point in the *Completions* buffer. This is
   ;; relevant when you use the default completion UI.
   :hook (completion-list-mode . consult-preview-at-point-mode)
@@ -4273,7 +4348,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
    ;; ([remap yas-expand] . acm-complete)
    ;; select
    ("TAB"       . acm-select-next)
-   ("<tab>"       . acm-select-next)   
+   ("<tab>"       . acm-select-next)
    ("<backtab>" . acm-select-prev)
    ;; ("H-TAB"    . acm-select-prev)
    ("H-j"       . acm-select-next)
@@ -4289,7 +4364,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
    ;; ("s-C-p" . lsp-bridge-jump-to-prev-diagnostic)
    )
   :init
-  (setq-default lsp-bridge-enable-mode-line nil)  
+  (setq-default lsp-bridge-enable-mode-line nil)
   :config
   (require 'yasnippet)
   (yas-global-mode 1)

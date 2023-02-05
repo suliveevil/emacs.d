@@ -5,8 +5,8 @@
 ;; Author: Łukasz Gruner <lukasz@gruner.lu>
 ;; Maintainer: Łukasz Gruner <lukasz@gruner.lu>
 ;; Version: 2
-;; Package-Version: 20230204.1432
-;; Package-Commit: f8fa515eb3e195760b022b5f635b413221451f9a
+;; Package-Version: 20230205.1008
+;; Package-Commit: cc1661525bdf5c908c94a9d891a62d9b2e313670
 ;; Package-Requires: ((emacs "24.4"))
 ;; URL: https://bitbucket.org/ukaszg/aria2-mode
 ;; Created: 19/10/2014
@@ -867,7 +867,7 @@ With prefix remove all applicable downloads."
                                        "aria2-controller"
                                        :file aria2-cc-file)))))
     (when aria2-start-rpc-server
-        (run-process this))
+        (run-process aria2--cc))
     ;; kill process or save state on exit
     (if aria2-kill-process-on-emacs-exit
         (add-hook 'kill-emacs-hook 'aria2--kill-on-exit)
