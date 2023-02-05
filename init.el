@@ -372,8 +372,25 @@ Consider only documented, non-obsolete functions."
   :hook (after-init . save-place-mode)
   )
 
+(setq default-directory "~/")
+(setq command-line-default-directory "~/")
+
 ;; warn when opening files bigger than 100 MB
 (setq large-file-warning-threshold (* 100 1000 1000))
+
+;; https://emacsredux.com/blog/2013/04/21/edit-files-as-root/
+(defun my/sudo-edit (&optional arg)
+  "Edit currently visited file as root.
+
+With a prefix ARG prompt for a file to visit.
+Will also prompt for a file to visit if current
+buffer is not visiting a file."
+  (interactive "P")
+  (if (or arg (not buffer-file-name))
+      (find-file (concat "/sudo:root@localhost:"
+                         (ido-read-file-name "Find file(as root): ")))
+    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+(keymap-global-set "C-c C-r" #'my/sudo-edit)
 
 ;; 使 Emacs 自动加载外部修改过的文件
 (use-package autorevert
@@ -445,6 +462,29 @@ Consider only documented, non-obsolete functions."
 (setq lock-file-name-transforms
       '(("\\`/.*/\\([^/]+\\)\\'" "/var/tmp/\\1" t)))
 ;; }}}
+
+(use-package ffap
+  :ensure nil
+  :defer t
+  :bind
+  (
+   ([remap find-file] . my/find-file-at-point)
+   ([remap ffap]      . my/find-file-at-point)
+   )
+  :config
+  ;; https://emacstalk.codeberg.page/post/021/
+  (defun my/find-file-at-point ()
+    "Enhanced version of `find-file-at-point'.
+First attempt to open file specified by `symbol-at-point', and fallback to normal one."
+    (interactive)
+    (condition-case nil
+        (thread-last (thing-at-point 'symbol t)
+                     (intern)
+                     (symbol-value)
+                     (find-file-noselect)
+                     (switch-to-buffer))
+      (t (call-interactively 'find-file-at-point))))
+  )
 
 ;; file name and file extension
 ;; {{{
@@ -559,13 +599,20 @@ If no file is associated, just close buffer without prompt for save."
   :ensure nil
   ;; :demand t
   :defer 1.5
-  ;; :hook (dired-mode . dired-hide-details-mode)
+  :hook
+  (
+   (dired-mode-hook . my/dired-setup-view)
+   (dired-mode-hook . my/dired-disable-line-wrapping)
+   (dired-after-readin-hook . my/dired-postprocess-ls-output)
+   )
   :bind
   (
    :map dired-mode-map
-   ("RET" . dired-open-dwim)
+   ("RET"   . my/dired-open-dwim)
+   ("<tab>" . my/dired-switch-view)
    )
   :config
+  (setq dired-hide-details-hide-symlink-targets nil)
   (setq dired-dwim-target t)
   (setq dired-kill-when-opening-new-dired-buffer t)
   (setq dired-recursive-deletes 'always
@@ -575,13 +622,63 @@ If no file is associated, just close buffer without prompt for save."
   ;; (dired-listing-switches "-alGh")
   (setq insert-directory-program "/opt/homebrew/bin/gls")
   (setq dired-listing-switches
-        "-l --almost-all --human-readable --group-directories-first --no-group")
+        "-alh --time-style=long-iso"
+        ;; "-l --almost-all --human-readable --group-directories-first --no-group"
+        )
 
-  (defun dired-open-dwim ()
+  (defun my/dired-open-dwim ()
     (interactive)
     (if (file-directory-p (dired-file-name-at-point))
         (dired-find-file)
       (dired-find-file-other-window)))
+  
+  ;; https://www.n16f.net/blog/decluttering-dired-for-peace-of-mind/
+  (setq my/dired-minimal-view t)
+
+  (defun my/dired-setup-view ()
+    (dired-hide-details-mode (if my/dired-minimal-view 1 -1)))
+
+  (defun my/dired-switch-view ()
+    (interactive)
+    (setq my/dired-minimal-view (not my/dired-minimal-view))
+    (my/dired-setup-view))
+
+  (defun my/dired-postprocess-ls-output ()
+    "Postprocess the list of files printed by the ls program when
+executed by Dired."
+    (save-excursion
+      (goto-char (point-min))
+      (while (not (eobp))
+        ;; Go to the beginning of the next line representing a file
+        (while (null (dired-get-filename nil t))
+          (dired-next-line 1))
+        (beginning-of-line)
+        ;; Narrow to the line and process it
+        (let ((start (line-beginning-position))
+              (end (line-end-position)))
+          (save-restriction
+            (narrow-to-region start end)
+            (setq inhibit-read-only t)
+            (unwind-protect
+                (my/dired-postprocess-ls-line)
+              (setq inhibit-read-only nil))))
+        ;; Next line
+        (dired-next-line 1))))
+
+  (defun my/dired-disable-line-wrapping ()
+    (setq truncate-lines t))
+
+  (defun my/dired-postprocess-ls-line ()
+    "Postprocess a single line in the ls output, i.e. the information
+about a single file. This function is called with the buffer
+narrowed to the line."
+    ;; Highlight everything but the filename
+    (when (re-search-forward directory-listing-before-filename-regexp nil t 1)
+      (add-text-properties (point-min) (match-end 0) '(font-lock-face shadow)))
+    ;; Hide the link count
+    (beginning-of-line)
+    (when (re-search-forward " +[0-9]+" nil t 1)
+      (add-text-properties (match-beginning 0) (match-end 0) '(invisible t))))
   )
 ;; }}}
 
@@ -590,8 +687,42 @@ If no file is associated, just close buffer without prompt for save."
 (use-package project
   :ensure nil
   :defer 2
-  ;; :bind
-  ;; ("C-c p" . project-prefix-map)
+  :bind
+  (
+   ("C-x s" . my/eshell)
+   ;; ("C-c p" . project-prefix-map)
+   )
+  :config
+  ;; (setq project-switch-commands 'project-dired)
+  (defun my/eshell ()
+    "Start eshell at the root of the current project, or in the
+current directory if the current buffer is not part of a
+project."
+    (interactive)
+    (if (project-current)
+        (project-eshell)
+      (eshell)))
+
+  ;; https://emacstalk.codeberg.page/post/010/
+  ;; (defun my/project-try-local (dir)
+  ;;   "Determine if DIR is a non-Git project."
+  ;;   (catch 'ret
+  ;;     (let ((pr-flags '((".project")
+  ;;                       ("go.mod"
+  ;;                        "Cargo.toml"
+  ;;                        "project.clj"
+  ;;                        "pom.xml"
+  ;;                        "package.json")
+  ;;                       ("Makefile"
+  ;;                        "README.org"
+  ;;                        "README.md"))))
+  ;;       (dolist (current-level pr-flags)
+  ;;         (dolist (f current-level)
+  ;;           (when-let ((root (locate-dominating-file dir f)))
+  ;;             (throw 'ret (cons 'local root))))))))
+
+  ;; (setq project-find-functions
+  ;;       '(my/project-try-local project-try-vc))
   )
 ;; }}}
 
@@ -861,7 +992,9 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
 (use-package dabbrev
   :ensure nil
   :bind
-  ( "C-<tab>" . dabbrev-expand)
+  ("C-<tab>" . dabbrev-expand)
+  :custom
+  (dabbrev-ignored-buffer-regexps '("\\.\\(?:pdf\\|jpe?g\\|png\\)\\'"))
   ;; :config
   )
 ;; }}}
@@ -887,48 +1020,6 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
           ))
   )
 ;; }}}
-
-(use-package eglot
-  :ensure nil
-  :defer 1
-  :bind
-  (
-   :map eglot-mode-map
-   ("C-c l a a" . eglot-code-actions)
-   ("C-c l a e" . eglot-code-action-extract)
-   ("C-c l a i" . eglot-code-action-inline)
-   ("C-c l a q" . eglot-code-action-quickfix)
-   ("C-c l a r" . eglot-code-action-rewrite)
-   ("C-c l d"   . eldoc)
-   ("C-c l f b" . eglot-format-buffer)
-   ("C-c l f f" . eglot-format)
-   ("C-c l f"   . eglot-format)
-   ("C-c l r"   . eglot-rename)
-  )
-:hook
-(
- (c++-mode . eglot-ensure)
- (c++-ts-mode . eglot-ensure)
- (c-mode . eglot-ensure)
- (c-ts-mode . eglot-ensure)
- (java-mode . eglot-ensure)
- (java-ts-mode . eglot-ensure)
- (js-mode . eglot-ensure)
- (js-ts-mode . eglot-ensure)
- (python-mode . eglot-ensure)
- (python-ts-mode . eglot-ensure)
- (typescript-mode . eglot-ensure)
- (typescript-ts-base-mode . eglot-ensure)
- )
-:custom
-(eglot-autoshutdown t)
-(eglot-extend-to-xref t)
-:config
-(setq read-process-output-max (* 1024 1024))
-(setq eglot-events-buffer-size 0)
-(add-to-list 'eglot-ignored-server-capabilities :documentHighlightProvider)
-;; (add-to-list 'eglot-server-programs '(rust-mode . ("rust-analyzer")))
-)
 
 ;; https://github.com/Eason0210/.emacs.d/
 (use-package emacs
@@ -1121,6 +1212,23 @@ Version: 2018-09-07 2022-09-13"
           (capitalize-word 1))))
   )
 
+;; https://emacstalk.codeberg.page/post/023/
+;;;###autoload
+(defun my/upcase-backwards ()
+  "Upcase word in reverse direction, back until the first space char or beginning-of-line"
+  (interactive)
+  (save-excursion
+    ;; move to first non-space char
+    (skip-syntax-backward " " (line-beginning-position))
+    (push-mark)
+    (let ((beginning (or (re-search-backward "[[:space:]]" (line-beginning-position) t)
+                         (line-beginning-position)))
+          (end (mark)))
+      (unless (= beginning end)
+        (upcase-region beginning end)))))
+
+;; (keymap-global-set "M-o" #'my/upcase-backwards)
+
 ;; goto-char by Oliver Scholz
 ;; {{{
 (use-package emacs
@@ -1220,58 +1328,60 @@ occurence of CHAR."
   )
 ;; }}}
 
-;; refresh-file: format/indent elisp file
-;; {{{
-;; https://github.com/manateelazycat/lazycat-emacs/blob/master/site-lisp/extensions/lazycat/basic-toolkit.el
-(defun refresh-file ()
-  "Automatic reload current file."
-  (interactive)
-  (cond ((eq major-mode 'emacs-lisp-mode)
-         (indent-buffer)
-         (indent-comment-buffer)
-         (save-buffer)
-         (load-file (buffer-file-name)))
-        ((member major-mode '(lisp-mode c-mode perl-mode))
-         (indent-buffer)
-         (indent-comment-buffer)
-         (save-buffer))
-        ((member major-mode '(haskell-mode sh-mode))
-         (indent-comment-buffer)
-         (save-buffer))
-        ((derived-mode-p 'scss-mode)
-         (require 'css-sort)
-         (css-sort))
-        (t (message "Current mode is not supported, so not reload"))))
-(defun indent-buffer ()
-  "Automatic format current buffer."
-  (interactive)
-  (if (derived-mode-p 'python-mode)
-      (message "Don't indent python buffer, it will mess up the code syntax.")
+(use-package simple
+  :ensure nil
+  :defer t
+  :bind ("C-c H-i" . my/indent-buffer)
+  :config
+  ;; https://github.com/manateelazycat/lazycat-emacs/blob/master/site-lisp/extensions/lazycat/basic-toolkit.el
+  (defun my/refresh-file ()
+    "Automatic reload current file."
+    (interactive)
+    (cond
+     ((eq major-mode 'emacs-lisp-mode)
+      (my/indent-buffer)
+      (my/indent-comment-buffer)
+      (save-buffer)
+      (load-file (buffer-file-name)))
+     ((member major-mode '(lisp-mode c-mode perl-mode))
+      (my/indent-buffer)
+      (my/indent-comment-buffer)
+      (save-buffer))
+     ((member major-mode '(haskell-mode sh-mode))
+      (my/indent-comment-buffer)
+      (save-buffer))
+     ((derived-mode-p 'scss-mode)
+      (require 'css-sort)
+      (css-sort))
+     (t
+      (message "Current mode is not supported, so didn't reload"))))
+
+  (defun my/indent-buffer ()
+    "Automatic format current buffer."
+    (interactive)
+    (if (derived-mode-p 'python-mode)
+        (message "Don't indent python buffer, it will mess up the code syntax.")
+      (save-excursion
+        (indent-region (point-min) (point-max) nil)
+        (delete-trailing-whitespace)
+        (untabify (point-min) (point-max)))))
+
+  (defun my/indent-comment-buffer ()
+    "Indent comment of buffer."
+    (interactive)
+    (my/indent-comment-region (point-min) (point-max)))
+
+  (defun my/indent-comment-region (start end)
+    "Indent region."
+    (interactive "r")
     (save-excursion
-      (indent-region (point-min) (point-max) nil)
-      (delete-trailing-whitespace)
-      (untabify (point-min) (point-max))))
+      (setq end (copy-marker end))
+      (goto-char start)
+      (while (< (point) end)
+        (if (comment-search-forward end t)
+            (comment-indent)
+          (goto-char end)))))
   )
-
-(defun indent-comment-buffer ()
-  "Indent comment of buffer."
-  (interactive)
-  (indent-comment-region (point-min) (point-max)))
-
-(defun indent-comment-region (start end)
-  "Indent region."
-  (interactive "r")
-  (save-excursion
-    (setq end (copy-marker end))
-    (goto-char start)
-    (while (< (point) end)
-      (if (comment-search-forward end t)
-          (comment-indent)
-        (goto-char end))
-      )
-    )
-  )
-;; }}}
 
 (use-package diff-mode
   :ensure nil
@@ -1311,6 +1421,7 @@ occurence of CHAR."
  )
 ;; }}}
 
+;; https://www.n16f.net/blog/eshell-key-bindings-and-completion/
 (use-package eshell
   :ensure nil
   :bind
@@ -1320,6 +1431,7 @@ occurence of CHAR."
    ;; (
    ;;("C-l" . eshell-clear)
    ;; ("C-r" . eshell-history)
+   ;; ("<tab>" . company-complete)
    ;; )
    )
   :config
@@ -1627,10 +1739,11 @@ This command can be called when in a file buffer or in `dired'."
    :map org-mode-map
    ("C-c l"   . org-store-link) ; C-c C-l org-insert-link
    ("C-c n o" . org-id-get-create)
-   ("C-c H-i" . org-insert-structure-template)
+   ("C-c t t" . org-insert-structure-template)
    ("C-c H-t" . my/sparse-tree-with-tag-filter)
    )
   :config
+  (setq org-insert-heading-respect-content t) ; for C-<return>
   (setq org-directory "~/org-roam")
   ;; (setq org-fold-core-style "overlays")
   ;; (setq org-startup-indented t)
@@ -1660,6 +1773,21 @@ all open tasks in current Org buffer
 
 ;; (setq org-hide-leading-stars t) ; Omit headline-asterisks except the last one
 (setq org-src-fontify-natively t)  ; code block syntax highlight
+(setq org-fontify-todo-headline nil)
+(setq org-fontify-done-headline nil)
+
+;; org-mode Face for org-id links.                                      ; FIXME
+;; (defface my-org-id-link
+;;   '((t
+;;      :inherit org-link
+;;      :underline nil
+;;      ;; :foreground "#009600"
+;;      :group 'org-faces
+;;      ))
+;;   :group 'org-faces)
+;; (with-eval-after-load 'ol
+;;   (org-link-set-parameters "id" :face 'my-org-id-link))
+;; }}}
 
 ;; org-mode: head/title
 ;; (org-in-src-block-p)
@@ -1709,12 +1837,37 @@ all open tasks in current Org buffer
 ;; (keymap-global-set "C-c H-n" #'my/org-narrow-heading-or-code-block)
 ;; }}}
 
+(defconst my/org-special-pre "^\s*#[+]")
+(defun my/org-2every-src-block (fn)
+  "Visit every Source-Block and evaluate `FN'."
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (let ((case-fold-search t))
+      (while (re-search-forward (concat my/org-special-pre "BEGIN_SRC") nil t)
+        (let ((element (org-element-at-point)))
+          (when (eq (org-element-type element) 'src-block)
+            (funcall fn element)))))
+    (save-buffer)))
+
+;; https://www.wisdomandwonder.com/link/9008/a-progress-indicator-for-code-blocks-in-org-mode
+(defadvice org-babel-execute-src-block (around progress nil activate)
+  (set-face-attribute
+   'org-block-background nil :background "LightSteelBlue")
+  (message "Running your code block")
+  ad-do-it
+  (set-face-attribute 'org-block-background nil :background "gray")
+  (message "Done with code block"))
+
 (use-package org-src
   :ensure nil
   :defer t
   :bind
   (
    :map org-mode-map
+   ("s-]" . (lambda () (interactive)
+              (my/org-2every-src-block
+               'org-babel-remove-result)))
    ("C-c e" . org-edit-special)
    ("s-l" . org-edit-special)
    ("s-j" . org-babel-next-src-block)
@@ -1748,47 +1901,6 @@ all open tasks in current Org buffer
           ("toml" . conf-toml)
           ))
   )
-
-(defconst my/org-special-pre "^\s*#[+]")
-(defun my/org-2every-src-block (fn)
-  "Visit every Source-Block and evaluate `FN'."
-  (interactive)
-  (save-excursion
-    (goto-char (point-min))
-    (let ((case-fold-search t))
-      (while (re-search-forward (concat my/org-special-pre "BEGIN_SRC") nil t)
-        (let ((element (org-element-at-point)))
-          (when (eq (org-element-type element) 'src-block)
-            (funcall fn element)))))
-    (save-buffer)))
-(define-key org-mode-map (kbd "s-]") (lambda () (interactive)
-                                       (my/org-2every-src-block
-                                        'org-babel-remove-result)))
-
-;; https://www.wisdomandwonder.com/link/9008/a-progress-indicator-for-code-blocks-in-org-mode
-(defadvice org-babel-execute-src-block (around progress nil activate)
-  (set-face-attribute
-   'org-block-background nil :background "LightSteelBlue")
-  (message "Running your code block")
-  ad-do-it
-  (set-face-attribute 'org-block-background nil :background "gray")
-  (message "Done with code block"))
-
-(setq org-fontify-todo-headline nil)
-(setq org-fontify-done-headline nil)
-
-;; org-mode Face for org-id links.                                      ; FIXME
-;; (defface my-org-id-link
-;;   '((t
-;;      :inherit org-link
-;;      :underline nil
-;;      ;; :foreground "#009600"
-;;      :group 'org-faces
-;;      ))
-;;   :group 'org-faces)
-;; (with-eval-after-load 'ol
-;;   (org-link-set-parameters "id" :face 'my-org-id-link))
-;; }}}
 
 (use-package org
   :ensure nil
@@ -2707,6 +2819,315 @@ When fixing a typo, avoid pass camel case option to cli program."
       )
 ;; }}}
 
+(use-package vertico
+  :ensure nil
+  :bind
+  (
+   :map vertico-map
+   ([backtab] . vertico-previous)
+   ("<tab>" . vertico-insert)    ; Choose selected candidate
+   ("<escape>" . minibuffer-keyboard-quit) ; Close minibuffer
+   )
+  :init
+  (fido-mode -1)
+  (vertico-mode)
+  (vertico-mouse-mode)
+  ;; (setq vertico-scroll-margin 0) ; Different scroll margin
+  (setq vertico-count 20)  ; Show more candidates
+  (setq vertico-resize t) ; Grow and shrink the Vertico minibuffer
+  ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
+  (setq vertico-cycle t)
+  )
+
+;; Configure directory extension.
+(use-package vertico-directory
+  :ensure nil
+  :after vertico
+  ;; Tidy shadowed file names
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy)
+  ;; More convenient directory navigation commands
+  :bind
+  (
+   :map vertico-map
+   ("H-k" . vertico-directory-up)
+   ("RET" . vertico-directory-enter)
+   ("DEL" . vertico-directory-delete-char)
+   ("M-DEL" . vertico-directory-delete-word)
+   )
+  )
+
+;; A few more useful configurations...
+(use-package emacs
+  :ensure nil
+  :init
+  ;; Add prompt indicator to `completing-read-multiple'.
+  ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
+  (defun crm-indicator (args)
+    (cons (format "[CRM%s] %s"
+                  (replace-regexp-in-string
+                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                   crm-separator)
+                  (car args))
+          (cdr args)))
+  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
+  ;; Do not allow the cursor in the minibuffer prompt
+  (setq minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+
+  ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
+  ;; Vertico commands are hidden in normal buffers.
+  ;; (setq read-extended-command-predicate
+  ;;       #'command-completion-default-include-p)
+
+  ;; Enable recursive minibuffers
+  (setq enable-recursive-minibuffers t)
+  )
+
+(use-package vertico-posframe
+  :ensure nil
+  :after (vertico posframe)
+  :config
+  (vertico-posframe-mode 1)
+  (setq vertico-multiform-commands
+        '((consult-line
+           posframe
+           (vertico-posframe-poshandler . posframe-poshandler-frame-top-center)
+           (vertico-posframe-border-width . 10)
+           ;; NOTE: This is useful when emacs is used in both in X and
+           ;; terminal, for posframe do not work well in terminal, so
+           ;; vertico-buffer-mode will be used as fallback at the
+           ;; moment.
+           (vertico-posframe-fallback-mode . vertico-buffer-mode))
+          (t posframe)))
+
+  (vertico-multiform-mode 1)
+  (setq vertico-posframe-parameters
+        '(
+          (left-fringe . 20)
+          (right-fringe . 20)
+          ))
+  )
+
+;; marginalia: minibuffer annotations
+;; {{{
+;; Enable rich annotations using the Marginalia package
+(use-package marginalia
+  :ensure nil
+  ;; Either bind `marginalia-cycle' globally or only in the minibuffer
+  ;; :bind (("C-M-a" . marginalia-cycle)
+  ;;        :map minibuffer-local-map
+  ;;        ("C-M-a" . marginalia-cycle))
+  ;; :custom (marginalia-align 'right)
+  ;; :init
+  ;; The :init configuration is always executed (Not lazy!)
+  ;; Must be in the :init section of use-package such that the mode gets
+  ;; enabled right away. Note that this forces loading the package.
+  ;; (marginalia-mode)
+  :hook (after-init . marginalia-mode)
+  :config
+  ;; https://emacs-china.org/t/21-emacs-vertico-orderless-marginalia-embark-consult/19683/
+  (defun marginalia-annotate-command (cand)
+    "Annotate command CAND with its documentation string.
+Similar to `marginalia-annotate-symbol', but does not show symbol class."
+    (when-let* ((sym (intern-soft cand))
+                (mode (if (boundp sym)
+                          sym
+                        (lookup-minor-mode-from-indicator cand))))
+      (concat
+       (if (and (boundp mode) (symbol-value mode))
+           (propertize " On" 'face 'marginalia-on)
+         (propertize " Off" 'face 'marginalia-off))
+       (marginalia-annotate-binding cand)
+       (marginalia--documentation (marginalia--function-doc sym)))))
+  )
+;; }}}
+
+;; consult
+;; {{{
+;; Example configuration for Consult
+(use-package consult
+  :ensure nil
+  :defer 1
+  ;; Replace bindings. Lazily loaded due by `use-package'.
+  :bind (
+         ("C-c H-f H-d" . consult-find)
+         ("C-c H-r H-e" . consult-grep)
+         ("C-c H-r H-g" . consult-ripgrep)
+         ("C-x H-l" . consult-focus-lines)
+         ;; C-c bindings (mode-specific-map)
+         ("C-c M-x" . consult-mode-command)
+         ("C-c h" . consult-history)
+         ("C-c k" . consult-kmacro)
+         ("C-c i" . consult-info)
+         ([remap Info-search] . consult-info)
+         ;; C-x bindings (ctl-x-map)
+         ("C-x M-:" . consult-complex-command) ;; orig. repeat-complex-command
+         ("C-x b" . consult-buffer)            ;; orig. switch-to-buffer
+         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+         ("C-x 5 b" . consult-buffer-other-frame) ;; orig. switch-to-buffer-other-frame
+         ("C-x r b" . consult-bookmark)           ;; orig. bookmark-jump
+         ("C-x p b" . consult-project-buffer) ;; orig. project-switch-to-buffer
+         ;; Custom M-# bindings for fast register access
+         ("M-#" . consult-register-load)
+         ("M-'" . consult-register-store) ;; orig. abbrev-prefix-mark (unrelated)
+         ("C-M-#" . consult-register)
+         ;; Other custom bindings
+         ("M-y" . consult-yank-pop) ;; orig. yank-pop
+         ;; M-g bindings (goto-map)
+         ("M-g e" . consult-compile-error)
+         ("M-g f" . consult-flymake)     ;; Alternative: consult-flycheck
+         ("M-g g" . consult-goto-line)   ;; orig. goto-line
+         ("M-g M-g" . consult-goto-line) ;; orig. goto-line
+         ("M-g o" . consult-outline)     ;; Alternative: consult-org-heading
+         ("M-g m" . consult-mark)
+         ("M-g k" . consult-global-mark)
+         ("M-g i" . consult-imenu)
+         ("M-g I" . consult-imenu-multi)
+         ;; M-s bindings (search-map)
+         ("M-s d" . consult-find)
+         ("M-s D" . consult-locate)
+         ("M-s g" . consult-grep)
+         ("M-s G" . consult-git-grep)
+         ("M-s r" . consult-ripgrep)
+         ("M-s l" . consult-line)
+         ("M-s L" . consult-line-multi)
+         ("M-s k" . consult-keep-lines)
+         ("M-s u" . consult-focus-lines)
+         ;; Isearch integration
+         ("M-s e" . consult-isearch-history)
+         :map isearch-mode-map
+         ("M-e" . consult-isearch-history)   ;; orig. isearch-edit-string
+         ("M-s e" . consult-isearch-history) ;; orig. isearch-edit-string
+         ("M-s l" . consult-line) ;; needed by consult-line to detect isearch
+         ("M-s L" . consult-line-multi) ;; needed by consult-line to detect isearch
+         ;; Minibuffer history
+         :map minibuffer-local-map
+         ("M-s" . consult-history)  ;; orig. next-matching-history-element
+         ("H-r" . consult-history) ;; orig. previous-matching-history-element
+         :map org-mode-map
+         ("C-c C-j"  . consult-org-heading)
+         :map prog-mode-map
+         ("C-c C-j"  . consult-outline)
+         )
+  ;; Enable automatic preview at point in the *Completions* buffer. This is
+  ;; relevant when you use the default completion UI.
+  :hook (completion-list-mode . consult-preview-at-point-mode)
+
+  ;; The :init configuration is always executed (Not lazy)
+  :init
+
+  ;; Optionally configure the register formatting. This improves the register
+  ;; preview for `consult-register', `consult-register-load',
+  ;; `consult-register-store' and the Emacs built-ins.
+  (setq register-preview-delay 0
+        register-preview-function #'consult-register-format)
+
+  ;; Optionally tweak the register preview window.
+  ;; This adds thin lines, sorting and hides the mode line of the window.
+  (advice-add #'register-preview :override #'consult-register-window)
+
+  ;; Use Consult to select xref locations with preview
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+
+  ;; Configure other variables and modes in the :config section,
+  ;; after lazily loading the package.
+  ;; macOS locate doesn't support `--ignore-case --existing' args.
+  (setq consult-locate-args (pcase system-type
+                              ('gnu/linux
+                               "locate --ignore-case --existing --regex")
+                              ('darwin
+                               "mdfind -name")
+                              ))
+  :config
+
+  ;; Optionally configure preview. The default value
+  ;; is 'any, such that any key triggers the preview.
+  ;; (setq consult-preview-key 'any)
+  ;; (setq consult-preview-key (kbd "M-."))
+  ;; (setq consult-preview-key (list (kbd "<S-down>") (kbd "<S-up>")))
+  ;; For some commands and buffer sources it is useful to configure the
+  ;; :preview-key on a per-command basis using the `consult-customize' macro.
+  (consult-customize
+   consult-theme :preview-key '(:debounce 0.2 any)
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-bookmark consult--source-file-register
+   consult--source-recent-file consult--source-project-recent-file
+   :preview-key (kbd "M-.")
+   )
+
+  ;; Optionally configure the narrowing key.
+  ;; Both < and C-+ work reasonably well.
+  (setq consult-narrow-key "<") ;; (kbd "C-+")
+
+  ;; Optionally make narrowing help available in the minibuffer.
+  ;; You may want to use `embark-prefix-help-command' or which-key instead.
+  ;; (define-key consult-narrow-map (vconcat consult-narrow-key "?") #'consult-narrow-help)
+
+  ;; By default `consult-project-function' uses `project-root' from project.el.
+  ;; Optionally configure a different project root function.
+  ;; There are multiple reasonable alternatives to chose from.
+;;;; 1. project.el (the default)
+  ;; (setq consult-project-function #'consult--default-project--function)
+;;;; 2. projectile.el (projectile-project-root)
+  ;; (autoload 'projectile-project-root "projectile")
+  ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
+;;;; 3. vc.el (vc-root-dir)
+  ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
+;;;; 4. locate-dominating-file
+  ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
+
+  ;; Use `consult-completion-in-region' if Vertico is enabled.
+  ;; Otherwise use the default `completion--in-region' function.
+  (setq completion-in-region-function
+        (lambda (&rest args)
+          (apply (if vertico-mode
+                     #'consult-completion-in-region
+                   #'completion--in-region)
+                 args)))
+  )
+;; }}}
+
+(use-package consult-yasnippet
+  :ensure nil
+  ;; :defer t
+  ;; :demand t
+  :after (consult yasnippet)
+  )
+
+(use-package embark
+  :ensure nil
+  :init
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command)
+  :bind
+  (
+   ("C-." . embark-act)         ;; pick some comfortable binding
+   ("M-." . embark-dwim)
+   ("C-;" . embark-dwim)        ;; good alternative: M-.
+   ("C-h B" . embark-bindings)  ;; alternative for `describe-bindings'
+   :map minibuffer-mode-map
+   ("H-o" . embark-export)
+   )
+  :custom
+  (embark-quit-after-action nil)
+  (prefix-help-command #'embark-prefix-help-command)
+  (embark-indicators '(embark-minimal-indicator
+                       embark-highlight-indicator
+                       embark-isearch-highlight-indicator))
+  (embark-cycle-key ".")
+  (embark-help-key "?")
+  :config
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none))))
+  )
+
 ;; pyim
 ;; {{{
 (use-package pyim
@@ -2786,17 +3207,16 @@ When fixing a typo, avoid pass camel case option to cli program."
 (use-package orderless
   :ensure nil
   :init
+  ;; basic partial-completion emacs22 substring initials flex
   (setq completion-styles '(basic partial-completion orderless))
   ;; (setq completion-styles
   ;;       '(orderless basic initials substring partial-completion flex)
   (setq completion-category-defaults nil)
   (setq completion-category-overrides nil)
-  ;; (setq completion-category-overrides '(
-  ;;                                    (file
-  ;;                                     (styles basic partial-completion)
-  ;;                                     )
-  ;;                                    )
-  ;;    )
+  ;; (setq completion-category-overrides
+  ;;       '((file
+  ;;          (styles basic partial-completion)
+  ;;          )))
   (setq orderless-component-separator "[ &]") ; & is for company because space will break completion
   ;; :config
   ;; ;; make completion support pinyin, refer to
@@ -2826,6 +3246,7 @@ When fixing a typo, avoid pass camel case option to cli program."
 ;; deadgrep
 ;; {{{
 (use-package deadgrep
+  :ensure nil
   ;; :defer 1.5
   :bind
   (
@@ -2837,6 +3258,9 @@ When fixing a typo, avoid pass camel case option to cli program."
    ("C-c C-c" . deadgrep-mode)
    )
   :config
+  (setq deadgrep-max-buffers 1)
+  (setq kill-buffer-query-functions nil)
+
   (defun my/grep-org-files (words)
     (interactive "sSearch(ripgrep) org-roam files: ")
     (let ((default-directory org-roam-directory)
@@ -2845,6 +3269,29 @@ When fixing a typo, avoid pass camel case option to cli program."
           (deadgrep--search-type 'regexp))
       (deadgrep words)
       )
+    )
+
+  (setq my/home-directory "~/")
+  (defun my/deadgrep-home-dir ()
+    (interactive)
+    (if (equal major-mode 'dired-mode)
+        (setq search-term
+              (read-from-minibuffer "Search : "))
+      (setq search-term
+            (read-from-minibuffer "Search : " (thing-at-point 'symbol)))
+      )
+    (deadgrep search-term my/home-directory)
+    )
+
+  (defun my/deadgrep ()
+    (interactive)
+    (if (equal major-mode 'dired-mode)
+        (setq search-term
+              (read-from-minibuffer "Search : "))
+      (setq search-term
+            (read-from-minibuffer "Search : " (thing-at-point 'symbol)))
+      )
+    (deadgrep search-term)
     )
   )
 ;; }}}
@@ -3179,299 +3626,6 @@ When fixing a typo, avoid pass camel case option to cli program."
   (define-key origami-mode-map (kbd "C-c F") 'origami-toggle-all-nodes)
   )
 ;; }}}
-
-;; consult
-;; {{{
-;; Example configuration for Consult
-(use-package consult
-  ;; :defer 1
-  :after org
-  ;; Replace bindings. Lazily loaded due by `use-package'.
-  :bind (
-         ("C-c H-f H-d" . consult-find)
-         ("C-c H-r H-e" . consult-grep)
-         ("C-c H-r H-g" . consult-ripgrep)
-         ("C-x H-l" . consult-focus-lines)
-         ;; C-c bindings (mode-specific-map)
-         ("C-c M-x" . consult-mode-command)
-         ("C-c h" . consult-history)
-         ("C-c k" . consult-kmacro)
-         ("C-c i" . consult-info)
-         ([remap Info-search] . consult-info)
-         ;; C-x bindings (ctl-x-map)
-         ("C-x M-:" . consult-complex-command) ;; orig. repeat-complex-command
-         ("C-x b" . consult-buffer)            ;; orig. switch-to-buffer
-         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
-         ("C-x 5 b" . consult-buffer-other-frame) ;; orig. switch-to-buffer-other-frame
-         ("C-x r b" . consult-bookmark)           ;; orig. bookmark-jump
-         ("C-x p b" . consult-project-buffer) ;; orig. project-switch-to-buffer
-         ;; Custom M-# bindings for fast register access
-         ("M-#" . consult-register-load)
-         ("M-'" . consult-register-store) ;; orig. abbrev-prefix-mark (unrelated)
-         ("C-M-#" . consult-register)
-         ;; Other custom bindings
-         ("M-y" . consult-yank-pop) ;; orig. yank-pop
-         ;; M-g bindings (goto-map)
-         ("M-g e" . consult-compile-error)
-         ("M-g f" . consult-flymake)     ;; Alternative: consult-flycheck
-         ("M-g g" . consult-goto-line)   ;; orig. goto-line
-         ("M-g M-g" . consult-goto-line) ;; orig. goto-line
-         ("M-g o" . consult-outline)     ;; Alternative: consult-org-heading
-         ("M-g m" . consult-mark)
-         ("M-g k" . consult-global-mark)
-         ("M-g i" . consult-imenu)
-         ("M-g I" . consult-imenu-multi)
-         ;; M-s bindings (search-map)
-         ("M-s d" . consult-find)
-         ("M-s D" . consult-locate)
-         ("M-s g" . consult-grep)
-         ("M-s G" . consult-git-grep)
-         ("M-s r" . consult-ripgrep)
-         ("M-s l" . consult-line)
-         ("M-s L" . consult-line-multi)
-         ("M-s k" . consult-keep-lines)
-         ("M-s u" . consult-focus-lines)
-         ;; Isearch integration
-         ("M-s e" . consult-isearch-history)
-         :map isearch-mode-map
-         ("M-e" . consult-isearch-history)   ;; orig. isearch-edit-string
-         ("M-s e" . consult-isearch-history) ;; orig. isearch-edit-string
-         ("M-s l" . consult-line) ;; needed by consult-line to detect isearch
-         ("M-s L" . consult-line-multi) ;; needed by consult-line to detect isearch
-         ;; Minibuffer history
-         :map minibuffer-local-map
-         ("M-s" . consult-history)  ;; orig. next-matching-history-element
-         ("H-r" . consult-history) ;; orig. previous-matching-history-element
-         :map org-mode-map
-         ("C-c C-j"  . consult-org-heading)
-         :map prog-mode-map
-         ("C-c C-j"  . consult-outline)
-         )
-  ;; Enable automatic preview at point in the *Completions* buffer. This is
-  ;; relevant when you use the default completion UI.
-  :hook (completion-list-mode . consult-preview-at-point-mode)
-
-  ;; The :init configuration is always executed (Not lazy)
-  :init
-
-  ;; Optionally configure the register formatting. This improves the register
-  ;; preview for `consult-register', `consult-register-load',
-  ;; `consult-register-store' and the Emacs built-ins.
-  (setq register-preview-delay 0
-        register-preview-function #'consult-register-format)
-
-  ;; Optionally tweak the register preview window.
-  ;; This adds thin lines, sorting and hides the mode line of the window.
-  (advice-add #'register-preview :override #'consult-register-window)
-
-  ;; Use Consult to select xref locations with preview
-  (setq xref-show-xrefs-function #'consult-xref
-        xref-show-definitions-function #'consult-xref)
-
-  ;; Configure other variables and modes in the :config section,
-  ;; after lazily loading the package.
-  ;; macOS locate doesn't support `--ignore-case --existing' args.
-  (setq consult-locate-args (pcase system-type
-                              ('gnu/linux
-                               "locate --ignore-case --existing --regex")
-                              ('darwin
-                               "mdfind -name")
-                              ))
-  :config
-
-  ;; Optionally configure preview. The default value
-  ;; is 'any, such that any key triggers the preview.
-  ;; (setq consult-preview-key 'any)
-  ;; (setq consult-preview-key (kbd "M-."))
-  ;; (setq consult-preview-key (list (kbd "<S-down>") (kbd "<S-up>")))
-  ;; For some commands and buffer sources it is useful to configure the
-  ;; :preview-key on a per-command basis using the `consult-customize' macro.
-  (consult-customize
-   consult-theme :preview-key '(:debounce 0.2 any)
-   consult-ripgrep consult-git-grep consult-grep
-   consult-bookmark consult-recent-file consult-xref
-   consult--source-bookmark consult--source-file-register
-   consult--source-recent-file consult--source-project-recent-file
-   :preview-key (kbd "M-.")
-   )
-
-  ;; Optionally configure the narrowing key.
-  ;; Both < and C-+ work reasonably well.
-  (setq consult-narrow-key "<") ;; (kbd "C-+")
-
-  ;; Optionally make narrowing help available in the minibuffer.
-  ;; You may want to use `embark-prefix-help-command' or which-key instead.
-  ;; (define-key consult-narrow-map (vconcat consult-narrow-key "?") #'consult-narrow-help)
-
-  ;; By default `consult-project-function' uses `project-root' from project.el.
-  ;; Optionally configure a different project root function.
-  ;; There are multiple reasonable alternatives to chose from.
-;;;; 1. project.el (the default)
-  ;; (setq consult-project-function #'consult--default-project--function)
-;;;; 2. projectile.el (projectile-project-root)
-  ;; (autoload 'projectile-project-root "projectile")
-  ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
-;;;; 3. vc.el (vc-root-dir)
-  ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
-;;;; 4. locate-dominating-file
-  ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
-  )
-;; }}}
-
-(use-package vertico
-  :ensure nil
-  :bind
-  (
-   :map vertico-map
-   ([backtab] . vertico-previous)
-   ("<tab>" . vertico-insert)    ; Choose selected candidate
-   ("<escape>" . minibuffer-keyboard-quit) ; Close minibuffer
-   )
-  :init
-  (fido-mode -1)
-  (vertico-mode)
-  (vertico-mouse-mode)
-  ;; (setq vertico-scroll-margin 0) ; Different scroll margin
-  (setq vertico-count 20)  ; Show more candidates
-  (setq vertico-resize t) ; Grow and shrink the Vertico minibuffer
-  ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
-  (setq vertico-cycle t)
-  )
-
-;; Configure directory extension.
-(use-package vertico-directory
-  :ensure nil
-  :after vertico
-  ;; Tidy shadowed file names
-  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy)
-  ;; More convenient directory navigation commands
-  :bind
-  (
-   :map vertico-map
-   ("H-k" . vertico-directory-up)
-   ("RET" . vertico-directory-enter)
-   ("DEL" . vertico-directory-delete-char)
-   ("M-DEL" . vertico-directory-delete-word)
-   )
-  )
-
-;; A few more useful configurations...
-(use-package emacs
-  :ensure nil
-  :init
-  ;; Add prompt indicator to `completing-read-multiple'.
-  ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
-  (defun crm-indicator (args)
-    (cons (format "[CRM%s] %s"
-                  (replace-regexp-in-string
-                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
-                   crm-separator)
-                  (car args))
-          (cdr args)))
-  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
-
-  ;; Do not allow the cursor in the minibuffer prompt
-  (setq minibuffer-prompt-properties
-        '(read-only t cursor-intangible t face minibuffer-prompt))
-  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
-
-  ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
-  ;; Vertico commands are hidden in normal buffers.
-  ;; (setq read-extended-command-predicate
-  ;;       #'command-completion-default-include-p)
-
-  ;; Enable recursive minibuffers
-  (setq enable-recursive-minibuffers t)
-  )
-
-(use-package vertico-posframe
-  :ensure nil
-  :after (vertico posframe)
-  :config
-  (vertico-posframe-mode 1)
-  (setq vertico-multiform-commands
-        '((consult-line
-           posframe
-           (vertico-posframe-poshandler . posframe-poshandler-frame-top-center)
-           (vertico-posframe-border-width . 10)
-           ;; NOTE: This is useful when emacs is used in both in X and
-           ;; terminal, for posframe do not work well in terminal, so
-           ;; vertico-buffer-mode will be used as fallback at the
-           ;; moment.
-           (vertico-posframe-fallback-mode . vertico-buffer-mode))
-          (t posframe)))
-
-  (vertico-multiform-mode 1)
-  (setq vertico-posframe-parameters
-        '(
-          (left-fringe . 20)
-          (right-fringe . 20)
-          ))
-  )
-
-;; marginalia: minibuffer annotations
-;; {{{
-;; Enable rich annotations using the Marginalia package
-(use-package marginalia
-  :ensure nil
-  ;; Either bind `marginalia-cycle' globally or only in the minibuffer
-  ;; :bind (("C-M-a" . marginalia-cycle)
-  ;;        :map minibuffer-local-map
-  ;;        ("C-M-a" . marginalia-cycle))
-  ;; :custom (marginalia-align 'right)
-  ;; :init
-  ;; The :init configuration is always executed (Not lazy!)
-  ;; Must be in the :init section of use-package such that the mode gets
-  ;; enabled right away. Note that this forces loading the package.
-  ;; (marginalia-mode)
-  :hook (after-init . marginalia-mode)
-  :config
-  ;; https://emacs-china.org/t/21-emacs-vertico-orderless-marginalia-embark-consult/19683/
-  (defun marginalia-annotate-command (cand)
-    "Annotate command CAND with its documentation string.
-Similar to `marginalia-annotate-symbol', but does not show symbol class."
-    (when-let* ((sym (intern-soft cand))
-                (mode (if (boundp sym)
-                          sym
-                        (lookup-minor-mode-from-indicator cand))))
-      (concat
-       (if (and (boundp mode) (symbol-value mode))
-           (propertize " On" 'face 'marginalia-on)
-         (propertize " Off" 'face 'marginalia-off))
-       (marginalia-annotate-binding cand)
-       (marginalia--documentation (marginalia--function-doc sym)))))
-  )
-;; }}}
-
-(use-package embark
-  :ensure nil
-  :init
-  ;; Optionally replace the key help with a completing-read interface
-  (setq prefix-help-command #'embark-prefix-help-command)
-  :bind
-  (
-   ("C-." . embark-act)         ;; pick some comfortable binding
-   ("M-." . embark-dwim)
-   ("C-;" . embark-dwim)        ;; good alternative: M-.
-   ("C-h B" . embark-bindings)  ;; alternative for `describe-bindings'
-   :map minibuffer-mode-map
-   ("H-o" . embark-export)
-   )
-  :custom
-  (embark-quit-after-action nil)
-  (prefix-help-command #'embark-prefix-help-command)
-  (embark-indicators '(embark-minimal-indicator
-                       embark-highlight-indicator
-                       embark-isearch-highlight-indicator))
-  (embark-cycle-key ".")
-  (embark-help-key "?")
-  :config
-  ;; Hide the mode line of the Embark live/completions buffers
-  (add-to-list 'display-buffer-alist
-               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                 nil
-                 (window-parameters (mode-line-format . none))))
-  )
 
 (use-package org-modern
   :hook (org-mode . org-modern-mode)
@@ -3941,6 +4095,21 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; mybigword-upper-limit
 ;; }}}
 
+(use-package bing-dict
+  :ensure nil
+  :bind
+  ("C-c d b" . bing-dict-brief)
+  :config
+  (setq bing-dict-show-thesaurus 'both) ; synonym and antonym
+  (setq bing-dict-pronunciation-style 'uk) ; us uk
+  (setq bing-dict-vocabulary-file
+        (expand-file-name
+         "vocabulary.org"
+         (concat user-emacs-directory))
+        )
+  (setq bing-dict-vocabulary-save t)
+  )
+
 ;; elfeed
 ;; {{{
 ;; reference: https://github.com/jiacai2050/jiacai2050.github.io/blob/hugo/playground/mu4e-elfeed-config.el
@@ -4035,135 +4204,43 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   (browser-hist-search)
   )
 
-;; keyfreq: Track Emacs commands frequency
-;; {{{
 ;; keyfreq fork: keyfreq-html-v2 show keyboard heat map
-(require 'keyfreq) ;; 导入插件包
-(setq keyfreq-folder  (expand-file-name
-                       "lib/keyfreq"
-                       (concat user-emacs-directory)
-                       )
-      )
-(keyfreq-mode 1)          ;; 启动插件包
-(keyfreq-autosave-mode 1) ;; 自动保存模式
-(setq-default keyfreq-file (expand-file-name
-                            "assets/keyfreq-log"
-                            (concat user-emacs-directory)
-                            )
-              )
-;; (defun turnon-keyfreq-mode ()
-;;   "Turn on keyfreq."
-;;   (interactive)
-;;   (my-run-with-idle-timer 4 (lambda () ;; ;; Fire up keyfreq a few seconds later to start up emacs faster
-;;                               (keyfreq-mode 1)
-;;                               (keyfreq-autosave-mode 1))))
-;;
-;; }}}
+(use-package keyfreq
+  :ensure nil
+  :defer 1
+  :config
+  (keyfreq-mode 1) ;; 启动插件包
+  (keyfreq-autosave-mode 1) ;; 自动保存模式
 
-;; keyferq: 排除命令: exclude commands
-;; {{{
-(with-eval-after-load 'keyfreq
+  (setq keyfreq-folder
+        (expand-file-name
+         "lib/keyfreq"
+         (concat user-emacs-directory)))
+
+  (setq-default keyfreq-file
+                (expand-file-name
+                 "assets/keyfreq-log"
+                 (concat user-emacs-directory)))
+
   (setq keyfreq-excluded-commands
         '(
-          ;; abort-recursive-edit
-          ;; ace-window
-          ;; avy-goto-line
-          ;; backward-char
-          ;; clipboard-kill-ring-save
-          ;; comint-previous-input
-          ;; comint-send-input
-          ;; delete-backward-char
-          ;; describe-variable
-          ;; electric-pair-delete-pair
-          ;; eval-buffer
-          ;; exit-minibuffer
-          ;; ffip
-          ;; forward-char
-          ;; goto-line
-          ;; hippie-expand
-          ;; indent-new-comment-line
-          ;; ispell-minor-check
-          ;; js-mode
-          ;; js2-line-break
-          ;; kill-sentence
-          ;; left-char
-          ;; mac-mwheel-scroll
-          ;; magit-next-line
-          ;; magit-previous-line
-          ;; markdown-exdent-or-delete
-          ;; markdown-outdent-or-delete
-          ;; minibuffer-complete
-          ;; minibuffer-complete-and-exit
-          ;; minibuffer-keyboard-quit
-          ;; mouse-drag-region
-          ;; mouse-set-point
-          ;; move-beginning-of-line
-          ;; move-end-of-line
           mwheel-scroll
-          ;; my-company-number
-          ;; my-setup-develop-environment
-          ;; newline-and-indent
-          ;; next-history-element
-          ;; next-line
-          ;; package-menu-execute
-          ;; pcomplete
-          ;; previous-history-element
-          ;; previous-line
-          ;; push-button
-          ;; pwd
-          ;; quit-window
-          ;; recenter-top-bottom
-          ;; right-char
-          ;; rjsx-electric-gt
-          ;; rjsx-electric-lt
           org-self-insert-command
           self-insert-command
-          ;; shellcop-erase-buffer
-          ;; smarter-move-beginning-of-line
-          ;; suspend-frame
-          ;; term-send-raw
-          ;; turnon-keyfreq-mode
-          ;; typescript-insert-and-indent
-          ;; undefined ;; lambda function
-          ;; wgrep-finish-edit
-          ;; xterm-paste
-          ;; yank
-          )) )
-;; }}}
+          ))
 
-;; keyfreq: 正则表达式排除模式, excluded regexp
-;; {{{
-;; (with-eval-after-load 'keyfreq
-;; (setq keyfreq-excluded-regexp
-;;       '(
-;;         "^ace-jump-"
-;;         "^backward-"
-;;         "^company-"
-;;         "^dired"
-;;         "^evil-"
-;;         "^forward-"
-;;         "^general-dispatch-self-insert-command-"
-;;         "^gnus-"
-;;         "^ido-"
-;;         "^isearch-"
-;;         "^ivy-"
-;;         "^keyboard-"
-;;         "^keyfreq-"
-;;         "^my-hydra-.*/body"
-;;         "^next-"
-;;         "^org-"
-;;         "^paredit-"
-;;         "^save-"
-;;         "^scroll-"
-;;         "^select-window-"
-;;         "^undo-"
-;;         "^w3m-"
-;;         "^web-mode"
-;;         "^y-or-n-"
-;;         "^yas-"
-;;         "emms-"
-;;        )))
-;; }}}
+  ;; (setq keyfreq-excluded-regexp
+  ;;       '(
+  ;;         "^w3m-"
+  ;;        ))
+
+  ;; (defun turnon-keyfreq-mode ()
+  ;;   "Turn on keyfreq."
+  ;;   (interactive)
+  ;;   (my-run-with-idle-timer 4 (lambda () ; lazy load keyfreq
+  ;;                               (keyfreq-mode 1)
+  ;;                               (keyfreq-autosave-mode 1))))
+  )
 
 ;; elisp-demos
 ;; {{{
@@ -4175,6 +4252,58 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   ;; :defer 2
   :bind
   ("C-c w c" . advance-words-count)
+  )
+
+(use-package lsp-bridge
+  :ensure nil
+  ;; :after (yasnippet posframe)
+  ;; :hook
+  ;; (after-init . lsp-bridge-mode)
+  ;; ((prog-mode org-mode) . lsp-bridge-mode)
+  :defer 1
+  ;; :commands lsp-bridge-mode
+  :bind
+  (
+   :map acm-mode-map
+   ("<escape>"  . acm-hide)
+   ("C-j"       . acm-insert-common)
+   ;; complete
+   ("SPC"       . acm-complete)
+   ("RET"       . acm-complete)
+   ;; ([remap yas-expand] . acm-complete)
+   ;; select
+   ("TAB"       . acm-select-next)
+   ("<tab>"       . acm-select-next)   
+   ("<backtab>" . acm-select-prev)
+   ;; ("H-TAB"    . acm-select-prev)
+   ("H-j"       . acm-select-next)
+   ("H-k"      . acm-select-prev)
+   ;; :map lsp-bridge-mode-map
+   ;; ("M-." . lsp-bridge-find-def)
+   ;; ("M-," . lsp-bridge-return-from-def)
+   ;; ("M-?" . lsp-bridge-find-references)
+   ;; ("M-i" . lsp-bridge-lookup-documentation)
+   ;; ("M-n" . lsp-bridge-popup-documentation-scroll-up)
+   ;; ("M-p" . lsp-bridge-popup-documentation-scroll-down)
+   ;; ("s-C-n" . lsp-bridge-jump-to-next-diagnostic)
+   ;; ("s-C-p" . lsp-bridge-jump-to-prev-diagnostic)
+   )
+  :init
+  (setq-default lsp-bridge-enable-mode-line nil)  
+  :config
+  (require 'yasnippet)
+  (yas-global-mode 1)
+  (require 'lsp-bridge)
+  (global-lsp-bridge-mode)
+  (setq acm-enable-quick-access t)
+  (setq acm-quick-access-modifier 'meta)
+  ;; (setq lsp-bridge-auto-format-code t)
+  ;; (setq lsp-bridge-python-lsp-server "jedi")
+  ;; (setq lsp-bridge-use-ds-pinyin-in-org-mode t)
+  ;; (setq lsp-bridge-use-wenls-in-org-mode t)
+  ;; ;; lsp-bridge-org-babel-lang-list ; default: clojure latex python
+  (add-to-list 'lsp-bridge-org-babel-lang-list "emacs-lisp")
+  (add-to-list 'lsp-bridge-org-babel-lang-list "shell")
   )
 
 ;; unicode
