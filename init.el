@@ -407,6 +407,14 @@ Consider only documented, non-obsolete functions."
  auto-save-timeout 20 ; number of seconds idle time before auto-save (default: 30)
  auto-save-interval 200 ; number of keystrokes between auto-saves (default: 300)
  )
+
+(defun my/save-all-file-buffers ()
+  "Saves every buffer associated with a file."
+  (interactive)
+  (dolist (buf (buffer-list))
+    (with-current-buffer buf
+      (when (and (buffer-file-name) (buffer-modified-p))
+        (save-buffer)))))
 ;; }}}
 
 ;; backup file: 备份
@@ -886,17 +894,41 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
   :bind
   (
    :map eglot-mode-map
-   ("C-c l a" . eglot-code-actions)
-   ("C-c l r" . eglot-rename)
-   ("C-c l f" . eglot-format)
-   ("C-c l d" . eldoc)
-   )
-  :config
-  (setq read-process-output-max (* 1024 1024))
-  (setq eglot-events-buffer-size 0)
-  (add-to-list 'eglot-ignored-server-capabilities :documentHighlightProvider)
-  ;; (add-to-list 'eglot-server-programs '(rust-mode . ("rust-analyzer")))
+   ("C-c l a a" . eglot-code-actions)
+   ("C-c l a e" . eglot-code-action-extract)
+   ("C-c l a i" . eglot-code-action-inline)
+   ("C-c l a q" . eglot-code-action-quickfix)
+   ("C-c l a r" . eglot-code-action-rewrite)
+   ("C-c l d"   . eldoc)
+   ("C-c l f b" . eglot-format-buffer)
+   ("C-c l f f" . eglot-format)
+   ("C-c l f"   . eglot-format)
+   ("C-c l r"   . eglot-rename)
   )
+:hook
+(
+ (c++-mode . eglot-ensure)
+ (c++-ts-mode . eglot-ensure)
+ (c-mode . eglot-ensure)
+ (c-ts-mode . eglot-ensure)
+ (java-mode . eglot-ensure)
+ (java-ts-mode . eglot-ensure)
+ (js-mode . eglot-ensure)
+ (js-ts-mode . eglot-ensure)
+ (python-mode . eglot-ensure)
+ (python-ts-mode . eglot-ensure)
+ (typescript-mode . eglot-ensure)
+ (typescript-ts-base-mode . eglot-ensure)
+ )
+:custom
+(eglot-autoshutdown t)
+(eglot-extend-to-xref t)
+:config
+(setq read-process-output-max (* 1024 1024))
+(setq eglot-events-buffer-size 0)
+(add-to-list 'eglot-ignored-server-capabilities :documentHighlightProvider)
+;; (add-to-list 'eglot-server-programs '(rust-mode . ("rust-analyzer")))
+)
 
 ;; https://github.com/Eason0210/.emacs.d/
 (use-package emacs
@@ -1114,6 +1146,25 @@ occurence of CHAR."
 ;; doitian/iy-go-to-char: Go to next CHAR which is similar to "f" and "t" in vim
 ;; https://github.com/doitian/iy-go-to-char
 ;; }}}
+
+(defun my/occur-mode-hook-fn ()
+  "HELP customizations."
+  (interactive)
+  (turn-on-stripe-buffer-mode)
+  (occur-rename-buffer))
+
+(add-hook 'occur-mode-hook #'my/occur-mode-hook-fn)
+
+(define-key occur-mode-map (kbd "n") #'next-logical-line)
+(define-key occur-mode-map (kbd "p") #'previous-logical-line)
+
+(defun my/recenter-line-near-top-fn ()
+  "Move current line near top"
+  (interactive)
+  (let ((recenter-positions '(5)))
+    (recenter-top-bottom)))
+
+(add-hook 'occur-mode-find-occurrence-hook #'my/recenter-line-near-top-fn)
 
 ;; isearch
 ;; {{{
@@ -1578,8 +1629,6 @@ This command can be called when in a file buffer or in `dired'."
    ("C-c n o" . org-id-get-create)
    ("C-c H-i" . org-insert-structure-template)
    ("C-c H-t" . my/sparse-tree-with-tag-filter)
-   :map org-src-mode-map
-   ("C-c e" . org-edit-src-exit)
    )
   :config
   (setq org-directory "~/org-roam")
@@ -1667,6 +1716,12 @@ all open tasks in current Org buffer
   (
    :map org-mode-map
    ("C-c e" . org-edit-special)
+   ("s-l" . org-edit-special)
+   ("s-j" . org-babel-next-src-block)
+   ("s-k" . org-babel-previous-src-block)
+   :map org-src-mode-map
+   ("C-c e" . org-edit-src-exit)
+   ("s-l" . org-edit-src-exit)
    )
   :config
   (setq org-src-fontify-natively 1)         ;代码块语法高亮
@@ -1693,6 +1748,31 @@ all open tasks in current Org buffer
           ("toml" . conf-toml)
           ))
   )
+
+(defconst my/org-special-pre "^\s*#[+]")
+(defun my/org-2every-src-block (fn)
+  "Visit every Source-Block and evaluate `FN'."
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (let ((case-fold-search t))
+      (while (re-search-forward (concat my/org-special-pre "BEGIN_SRC") nil t)
+        (let ((element (org-element-at-point)))
+          (when (eq (org-element-type element) 'src-block)
+            (funcall fn element)))))
+    (save-buffer)))
+(define-key org-mode-map (kbd "s-]") (lambda () (interactive)
+                                       (my/org-2every-src-block
+                                        'org-babel-remove-result)))
+
+;; https://www.wisdomandwonder.com/link/9008/a-progress-indicator-for-code-blocks-in-org-mode
+(defadvice org-babel-execute-src-block (around progress nil activate)
+  (set-face-attribute
+   'org-block-background nil :background "LightSteelBlue")
+  (message "Running your code block")
+  ad-do-it
+  (set-face-attribute 'org-block-background nil :background "gray")
+  (message "Done with code block"))
 
 (setq org-fontify-todo-headline nil)
 (setq org-fontify-done-headline nil)
@@ -3035,10 +3115,6 @@ When fixing a typo, avoid pass camel case option to cli program."
 ;;   "#963D97"
 ;;   "#009DDC"
 ;;   ))
-;;
-;; Emacs builtin
-;; (setq show-paren-when-point-inside-paren t
-;;       show-paren-when-point-in-periphery t)
 ;; }}}
 
 ;; doom-modeline
@@ -3822,8 +3898,8 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   ;; :after org
   :init
   ;; Load Org link support
-  (with-eval-after-load 'org
-    (require 'osm-ol))
+  ;; (with-eval-after-load 'org
+  ;;   (require 'osm-ol))
   :bind (
          ("C-c m h" . osm-home)
          ("C-c m s" . osm-search)
@@ -3832,7 +3908,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
          ("C-c m x" . osm-gpx-show)
          ("C-c m j" . osm-bookmark-jump)
          :map osm-mode-map
-         ("q" . (lambda() (interactive) (quit-window t)))
+         ("q" . (lambda () (interactive) (quit-window t)))
          )
   :custom
   ;; Take a look at the customization group `osm' for more options.
