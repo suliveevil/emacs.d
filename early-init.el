@@ -141,9 +141,23 @@
 ;;
 (keymap-set global-map "H-q"          #'restart-emacs)
 (keymap-global-set     "H-x"          #'execute-extended-command)
+
+;; check-parens
+(keymap-global-set "H-M-c" #'check-parens) ; <escape> H-c
 ;; }}}
 
 (keymap-global-set "H-a" #'universal-argument)
+
+(context-menu-mode 1)       ;; 鼠标右键菜单
+(setq context-menu-functions
+      '(context-menu-ffap
+        occur-context-menu
+        context-menu-region
+        context-menu-undo
+        context-menu-minor
+        context-menu-local
+        ))
+(setq use-dialog-box nil)   ;; 鼠标点击不触发弹窗
 
 ;; 快速打开文件
 ;; {{{
@@ -206,16 +220,6 @@
 (set-fringe-mode 10)        ;;
 (global-visual-line-mode 1) ;;
 (setq visible-bell t)       ;; 关闭提示声音
-(context-menu-mode 1)       ;; 鼠标右键菜单
-(setq context-menu-functions
-      '(context-menu-ffap
-        occur-context-menu
-        context-menu-region
-        context-menu-undo
-        context-menu-minor
-        context-menu-local
-        ))
-(setq use-dialog-box nil)   ;; 鼠标点击不触发弹窗
 ;; }}}
 
 ;; user name & email

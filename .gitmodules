@@ -61,3 +61,6 @@
 [submodule "lib/mode-minder"]
 	path = lib/mode-minder
 	url = git@github.com:jdtsmith/mode-minder.git
+[submodule "lib/itranslate-mode"]
+	path = lib/itranslate-mode
+	url = git@github.com:suliveevil/itranslate-mode.git

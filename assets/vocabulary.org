@@ -1,3 +1,31 @@
+:PROPERTIES:
+:ID:       B2E4E5E7-E32E-4F37-8562-4FA4DCFB1DE9
+:END:
+#+title: my Vocabulary
+
 * Vocabulary
+
 ** evaluation [ɪˌvæljuˈeɪʃ(ə)n]
-n. 评价；【数】赋值 | 网络 评估；估价；评监 | Synonym n. assessment,appraisal,estimation,calculation,valuation
+
+n. 评价；【数】赋值 | 网络 评估；估价；评监 | Synonym
+n. assessment,appraisal,estimation,calculation,valuation
+
+** Duration [djʊˈreɪʃ(ə)n]
+
+n. 持续时间；期间 | 网络 存续期间；持续期间；久期 | Synonym
+n. period,length,extent,time,interval
+
+** 必应词典 
+网络 Bing Dictionary; Beta; dict.bing.com.cn
+
+** pagination [ˌpædʒəˈneɪʃ(ə)n]
+n. 标页码；编页码 | 网络 分页；页码导航；分页显示
+
+** Sequence [ˈsikwəns]
+n. 顺序；次序；一系列；一连串 | v. 按顺序排列；测定（整套基因或分子成分的）序列 | 网络 连续；数列；时序 | Synonym n. series,succession,run,progression,chain | Antonym n. disarray
+
+** test [test]
+v. 试验；测试；检测；测验 | n. 试验；检测；考试；测验 | 网络 检验；考验；睾酮(testosterone) | Synonym v. try,try out,put to the test,examine,assess n. examination,exam,tryout,trial run,proof
+
+** dispatch [dɪˈspætʃ]
+n. 派遣；发送；电讯；快信 | v. 派遣；派出；发出；调遣 | 网络 分派；调度；急件 | Synonym v. send off,send out,post,mail,kill n. message,communication,notice,letter,report | Antonym v. keep
