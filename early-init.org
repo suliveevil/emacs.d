@@ -327,6 +327,9 @@ open -b org.gnu.Emacs --args -q --eval='(message "%s" (emacs-init-time))'
 ;;
 (keymap-set global-map "H-q"          #'restart-emacs)
 (keymap-global-set     "H-x"          #'execute-extended-command)
+
+;; check-parens
+(keymap-global-set "H-M-c" #'check-parens) ; <escape> H-c
 ;; }}}
 #+end_src
 
@@ -374,6 +377,21 @@ open -b org.gnu.Emacs --args -q --eval='(message "%s" (emacs-init-time))'
 (keymap-global-set "H-c H-f" #'find-file)
 #+end_src
 
+
+** mouse
+
+#+begin_src emacs-lisp :tangle yes
+(context-menu-mode 1)       ;; 鼠标右键菜单
+(setq context-menu-functions
+      '(context-menu-ffap
+        occur-context-menu
+        context-menu-region
+        context-menu-undo
+        context-menu-minor
+        context-menu-local
+        ))
+(setq use-dialog-box nil)   ;; 鼠标点击不触发弹窗
+#+end_src
 
 ** buffer and File
 
@@ -426,6 +444,9 @@ open -b org.gnu.Emacs --args -q --eval='(message "%s" (emacs-init-time))'
 
 ** UI
 
+
+*** frame
+
 #+begin_src emacs-lisp :tangle no
 ;; https://emacs-china.org/t/emacs/22375/2
 (push '(menu-bar-lines . 0) default-frame-alist) ; 菜单栏
@@ -455,19 +476,14 @@ open -b org.gnu.Emacs --args -q --eval='(message "%s" (emacs-init-time))'
 (set-fringe-mode 10)        ;;
 (global-visual-line-mode 1) ;;
 (setq visible-bell t)       ;; 关闭提示声音
-(context-menu-mode 1)       ;; 鼠标右键菜单
-(setq context-menu-functions
-      '(context-menu-ffap
-        occur-context-menu
-        context-menu-region
-        context-menu-undo
-        context-menu-minor
-        context-menu-local
-        ))
-(setq use-dialog-box nil)   ;; 鼠标点击不触发弹窗
 ;; }}}
 #+end_src
 
+*** window
+
+#+begin_src emacs-lisp :tangle no
+
+#+end_src
 
 ** user name & email
 
