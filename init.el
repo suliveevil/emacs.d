@@ -52,7 +52,10 @@ Consider only documented, non-obsolete functions."
 ;;     (unless package-archive-contents
 ;;       (package-refresh-contents))
 ;;     (package-install package)))
+
 ;; }}}
+
+(setq package-list-unversioned t)
 
 ;; package dependency graph (Graphviz)
 ;; {{{
@@ -104,6 +107,12 @@ Consider only documented, non-obsolete functions."
 ;;   (package-refresh-contents)
 ;;   (package-install 'use-package)
 ;;   (eval-when-compile (require 'use-package)))
+(use-package package
+  :ensure nil
+  :config
+  (setq package-quickstart t)
+  ;; post-command-hook package-update list-packages
+  )
 ;; }}}
 
 (use-package repeat
@@ -112,6 +121,7 @@ Consider only documented, non-obsolete functions."
   :bind
   ("M-o" . other-window)
   :init
+  (setq repeat-echo-function 'repeat-echo-message)
   (put 'other-window 'repeat-map nil)
   )
 
@@ -217,17 +227,6 @@ Consider only documented, non-obsolete functions."
 
 
 
-;; pretty-symbols
-;; {{{
-(setq-default prettify-symbols-alist
-              '(
-                ("lambda" . ?λ)
-                ("function" . ?𝑓)
-                )
-              )
-(add-hook 'prog-mode-hook 'prettify-symbols-mode)
-;; }}}
-
 (use-package benchmark-init
   :ensure nil
   :init (benchmark-init/activate)
@@ -247,15 +246,18 @@ Consider only documented, non-obsolete functions."
 ;; tree-sitter
 ;; {{{
 ;; Use the built-in treesit and load all language grammars
-(use-package
- treesit
+(use-package treesit
  :ensure nil
  :when (and (fboundp 'treesit-available-p) (treesit-available-p))
  :defer 1
+ :hook
+ (
+  ;; (tree-sitter-after-on . tree-sitter-hl-mode)
+  (emacs-lisp-mode . (lambda () (treesit-parser-create 'elisp))))
  :init
  ;; Load languages directly from the repository after making them
- (setq treesit-extra-load-path
-       (expand-file-name "tree-sitter" user-emacs-directory))
+ ;; (setq treesit-extra-load-path
+ ;;       (expand-file-name "tree-sitter" user-emacs-directory))
  :custom
  (major-mode-remap-alist
   '((c-mode . c-ts-mode)
@@ -263,6 +265,7 @@ Consider only documented, non-obsolete functions."
     (csharp-mode . csharp-ts-mode)
     (conf-toml-mode . toml-ts-mode)
     (css-mode . css-ts-mode)
+    ;; (emacs-lisp-mode . elisp-ts-mode)
     (java-mode . java-ts-mode)
     (js-mode . js-ts-mode)
     (js-json-mode . json-ts-mode)
@@ -274,6 +277,7 @@ Consider only documented, non-obsolete functions."
  ;; (add-hook 'emacs-lisp-mode-hook
  ;;   #'(lambda () (treesit-parser-create 'elisp)))
 
+ ;; (add-to-list 'auto-mode-alist '("\\.el\\'" . elisp-ts-mode))
  (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode))
  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
  (add-to-list 'auto-mode-alist '("\\.ya?ml\\'" . yaml-ts-mode))
@@ -281,12 +285,18 @@ Consider only documented, non-obsolete functions."
   'auto-mode-alist '("\\(?:CMakeLists\\.txt\\|\\.cmake\\)\\'" . cmake-ts-mode)))
 ;; }}}
 
+(use-package eldoc
+  :ensure nil
+  ;; :after flymake
+  :hook (emacs-lisp-mode . eldoc-mode)
+  )
+
 ;; time
 ;; {{{
 (use-package iso8601
   :ensure nil
   :defer t
-  :hook (kill-emacs . my-log-emacs-uptime)
+  :hook (kill-emacs . my/log-emacs-uptime)
   :bind ("C-c d t" . my/date-and-time-iso8601)
   :config
   (defun my/date-and-time-iso8601 ()
@@ -298,7 +308,7 @@ Consider only documented, non-obsolete functions."
     ;; (locate-user-emacs-file "uptime.log")
     (expand-file-name "assets/uptime.org" user-emacs-directory)
     "Log file for `my/log-emacs-uptime'.")
-  (defun my-log-emacs-uptime ()
+  (defun my/log-emacs-uptime ()
     "Write emacs uptime to `my/emacs-uptime-log'. Use with `kill-emacs-hook'."
     (with-temp-buffer
       (insert
@@ -435,26 +445,31 @@ Consider only documented, non-obsolete functions."
   )
 
 (use-package emacs
-  :ensure nil
-  :bind
-  (
-   ("C-c b f" . next-buffer)
-   ("C-c b b" . previous-buffer)
-   ("C-c b l" . list-buffers)
-   ;; esc-map
-   ;; ("M-b f" . next-buffer)
-   ;; ("M-b b" . previous-buffer)
-   ;; ("M-b l" . list-buffers)
-   )
+ :ensure nil
+ :bind
+ (("C-c b f" . next-buffer)
+  ("C-c b b" . previous-buffer) ("C-c b l" . list-buffers)
+  ;; esc-map
+  ;; ("M-b f" . next-buffer)
+  ;; ("M-b b" . previous-buffer)
+  ;; ("M-b l" . list-buffers)
   )
+ :custom
+ ;; (async-shell-command-buffer 'new-buffer)
+ (shell-command-dont-erase-buffer 'end-last-out)
+ (tab-always-indent 'complete) ; free the M-TAB keybinding
+ :init
+ (add-to-list
+  'display-buffer-alist
+  (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil))))
 
 ;; line
 ;; {{{
 (use-package display-line-numbers
   :ensure nil
   :hook
-  (prog-mode . display-line-numbers-mode)
-  ;; (after-init . global-display-line-numbers-mode)
+  ;; (prog-mode . display-line-numbers-mode)
+  (after-init . global-display-line-numbers-mode)
   :bind
   ("C-c O"   . open-newline-above)
   ("C-c C-o" . open-newline-below)
@@ -496,9 +511,11 @@ Consider only documented, non-obsolete functions."
   ;;  )
   :init
   ;; wrap/truncate: word-wrap-mode
-  ;; (setq-default truncate-lines t)
+  (setq-default truncate-lines nil) ; nil equals wrap
   (setq word-wrap-by-category t) ;; improves CJK + Latin word-wrapping
   )
+
+;; file head: # -*- truncate-lines: nil -*-
 
 ;; (use-package simple
 ;;   :ensure nil
@@ -608,40 +625,49 @@ Consider only documented, non-obsolete functions."
   )
 ;; }}}
 
-(setq default-directory "~/")
-(setq command-line-default-directory "~/")
-
-(setq find-file-visit-truename t)
-
-;; warn when opening files bigger than 100 MB
-(setq large-file-warning-threshold (* 100 1000 1000))
-
-;; https://emacsredux.com/blog/2013/04/21/edit-files-as-root/
-(defun my/sudo-edit (&optional arg)
-  "Edit currently visited file as root.
+(use-package emacs
+ :ensure nil
+ :bind ([remap read-only-mode] . my/sudo-edit)
+ :init
+ (setq default-directory "~/")
+ (setq command-line-default-directory "~/")
+ (setq find-file-visit-truename t)
+ ;; warn when opening files bigger than 100 MB
+ (setq large-file-warning-threshold (* 100 1000 1000))
+ :config
+ ;; https://emacsredux.com/blog/2013/04/21/edit-files-as-root/
+ (defun my/sudo-edit (&optional arg)
+   "Edit currently visited file as root.
 
 With a prefix ARG prompt for a file to visit.
 Will also prompt for a file to visit if current
 buffer is not visiting a file."
-  (interactive "P")
-  (if (or arg (not buffer-file-name))
-      (find-file (concat "/sudo:root@localhost:"
-                         (ido-read-file-name "Find file(as root): ")))
-    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+   (interactive "P")
+   (if (or arg (not buffer-file-name))
+       (find-file
+        (concat "/sudo:root@localhost:" (ido-read-file-name "File(root): ")))
+     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
-(keymap-global-set "C-c C-r" #'my/sudo-edit)
 
-(defun my/sudo-find-file (file)
-  "Open FILE as root."
-  (interactive "FOpen file as root: ")
-  (when (file-writable-p file)
-    (user-error "File is user writeable, aborting sudo"))
-  (find-file (if (file-remote-p file)
-                 (concat "/" (file-remote-p file 'method) ":"
-                         (file-remote-p file 'user) "@" (file-remote-p file 'host)
-                         "|sudo:root@"
-                         (file-remote-p file 'host) ":" (file-remote-p file 'localname))
-               (concat "/sudo:root@localhost:" file))))
+ (defun my/sudo-find-file (file)
+   "Open FILE as root."
+   (interactive "FOpen file as root: ")
+   (when (file-writable-p file)
+     (user-error "File is user writeable, aborting sudo"))
+   (find-file
+    (if (file-remote-p file)
+        (concat
+         "/"
+         (file-remote-p file 'method)
+         ":"
+         (file-remote-p file 'user)
+         "@"
+         (file-remote-p file 'host)
+         "|sudo:root@"
+         (file-remote-p file 'host)
+         ":"
+         (file-remote-p file 'localname))
+      (concat "/sudo:root@localhost:" file)))))
 
 ;; 使 Emacs 自动加载外部修改过的文件
 (use-package autorevert
@@ -995,6 +1021,7 @@ project."
   :bind
   (
    ;; ("TAB" . minibuffer-complete)
+   ("M-SPC" . execute-extended-command) ; replace part of [cycle-spacing] keymap
    :map minibuffer-mode-map ; alias of minibuffer-local-map
    ("H-j" . next-line-or-history-element)
    ("H-k" . previous-line-or-history-element)
@@ -1752,6 +1779,17 @@ i.e. change right window to bottom, or change bottom window to right."
 (global-font-lock-mode t) ;; turn on syntax highlighting for all buffers
 ;; }}}
 
+;; pretty-symbols
+;; {{{
+(setq-default prettify-symbols-alist
+              '(
+                ("lambda" . ?λ)
+                ("function" . ?𝑓)
+                )
+              )
+(add-hook 'prog-mode-hook 'prettify-symbols-mode)
+;; }}}
+
 ;; mode-line
 ;; {{{
 (use-package battery
@@ -1885,13 +1923,16 @@ i.e. change right window to bottom, or change bottom window to right."
   )
 ;; }}}
 
+(defun xwidget-webkit-search-forward (text)
+  "Search forward of `text'"
+  (interactive "sSearch: " xwidget-webkit-mode)
+  (xwidget-webkit-execute-script
+   (xwidget-webkit-current-session) (format "window.find(\"%s\");" text)))
+
 (defun my/webkit-open-local-file (fpath)
   (interactive "fEnter file path: ")
   (when (member (substring fpath -4 nil) '("html" ".pdf" ".mp4"))
-    (xwidget-webkit-browse-url
-     (concat "file://" (expand-file-name fpath)))
-    )
-  )
+    (xwidget-webkit-browse-url (concat "file://" (expand-file-name fpath)))))
 
 (use-package dired
   :ensure nil
@@ -1988,14 +2029,15 @@ This command can be called when in a file buffer or in `dired'."
 ;; https://github.com/pietroiusti/.emacs.d/blob/master/custom-functions.el
 (defun my/open-in-vscode ()
   (interactive)
-  (start-process-shell-command "code"
-                               nil
-                               (concat "code --goto "
-                                       (buffer-file-name)
-                                       ":"
-                                       (int-to-string (line-number-at-pos))
-                                       ":"
-                                       (int-to-string (current-column)))))
+  (start-process-shell-command
+   "code" nil
+   (concat
+    "code --goto "
+    (buffer-file-name)
+    ":"
+    (int-to-string (line-number-at-pos))
+    ":"
+    (int-to-string (current-column)))))
 ;; (w32-shell-execute "open" "vscode-path" (format "-g %s:%s:%s" (buffer-file-name) (int-to-string (line-number-at-pos)) (int-to-string (current-column))))
 ;; better solution
 ;; https://emacs-china.org/t/leader-vscode/19166/29
@@ -2142,9 +2184,9 @@ all open tasks in current Org buffer
   :bind
   (
    :map org-mode-map
-   ("s-]" . (lambda () (interactive)
-              (my/org-2every-src-block
-               'org-babel-remove-result)))
+   ;; ("s-]" . (lambda () (interactive)
+   ;;            (my/org-2every-src-block
+   ;;             'org-babel-remove-result)))
    ("C-c e" . org-edit-special)
    ("s-l" . org-edit-special)
    ("H-l" . org-edit-special)
@@ -2398,84 +2440,49 @@ all open tasks in current Org buffer
   :ensure nil
   :bind
   ("C-c H-o" . my/siri-ocr)
-  :custom
-  (async-shell-command-buffer 'new-buffer)
-  (tab-always-indent 'complete) ; free the M-TAB keybinding
   :config
   ;; Siri Shortcuts: OCR
   (defun my/siri-ocr ()
     (interactive)
     (shell-command "shortcuts run \"OCR Selected Area\"")
     (do-applescript "tell application id \"org.gnu.Emacs\" to activate")
-    ;; (shell-command "pbpaste &")
+    (shell-command "pbpaste")
     )
   )
 
 (use-package simple
-  :ensure nil
-  :bind
-  ("H-t H-t" . my/translate-language-to-zh-or-zh-to-english)
-  :custom
-  (async-shell-command-buffer 'new-buffer)
-  (tab-always-indent 'complete) ; free the M-TAB keybinding
-  :config
-  ;; Siri Shortcuts: Translate
-  (defun my/siri-ocr ()
-    (interactive)
-    (shell-command "shortcuts run \"OCR Selected Area\"")
-    (do-applescript "tell application id \"org.gnu.Emacs\" to activate")
-    ;; (shell-command "pbpaste &")
-    )
-  (add-to-list 'display-buffer-alist
-               (cons
-                "\\*Async Shell Command\\*.*"
-                (cons #'display-buffer-no-window nil)))
+ :ensure nil
+ :bind ("H-t H-t" . my/translate-language-to-zh-or-zh-to-english)
+ :config
+ ;; Siri Shortcuts: Translate
+ (defun my/siri-translate ()
+   (interactive)
+   (let ((tempfile (make-temp-file "siri-translate-" nil ".txt")))
+     (write-region (format "%s" (thing-at-point 'paragraph)) nil tempfile)
+     (end-of-paragraph-text) ; jump to end of paragraph
+     (shell-command (format "shortcuts run \"Translate File\" -i %s" tempfile)))
+   (shell-command "open -b org.gnu.Emacs")
+   ;; (shell-command "pbpaste")
+   )
 
-  (defun my/siri-translate ()
-    (interactive)
-    (let
-        ((tempfile
-          (make-temp-file "siri-translate-" nil ".txt")
-          ))
-      (write-region
-       (format "%s" (thing-at-point 'paragraph))
-       nil
-       tempfile)
-      (end-of-paragraph-text)             ; jump to end of paragraph
-      (shell-command
-       (format "shortcuts run \"Translate File\" -i %s &" tempfile))
-      )
-    (shell-command "open -b org.gnu.Emacs")
-    ;; (shell-command "pbpaste &")
-    )
+ (defun my/siri-translate2english ()
+   (interactive)
+   (let ((tempfile (make-temp-file "siri-translate-" nil ".txt")))
+     (write-region (format "%s" (thing-at-point 'paragraph)) nil tempfile)
+     (end-of-paragraph-text) ; jump to end of paragraph
+     (shell-command
+      (format "shortcuts run \"Translate File 2 English\" -i %s" tempfile)))
+   (shell-command "open -b org.gnu.Emacs")
+   ;; (shell-command "pbpaste")
+   )
 
-  (defun my/siri-translate2english ()
-    (interactive)
-    (let
-        ((tempfile
-          (make-temp-file "siri-translate-" nil ".txt")
-          ))
-      (write-region
-       (format "%s" (thing-at-point 'paragraph))
-       nil
-       tempfile)
-      (end-of-paragraph-text)             ; jump to end of paragraph
-      (shell-command
-       (format "shortcuts run \"Translate File 2 English\" -i %s &" tempfile))
-      )
-    (shell-command "open -b org.gnu.Emacs")
-    ;; (shell-command "pbpaste &")
-    )
-
-  (defun my/translate-language-to-zh-or-zh-to-english ()
-    (interactive) ; 测试
-    (let ((string (thing-at-point 'paragraph)))
-      (if (eq (string-match "\\cC" string) nil)
-          (my/siri-translate)
-        (my/siri-translate2english)
-        ))
-    )
-  )
+ (defun my/translate-language-to-zh-or-zh-to-english ()
+   (interactive) ; 测试
+   (let ((string (thing-at-point 'paragraph)))
+     (if (eq (string-match "\\cC" string) nil)
+         (my/siri-translate)
+       (my/siri-translate2english)))
+   (shell-command "pbpaste")))
 
 (use-package xwidget
   :ensure nil
@@ -2531,6 +2538,30 @@ all open tasks in current Org buffer
                                        "|'"
                                        )))
 ;; }}}
+
+(use-package epkg
+  :ensure nil
+  :defer t
+  ;; :custom (epkg-database-connector 'sqlite-builtin)
+  :config
+  (setq epkg-repository "~/Documents/GitHub/epkgs")
+  (setq package-list-unversioned t) ;; unversioned packages(ibuffer and so on)
+  ;; 怎样快速找到 elpa 目录下那些重复的包 - Emacs China
+  ;; https://emacs-china.org/t/topic/4244
+  (defun my/list-packages-and-versions ()
+    "Returns a list of all installed packages and their versions"
+    (interactive)
+    (mapcar
+     (lambda (pkg)
+       `(,pkg ,(package-desc-version
+                (cadr (assq pkg package-alist)))))
+     package-activated-list))
+  )
+
+(use-package epkgs
+  :ensure nil
+  :defer t
+  )
 
 ;; dictionary: Apple 词典: osx-dictionary
 ;; {{{
@@ -2608,21 +2639,43 @@ all open tasks in current Org buffer
   )
 
 (use-package which-key
-  :ensure nil
-  :hook (after-init . which-key-mode) ; :init (which-key-mode)
-  :config
-  (setq which-key-popup-type 'minibuffer)
-  (setq
-   which-key-idle-delay 0.5
-   which-key-idle-secondary-delay 0.5
-   which-key-show-operator-state-maps t
-   )
+ :ensure nil
+ :hook
+ (
+  (after-init . which-key-mode)
+ ;; (repeat-mode . which-key-mode) ; :init (which-key-mode)
   )
+ ;; :custom
+ ;; for repeat-mode
+ ;; Disable the built-in repeat-mode hinting
+ ;; (repeat-echo-function 'ignore)
+ :init
+ ;; for repeat-mode
+ ;; Spawn or hide a which-key popup
+ ;; (advice-add
+ ;;  'repeat-post-hook
+ ;;  :after
+ ;;  (defun repeat-help--which-key-popup ()
+ ;;    (if-let ((cmd (or this-command real-this-command))
+ ;;             (keymap (or repeat-map (repeat--command-property 'repeat-map))))
+ ;;      (run-at-time
+ ;;       0 nil
+ ;;       (lambda ()
+ ;;         (which-key--create-buffer-and-show nil (symbol-value keymap))))
+ ;;      (which-key--hide-popup))))
+ :config (setq which-key-popup-type 'minibuffer)
+ (setq
+  which-key-idle-delay 0.5
+  which-key-idle-secondary-delay 0.5
+  which-key-show-operator-state-maps t)
+ )
 
-(use-package which-key-posframe
+(use-package repeat-help
   :ensure nil
-  :hook
-  (which-key-mode . which-key-posframe-mode)
+  :hook (repeat-mode . repeat-help-mode)
+  :config
+  (setq repeat-echo-function 'ignore)
+  (setq repeat-help-popup-type 'which-key)
   )
 
 ;; free-keys
@@ -2633,91 +2686,26 @@ all open tasks in current Org buffer
   :config
   (setq free-keys-modifiers '(
                               ""
-                              ;; "A"
-                              "C"
-                              "H"
-                              "M"
-                              "S"
-                              "s"
-                              ;; "A-C"
-                              ;; "A-H"
-                              ;; "A-M"
-                              ;; "A-S"
-                              ;; "A-s"
-                              "C-c H"
-                              "C-H"
-                              "C-M"
-                              ;; "C-S"
-                              "C-s"
-                              ;; "M-S"
-                              ;; "M-s"
-                              "s-H"
-                              ;; "S-s"
-                              ;; "C-M-S"
-                              ;; "C-M-s"
-                              "C-c"
-                              "C-x" ))
+                              "C"     ;; Ctrl, map to Capslock
+                              "H"     ;; Hyper, map to right_command
+                              "M"     ;; Meta, ESC <key>, map to Option
+                              "S"     ;; Shift
+                              "s"     ;; super, map to Command
+                              "C-c M" ;; C-c ESC <key>
+                              "C-x M" ;; C-x ESC <key>
+                              "C-H"   ;; Ctrl + right_command
+                              "C-M"   ;; Ctrl + <key>
+                              "C-s"   ;; Ctrl + Command + <key>
+                              "H-s"   ;; right_command + left_command + <key>
+                               ))
   )
 ;; }}}
 
-;; helpful
-;; {{{
-(use-package helpful
-  :ensure nil
-  :bind
-  ;; ("C-h C" . helpful-command) ;; Look up *C*ommands.
-  ;; By default, C-h C is bound to describe `describe-coding-system'. I
-  ;; don't find this very useful, but it's frequently useful to only
-  ;; look at interactive functions.
-  ;; ("C-h F" . helpful-function) ; functions only
-  ;; By default, C-h F is bound to `Info-goto-emacs-command-node'. Helpful
-  ;; already links to the manual, if a function is referenced there.
-  ("C-h h" . #'helpful-at-point) ; Lookup the current symbol at point.
-  ([remap describe-command] . helpful-command) ; C-h x
-  ([remap describe-function] . helpful-callable)    ; both functions and macros
-  ([remap describe-key] . helpful-key) ; C-h k
-  ([remap describe-symbol] . helpful-symbol) ; C-h o
-  ([remap describe-variable] . helpful-variable) ; C-h v
-  ;; :config
-  ;; helpful + ivy
-  ;; (setq counsel-describe-function-function #'helpful-callable)
-  ;; (setq counsel-describe-variable-function #'helpful-variable)
-  )
-;; }}}
-
-;; RFC
-;; {{{
-(use-package rfc-mode
+(use-package keycast
   :ensure nil
   :defer t
   :config
-  (setq rfc-mode-directory (expand-file-name "~/Documents/GitHub/RFC-all/txt/"))
-  (setq rfc-mode-index-path (concat rfc-mode-directory "rfc-index.txt"))
-  )
-;; }}}
-
-(use-package epkg
-  :ensure nil
-  :defer t
-  ;; :custom (epkg-database-connector 'sqlite-builtin)
-  :config
-  (setq epkg-repository "~/Documents/GitHub/epkgs")
-  (setq package-list-unversioned t) ;; unversioned packages(ibuffer and so on)
-  ;; 怎样快速找到 elpa 目录下那些重复的包 - Emacs China
-  ;; https://emacs-china.org/t/topic/4244
-  (defun my/list-packages-and-versions ()
-    "Returns a list of all installed packages and their versions"
-    (interactive)
-    (mapcar
-     (lambda (pkg)
-       `(,pkg ,(package-desc-version
-                (cadr (assq pkg package-alist)))))
-     package-activated-list))
-  )
-
-(use-package epkgs
-  :ensure nil
-  :defer t
+  (setq keycast-log-newest-first nil)
   )
 
 ;; multiple-cursors
@@ -2773,6 +2761,42 @@ all open tasks in current Org buffer
   (setf (alist-get ?e avy-dispatch-alist) 'avy-action-embark)
   )
 
+;; helpful
+;; {{{
+(use-package helpful
+  :ensure nil
+  :bind
+  ;; ("C-h C" . helpful-command) ;; Look up *C*ommands.
+  ;; By default, C-h C is bound to describe `describe-coding-system'. I
+  ;; don't find this very useful, but it's frequently useful to only
+  ;; look at interactive functions.
+  ;; ("C-h F" . helpful-function) ; functions only
+  ;; By default, C-h F is bound to `Info-goto-emacs-command-node'. Helpful
+  ;; already links to the manual, if a function is referenced there.
+  ("C-h h" . #'helpful-at-point) ; Lookup the current symbol at point.
+  ([remap describe-command] . helpful-command) ; C-h x
+  ([remap describe-function] . helpful-callable)    ; both functions and macros
+  ([remap describe-key] . helpful-key) ; C-h k
+  ([remap describe-symbol] . helpful-symbol) ; C-h o
+  ([remap describe-variable] . helpful-variable) ; C-h v
+  ;; :config
+  ;; helpful + ivy
+  ;; (setq counsel-describe-function-function #'helpful-callable)
+  ;; (setq counsel-describe-variable-function #'helpful-variable)
+  )
+;; }}}
+
+;; RFC
+;; {{{
+(use-package rfc-mode
+  :ensure nil
+  :defer t
+  :config
+  (setq rfc-mode-directory (expand-file-name "~/Documents/GitHub/RFC-all/txt/"))
+  (setq rfc-mode-index-path (concat rfc-mode-directory "rfc-index.txt"))
+  )
+;; }}}
+
 (use-package puni
   :ensure nil
   :defer t
@@ -2784,9 +2808,9 @@ all open tasks in current Org buffer
   :hook (after-init . parrot-mode)
   :bind (
          ;;
-         ("H-r k" . parrot-rotate-prev-word-at-point)
+         ;; ("H-r k" . parrot-rotate-prev-word-at-point)
          ("H-k H-j" . parrot-rotate-prev-word-at-point)
-         ("H-r j" . parrot-rotate-next-word-at-point)
+         ;; ("H-r j" . parrot-rotate-next-word-at-point)
          ("H-k H-k" . parrot-rotate-next-word-at-point)
 
          )
@@ -2839,15 +2863,14 @@ all open tasks in current Org buffer
         )
   )
 
-;; pangu-spacing
-;; {{{
 (use-package pangu-spacing
-  :defer 3
-  :config
-  (global-pangu-spacing-mode 1)
-  (setq pangu-spacing-real-insert-separtor t)
-  )
-;; }}}
+ :defer 3
+ :custom
+ (pangu-spacing-inhibit-mode-alist
+  '(eshell-mode shell-mode term-mode fundamental-mode))
+ :config
+ (global-pangu-spacing-mode 1)
+ (setq pangu-spacing-real-insert-separtor t))
 
 (use-package visual-regexp
   :ensure nil
@@ -2865,11 +2888,29 @@ all open tasks in current Org buffer
 (keymap-global-unset "C-=")
 (keymap-global-unset "C--")
 (use-package expand-region
-  :bind (
-         ("C-=" . er/expand-region)
-         ("C--" . er/contract-region)
-         )
+ :bind
+ (
+  ("C-=" . er/expand-region)
+  ("C--" . er/contract-region)
   )
+ :config
+ (defun treesit-mark-bigger-node ()
+   (let* ((root (treesit-buffer-root-node))
+          (node
+           (treesit-node-descendant-for-range
+            root (region-beginning) (region-end)))
+          (node-start (treesit-node-start node))
+          (node-end (treesit-node-end node)))
+     ;; Node fits the region exactly. Try its parent node instead.
+     (when (and (= (region-beginning) node-start) (= (region-end) node-end))
+       (when-let ((node (treesit-node-parent node)))
+         (setq
+          node-start (treesit-node-start node)
+          node-end (treesit-node-end node))))
+     (set-mark node-end)
+     (goto-char node-start)))
+
+ (add-to-list 'er/try-expand-list 'treesit-mark-bigger-node))
 ;; }}}
 
 ;; symbol-overlay
@@ -2883,20 +2924,24 @@ all open tasks in current Org buffer
         ;; ("<f7>" . symbol-overlay-mode)
         ;; ("<f8>" . symbol-overlay-remove-all)
         :map symbol-overlay-map
-        ("<" . symbol-overlay-jump-first)
-        (">" . symbol-overlay-jump-last)
-        ("R" . symbol-overlay-query-replace)      ; 查找替换 symbol
-        ("c" . symbol-overlay-save-symbol)        ; 复制当前 symbol
-        ("d" . symbol-overlay-jump-to-definition) ; 跳转到定义
-        ("e" . symbol-overlay-echo-mark)          ; 撤销上一次跳转
-        ("i" . symbol-overlay-put)                ; 高亮或取消高亮当前 symbol
+        ;; quit
+        ("q" . symbol-overlay-remove-all)
+        ("<escape>" . symbol-overlay-remove-all)
+        ;; jump/move/scope
         ("n" . symbol-overlay-jump-next)
         ("p" . symbol-overlay-jump-prev)
-        ;; ("q" . symbol-overlay-remove-all)
-        ("<escape>" . symbol-overlay-remove-all)
-        ("r" . symbol-overlay-rename)
-        ("s" . symbol-overlay-isearch-literally)  ; 切换为 isearch 并搜索 symbol
+        ("<" . symbol-overlay-jump-first)
+        (">" . symbol-overlay-jump-last)
+        ("d" . symbol-overlay-jump-to-definition) ; 跳转到定义
+        ("e" . symbol-overlay-echo-mark)          ; 撤销上一次跳转
         ("t" . symbol-overlay-toggle-in-scope)    ; 切换高亮范围到作用域
+        ;; copy/edit/search/rename/replace
+        ("c" . symbol-overlay-save-symbol)        ; 复制当前 symbol
+        ("r" . symbol-overlay-rename)
+        ("R" . symbol-overlay-query-replace)      ; 查找替换 symbol
+        ("s" . symbol-overlay-isearch-literally)  ; 切换为 isearch 并搜索 symbol
+        ;; toggle
+        ("i" . symbol-overlay-put)                ; 高亮或取消高亮当前 symbol
         )
   )
 ;; }}}
@@ -3128,118 +3173,6 @@ When fixing a typo, avoid pass camel case option to cli program."
       )
 ;; }}}
 
-(use-package vertico
-  :ensure nil
-  :bind
-  (
-   :map vertico-map
-   ([backtab] . vertico-previous)
-   ("<tab>" . vertico-insert)    ; Choose selected candidate
-   ;; ("<escape>" . minibuffer-keyboard-quit) ; Close minibuffer
-   ("<escape>" . vertico-exit)
-   :map minibuffer-local-map
-   ("M-h" . backward-kill-word)
-   )
-  :init
-  (fido-mode -1)
-  (fido-vertical-mode -1)
-  (vertico-mode)
-  (vertico-mouse-mode)
-  ;; (setq vertico-scroll-margin 0) ; Different scroll margin
-  (setq vertico-count 20)  ; Show more candidates
-  (setq vertico-resize nil) ; Grow and shrink the Vertico minibuffer
-  ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
-  (setq vertico-cycle t)
-  )
-
-;; A few more useful configurations...
-(use-package emacs
-  :ensure nil
-  :init
-  ;; Add prompt indicator to `completing-read-multiple'.
-  ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
-  (defun crm-indicator (args)
-    (cons (format "[CRM%s] %s"
-                  (replace-regexp-in-string
-                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
-                   crm-separator)
-                  (car args))
-          (cdr args)))
-  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
-
-  ;; Do not allow the cursor in the minibuffer prompt
-  (setq minibuffer-prompt-properties
-        '(read-only t cursor-intangible t face minibuffer-prompt))
-  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
-
-  ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
-  ;; Vertico commands are hidden in normal buffers.
-  ;; (setq read-extended-command-predicate
-  ;;       #'command-completion-default-include-p)
-
-  ;; Enable recursive minibuffers
-  (setq enable-recursive-minibuffers t)
-  )
-
-(use-package vertico-posframe
-  :ensure nil
-  :after (vertico posframe)
-  :config
-  (vertico-posframe-mode 1)
-  (setq vertico-multiform-commands
-        '((consult-line
-           posframe
-           (vertico-posframe-poshandler . posframe-poshandler-frame-top-center)
-           (vertico-posframe-border-width . 10)
-           ;; NOTE: This is useful when emacs is used in both in X and
-           ;; terminal, for posframe do not work well in terminal, so
-           ;; vertico-buffer-mode will be used as fallback at the
-           ;; moment.
-           (vertico-posframe-fallback-mode . vertico-buffer-mode))
-          (t posframe)))
-
-  (vertico-multiform-mode 1)
-  (setq vertico-posframe-parameters
-        '(
-          (left-fringe . 20)
-          (right-fringe . 20)
-          ))
-  )
-
-;; marginalia: minibuffer annotations
-;; {{{
-;; Enable rich annotations using the Marginalia package
-(use-package marginalia
-  :ensure nil
-  ;; Either bind `marginalia-cycle' globally or only in the minibuffer
-  ;; :bind (("C-M-a" . marginalia-cycle)
-  ;;        :map minibuffer-local-map
-  ;;        ("C-M-a" . marginalia-cycle))
-  ;; :custom (marginalia-align 'right)
-  ;; :init
-  ;; The :init configuration is always executed (Not lazy!)
-  ;; Must be in the :init section of use-package such that the mode gets
-  ;; enabled right away. Note that this forces loading the package.
-  ;; (marginalia-mode)
-  :hook (after-init . marginalia-mode)
-  :config
-  ;; https://emacs-china.org/t/21-emacs-vertico-orderless-marginalia-embark-consult/19683/
-  (defun marginalia-annotate-command (cand)
-    "Annotate command CAND with its documentation string.
-Similar to `marginalia-annotate-symbol', but does not show symbol class."
-    (when-let* ((sym (intern-soft cand))
-                (mode (if (boundp sym)
-                          sym
-                        (lookup-minor-mode-from-indicator cand))))
-      (concat
-       (if (and (boundp mode) (symbol-value mode))
-           (propertize " On" 'face 'marginalia-on)
-         (propertize " Off" 'face 'marginalia-off))
-       (marginalia-annotate-binding cand)
-       (marginalia--documentation (marginalia--function-doc sym)))))
-  )
-;; }}}
-
 ;; consult
 ;; {{{
 ;; Example configuration for Consult
@@ -3255,8 +3188,8 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
    ("C-c H-l" . consult-line)
    ("C-c H-r H-e" . consult-grep)
    ("C-c H-r H-g" . consult-ripgrep)
-   ([remap bookmark-jump] . consult-bookmark)           ;; "C-x r b"
-   ([remap goto-line] . consult-goto-line) ; "C-c H-j"
+   ([remap bookmark-jump] . consult-bookmark)
+   ([remap goto-line] . consult-goto-line)
    ([remap imenu] . consult-imenu)
    ([remap load-theme] . consult-theme)
    ([remap locate] . consult-locate)
@@ -3270,7 +3203,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
    ;; ([remap apropos] . consult-apropos)
    ;; ;; ("C-x H-l" . consult-focus-lines)
    ;; ;; C-c bindings (mode-specific-map)
-   ;; ("C-c M-x" . consult-mode-command)
+   ("C-c M-x" . consult-mode-command)
    ;; ("C-c h" . consult-history)
    ;; ("C-c k" . consult-kmacro)
    ;; ("C-c i" . consult-info)
@@ -3395,12 +3328,12 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 
   ;; Use `consult-completion-in-region' if Vertico is enabled.
   ;; Otherwise use the default `completion--in-region' function.
-  (setq-default completion-in-region-function
-                (lambda (&rest args)
-                  (apply (if vertico-mode
-                             #'consult-completion-in-region
-                           #'completion--in-region)
-                         args)))
+  ;; (setq-default completion-in-region-function
+  ;;               (lambda (&rest args)
+  ;;                 (apply (if vertico-mode
+  ;;                            #'consult-completion-in-region
+  ;;                          #'completion--in-region)
+  ;;                        args)))
   )
 ;; }}}
 
@@ -3425,36 +3358,182 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   :after (consult yasnippet)
   )
 
-(use-package embark
+;; marginalia: minibuffer annotations
+;; {{{
+;; Enable rich annotations using the Marginalia package
+(use-package marginalia
   :ensure nil
-  :init
-  ;; Optionally replace the key help with a completing-read interface
-  (setq prefix-help-command #'embark-prefix-help-command)
+  ;; Either bind `marginalia-cycle' globally or only in the minibuffer
+  ;; :bind (("C-M-a" . marginalia-cycle)
+  ;;        :map minibuffer-local-map
+  ;;        ("C-M-a" . marginalia-cycle))
+  ;; :custom (marginalia-align 'right)
+  ;; :init
+  ;; The :init configuration is always executed (Not lazy!)
+  ;; Must be in the :init section of use-package such that the mode gets
+  ;; enabled right away. Note that this forces loading the package.
+  ;; (marginalia-mode)
+  :hook (after-init . marginalia-mode)
+  :config
+  ;; https://emacs-china.org/t/21-emacs-vertico-orderless-marginalia-embark-consult/19683/
+  (defun marginalia-annotate-command (cand)
+    "Annotate command CAND with its documentation string.
+Similar to `marginalia-annotate-symbol', but does not show symbol class."
+    (when-let* ((sym (intern-soft cand))
+                (mode (if (boundp sym)
+                          sym
+                        (lookup-minor-mode-from-indicator cand))))
+      (concat
+       (if (and (boundp mode) (symbol-value mode))
+           (propertize " On" 'face 'marginalia-on)
+         (propertize " Off" 'face 'marginalia-off))
+       (marginalia-annotate-binding cand)
+       (marginalia--documentation (marginalia--function-doc sym)))))
+  )
+;; }}}
+
+(use-package vertico
+  :ensure nil
   :bind
   (
+   :map vertico-map
+   ([backtab] . vertico-previous)
+   ("<tab>" . vertico-insert)    ; Choose selected candidate
+   ;; ("<escape>" . minibuffer-keyboard-quit) ; Close minibuffer
+   ("<escape>" . vertico-exit)
+   :map minibuffer-local-map
+   ("M-h" . backward-kill-word)
+   )
+  :init
+  (fido-mode -1)
+  (fido-vertical-mode -1)
+  (vertico-mode)
+  (vertico-mouse-mode)
+  ;; (setq vertico-scroll-margin 0) ; Different scroll margin
+  (setq vertico-count 20)  ; Show more candidates
+  (setq vertico-resize nil) ; Grow and shrink the Vertico minibuffer
+  ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
+  (setq vertico-cycle t)
+  )
+
+;; A few more useful configurations...
+(use-package emacs
+  :ensure nil
+  :init
+  ;; Add prompt indicator to `completing-read-multiple'.
+  ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
+  (defun crm-indicator (args)
+    (cons (format "[CRM%s] %s"
+                  (replace-regexp-in-string
+                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                   crm-separator)
+                  (car args))
+          (cdr args)))
+  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
+  ;; Do not allow the cursor in the minibuffer prompt
+  (setq minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+
+  ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
+  ;; Vertico commands are hidden in normal buffers.
+  ;; (setq read-extended-command-predicate
+  ;;       #'command-completion-default-include-p)
+
+  ;; Enable recursive minibuffers
+  (setq enable-recursive-minibuffers t)
+  )
+
+(use-package vertico-posframe
+  :ensure nil
+  :after (vertico posframe)
+  :config
+  (vertico-multiform-mode 1)
+  ;; (setq vertico-multiform-commands
+  ;;       '((consult-line
+  ;;          posframe
+  ;;          (vertico-posframe-poshandler . posframe-poshandler-frame-top-center)
+  ;;          (vertico-posframe-border-width . 10)
+  ;;          ;; NOTE: This is useful when emacs is used in both in X and
+  ;;          ;; terminal, for posframe do not work well in terminal, so
+  ;;          ;; vertico-buffer-mode will be used as fallback at the
+  ;;          ;; moment.
+  ;;          (vertico-posframe-fallback-mode . vertico-buffer-mode))
+  ;;         (t posframe)))
+
+  (vertico-posframe-mode 1)
+  (setq vertico-posframe-parameters
+        '(
+          (left-fringe . 20)
+          (right-fringe . 20)
+          ))
+  )
+
+(use-package embark
+  :ensure nil
+  :defer 1
+  :bind
+  (
+   ;; ("C-<return>" . embark-act)
+   ("C-;"        . embark-act)
+   ("M-."        . embark-dwim)
+   ([remap describe-bindings]  . embark-bindings)
+   ;; ("C-h B"      . embark-bindings)
    :map minibuffer-mode-map
-   ("C-;" . embark-act)
-   ("C-d" . embark-act)
    ("C-c C-l" . embark-collect)
-   ("C-c C-e" . embark-export)
    ("H-o"     . embark-export)
-   ("M-." . embark-dwim)
-   ([remap describe-bindings] . embark-bindings)
+   ;; ("C-c C-e" . embark-export)
+   ;; ("C-d" . embark-act)
    )
   :custom
-  (embark-quit-after-action nil)
-  (prefix-help-command #'embark-prefix-help-command)
-  (embark-indicators '(embark-minimal-indicator
-                       embark-highlight-indicator
-                       embark-isearch-highlight-indicator))
+  ;; (embark-quit-after-action nil)
+  ;; (embark-indicators '(embark-minimal-indicator
+  ;;                      embark-highlight-indicator
+  ;;                      ;; embark-verbose-indicator
+  ;;                      embark-isearch-highlight-indicator
+  ;;                      ))
   (embark-cycle-key ".")
   (embark-help-key "?")
   :config
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command)
   ;; Hide the mode line of the Embark live/completions buffers
   (add-to-list 'display-buffer-alist
                '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
                  nil
                  (window-parameters (mode-line-format . none))))
+
+  (defvar embark--target-mode-timer nil)
+(defvar embark--target-mode-string "")
+
+(defun embark--target-mode-update ()
+  (setq embark--target-mode-string
+        (if-let (targets (embark--targets))
+            (format "[%s%s] "
+                    (propertize (symbol-name (plist-get (car targets) :type)) 'face 'bold)
+                    (mapconcat (lambda (x) (format ", %s" (plist-get x :type)))
+                               (cdr targets)
+                               ""))
+          "")))
+
+(define-minor-mode embark-target-mode
+  "Shows the current targets in the modeline."
+  :global t
+  (setq mode-line-misc-info (assq-delete-all 'embark-target-mode mode-line-misc-info))
+  (when embark--target-mode-timer
+    (cancel-timer embark--target-mode-timer)
+    (setq embark--target-mode-timer nil))
+  (when embark-target-mode
+    (push '(embark-target-mode (:eval embark--target-mode-string)) mode-line-misc-info)
+    (setq embark--target-mode-timer
+          (run-with-idle-timer 0.1 t #'embark--target-mode-update))))
+  )
+
+(use-package embark-consult
+  :ensure nil
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode)
   )
 
 ;; pyim
@@ -3467,9 +3546,9 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
    ("H-e" . toggle-input-method)
    ([remap backward-word] . pyim-backward-word)
    ([remap forward-word]  . pyim-forward-word)
-   ("H-b" . pyim-backward-word)
-   ("H-f" . pyim-forward-word)
-   ("H-c H-s" . pyim-convert-string-at-point) ; 金手指：将字符串转换为中文。
+   ;; ("H-b" . pyim-backward-word)
+   ;; ("H-f" . pyim-forward-word)
+   ("H-c H-c" . pyim-convert-string-at-point) ; 金手指：将字符串转换为中文。
    :map minibuffer-local-map
    ("H-c" . pyim-cregexp-convert-at-point) ; 将光标前字符转换为搜索中文的 regexp.
    :map pyim-mode-map
@@ -3477,6 +3556,8 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
    ("+"   . pyim-page-next-page)
    ("H-h" . pyim-page-previous-page)
    ("H-l" . pyim-page-next-page)
+   ("H-j" .  pyim-forward-imelem)
+   ("H-k" . pyim-backward-imelem)   
    )
   :init
   ;; (setq default-input-method "pyim")
@@ -3484,7 +3565,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   ;; (setq default-input-method "pyim")
   (setq pyim-page-style 'vertical)
   (setq pyim-page-tooltip '(posframe minibuffer popup))
-  (setq pyim-page-length 5)
+  (setq pyim-page-length 9)
   :config
   (require 'pyim-cregexp-utils)
   (require 'pyim-cstring-utils)
@@ -3771,13 +3852,17 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   :ensure nil
   :bind
   (
-   ("C-x u" . vundo)
+   ([remap undo] . vundo)
    :map vundo-mode-map
-   ("h" . vundo-backward) ; b
-   ("j" . vundo-next)     ; n
-   ("k" . vundo-previous) ; p
-   ("l" . vundo-forward)  ; f
-   ;; ("C-g" . vundo-quit)
+   ;;
+   ("k" . vundo-forward)  ; f
+   ("j" . vundo-backward) ; b
+   ;;
+   ;; ("h" . vundo-backward) ; b
+   ;; ("j" . vundo-next)     ; n
+   ;; ("k" . vundo-previous) ; p
+   ;; ("l" . vundo-forward)  ; f
+   ("ESC" . vundo-quit)
    ;; ("RET" . vundo-confirm)
    ;; ("a"   . vundo-stem-root)
    ;; ("d"   . vundo--debug)
@@ -3825,6 +3910,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 (use-package posframe
   :ensure nil
   :defer 1
+  ;; posframe-poshandler-window-top-center
   )
 
 ;; sticky header: topsy
@@ -4030,7 +4116,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
         '((org-roam-backlinks-section :unique t)
           org-roam-reflinks-section
           org-roam-unlinked-references-section))
-  (setq org-roam-completion-everywhere t)
+  ;; (setq org-roam-completion-everywhere t)
   (setq org-roam-file-extensions '("org" "md")) ;; enable Org-roam for markdown
   ;; (setq org-roam-node-display-template "${title:50} ${tags:30}")
   (setq org-roam-node-display-template
@@ -4445,26 +4531,28 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; mybigword-upper-limit
 ;; }}}
 
-(use-package olivetti
-  :hook
-  ((after-init . olivetti-mode)
-   (org-mode . xs-toggle-olivetti-for-org)
-   (window-configuration-change . xs-toggle-olivetti-for-org))
-  :init
-  (setq olivetti-body-width 90) ; default: fill-column+2
-
-  ;; https://emacs-china.org/t/emacs/19797/4
-  (defun xs-toggle-olivetti-for-org ()
-    "if current buffer is org and only one visible buffer
-  enable olivetti mode"
-    (if (and (eq (buffer-local-value 'major-mode (current-buffer)) 'org-mode)
-             (or (eq (length (window-list nil nil nil)) 1)
-                 (window-at-side-p (frame-first-window) 'right))) ;; frame-first-window 的 mode 是 org-mode 并且没有右边 window
-        (olivetti-mode 1)
-      (olivetti-mode 0)
-      (when (eq (buffer-local-value 'major-mode (current-buffer)) 'org-mode)
-        (visual-line-mode 1))))
+(use-package
+ olivetti
+ :hook
+ ((after-init . olivetti-mode)
+  ;; (org-mode . my/toggle-olivetti-for-org)
+  ;; (window-configuration-change . my/toggle-olivetti-for-org)
   )
+ :init
+ (setq olivetti-body-width 90) ; default: fill-column+2
+
+ ;; https://emacs-china.org/t/emacs/19797/4
+ (defun my/toggle-olivetti-for-org ()
+   "if current buffer is org and only one visible buffer
+  enable olivetti mode"
+   (interactive)
+   (if (and (eq (buffer-local-value 'major-mode (current-buffer)) 'org-mode)
+            (or (eq (length (window-list nil nil nil)) 1)
+                (window-at-side-p (frame-first-window) 'right))) ;; frame-first-window 的 mode 是 org-mode 并且没有右边 window
+       (olivetti-mode 1)
+     (olivetti-mode 0)
+     (when (eq (buffer-local-value 'major-mode (current-buffer)) 'org-mode)
+       (visual-line-mode 1)))))
 
 (use-package
   bing-dict
@@ -4609,7 +4697,12 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
                 (expand-file-name
                  "assets/keyfreq-log"
                  (concat user-emacs-directory)))
-
+  
+  (setq-default keyfreq-file-lock
+                (expand-file-name
+                 "var/keyfreq-log.lock"
+                 (concat user-emacs-directory)))
+  
   (setq keyfreq-excluded-commands
         '(
           mwheel-scroll
@@ -4630,10 +4723,21 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   ;;                               (keyfreq-autosave-mode 1))))
   )
 
-;; elisp-demos
-;; {{{
-(advice-add 'helpful-update :after #'elisp-demos-advice-helpful-update)
-;; }}}
+(use-package elisp-demos
+ :ensure nil
+ :after helpful
+ :bind
+ (
+  :map help-mode-map
+       ("C-c M-d" . elisp-demos-add-demo)
+  )
+ ;; :config
+ :init
+ (advice-add
+  'describe-function-1
+  :after #'elisp-demos-advice-describe-function-1)
+ (advice-add 'helpful-update :after #'elisp-demos-advice-helpful-update)
+ )
 
 (use-package advance-words-count
   :ensure nil
@@ -4653,11 +4757,15 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   :bind
   (
    :map acm-mode-map
-   ("<escape>"  . acm-hide)
+   ;; ("RET" . nil)
+   ;; ("<escape>"  . acm-hide)
+   ;; insert common/abort completion 
+   ("<escape>"  . acm-insert-common)
    ("C-j"       . acm-insert-common)
+   ("RET"       . acm-insert-common)
    ;; complete
    ("SPC"       . acm-complete)
-   ("RET"       . acm-complete)
+   ;; ("RET"       . acm-complete)
    ;; ([remap yas-expand] . acm-complete)
    ;; select
    ("TAB"       . acm-select-next)

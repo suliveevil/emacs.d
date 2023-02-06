@@ -1,0 +1,2 @@
+;;; Generated package description from repeat-help.el  -*- no-byte-compile: t -*-
+(define-package "repeat-help" "20230118.24" "Display keybindings for repeat-mode" '((emacs "28.1")) :commit "41dea6fba2edd6ac748d0ca7a6da4058290feede" :authors '(("Karthik Chikmagalur" . "karthikchikmagalur@gmail.com")) :maintainer '("Karthik Chikmagalur" . "karthikchikmagalur@gmail.com") :keywords '("convenience") :url "https://github.com/karthink/repeat-help")
