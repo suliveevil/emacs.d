@@ -29,3 +29,6 @@ v. 试验；测试；检测；测验 | n. 试验；检测；考试；测验 | �
 
 ** dispatch [dɪˈspætʃ]
 n. 派遣；发送；电讯；快信 | v. 派遣；派出；发出；调遣 | 网络 分派；调度；急件 | Synonym v. send off,send out,post,mail,kill n. message,communication,notice,letter,report | Antonym v. keep
+
+** inhibit [ɪnˈhɪbɪt]
+v. 抑制；阻止；阻碍；使拘束 | 网络 禁止；约束；压制 | Synonym v. slow,stop,hold back,restrain,reduce

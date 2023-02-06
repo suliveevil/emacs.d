@@ -64,3 +64,6 @@
 [submodule "lib/itranslate-mode"]
 	path = lib/itranslate-mode
 	url = git@github.com:suliveevil/itranslate-mode.git
+[submodule "lib/combobulate"]
+	path = lib/combobulate
+	url = git@github.com:mickeynp/combobulate.git

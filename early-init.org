@@ -222,25 +222,42 @@ open -b org.gnu.Emacs --args -q --eval='(message "%s" (emacs-init-time))'
 ;; {{{
 ;; [hick/emacs-chinese: Emacs 相关中文问题以及解决方案](https://github.com/hick/emacs-chinese)
 (set-charset-priority 'unicode)
-(set-language-environment               "UTF-8")     ;; System default coding
-(prefer-coding-system                   'utf-8)      ;; prefer
-(set-buffer-file-coding-system          'utf-8-unix) ;;
-(set-charset-priority                   'unicode)    ;;
-(set-clipboard-coding-system            'utf-8)      ;; clipboard
-(set-default-coding-systems             'utf-8)      ;; buffer/file: 打开文件时的默认编码
-(set-file-name-coding-system            'utf-8-unix) ;; unix/linux/macos
-(set-keyboard-coding-system             'utf-8-unix) ;; keyboard
-(set-next-selection-coding-system       'utf-8-unix) ;; selection
-(set-selection-coding-system            'utf-8)      ;; selection
-(set-terminal-coding-system             'utf-8-unix) ;; terminal
-(setq coding-system-for-read            'utf-8)      ;;
-(setq default-buffer-file-coding-system 'utf-8)      ;;
-(setq locale-coding-system              'utf-8)      ;; local
+(set-language-environment "UTF-8") ;; System default coding
+(prefer-coding-system 'utf-8) ;; prefer
+(set-buffer-file-coding-system 'utf-8-unix) ;;
+(set-charset-priority 'unicode) ;;
+(set-clipboard-coding-system 'utf-8) ;; clipboard
+(set-default-coding-systems 'utf-8) ;; buffer/file: 打开文件时的默认编码
+(set-file-name-coding-system 'utf-8-unix) ;; unix/linux/macos
+(set-keyboard-coding-system 'utf-8-unix) ;; keyboard
+(set-next-selection-coding-system 'utf-8-unix) ;; selection
+(set-selection-coding-system 'utf-8) ;; selection
+(set-terminal-coding-system 'utf-8-unix) ;; terminal
+(setq coding-system-for-read 'utf-8) ;;
+(setq-default buffer-file-coding-system 'utf-8) ;;
+(setq locale-coding-system 'utf-8) ;; local
+
+(setq process-coding-system-alist
+      (cons '("zsh" . (utf-8 . utf-8)) process-coding-system-alist))
+
+(setq process-coding-system-alist
+      (cons '("bash" . (utf-8 . utf-8)) process-coding-system-alist))
+
+(setq process-coding-system-alist
+      (cons '("git" . (utf-8 . utf-8)) process-coding-system-alist))
+
+(setq process-coding-system-alist
+      (cons '("grep" . (utf-8 . utf-8)) process-coding-system-alist))
+
+(setq process-coding-system-alist
+      (cons '("diff" . (utf-8 . utf-8)) process-coding-system-alist))
+
 ;; }}}
 
 ;; locale
 ;; {{{
-(setq system-time-locale "C")
+(setenv "LANG" "zh_CN.UTF-8")
+;; (setq system-time-locale "C")
 ;; }}}
 #+end_src
 
@@ -335,11 +352,9 @@ open -b org.gnu.Emacs --args -q --eval='(message "%s" (emacs-init-time))'
 
 *** repeat-mode
 
-#+begin_src emacs-lisp
-;; key
-;; {{{
-
+#+begin_src emacs-lisp :tangle no
 ;; repeat-mode
+;; {{{
 (setq repeat-mode t)
 (defvar org-mode-navigation-repeat-map
   "Keymap to repeat `org-mode' navigation key sequences.  Used in `repeat-mode'."
