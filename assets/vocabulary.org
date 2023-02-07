@@ -32,3 +32,6 @@ n. 派遣；发送；电讯；快信 | v. 派遣；派出；发出；调遣 | �
 
 ** inhibit [ɪnˈhɪbɪt]
 v. 抑制；阻止；阻碍；使拘束 | 网络 禁止；约束；压制 | Synonym v. slow,stop,hold back,restrain,reduce
+
+** substitute [ˈsʌbstɪˌtut]
+v. 取代；（以…）代替 | n. 代用品；代替物；代替者；替补（运动员） | 网络 替身；替换；替代 | Synonym n. alternative,replacement,stand-in,locum,surrogate adj. supernumerary,extra,auxiliary,additional,ancillary v. replace with,exchange,switch,fill in for,take the place of | Antonym adj. permanent

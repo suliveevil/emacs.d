@@ -1,20 +1,24 @@
+;; [[file:README.org::*File header][File header:1]]
 ;; -*- coding: utf-8; lexical-binding: t; no-byte-compile: t -*-
-;; -*- origami-fold-style: triple-braces -*-
 
 ;;; Commentary:
 
-;; early-init.el --- Emacs 27+ pre-initialisation config
+;; early-init.el --- Emacs 29+ pre-initialisation config
 ;; Code loaded before the package system and GUI is initialized.
-;; Date: 2023-01-06 07:23:09 +0800
+;; Date: <<my-time-stamps-iso8601>>
 
 ;;; Code:
+;; File header:1 ends here
 
+;; [[file:README.org::*Garbage Collection & file-name-handler][Garbage Collection & file-name-handler:1]]
 (let (
       ;; (gc-cons-threshold most-positive-fixnum)
       (file-name-handler-alist nil)
       )
   )
+;; Garbage Collection & file-name-handler:1 ends here
 
+;; [[file:README.org::*Garbage Collection & file-name-handler][Garbage Collection & file-name-handler:2]]
 (setq gc-cons-threshold most-positive-fixnum) ; Don't collect garbage when init
 ;; (setq gc-cons-threshold (* 500 1024 1024)) ; 500 MiB
 
@@ -24,12 +28,18 @@
             (setq gc-cons-threshold (* 10 1024 1024)) ; default 800000
             (message "gc-cons-threshold restored to %S"
                      gc-cons-threshold)))
+;; Garbage Collection & file-name-handler:2 ends here
 
+;; [[file:README.org::*load][load:1]]
 ;; (setq load-prefer-newer t)
 (setq load-prefer-newer noninteractive)
+;; load:1 ends here
 
+;; [[file:README.org::*native-compilation][native-compilation:1]]
 (setq inhibit-automatic-native-compilation t)
+;; native-compilation:1 ends here
 
+;; [[file:README.org::*Profile][Profile:2]]
 ;; Profile emacs startup
 (add-hook 'emacs-startup-hook
           (lambda ()
@@ -38,16 +48,28 @@
                              (float-time
                               (time-subtract after-init-time before-init-time)))
                      gcs-done)))
+;; Profile:2 ends here
 
+;; [[file:README.org::*Confirm before quit][Confirm before quit:1]]
+(setq use-short-answers t) ;; use y/n instead of yes/no
+(setq confirm-kill-emacs (lambda (prompt) (y-or-n-p-with-timeout "确认退出？" 10 "y")))
+;; (setq confirm-kill-emacs 'yes-or-no-p)
+;; Confirm before quit:1 ends here
+
+;; [[file:README.org::*Startup][Startup:1]]
 ;; startup
 ;; {{{
 (setq initial-major-mode 'fundamental-mode)
 (setq inhibit-startup-screen t)
 (setq inhibit-startup-echo-area-message (user-login-name))
 ;; }}}
+;; Startup:1 ends here
 
+;; [[file:README.org::*python][python:1]]
 (setq python-shell-interpreter "python3")
+;; python:1 ends here
 
+;; [[file:README.org::*Backtrace & debug: warning error][Backtrace & debug: warning error:1]]
 ;; debug warning and error
 ;; {{{
 ;; debug
@@ -58,11 +80,9 @@
 ;; (add-to-list 'warning-suppress-log-types '((defvaralias))) ; FIXME
 ;; error
 ;; }}}
+;; Backtrace & debug: warning error:1 ends here
 
-(setq confirm-kill-emacs (lambda (prompt) (y-or-n-p-with-timeout "确认退出？" 10 "y")))
-;; (setq confirm-kill-emacs 'yes-or-no-p)
-(setq use-short-answers t) ;; use y/n instead of yes/no
-
+;; [[file:README.org::*custom-file][custom-file:1]]
 ;; custome-file
 ;; {{{
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -71,7 +91,9 @@
 (when (file-exists-p custom-file)
   (load custom-file))
 ;; }}}
+;; custom-file:1 ends here
 
+;; [[file:README.org::*encoding and locale][encoding and locale:1]]
 ;; encoding: prefer UTF-8 everywhere
 ;; {{{
 ;; [hick/emacs-chinese: Emacs 相关中文问题以及解决方案](https://github.com/hick/emacs-chinese)
@@ -113,9 +135,13 @@
 (setenv "LANG" "zh_CN.UTF-8")
 ;; (setq system-time-locale "C")
 ;; }}}
+;; encoding and locale:1 ends here
 
+;; [[file:README.org::*Version Control & symlink][Version Control & symlink:1]]
 (setq vc-follow-symlinks t)
+;; Version Control & symlink:1 ends here
 
+;; [[file:README.org::*remap Physical keys][remap Physical keys:1]]
 ;; keymap
 ;; {{{
 ;; bind: 全局按键/快捷键 (Global key bindings)
@@ -133,7 +159,9 @@
       )
 
 ;; }}}
+;; remap Physical keys:1 ends here
 
+;; [[file:README.org::*basic keybinding][basic keybinding:1]]
 ;; basic keybinding
 ;; {{{
 (keymap-global-set "s-a" #'mark-whole-buffer)
@@ -152,9 +180,9 @@
 (keymap-global-set     "C-s-f"        #'toggle-frame-fullscreen) ;; macOS
 ;;
 (keymap-global-set "C-<backspace>" '(lambda ()
-                                        (interactive)
-                                        (kill-line 0)
-                                        (indent-according-to-mode)))
+                                      (interactive)
+                                      (kill-line 0)
+                                      (indent-according-to-mode)))
 ;;
 (keymap-set global-map "H-q"          #'restart-emacs)
 (keymap-global-set     "H-x"          #'execute-extended-command)
@@ -162,9 +190,13 @@
 ;; check-parens
 (keymap-global-set "H-M-c" #'check-parens) ; <escape> H-c
 ;; }}}
+;; basic keybinding:1 ends here
 
+;; [[file:README.org::*universal-argument][universal-argument:1]]
 (keymap-global-set "H-a" #'universal-argument)
+;; universal-argument:1 ends here
 
+;; [[file:README.org::*mouse][mouse:1]]
 (context-menu-mode 1)       ;; 鼠标右键菜单
 (setq context-menu-functions
       '(context-menu-ffap
@@ -175,25 +207,36 @@
         context-menu-local
         ))
 (setq use-dialog-box nil)   ;; 鼠标点击不触发弹窗
+;; mouse:1 ends here
 
+;; [[file:README.org::*open file][open file:1]]
 ;; 快速打开文件
 ;; {{{
 (defun my/open-init-file () ;; Emacs init
   (interactive)
   (find-file-other-window user-init-file)
-  (delete-other-windows)
-  )
+  (delete-other-windows))
 
 (keymap-global-set "C-c E" #'my/open-init-file)
 
 (defun my/open-init-org () ;; Emacs init
   (interactive)
   (find-file-other-window
-   (expand-file-name "init.org" (concat user-emacs-directory)))
-  (delete-other-windows)
-  )
+   (if (file-exists-p "init.org")
+       (expand-file-name "init.org" (concat user-emacs-directory))
+     (expand-file-name "README.org" (concat user-emacs-directory))))
+  (delete-other-windows))
 
 (keymap-global-set "C-c H-e" #'my/open-init-org)
+
+(defun my/open-package-config-org () ;; Emacs third-party Packages
+  (interactive)
+  (find-file-other-window
+   (expand-file-name "package.org" (concat user-emacs-directory)))
+  (delete-other-windows))
+
+(keymap-global-set "C-c H-p" #'my/open-package-config-org)
+
 ;; (defun open-goku-file()      ;; Emacs early-init
 ;;   (interactive)
 ;;   (find-file "~/.config/karabiner.edn")
@@ -212,22 +255,22 @@
             ".bashrc")
            (t
             (error "Unknown shell")))))
-    (find-file-other-window
-     (expand-file-name shell-init-file (getenv "HOME"))))
-  (delete-other-windows)
-  )
+    (find-file-other-window (expand-file-name shell-init-file (getenv "HOME"))))
+  (delete-other-windows))
 ;; }}}
+;; open file:1 ends here
 
+;; [[file:README.org::*frame][frame:2]]
 ;; UI
 ;; {{{
 ;; (push '(fullscreen . maximized) default-frame-alist)
 (setq default-frame-alist
       '(
-	(height . 46)
+        (height . 46)
         (width . 97)
         (left . 700)
         (top . 20)
-        (alpha . (95 .80))
+        (alpha . (95 .90))
         (vertical-scroll-bars . nil)
         ;; (horizontal-scroll-bars . nil)
         (tool-bar-lines . 0)
@@ -238,7 +281,9 @@
 (global-visual-line-mode 1) ;;
 (setq visible-bell t)       ;; 关闭提示声音
 ;; }}}
+;; frame:2 ends here
 
+;; [[file:README.org::*user name & email][user name & email:1]]
 ;; user name & email
 ;; {{{
 (setq user-full-name "suliveevil")
@@ -247,7 +292,9 @@
 ;; user-organisation    ""
 ;; user-gpg-encrypt-key ""
 ;; }}}
+;; user name & email:1 ends here
 
+;; [[file:README.org::*package & package mirror][package & package mirror:1]]
 ;; package: package-enable-at-startup is before init but after early-init
 ;; {{{
 (setq package-enable-at-startup nil) ;; don't enable at startup, pair with (package-initialize)
@@ -291,7 +338,9 @@
 ;;   )
 ;; )
 ;; }}}
+;; package & package mirror:1 ends here
 
+;; [[file:README.org::*package load-path][package load-path:1]]
 ;; package: add other source packages to load path
 ;; {{{
 (require 'cl-lib)
@@ -327,5 +376,8 @@
 
 (add-subdirs-to-load-path (expand-file-name "lib" user-emacs-directory))
 ;; }}}
+;; package load-path:1 ends here
 
+;; [[file:README.org::*File End][File End:1]]
 ;;; early-init.el ends here
+;; File End:1 ends here
