@@ -1,0 +1,516 @@
+  5x5                                           built-in              simple little puzzle game
+  add-log                                       built-in              change log maintenance commands for Emacs
+  align                                         built-in              align text to a specific column, by regexp
+  allout                         2.3            built-in              extensive outline mode for use alone and with other modes
+  allout-widgets                 1.0            built-in              Visually highlight allout outline structure.
+  ange-ftp                                      built-in              transparent FTP support for GNU Emacs
+  animate                                       built-in              make text dance
+  ansi-color                     3.4.2          built-in              translate ANSI escape sequences into faces
+  ansi-osc                                      built-in              Support for OSC escape sequences
+  antlr-mode                     2.2.3          built-in              major mode for ANTLR grammar files
+  arc-mode                                      built-in              simple editing of archives
+  array                                         built-in              array editing commands for GNU Emacs
+  artist                                        built-in              draw ascii graphics with your mouse
+  asm-mode                                      built-in              mode for editing assembler code
+  auth-source                                   built-in              authentication sources for Gnus and Emacs
+  auth-source-pass               5.0.0          built-in              Integrate auth-source with password-store
+  autoconf                                      built-in              mode for editing Autoconf configure.ac files
+  autoinsert                                    built-in              automatic mode-dependent insertion of text into new files
+  autorevert                                    built-in              revert buffers when files on disk change
+  avl-tree                                      built-in              balanced binary trees, AVL-trees
+  avoid                                         built-in              make mouse pointer stay out of the way of editing
+  backtrace                      1.0            built-in              generic major mode for Elisp backtraces
+  bat-mode                                      built-in              Major mode for editing DOS/Windows scripts
+  battery                                       built-in              display battery status information
+  benchmark                                     built-in              support for benchmarking code
+  bib-mode                                      built-in              major mode for editing bib files
+  bibtex                                        built-in              BibTeX mode for GNU Emacs
+  bibtex-style                                  built-in              Major mode for BibTeX Style files
+  bind-key                       2.4.1          built-in              A simple way to manage personal keybindings
+  bindat                                        built-in              binary data structure packing and unpacking.
+  binhex                                        built-in              decode BinHex-encoded text
+  blackbox                                      built-in              blackbox game in Emacs Lisp
+  bookmark                                      built-in              set bookmarks, maybe annotate them, jump to them later
+  browse-url                                    built-in              pass a URL to a web browser
+  bs                                            built-in              menu for selecting and displaying buffers
+  bubbles                                       built-in              Puzzle game for Emacs
+  bug-reference                                 built-in              buttonize bug references
+  c-ts-common                                   built-in              Utilities for C like Languages
+  c-ts-mode                                     built-in              tree-sitter support for C and C++
+  calc                                          built-in              the GNU Emacs calculator
+  calculator                                    built-in              a calculator for Emacs
+  calendar                                      built-in              calendar functions
+  cc-guess                                      built-in              guess indentation values by scanning existing code
+  cc-mode                        5.33.1         built-in              major mode for editing C and similar languages
+  cdl                                           built-in              Common Data Language (CDL) utility functions for GNU Emacs
+  cedet                          2.0            built-in              Setup CEDET environment
+  cfengine                       1.4            built-in              mode for editing Cfengine files
+  char-fold                                     built-in              match unicode to similar ASCII
+  chart                                         built-in              Draw charts (bar charts, etc)
+  check-declare                                 built-in              Check declare-function statements
+  checkdoc                                      built-in              check documentation strings for style requirements
+  chistory                                      built-in              list command history
+  cl-font-lock                                  built-in              Pretty Common Lisp font locking
+  cl-generic                     1.0            built-in              CLOS-style generic functions for Elisp
+  cl-lib                         1.0            built-in              Common Lisp extensions for Emacs
+  cl-print                       1.0            built-in              CL-style generic printing
+  cmacexp                                       built-in              expand C macros in a region
+  cmake-ts-mode                                 built-in              tree-sitter support for CMake
+  cmuscheme                                     built-in              Scheme process in a buffer. Adapted from tea.el
+  color                                         built-in              Color manipulation library
+  compare-w                                     built-in              compare text between windows for Emacs
+  compface                                      built-in              functions for converting X-Face headers
+  compile                                       built-in              run compiler as inferior of Emacs, parse error messages
+  completion                                    built-in              dynamic word-completion code
+  conf-mode                                     built-in              Simple major mode for editing conf/ini/properties files
+  cookie1                                       built-in              retrieve random phrases from fortune cookie files
+  copyright                                     built-in              update the copyright notice in current buffer
+  cperl-mode                                    built-in              Perl code editing commands for Emacs
+  cpp                                           built-in              highlight or hide text according to cpp conditionals
+  crm                                           built-in              read multiple strings with completion
+  csharp-mode                                   built-in              Support for editing C#
+  css-mode                                      built-in              Major mode to edit CSS files
+  cua-base                                      built-in              emulate CUA key bindings
+  cursor-sensor                                 built-in              React to cursor movement
+  cvs-status                                    built-in              major mode for browsing `cvs status' output
+  cwarn                                         built-in              highlight suspicious C and C++ constructions
+  dabbrev                                       built-in              dynamic abbreviation package
+  dbus                                          built-in              Elisp bindings for D-Bus.
+  dcl-mode                                      built-in              major mode for editing DCL command files
+  debug                                         built-in              debuggers and related commands for Emacs
+  decipher                                      built-in              cryptanalyze monoalphabetic substitution ciphers
+  delim-col                                     built-in              prettify all columns in a region or rectangle
+  delsel                                        built-in              delete selection if you insert
+  descr-text                                    built-in              describe text mode
+  desktop                                       built-in              save partial status of Emacs when killed
+  dframe                                        built-in              dedicate frame support modes
+  diary-lib                                     built-in              diary functions
+  dictionary                                    built-in              Client for rfc2229 dictionary servers
+  dictionary-connection                         built-in              TCP-based client connection for dictionary
+  diff                                          built-in              run `diff'
+  diff-mode                                     built-in              a mode for viewing/editing context diffs
+  dig                                           built-in              Domain Name System dig interface
+  dirtrack                                      built-in              Directory Tracking by watching the prompt
+  disass                                        built-in              disassembler for compiled Emacs Lisp code
+  display-fill-column-indicator                 built-in              interface for display-fill-column-indicator
+  display-line-numbers                          built-in              interface for display-line-numbers
+  dissociate                                    built-in              scramble text amusingly for Emacs
+  dns                                           built-in              Domain Name Service lookups
+  dns-mode                                      built-in              a mode for viewing/editing Domain Name System master files
+  doc-view                                      built-in              Document viewer for Emacs
+  dockerfile-ts-mode                            built-in              tree-sitter support for Dockerfiles
+  doctor                                        built-in              psychological help for frustrated users
+  dom                                           built-in              XML/HTML (etc.) DOM manipulation and searching functions
+  double                                        built-in              support for keyboard remapping with double clicking
+  dunnet                                        built-in              text adventure for Emacs
+  ebnf2ps                                       built-in              translate an EBNF to a syntactic chart on PostScript
+  ebrowse                                       built-in              Emacs C++ class browser & tags facility
+  ebuff-menu                                    built-in              electric-buffer-list mode
+  echistory                                     built-in              Electric Command History Mode
+  ecomplete                                     built-in              electric completion of addresses and the like
+  ede                            2.0            built-in              Emacs Development Environment gloss
+  edebug                                        built-in              a source-level debugger for Emacs Lisp
+  ediff                          2.81.6         built-in              a comprehensive visual interface to diff & patch
+  edmacro                                       built-in              keyboard macro editor
+  edt                                           built-in              enhanced EDT keypad mode emulation for GNU Emacs
+  eglot                          1.11           built-in              The Emacs Client for LSP servers
+  ehelp                                         built-in              bindings for electric-help mode
+  eieio                          1.4            built-in              Enhanced Implementation of Emacs Interpreted Objects
+  eieio-core                     1.4            built-in              Core implementation for eieio
+  eldoc                          1.13.0         built-in              Show function arglist or variable docstring in echo area
+  elec-pair                                     built-in              Automatic parenthesis pairing
+  electric                                      built-in              window maker and Command loop for `electric' modes
+  elide-head                                    built-in              hide headers in files
+  elint                                         built-in              Lint Emacs Lisp
+  elp                                           built-in              Emacs Lisp Profiler
+  emacs-authors-mode                            built-in              font-locking for etc/AUTHORS
+  emacs-lock                                    built-in              protect buffers against killing or exiting
+  emacs-news-mode                               built-in              major mode to edit and view the NEWS file
+  emerge                                        built-in              merge diffs under Emacs control
+  enriched                                      built-in              read and save files in text/enriched format
+  epa                                           built-in              the EasyPG Assistant
+  epa-ks                                        built-in              EasyPG Key Server Client
+  epg                            1.0.0          built-in              the EasyPG Library
+  erc                            5.4.1          built-in              An Emacs Internet Relay Chat client
+  ert                                           built-in              Emacs Lisp Regression Testing
+  ert-x                                         built-in              Staging area for experimental extensions to ERT
+  erts-mode                                     built-in              major mode to edit erts files
+  eshell                         2.4.2          built-in              the Emacs command shell
+  etags                                         built-in              etags facility for Emacs
+  eudc                                          built-in              Emacs Unified Directory Client
+  eudc-capf                                     built-in              EUDC - completion-at-point bindings
+  eudcb-ecomplete                               built-in              EUDC - ecomplete backend
+  eudcb-macos-contacts                          built-in              EUDC - macOS Contacts backend
+  eudcb-mailabbrev                              built-in              EUDC - mailabbrev backend
+  ewoc                                          built-in              utility to maintain a view of a list of objects in a buffer
+  eww                                           built-in              Emacs Web Wowser
+  executable                                    built-in              base functionality for executable interpreter scripts
+  exif                                          built-in              parsing Exif data in JPEG images
+  expand                                        built-in              make abbreviations more usable
+  external-completion            0.1            built-in              Let external tools control completion style
+  ezimage                                       built-in              Generalized Image management
+  f90                                           built-in              Fortran-90 mode (free format)
+  face-remap                                    built-in              Functions for managing `face-remapping-alist'
+  faceup                         0.0.6          built-in              Markup language for faces and font-lock regression testing
+  feedmail                       11             built-in              assist other email packages to massage outgoing messages
+  ffap                                          built-in              find file (or url) at point
+  filecache                                     built-in              find files using a pre-loaded cache
+  fileloop                                      built-in              Operations on multiple files
+  filenotify                                    built-in              watch files for changes on disk
+  filesets                                      built-in              handle group of files
+  find-cmd                       0.6            built-in              Build a valid find(1) command with sexps
+  find-dired                                    built-in              run a `find' command and dired the output
+  find-file                                     built-in              find a file corresponding to this one given a pattern
+  find-func                                     built-in              find the definition of the Emacs Lisp function near point
+  find-lisp                                     built-in              emulation of find in Emacs Lisp
+  finder                                        built-in              topic & keyword-based code finder
+  flow-ctrl                                     built-in              help for lusers on cu(1) or ttys with wired-in ^S/^Q flow control
+  flow-fill                                     built-in              interpret RFC2646 "flowed" text
+  flymake                        1.2.2          built-in              A universal on-the-fly syntax checker
+  flymake-cc                                    built-in              Flymake support for GNU tools for C/C++
+  flymake-proc                   1.0            built-in              Flymake backend for external tools
+  flyspell                                      built-in              On-the-fly spell checker
+  foldout                        1.10           built-in              folding extensions for outline-mode and outline-minor-mode
+  follow                                        built-in              synchronize windows showing the same buffer
+  footnote                                      built-in              footnote support for message mode
+  format-spec                                   built-in              format arbitrary formatting strings
+  forms                                         built-in              Forms mode: edit a file as a form to fill in
+  fortran                                       built-in              Fortran mode for GNU Emacs
+  fortune                                       built-in              use fortune to create signatures
+  frameset                                      built-in              save and restore frame and window setup
+  gamegrid                                      built-in              library for implementing grid-based games on Emacs
+  gametree                                      built-in              manage game analysis trees in Emacs
+  gdb-mi                                        built-in              User Interface for running GDB
+  glasses                                       built-in              make cantReadThis readable
+  glyphless-mode                                built-in              minor mode for displaying glyphless characters
+  gnus                           5.13           built-in              a newsreader for GNU Emacs
+  gnutls                                        built-in              Support SSL/TLS connections through GnuTLS
+  go-ts-mode                                    built-in              tree-sitter support for Go
+  gomoku                                        built-in              Gomoku game between you and Emacs
+  goto-addr                                     built-in              click to browse URL or to send to e-mail address
+  gravatar                                      built-in              Get Gravatars
+  grep                                          built-in              run `grep' and display the results
+  gud                                           built-in              Grand Unified Debugger mode for running GDB and other debuggers
+  handwrite                                     built-in              turns your emacs buffer into a handwritten document
+  hanoi                                         built-in              towers of hanoi in Emacs
+  hashcash                                      built-in              Add hashcash payments to email
+  help-at-pt                                    built-in              local help through the keyboard
+  hex-util                                      built-in              Functions to encode/decode hexadecimal string
+  hexl                                          built-in              edit a file in a hex dump format using the hexl filter
+  hi-lock                                       built-in              minor mode for interactive automatic highlighting
+  hideif                                        built-in              hides selected code within ifdef
+  hideshow                                      built-in              minor mode cmds to selectively display code/comment blocks
+  hierarchy                                     built-in              Library to create and display hierarchical structures
+  hilit-chg                                     built-in              minor mode displaying buffer changes with special face
+  hippie-exp                                    built-in              expand text trying various ways to find its expansion
+  hl-line                                       built-in              highlight the current line
+  hmac-def                                      built-in              A macro for defining HMAC functions.
+  hmac-md5                                      built-in              Compute HMAC-MD5.
+  html-ts-mode                                  built-in              tree-sitter support for HTML
+  htmlfontify                    0.21           built-in              htmlize a buffer/source tree with optional hyperlinks
+  ibuffer                                       built-in              operate on buffers like dired
+  icalendar                                     built-in              iCalendar implementation
+  icomplete                                     built-in              minibuffer completion incremental feedback
+  icon                                          built-in              mode for editing Icon code
+  icons                                         built-in              Handling icons
+  idlwave                        6.1.22         built-in              IDL editing mode for GNU Emacs
+  ido                                           built-in              interactively do things with buffers and files
+  ielm                                          built-in              interaction mode for Emacs Lisp
+  ietf-drums                                    built-in              Functions for parsing RFC 2822 headers
+  ietf-drums-date                               built-in              parse time/date for ietf-drums.el
+  iimage                                        built-in              Inline image minor mode.
+  image-converter                               built-in              Converting images from exotic formats
+  image-crop                                    built-in              Image Cropping
+  image-dired                    0.5            built-in              use dired to browse and manipulate your images
+  image-dired-dired                             built-in              Dired specific commands for Image-Dired
+  image-dired-external                          built-in              External process support for Image-Dired
+  image-dired-tags                              built-in              Tag support for Image-Dired
+  image-dired-util                              built-in              util functions for Image-Dired
+  image-file                                    built-in              support for visiting image files
+  imap                                          built-in              imap library
+  imenu                                         built-in              framework for mode-specific buffer indexes
+  inf-lisp                                      built-in              an inferior-lisp mode
+  info                                          built-in              Info package for Emacs
+  info-look                                     built-in              major-mode-sensitive Info index lookup facility
+  info-xref                      3              built-in              check external references in an Info document
+  informat                                      built-in              info support functions package for Emacs
+  inline                                        built-in              Define functions by their inliner
+  isearchb                       1.5            built-in              a marriage between iswitchb and isearch
+  iso8601                                       built-in              parse ISO 8601 date/time strings
+  ispell                                        built-in              interface to spell checkers
+  java-ts-mode                                  built-in              tree-sitter support for Java
+  jka-compr                                     built-in              reading/writing/loading compressed files
+  js                             9              built-in              Major mode for editing JavaScript
+  json                           1.5            built-in              JavaScript Object Notation parser / generator
+  json-ts-mode                                  built-in              tree-sitter support for JSON
+  jsonrpc                        1.0.16         built-in              JSON-RPC library
+  kermit                                        built-in              additions to shell mode for use with kermit
+  keymap                                        built-in              Keymap functions
+  keypad                                        built-in              simplified keypad bindings
+  kmacro                                        built-in              enhanced keyboard macros
+  ld-script                                     built-in              GNU linker script editing mode for Emacs
+  ldap                                          built-in              client interface to LDAP for Emacs
+  less-css-mode                                 built-in              Major mode for editing Less CSS files
+  let-alist                      1.0.6          built-in              Easily let-bind values of an assoc-list by their names
+  life                                          built-in              John Horton Conway's Game of Life
+  lisp-mnt                                      built-in              utility functions for Emacs Lisp maintainers
+  loadhist                                      built-in              lisp functions for working with feature groups
+  locate                                        built-in              interface to the locate command
+  log-edit                                      built-in              Major mode for editing CVS commit messages
+  log-view                                      built-in              Major mode for browsing revision log histories
+  lpr                                           built-in              print Emacs buffer on line printer
+  m4-mode                                       built-in              m4 code editing commands for Emacs
+  macroexp                                      built-in              Additional macro-expansion support
+  mail-parse                                    built-in              Interface functions for parsing mail
+  mail-prsvr                                    built-in              Interface variables for parsing mail
+  mail-utils                                    built-in              utility functions used both by rmail and rnews
+  mailabbrev                                    built-in              abbrev-expansion of mail aliases
+  mailalias                                     built-in              expand and complete mailing address aliases
+  mailcap                                       built-in              MIME media types configuration
+  mailclient                                    built-in              mail sending via system's mail client.
+  mairix                                        built-in              Mairix interface for Emacs
+  make-mode                                     built-in              makefile editing commands for Emacs
+  makeinfo                                      built-in              run makeinfo conveniently
+  man                                           built-in              browse UNIX manual pages
+  map                            3.3.1          built-in              Map manipulation functions
+  master                                        built-in              make a buffer the master over another buffer
+  mb-depth                                      built-in              Indicate minibuffer-depth in prompt
+  md4                                           built-in              MD4 Message Digest Algorithm.
+  memory-report                                 built-in              Short function summaries
+  meta-mode                      1.0            built-in              major mode for editing Metafont or MetaPost sources
+  mh-e                           8.6snapshot    built-in              GNU Emacs interface to the MH mail system
+  mhtml-mode                                    built-in              HTML editing mode that handles CSS and JS
+  midnight                                      built-in              run something every midnight, e.g., kill old buffers
+  minibuf-eldef                                 built-in              Only show defaults in prompts when applicable
+  misearch                                      built-in              isearch extensions for multi-buffer search
+  mixal-mode                     0.4            built-in              Major mode for the mix asm language.
+  mode-local                                    built-in              Support for mode local facilities
+  modula2                                       built-in              Modula-2 editing support package
+  morse                                         built-in              convert text to morse code and back
+  mouse-copy                                    built-in              one-click text copy and move
+  mouse-drag                                    built-in              use mouse-2 to do a new style of scrolling
+  mpc                                           built-in              A client for the Music Player Daemon
+  mpuz                                          built-in              multiplication puzzle for GNU Emacs
+  msb                                           built-in              customizable buffer-selection with multiple menus
+  mspools                                       built-in              show mail spools waiting to be read
+  multisession                                  built-in              Multisession storage for variables
+  nadvice                        1.0            built-in              Light-weight advice primitives for Elisp functions
+  net-utils                                     built-in              network functions
+  network-stream                                built-in              open network processes, possibly with encryption
+  newsticker                                    built-in              A Newsticker for Emacs.
+  notifications                                 built-in              Client interface to desktop notifications.
+  novice                                        built-in              handling of disabled commands ("novice mode") for Emacs
+  nroff-mode                                    built-in              GNU Emacs major mode for editing nroff source
+  nsm                                           built-in              Network Security Manager
+  ntlm                           2.1.0          built-in              NTLM (NT LanManager) authentication support
+  nxml                                          built-in              a new XML mode
+  oclosure                                      built-in              Open Closures
+  octave                                        built-in              editing octave source files under emacs
+  opascal                                       built-in              major mode for editing Object Pascal source in Emacs
+  org                            9.6.1          built-in              Outline-based notes management and organizer
+  outline                                       built-in              outline mode commands for Emacs
+  package                        1.1.0          built-in              Simple package system for Emacs
+  package-vc                                    built-in              Manage packages from VC checkouts
+  page-ext                                      built-in              extended page handling commands
+  paren                                         built-in              highlight matching paren
+  parse-time                                    built-in              parsing time strings
+  pascal                                        built-in              major mode for editing pascal source in Emacs
+  password-cache                                built-in              Read passwords, possibly using a password cache.
+  pcase                                         built-in              ML-style pattern-matching macro for Elisp
+  pcomplete                                     built-in              programmable completion
+  pcvs                                          built-in              a front-end to CVS
+  perl-mode                                     built-in              Perl code editing commands for GNU Emacs
+  picture                                       built-in              "Picture mode" -- editing using quarter-plane screen model
+  pixel-fill                                    built-in              variable pitch filling functions
+  plstore                                       built-in              secure plist store
+  po                                            built-in              basic support of PO translation files
+  pong                                          built-in              classical implementation of pong
+  pop3                                          built-in              Post Office Protocol (RFC 1460) interface
+  pp                                            built-in              pretty printer for Emacs Lisp
+  printing                                      built-in              printing utilities
+  proced                                        built-in              operate on system processes like dired
+  profiler                                      built-in              UI and helper functions for Emacs's native profiler
+  project                        0.9.6          built-in              Operations on the current project
+  prolog                                        built-in              major mode for Prolog (and Mercury)
+  ps-mode                        1.1.9          built-in              PostScript mode for GNU Emacs
+  ps-print                                      built-in              print text from the buffer as PostScript
+  pulse                          1.0            built-in              Pulsing Overlays
+  puny                                          built-in              translate non-ASCII domain names to ASCII
+  python                         0.28           built-in              Python's flying circus support for Emacs
+  qp                                            built-in              Quoted-Printable functions
+  radix-tree                                    built-in              A simple library of radix trees
+  range                                         built-in              range functions
+  rcirc                                         built-in              default, simple IRC client
+  re-builder                                    built-in              building Regexps with visual feedback
+  recentf                                       built-in              keep track of recently opened files
+  refbib                                        built-in              convert refer-style references to ones usable by Latex bib
+  refer                                         built-in              look up references in bibliography files
+  refill                                        built-in              `auto-fill' by refilling paragraphs on changes
+  reftex                                        built-in              minor mode for doing \label, \ref, \cite, \index in LaTeX
+  reftex-auc                                    built-in              RefTeX's interface to AUCTeX
+  reftex-cite                                   built-in              creating citations with RefTeX
+  reftex-dcr                                    built-in              viewing cross references and citations with RefTeX
+  reftex-global                                 built-in              operations on entire documents with RefTeX
+  reftex-index                                  built-in              index support with RefTeX
+  reftex-parse                                  built-in              parser functions for RefTeX
+  reftex-ref                                    built-in              code to create labels and references with RefTeX
+  reftex-sel                                    built-in              the selection modes for RefTeX
+  reftex-toc                                    built-in              RefTeX's table of contents mode
+  reftex-vars                                   built-in              configuration variables for RefTeX
+  regexp-opt                                    built-in              generate efficient regexps to match strings
+  regi                                          built-in              REGular expression Interpreting engine
+  registry                                      built-in              Track and remember data items by various fields
+  remember                                      built-in              a mode for quickly jotting down things to remember
+  repeat                                        built-in              convenient way to repeat the previous command
+  reporter                                      built-in              customizable bug reporting of lisp programs
+  reposition                                    built-in              center a Lisp function or comment on the screen
+  reveal                                        built-in              Automatically reveal hidden text at point
+  rfc2045                                       built-in              Functions for decoding rfc2045 headers
+  rfc2047                                       built-in              functions for encoding and decoding rfc2047 messages
+  rfc2104                                       built-in              RFC2104 Hashed Message Authentication Codes
+  rfc2231                                       built-in              Functions for decoding rfc2231 headers
+  rfc6068                                       built-in              support for rfc6068
+  rfc822                                        built-in              hairy RFC 822 (or later) parser for mail, news, etc.
+  ring                                          built-in              handle rings of items
+  rmail                                         built-in              main code of "RMAIL" mail reader for Emacs
+  rmc                                           built-in              read from a multiple choice question
+  rot13                                         built-in              display a buffer in ROT13
+  rst                                           built-in              Mode for viewing and editing reStructuredText-documents
+  rtree                                         built-in              functions for manipulating range trees
+  ruby-mode                      1.2            built-in              Major mode for editing Ruby files
+  ruby-ts-mode                   0.2            built-in              Major mode for editing Ruby files using tree-sitter
+  ruler-mode                                    built-in              display a ruler in the header line
+  rust-ts-mode                                  built-in              tree-sitter support for Rust
+  rx                                            built-in              S-exp notation for regexps           -
+  sasl                                          built-in              SASL client framework
+  savehist                                      built-in              Save minibuffer history
+  saveplace                                     built-in              automatically save place in files
+  scheme                                        built-in              Scheme (and DSSSL) editing mode
+  scroll-all                                    built-in              scroll all buffers together minor mode
+  scroll-lock                                   built-in              Scroll lock scrolling.
+  secrets                                       built-in              Client interface to gnome-keyring and kwallet.
+  select                                        built-in              lisp portion of standard selection support
+  semantic                       2.2            built-in              Semantic buffer evaluator.
+  sendmail                                      built-in              mail sending commands for Emacs
+  seq                            2.23           built-in              Sequence manipulation functions
+  server                                        built-in              Lisp code for GNU Emacs running as server process
+  ses                                           built-in              Simple Emacs Spreadsheet
+  sgml-mode                                     built-in              SGML- and HTML-editing modes
+  sh-script                                     built-in              shell-script editing commands for Emacs
+  shadow                                        built-in              locate Emacs Lisp file shadowings
+  shadowfile                                    built-in              automatic file copying
+  shell                                         built-in              specialized comint.el for running the shell
+  shorthands                                    built-in              Read code considering Elisp shorthands
+  shr                                           built-in              Simple HTML Renderer
+  shr-color                                     built-in              Simple HTML Renderer color management
+  sieve                                         built-in              Utilities to manage sieve scripts
+  sieve-manage                                  built-in              Implementation of the managesieve protocol in elisp
+  sieve-mode                                    built-in              Sieve code editing commands for Emacs
+  simula                                        built-in              SIMULA 87 code editing commands for Emacs
+  skeleton                                      built-in              Lisp language extension for writing statement skeletons
+  smerge-mode                                   built-in              Minor mode to resolve diff3 conflicts
+  smie                                          built-in              Simple Minded Indentation Engine
+  smtpmail                                      built-in              simple SMTP protocol (RFC 821) for sending mail
+  snake                                         built-in              implementation of Snake for Emacs
+  snmp-mode                                     built-in              SNMP & SNMPv2 MIB major mode
+  so-long                        1.1.2          built-in              Say farewell to performance problems with minified code.
+  soap-client                    3.2.1          built-in              Access SOAP web services
+  socks                                         built-in              A Socks v5 Client for Emacs
+  solitaire                                     built-in              game of solitaire in Emacs Lisp
+  sort                                          built-in              commands to sort text in an Emacs buffer
+  soundex                                       built-in              implement Soundex algorithm
+  speedbar                                      built-in              quick access to files and tags in a frame
+  spook                                         built-in              spook phrase utility for overloading the NSA line eater
+  sql                            3.6            built-in              specialized comint.el for SQL interpreters
+  sqlite                                        built-in              Functions for interacting with sqlite3 databases
+  sqlite-mode                                   built-in              Mode for examining sqlite3 database files
+  srecode                        1.2            built-in              Semantic buffer evaluator.
+  string-edit                                   built-in              editing long strings
+  strokes                                       built-in              control Emacs through mouse strokes
+  studly                                        built-in              StudlyCaps (tm)(r)(c)(xxx)
+  subword                                       built-in              Handling capitalized subwords in a nomenclature
+  supercite                                     built-in              minor mode for citing mail and news replies
+  svg                            1.1            built-in              SVG image creation functions
+  syntax                                        built-in              helper functions to find syntactic context
+  t-mouse                                       built-in              mouse support within the text terminal
+  tab-bar                                       built-in              frame-local tabs with named persistent window configurations
+  tab-line                                      built-in              window-local tabs with window buffers
+  table                                         built-in              create and edit WYSIWYG text based embedded tables
+  tabulated-list                 1.0            built-in              generic major mode for tabulated lists
+  talk                                          built-in              allow several users to talk to each other through Emacs
+  tar-mode                                      built-in              simple editing of tar files from GNU Emacs
+  tcl                                           built-in              Tcl code editing commands for Emacs
+  telnet                                        built-in              run a telnet session from within an Emacs buffer
+  tempo                                         built-in              Flexible template insertion
+  term                                          built-in              general command interpreter in a window stuff
+  testcover                                     built-in              Visual code-coverage tool
+  tetris                                        built-in              implementation of Tetris for Emacs
+  tex-mode                                      built-in              TeX, LaTeX, and SliTeX mode commands
+  texinfmt                                      built-in              format Texinfo files into Info files
+  texinfo                                       built-in              major mode for editing Texinfo files
+  texnfo-upd                                    built-in              utilities for updating nodes and menus in Texinfo files
+  text-property-search                          built-in              search for text properties
+  thingatpt                                     built-in              get the `thing' at point
+  thread                                        built-in              Thread support in Emacs Lisp
+  thunk                          1.0            built-in              Lazy form evaluation
+  tildify                        4.6.1          built-in              adding hard spaces into texts
+  time                                          built-in              display time, load and mail indicator in mode line of Emacs
+  time-date                                     built-in              Date and time handling functions
+  time-stamp                                    built-in              Maintain last change time stamps in files edited by Emacs
+  timeclock                                     built-in              mode for keeping track of how much you work
+  timezone                                      built-in              time zone package for GNU Emacs
+  tmm                                           built-in              text mode access to menu-bar
+  todo-mode                                     built-in              facilities for making and maintaining todo lists
+  toml-ts-mode                                  built-in              tree-sitter support for TOML
+  tq                                            built-in              utility to maintain a transaction queue
+  trace                                         built-in              tracing facility for Emacs Lisp functions
+  tramp                          2.7.0pre       built-in              Transparent Remote Access, Multiple Protocol
+  transient                                     built-in              Transient commands
+  tree-widget                                   built-in              Tree widget
+  two-column                                    built-in              minor mode for editing of two-column text
+  type-break                                    built-in              encourage rests from typing at appropriate intervals
+  typescript-ts-mode                            built-in              tree sitter support for TypeScript
+  underline                                     built-in              insert/remove underlining (done by overstriking) in Emacs
+  undigest                                      built-in              digest-cracking support for the RMAIL mail reader
+  unrmail                                       built-in              convert Rmail Babyl files to mbox files
+  unsafep                                       built-in              Determine whether a Lisp form is safe to evaluate
+  url                                           built-in              Uniform Resource Locator retrieval tool
+  use-package                    2.4.5          built-in              A configuration macro for simplifying your .emacs
+  use-package-bind-key                          built-in              Support for the :bind/:bind-keymap keywords
+  use-package-core                              built-in              A configuration macro for simplifying your .emacs
+  use-package-delight                           built-in              Support for the :delight keyword
+  use-package-diminish                          built-in              Support for the :diminish keyword
+  use-package-ensure                            built-in              Support for the :ensure and :pin keywords
+  use-package-ensure-system-package 0.2            built-in              auto install system packages
+  use-package-jump                              built-in              Attempt to jump to a use-package declaration
+  use-package-lint                              built-in              Attempt to find errors in use-package declarations
+  uudecode                                      built-in              elisp native uudecode
+  vc                                            built-in              drive a version-control system from within Emacs
+  vcursor                                       built-in              manipulate an alternative ("virtual") cursor
+  vera-mode                      2.28           built-in              major mode for editing Vera files
+  verilog-mode                   2022.12.18.181110314 built-in              major mode for editing verilog source in Emacs
+  vhdl-mode                                     built-in              major mode for editing VHDL code
+  view                                          built-in              peruse file or buffer without editing
+  viper                          3.14.2         built-in              A full-featured Vi emulator for Emacs
+  vtable                                        built-in              Displaying data in tables
+  wallpaper                                     built-in              Change the desktop background
+  warnings                                      built-in              log and display warnings
+  wdired                                        built-in              Rename files editing their names in dired buffers
+  webjump                                       built-in              programmable Web hotlist
+  which-func                                    built-in              print current function in mode line
+  whitespace                     13.2.2         built-in              minor mode to visualize TAB, (HARD) SPACE, NEWLINE
+  windmove                                      built-in              directional window-selection routines
+  winner                                        built-in              Restore old window configurations
+  woman                                         built-in              browse UN*X manual pages `wo (without) man'
+  word-wrap-mode                                built-in              minor mode for `word-wrap' tweaks
+  xdg                                           built-in              XDG specification and standard support
+  xml                                           built-in              XML parser
+  xref                           1.6.1          built-in              Cross-referencing commands
+  xscheme                                       built-in              run MIT Scheme under Emacs
+  xt-mouse                                      built-in              support the mouse when emacs run in an xterm
+  xwidget                                       built-in              api functions for xwidgets
+  yaml-ts-mode                                  built-in              tree-sitter support for YAML
+  yank-media                                    built-in              Yanking images and HTML
+  yenc                                          built-in              elisp native yenc decoder
+  zeroconf                                      built-in              Service browser using Avahi.
+  zone                                          built-in              idle display hacks

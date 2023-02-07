@@ -17,10 +17,10 @@
  '(pyim-dicts nil)
  '(safe-local-variable-values
    '((eval setq-local org-roam-db-location
-           (expand-file-name "org-roam.db" org-roam-directory))
+	   (expand-file-name "org-roam.db" org-roam-directory))
      (eval setq-local org-roam-directory
-           (expand-file-name
-            (locate-dominating-file default-directory ".dir-locals.el")))
+	   (expand-file-name
+	    (locate-dominating-file default-directory ".dir-locals.el")))
      (org-roam-db-location expand-file-name "./org-roam.db")
      (org-roam-directory expand-file-name ".")
      (origami-fold-style . triple-braces))))
