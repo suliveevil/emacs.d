@@ -1,2 +1,0 @@
-;;; Generated package description from graphviz-dot-mode.el  -*- no-byte-compile: t -*-
-(define-package "graphviz-dot-mode" "20230206.1942" "Mode for the dot-language used by graphviz (att)." '((emacs "25.0")) :commit "72e72a9d3dc074296daf4122043c7a0f00bbbcb5" :maintainer '("Pieter Pareit" . "pieter.pareit@gmail.com") :keywords '("mode" "dot" "dot-language" "dotlanguage" "graphviz" "graphs" "att") :url "https://ppareit.github.io/graphviz-dot-mode/")

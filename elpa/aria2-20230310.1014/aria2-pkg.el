@@ -1,0 +1,2 @@
+;;; Generated package description from aria2.el  -*- no-byte-compile: t -*-
+(define-package "aria2" "20230310.1014" "Control aria2c commandline tool from Emacs" '((emacs "25.1")) :commit "55a2317a82aed56e12b1abb827807f05456f23a2" :authors '(("Łukasz Gruner" . "lukasz@gruner.lu")) :maintainer '("Łukasz Gruner" . "lukasz@gruner.lu") :keywords '("download" "bittorrent" "aria2") :url "https://bitbucket.org/ukaszg/aria2-mode")

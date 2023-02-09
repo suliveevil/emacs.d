@@ -350,7 +350,7 @@ open -b org.gnu.Emacs --args -q --eval='(message "%s" (emacs-init-time))'
 ;; keymap
 ;; {{{
 ;; bind: 全局按键/快捷键 (Global key bindings)
-(setq echo-keystrokes 0.1)
+(setq echo-keystrokes 0.01)
 (setq mac-command-modifier       'super   ;; s: super(Command/Win)
       mac-control-modifier       'control ;; C: Ctrl
       mac-option-modifier        'meta    ;; M: Meta (Option/Alt)
@@ -486,7 +486,8 @@ There are some packages have similar feature: combobulate
 **** universal-argument
 
 #+begin_src emacs-lisp
-(keymap-global-set "H-a" #'universal-argument)
+(keymap-global-set "H-a" #'set-mark-command)
+(keymap-global-set "H-u" #'universal-argument)
 #+end_src
 
 **** prefix-command
@@ -1253,7 +1254,10 @@ key-translation-map
 *** transcient
 
 #+begin_src emacs-lisp :tangle no
-
+  (use-package transcient
+    :ensure nil
+    :defer 1
+    )
 #+end_src
 
 *** viper
@@ -1324,6 +1328,8 @@ mouse-copy
 mouse-drag
 
 t-mouse
+
+[[http://endlessparentheses.com/disable-mouse-only-inside-emacs.html][Disable Mouse only inside Emacs · Endless Parentheses]]
 
 #+begin_src emacs-lisp
 ;; touchpad/trackpad & mouse
@@ -1655,15 +1661,34 @@ timezone
        (emacs-uptime)
        " |"
        "\n")
-      (append-to-file nil nil my/emacs-uptime-log))))
+      (append-to-file nil nil my/emacs-uptime-log)))
+  )
 ;; }}}
 #+end_src
 
-#+begin_src emacs-lisp
-
+#+begin_src emacs-lisp :tangle no
+(use-package calendar
+  :ensure nil
+  )
 #+end_src
 
 ** 剪贴板与寄存器 clipboard & register
+
+#+begin_src emacs-lisp :tangle no
+;; https://www.reddit.com/r/emacs/comments/1104zzt/comment/j879eim/
+(setq select-enable-clipboard t)
+(defun copy-from-osx ()
+  (shell-command-to-string "pbpaste"))
+
+(defun paste-to-osx (text &optional push)
+  (let ((process-connection-type nil))
+    (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+      (process-send-string proc text)
+      (process-send-eof proc))))
+
+(setq interprogram-cut-function 'paste-to-osx)
+(setq interprogram-paste-function 'copy-from-osx)
+#+end_src
 
 #+begin_src emacs-lisp
 (use-package emacs
@@ -1880,6 +1905,8 @@ desktop
 #+end_src
 
 *** 行 line
+
+[[https://emacs.stackexchange.com/questions/13092/how-can-i-highlight-duplicate-lines][font lock - How can I highlight duplicate lines? - Emacs Stack Exchange]]
 
 #+begin_src emacs-lisp
 ;; line
@@ -3332,39 +3359,36 @@ separator."
 
 #+begin_src emacs-lisp
 (use-package emacs
-  :ensure nil
-  :bind
-  (
-   ([remap fill-paragraph] . my/toggle-fill-unfill)
-   )
-  :config
-  (setq-default fill-column 80) ;; M-x set-fill-column RET
+ :ensure nil
+ :bind (([remap fill-paragraph] . my/toggle-fill-unfill))
+ :init
+ ;; (setq sentence-end-double-space nil)
+ (setq-default fill-column 80) ; M-x set-fill-column RET
+ :config
+ ;; sentence: 断句
+ (setq sentence-end "\\([。！？]\\|……\\|[.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*"))
+;; paragraph: 段落
+(defun my/toggle-fill-unfill ()
+  "Like `fill-paragraph', but unfill if used twice."
+  (interactive)
+  (let ((fill-column
+         (if (eq last-command 'my-fill-or-unfill)
+             (progn
+               (setq this-command nil)
+               (point-max))
+           fill-column)))
+    (call-interactively 'fill-paragraph nil (vector nil t))))
 
-  (defun my/toggle-fill-unfill ()
-    "Like `fill-paragraph', but unfill if used twice."
-    (interactive)
-    (let ((fill-column
-           (if (eq last-command 'my-fill-or-unfill)
-               (progn (setq this-command nil)
-                      (point-max))
-             fill-column)))
-      (call-interactively 'fill-paragraph nil (vector nil t))))
-
-  ;; https://www.emacswiki.org/emacs/UnfillParagraph
-  (defun my/unfill-paragraph (&optional region)
-    "Takes a multi-line paragraph and makes it into a single line of text."
-    (interactive (progn (barf-if-buffer-read-only) '(t)))
-    (let ((fill-column (point-max))
-          ;; This would override `fill-column' if it's an integer.
-          (emacs-lisp-docstring-fill-column t))
-      (fill-paragraph nil region))
-    )
-  ;; sentence: 断句
-  (setq sentence-end
-        "\\([。！？]\\|……\\|[.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*"
-        )
-  ;; (setq sentence-end-double-space nil)
-  )
+;; https://www.emacswiki.org/emacs/UnfillParagraph
+(defun my/unfill-paragraph (&optional region)
+  "Takes a multi-line paragraph and makes it into a single line of text."
+  (interactive (progn
+                 (barf-if-buffer-read-only)
+                 '(t)))
+  (let ((fill-column (point-max))
+        ;; This would override `fill-column' if it's an integer.
+        (emacs-lisp-docstring-fill-column t))
+    (fill-paragraph nil region)))
 #+end_src
 
 *** Text Case
@@ -4030,6 +4054,45 @@ point reaches the beginning or end of the buffer, stop there."
 ;;  'sql-mode-hook
 ;;  (lambda () (setq imenu-generic-expression sql-imenu-generic-expression)))
 #+end_src
+
+*** narrow
+
+#+begin_src emacs-lisp
+(use-package emacs
+ :ensure nil
+ :bind ("C-c n n" . my/narrow-or-widen-dwim)
+ :config
+ ;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
+ (defun my/narrow-or-widen-dwim (p)
+   "If the buffer is narrowed, it widens. Otherwise, it narrows intelligently.
+Intelligently means: region, org-src-block, org-subtree, or defun,
+whichever applies first.
+Narrowing to org-src-block actually calls `org-edit-src-code'.
+With prefix P, don't widen, just narrow even if buffer is already
+narrowed."
+   (interactive "P")
+   (declare (interactive-only))
+   (cond
+    ((and (buffer-narrowed-p) (not p))
+     (widen))
+    ((region-active-p)
+     (narrow-to-region (region-beginning) (region-end)))
+    ((derived-mode-p 'org-mode)
+     ;; `org-edit-src-code' is not a real narrowing command.
+     ;; Remove this first conditional if you don't want it.
+     (cond
+      ((ignore-errors
+         (org-edit-src-code))
+       (delete-other-windows))
+      ((org-at-block-p)
+       (org-narrow-to-block))
+      (t
+       (org-narrow-to-subtree))))
+    (t
+     (narrow-to-defun))))
+ )
+#+end_src
+
 
 ** Shell & Terminal
 
@@ -5217,6 +5280,13 @@ org-babel-detangle
           ("sqlite" . sql)
           ("toml" . conf-toml)
           ))
+  )
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package org-src
+  :ensure nil
+  ;; :defer t
   )
 #+end_src
 
