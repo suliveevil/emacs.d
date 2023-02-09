@@ -1,0 +1,2 @@
+;;; Generated package description from keycast.el  -*- no-byte-compile: t -*-
+(define-package "keycast" "20230212.2016" "Show current command and its binding" '((emacs "25.3") (compat "29.1.3.4")) :commit "cabb3fac1ccf2980ff3bcdbc1648d2a15ebe7cb1" :authors '(("Jonas Bernoulli" . "jonas@bernoul.li")) :maintainer '("Jonas Bernoulli" . "jonas@bernoul.li") :keywords '("multimedia") :url "https://github.com/tarsius/keycast")

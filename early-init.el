@@ -145,7 +145,7 @@
 ;; keymap
 ;; {{{
 ;; bind: 全局按键/快捷键 (Global key bindings)
-(setq echo-keystrokes 0.1)
+(setq echo-keystrokes 0.01)
 (setq mac-command-modifier       'super   ;; s: super(Command/Win)
       mac-control-modifier       'control ;; C: Ctrl
       mac-option-modifier        'meta    ;; M: Meta (Option/Alt)
@@ -193,7 +193,8 @@
 ;; basic keybinding:1 ends here
 
 ;; [[file:README.org::*universal-argument][universal-argument:1]]
-(keymap-global-set "H-a" #'universal-argument)
+(keymap-global-set "H-a" #'set-mark-command)
+(keymap-global-set "H-u" #'universal-argument)
 ;; universal-argument:1 ends here
 
 ;; [[file:README.org::*mouse][mouse:1]]

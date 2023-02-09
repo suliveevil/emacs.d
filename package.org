@@ -23,6 +23,10 @@ sibling file: [[file:README.org][Emacs config]]
 #+end_src
 
 * emacs-everywhere
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle no
+:ID:       76AD93CA-493F-4E43-A320-E8B9B52DC86E
+:END:
 
 #+begin_src emacs-lisp :tangle no
 (use-package emacs-everywhere
@@ -41,6 +45,18 @@ sibling file: [[file:README.org][Emacs config]]
 #+end_src
 
 * Benchmark/Debug/Discover/Monitor Emacs
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle no
+:ID:       D28281D0-F365-46D2-BF08-E76AFC6D0F20
+:END:
+** bug-hunter
+
+[[https://github.com/Malabarba/elisp-bug-hunter/][Malabarba/elisp-bug-hunter: Hunt down errors in elisp files.]]
+
+#+begin_src emacs-lisp :tangle no
+
+#+end_src
+
 ** explain-pause-mode
 
 [[https://github.com/lastquestion/explain-pause-mode][lastquestion/explain-pause-mode: top, but for Emacs.]]
@@ -125,6 +141,10 @@ sibling file: [[file:README.org][Emacs config]]
 #+end_src
 
 * Emacs Package Database epkg+epkgs
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       1898178B-9C71-436F-9593-8F16548E5522
+:END:
 
 #+begin_src emacs-lisp
 (use-package epkg
@@ -152,7 +172,14 @@ sibling file: [[file:README.org][Emacs config]]
   )
 #+end_src
 
-* 帮助※文档
+* 通知帮助与文档
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       3C4FF7DB-9E02-43B9-8E27-F8504FDC1EE6
+:END:
+** notify
+
+[[https://github.com/netjune/my_elisp/blob/master/misc/notify.el][netjune/my_elisp/misc/notify.el]]
 
 ** helpful
 
@@ -199,6 +226,10 @@ sibling file: [[file:README.org][Emacs config]]
 #+end_src
 
 * macOS :macOS:
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       7598153B-E306-41AC-8BF5-98CD3F73ABBE
+:END:
 
 ** osx-dictionary
 
@@ -228,6 +259,10 @@ sibling file: [[file:README.org][Emacs config]]
 #+end_src
 
 * 环境变量
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       18EB739C-4A18-4495-BC88-3757F4B2CBD3
+:END:
 
 [[https://emacs-china.org/t/topic/5507][Mac 下给 Emacs 设置 PATH 和 exec-path - Emacs China]]
 
@@ -368,6 +403,10 @@ variables such as `exec-path'."
 #+end_src
 
 * 系统/软件交互           :输入法:
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       298DCAED-8681-41C7-B229-38CD63B8DE5A
+:END:
 ** browser-hist :Git:
 
 #+begin_src emacs-lisp
@@ -459,6 +498,10 @@ variables such as `exec-path'."
 #+end_src
 
 * Emacs Lisp
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       075EC11F-FDC4-424B-A200-5B6ADBA7B580
+:END:
 
 ** 代码分析
 
@@ -578,6 +621,10 @@ elisp-depmap
 #+end_src
 
 * 快捷键
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       D6B399A8-B6C6-474F-B63C-BC0C9E40C591
+:END:
 ** region-bindings
 
 [[https://github.com/andreyorst/region-bindings.el][andreyorst/region-bindings.el]]
@@ -901,6 +948,10 @@ modifire prefix
 #+end_src
 
 * Macro & 光标/鼠标/触控板
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       43CF0A72-38FD-4D18-9646-EF28FCF6687C
+:END:
 
 ** iedit
 
@@ -1139,6 +1190,10 @@ targets."
 #+end_src
 
 * 字符/字符串/文本编辑
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       AC7651CB-507C-4F19-BD48-94C766A61A59
+:END:
 
 ** Unicode: modeline-char :Git:
 
@@ -1285,6 +1340,10 @@ supports many major modes out of box.
 #+end_src
 
 * 正则表达式
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       34BEAD6F-6451-44D4-8B8F-73BA5B029B69
+:END:
 
 #+begin_src emacs-lisp :tangle no
 ;; whatthefuck
@@ -1378,6 +1437,10 @@ re="(([\u2e80-\u9fff]+)([\n\r]{1,2})?([\s\t])?(([\u2e80-\u9fff]+)|(\w)+)([\s\t])
 ** xr
 
 * 选择 & region
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       A1BE32E1-FC11-4644-A1BF-1B2EF86C7CF3
+:END:
 
 ** zones
 
@@ -1543,6 +1606,10 @@ re="(([\u2e80-\u9fff]+)([\n\r]{1,2})?([\s\t])?(([\u2e80-\u9fff]+)|(\w)+)([\s\t])
 #+end_src
 
 * 拼写检查 spell
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       D84D227C-5554-4544-AB1B-8F8F048F4A8C
+:END:
 
 ** wucuo
 
@@ -1776,6 +1843,10 @@ When fixing a typo, avoid pass camel case option to cli program."
 #+end_src
 
 * buffer
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       AE8D7706-B1DF-48F1-8DC9-A5B7461CA8C1
+:END:
 ** consult
 
 #+begin_src emacs-lisp
@@ -2083,6 +2154,10 @@ When fixing a typo, avoid pass camel case option to cli program."
 #+end_src
 
 * minibuffer
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       ACE87324-3F5F-49FC-B886-1FE7B1EB58C7
+:END:
 
 ** marginalia
 
@@ -2334,6 +2409,10 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 #+end_src
 
 * tree-sitter
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       84F714FD-7024-4C24-8065-5338BEAFA376
+:END:
 
 ** treesit-auto
 
@@ -2344,6 +2423,10 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 #+end_src
 
 * 补全 & LSP
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       B7CF8CED-3844-4A68-B89F-A9E7294AD72C
+:END:
 
 ** corfu+cape
 
@@ -2587,6 +2670,10 @@ company-quickhelp
 #+end_src
 
 * snippet
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       AA2CF138-2651-49C1-A005-B1B7B7363A69
+:END:
 
 ** YASnippet
 
@@ -2644,6 +2731,10 @@ company-quickhelp
 ** Tempel
 
 * 中文：拼音输入与搜索
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       82FC09E4-AC1A-4AE0-82D7-1145D1CA45AB
+:END:
 
 ** pyim                                                              :输入法:
 
@@ -2782,7 +2873,28 @@ company-quickhelp
 ;; }}}
 #+end_src
 
+** emacs-rime
+
+#+begin_src emacs-lisp :tangle no
+(defun change-cursor-color-on-input-method ()
+  "Set cursor color depending on whether an input method is used or not."
+  (interactive)
+  (set-cursor-color (if (and (rime--should-enable-p)
+                             (not (rime--should-inline-ascii-p))
+                             current-input-method)
+                        input-method-cursor-color
+                      default-cursor-color)))
+#+end_src
+
+[[https://github.com/DogLooksGood/emacs-rime][DogLooksGood/emacs-rime: RIME ㄓ in Emacs]]
+
+[[https://github.com/Eason0210/im-cursor-chg][Eason0210/im-cursor-chg]]
+
 * 搜索工具
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       61B1EF66-4E1B-4A45-AEB7-07F5A30FC68E
+:END:
 
 ** orderless
 
@@ -2985,6 +3097,10 @@ Natural Language Search
 #+end_src
 
 * 文件管理
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       D49C1FE4-58E7-49DA-A075-48EA626A51D2
+:END:
 
 ** dired-hacks
 
@@ -3173,6 +3289,12 @@ Calibre sucks !
 #+end_src
 
 * 版本管理: git: Magit
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       8262274A-F276-4FFE-8534-4DE23ED1F17D
+:END:
+
+[[https://emacs-china.org/t/magit-add-commit-push/22457][magit一键add, commit, push - Emacs China]]
 
 #+begin_src emacs-lisp
 ;; difftastic + magit
@@ -3308,8 +3430,14 @@ Calibre sucks !
 
 git-auto-commit
 
+[[https://emacs-china.org/t/magit-blame-git-commit/7025][用 magit-blame 反向追踪 git commit - Emacs China]]
+
 * 文件对比/文本对比 Diff
-** 文件对比 diff-lisp :Git:
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       A3638E98-F0B9-4304-AE07-B0DFEC70922B
+:END:
+** 文件对比 diff-lisp                                                  :Git:
 
 #+begin_src emacs-lisp
 (use-package diff-lisp
@@ -3333,7 +3461,13 @@ git-auto-commit
   )
 #+end_src
 
-* undo: vundo
+* undo
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       88545EEC-9A57-40CD-AB8B-1623729B63F4
+:END:
+
+** vundo
 
 #+begin_src emacs-lisp
 (use-package vundo
@@ -3356,24 +3490,11 @@ git-auto-commit
   ))
 #+end_src
 
-* emacs-rime
-
-#+begin_src emacs-lisp :tangle no
-(defun change-cursor-color-on-input-method ()
-  "Set cursor color depending on whether an input method is used or not."
-  (interactive)
-  (set-cursor-color (if (and (rime--should-enable-p)
-                             (not (rime--should-inline-ascii-p))
-                             current-input-method)
-                        input-method-cursor-color
-                      default-cursor-color)))
-#+end_src
-
-[[https://github.com/DogLooksGood/emacs-rime][DogLooksGood/emacs-rime: RIME ㄓ in Emacs]]
-
-[[https://github.com/Eason0210/im-cursor-chg][Eason0210/im-cursor-chg]]
-
 * 书签 Bookmark 
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       32BD08DE-090F-4FC9-93DC-10A36723EA5E
+:END:
 
 binky-mode
 
@@ -3385,6 +3506,10 @@ binky-mode
 #+end_src
 
 * 剪贴板 kill-ring/clipboard
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       D92B0D57-EB04-43B7-86F9-50339674562E
+:END:
 
 #+begin_src emacs-lisp :tangle no
 (use-package browse-kill-ring
@@ -3405,6 +3530,10 @@ binky-mode
 #+end_src
 
 * UI
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       181557E2-40BD-4061-A865-94312CFF85AE
+:END:
 
 ** posframe
 
@@ -3425,6 +3554,8 @@ binky-mode
   :ensure nil
   :hook (prog-mode . topsy-mode) ;; (add-hook 'prog-mode-hook #'topsy-mode)
   )
+
+;; https://github.com/alphapapa/org-sticky-header/issues/14
 (use-package org-sticky-header
   :ensure nil
   :hook (org-mode . org-sticky-header-mode)
@@ -3614,6 +3745,10 @@ Emacs 29: copy-region-blink-predicate
 #+end_src
 
 * 折叠
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       F9BC2CD6-E690-47C1-AED9-71A98B5C79A3
+:END:
 
 ** ts-fold :Git:
 
@@ -3645,7 +3780,102 @@ Emacs 29: copy-region-blink-predicate
 
 https://github.com/logangrado/hideshow-orgmode
 
+* frame 管理
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       79C8DC5B-DA42-4A27-8615-9A382380B698
+:END:
+
+** moom
+
+#+begin_src emacs-lisp :tangle no
+(with-suppressed-warnings '(void-function transient-prefix)) ;FIXME
+(add-to-list 'warning-suppress-types '((void-function transient-prefix)))
+  (with-eval-after-load "moom"
+    (setq moom-use-font-module nil)
+    ;; (moom-recommended-keybindings '(all wof))
+    (moom-recommended-keybindings '(move fit expand fill font reset undo))
+    (when (require 'moom-transient nil t)
+      (moom-transient-hide-cursor) ;; if needed
+      (define-key moom-mode-map (kbd "C-c o") #'moom-transient-dispatch)
+      )
+    )
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+  (use-package moom
+    :ensure nil
+    :if (display-graphic-p)
+    :after transient
+    ;; :bind
+    ;; (
+    ;;  :map moom-mode-map
+    ;;       ("H-o H-o" . moom-transient-dispatch)
+    ;;       )
+    :config
+    (setq moom-use-font-module nil)
+    (moom-mode 1)
+    ;; (moom-transient-hide-cursor)
+    (moom-recommended-keybindings '(move fit expand fill font reset undo))
+    )
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+;; moom + transient
+;; {{{
+(with-suppressed-warnings '(void-function transient-prefix)) ;FIXME
+(add-to-list 'warning-suppress-types '((void-function transient-prefix)))
+(use-package moom
+  ;; :after transcient
+  :ensure nil
+  ;; :defer 1
+  ;; :if (memq window-system '(mac ns x))
+  ;; (keymap-global-set "" #'moom-font-increase)
+  :commands (moom-transient-dispatch moom-transient-config)
+  :config
+  (require 'moom-transient)
+  (setq moom-use-font-module nil)
+  (moom-mode 1)
+  (moom-transient-hide-cursor) ;; if needed
+  ;; (define-key moom-mode-map (kbd "C-c o") #'moom-transient-dispatch)
+  (moom-recommended-keybindings '(move fit expand fill font reset undo))
+  )
+
+;; (unless (and (display-graphic-p) (eq system-type 'darwin))
+;;   (add-hook 'after-init-hook 'moom-mode)
+;;   )
+;; }}}
+#+end_src
+
+* window 管理
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       F78BB24E-0E25-4C5A-A754-23AD22847736
+:END:
+
+** zoom
+
+** ace-window
+
+#+begin_src emacs-lisp
+;; {{{ ace-window
+;; (require 'ace-window)
+;; (keymap-global-set "H-w H-w" #'ace-window)
+(use-package ace-window
+  :ensure nil
+  :bind
+  ("H-w H-w" . ace-window)
+  :config
+  (setq aw-keys '(?e ?a ?s ?d ?f ?g ?h ?j ?k ?l ?v ?n))
+  )
+;; }}}
+#+end_src
+
 * Org family
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       CE9D175A-8FE9-4C90-A87C-62B3BB2C0748
+:END:
 
 ** org-download
 
@@ -3718,6 +3948,10 @@ https://github.com/logangrado/hideshow-orgmode
 #+end_src
 
 * org-roam
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       850BDBA1-B6FD-4149-8741-D9AC0F74F8BD
+:END:
 
 ** basic config
 
@@ -4232,13 +4466,11 @@ org-protocol://roam-node?node=uuid"
 ;; }}}
 #+end_src
 
-* ekg: super tag
-
-[[https://github.com/ahyatt/ekg][ahyatt/ekg: The emacs knowledge graph, app for notes and structured data.]]
-
-substitute of org-roam/denote
-
 * markdown
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       E004F903-F047-4309-8C54-3F11FB064EB6
+:END:
 
 #+begin_src emacs-lisp
 ;; markdown-mode
@@ -4266,74 +4498,37 @@ substitute of org-roam/denote
 ;; }}}
 #+end_src
 
-* frame 管理
+* ekg
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       6E4531B5-DF05-4BA9-BA7F-54CD0F016EBE
+:END:
 
-** moom
+https://github.com/ahyatt/ekg
 
-#+begin_src emacs-lisp
-(with-eval-after-load "moom"
-  (setq moom-use-font-module nil)
-  ;; (moom-recommended-keybindings '(all wof))
-  (moom-recommended-keybindings '(move fit expand fill font reset undo))
-  (when (require 'moom-transient nil t)
-    (moom-transient-hide-cursor) ;; if needed
-    (define-key moom-mode-map (kbd "C-c o") #'moom-transient-dispatch)
-    )
-  )
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-;; moom + transient
-;; {{{
-(with-suppressed-warnings '(void-function transient-prefix)) ;FIXME
-(add-to-list 'warning-suppress-types '((void-function transient-prefix)))
-(use-package moom
-  ;; :after transcient
-  :defer 1
-  :ensure nil
-  ;; :if (memq window-system '(mac ns x))
-  ;; (keymap-global-set "" #'moom-font-increase)
-  :commands (moom-transient-dispatch moom-transient-config)
-  :config
-  (require 'moom-transient)
-  (setq moom-use-font-module nil)
-  (moom-mode 1)
-  (moom-transient-hide-cursor) ;; if needed
-  ;; (define-key moom-mode-map (kbd "C-c o") #'moom-transient-dispatch)
-  (moom-recommended-keybindings '(move fit expand fill font reset undo))
-  )
-
-;; (unless (and (display-graphic-p) (eq system-type 'darwin))
-;;   (add-hook 'after-init-hook 'moom-mode)
-;;   )
-;; }}}
-#+end_src
-
-* window 管理
-
-** zoom
-
-** ace-window
+[[https://sspai.com/post/77394][Tana：2022 最惊艳的笔记软件 - 少数派]]
 
 #+begin_src emacs-lisp
-;; {{{ ace-window
-;; (require 'ace-window)
-;; (keymap-global-set "H-o" #'ace-window)
-(use-package ace-window
-  :ensure nil
-  :bind
-  ("H-o" . ace-window)
-  :config
-  (setq aw-keys '(?e ?a ?s ?d ?f ?g ?h ?j ?k ?l ?v ?n))
-  )
-;; }}}
+
 #+end_src
 
 * 邮件/邮箱
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       D838ABFA-10F1-4E87-AA04-0592B1AC77BE
+:END:
 
 ** notmuch
 
 * 网页浏览、信息订阅
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       D46579B0-56E1-4F3F-88BF-DCED1B6A9AC9
+:END:
+
+** goggle-this
+
+[[https://github.com/Malabarba/emacs-google-this][Malabarba/emacs-google-this: A set of emacs functions and bindings to google under point.]]
 
 ** 必应词典: bing-dict
 
@@ -4419,9 +4614,8 @@ substitute of org-roam/denote
 #+begin_src emacs-lisp :tangle no
 (use-package nov
   :defer t
+  :hook (nov-mode . shrface-mode)
   :mode ("\\.[eE][pP][uU][bB]\\'" . nov-mode)
-  :init
-  (add-hook 'nov-mode-hook #'shrface-mode)
   :config
   (
    ;; (setq nov-text-width 80)
@@ -4500,13 +4694,18 @@ https://github.com/zk-phi/spray
 #+end_src
 
 * UI
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       547CC50E-FDE2-40D9-A752-8273F8D60E35
+:END:
 
 ** nyan-mode
 
 #+begin_src emacs-lisp
 (use-package nyan-mode
   :ensure nil
-  :hook (doom-modeline-mode . nyan-mode)
+  :defer 3
+  :hook (parrot-mode . nyan-mode)
   :config
   (setq nyan-animate-nyancat t
         nyan-wavy-trail t)
@@ -4521,9 +4720,11 @@ https://github.com/zk-phi/spray
 ;; auto-dark
 ;; {{{
 (use-package auto-dark
+  :ensure nil
+  :defer 3
   :if (display-graphic-p)
   ;; :init (auto-dark-mode t)
-  :hook (after-init . auto-dark-mode)
+  ;; :hook (after-init . auto-dark-mode)
   :config
   (setq auto-dark-allow-osascript t
         auto-dark-dark-theme 'solarized-dark)
@@ -4532,6 +4733,10 @@ https://github.com/zk-phi/spray
 #+end_src
 
 ** zoom-to-point :Git:
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       489B39A2-E28E-4DDC-9D81-469C8148BE88
+:END:
 
 #+begin_src emacs-lisp :tangle no
 ;; https://github.com/rmloveland/zoom-to-point
@@ -4578,6 +4783,10 @@ in the window."
 #+end_src
 
 * 图表图像 diagram & image
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       6B8BFE51-5F0D-44D2-A83D-7136B7174630
+:END:
 
 ** Graphviz
 
@@ -4706,6 +4915,10 @@ Doesn't work on macOS: =(void-function x-export-frames)=
 #+end_src
 
 * 地图 map
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       5DD9E9A7-1FD6-4845-BEA4-D728C4123C14
+:END:
 
 #+begin_src emacs-lisp
 ;; osm: OpenStreetMap
@@ -4736,6 +4949,10 @@ Doesn't work on macOS: =(void-function x-export-frames)=
 #+end_src
 
 * 影音 video & audio
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       0257E57A-47B9-4187-A56A-197C48FED858
+:END:
 
 ** empv: 视频播放控制
 
@@ -4755,8 +4972,16 @@ Doesn't work on macOS: =(void-function x-export-frames)=
 #+end_src
 
 * STT
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       1A8B6CE5-87EC-48FF-90E9-764B88FA504E
+:END:
 
 * 字幕※歌词 Subtitle & Lyric
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       1A1F64A5-F496-4649-B7FD-E298E538D2AC
+:END:
 
 ** subed :Git:
 
@@ -4779,6 +5004,10 @@ Doesn't work on macOS: =(void-function x-export-frames)=
 #+end_src
 
 * 阅读
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       E7520EEE-CDE8-40EC-BF29-7AD58DB7FB8B
+:END:
 ** mybigword
 
 #+begin_src emacs-lisp
@@ -4807,10 +5036,11 @@ Doesn't work on macOS: =(void-function x-export-frames)=
 (use-package
   olivetti
   :hook
-  ((after-init . olivetti-mode)
-   ;; (org-mode . my/toggle-olivetti-for-org)
+  (
+   (after-init . olivetti-mode)
    ;; (window-configuration-change . my/toggle-olivetti-for-org)
    )
+  :bind ("H-v H-v" . olivetti-mode)
   :init
   (setq olivetti-body-width 90) ; default: fill-column+2
 
@@ -4843,8 +5073,20 @@ Doesn't work on macOS: =(void-function x-export-frames)=
 #+end_src
 
 * TTS
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       BE3C7815-E778-4DBA-8139-500EF6C0B379
+:END:
 
 * 待整理
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle no
+:ID:       51F8CE43-0A62-426B-91B0-1014D0D3E151
+:END:
+
+** crux
+
+[[https://github.com/bbatsov/crux][bbatsov/crux: A Collection of Ridiculously Useful eXtensions for Emacs]]
 
 ** with-editor                                                       :FIXME:
 
@@ -4868,9 +5110,11 @@ crontab: "/Applications/Emacs.app/Contents/MacOS/bin/emacsclient --socket-name=/
   )
 #+end_src
 
-** crux
+** ekg: super tag
 
-[[https://github.com/bbatsov/crux][bbatsov/crux: A Collection of Ridiculously Useful eXtensions for Emacs]]
+[[https://github.com/ahyatt/ekg][ahyatt/ekg: The emacs knowledge graph, app for notes and structured data.]]
+
+substitute of org-roam/denote
 
 * File End
 :PROPERTIES:

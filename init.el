@@ -364,15 +364,12 @@ Consider only documented, non-obsolete functions."
        (emacs-uptime)
        " |"
        "\n")
-      (append-to-file nil nil my/emacs-uptime-log))))
+      (append-to-file nil nil my/emacs-uptime-log)))
+  )
 ;; }}}
 ;; 时间与日期 date & time:1 ends here
 
-;; [[file:README.org::*时间与日期 date & time][时间与日期 date & time:2]]
-
-;; 时间与日期 date & time:2 ends here
-
-;; [[file:README.org::*剪贴板与寄存器 clipboard & register][剪贴板与寄存器 clipboard & register:1]]
+;; [[file:README.org::*剪贴板与寄存器 clipboard & register][剪贴板与寄存器 clipboard & register:2]]
 (use-package emacs
   :ensure nil
   :defer t
@@ -380,14 +377,14 @@ Consider only documented, non-obsolete functions."
   ;; ("C-c H-k" . yank-from-kill-ring)
   ("M-z" . zap-up-to-char)
   )
-;; 剪贴板与寄存器 clipboard & register:1 ends here
+;; 剪贴板与寄存器 clipboard & register:2 ends here
 
-;; [[file:README.org::*剪贴板与寄存器 clipboard & register][剪贴板与寄存器 clipboard & register:2]]
+;; [[file:README.org::*剪贴板与寄存器 clipboard & register][剪贴板与寄存器 clipboard & register:3]]
 (use-package register
   :ensure nil
   :defer t
   )
-;; 剪贴板与寄存器 clipboard & register:2 ends here
+;; 剪贴板与寄存器 clipboard & register:3 ends here
 
 ;; [[file:README.org::*注释 comment][注释 comment:1]]
 ;; comment
@@ -1481,39 +1478,36 @@ Version: 2018-09-07 2022-09-13"
 
 ;; [[file:README.org::*句子、段落 sentence paragraph][句子、段落 sentence paragraph:1]]
 (use-package emacs
-  :ensure nil
-  :bind
-  (
-   ([remap fill-paragraph] . my/toggle-fill-unfill)
-   )
-  :config
-  (setq-default fill-column 80) ;; M-x set-fill-column RET
+ :ensure nil
+ :bind (([remap fill-paragraph] . my/toggle-fill-unfill))
+ :init
+ ;; (setq sentence-end-double-space nil)
+ (setq-default fill-column 80) ; M-x set-fill-column RET
+ :config
+ ;; sentence: 断句
+ (setq sentence-end "\\([。！？]\\|……\\|[.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*"))
+;; paragraph: 段落
+(defun my/toggle-fill-unfill ()
+  "Like `fill-paragraph', but unfill if used twice."
+  (interactive)
+  (let ((fill-column
+         (if (eq last-command 'my-fill-or-unfill)
+             (progn
+               (setq this-command nil)
+               (point-max))
+           fill-column)))
+    (call-interactively 'fill-paragraph nil (vector nil t))))
 
-  (defun my/toggle-fill-unfill ()
-    "Like `fill-paragraph', but unfill if used twice."
-    (interactive)
-    (let ((fill-column
-           (if (eq last-command 'my-fill-or-unfill)
-               (progn (setq this-command nil)
-                      (point-max))
-             fill-column)))
-      (call-interactively 'fill-paragraph nil (vector nil t))))
-
-  ;; https://www.emacswiki.org/emacs/UnfillParagraph
-  (defun my/unfill-paragraph (&optional region)
-    "Takes a multi-line paragraph and makes it into a single line of text."
-    (interactive (progn (barf-if-buffer-read-only) '(t)))
-    (let ((fill-column (point-max))
-          ;; This would override `fill-column' if it's an integer.
-          (emacs-lisp-docstring-fill-column t))
-      (fill-paragraph nil region))
-    )
-  ;; sentence: 断句
-  (setq sentence-end
-        "\\([。！？]\\|……\\|[.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*"
-        )
-  ;; (setq sentence-end-double-space nil)
-  )
+;; https://www.emacswiki.org/emacs/UnfillParagraph
+(defun my/unfill-paragraph (&optional region)
+  "Takes a multi-line paragraph and makes it into a single line of text."
+  (interactive (progn
+                 (barf-if-buffer-read-only)
+                 '(t)))
+  (let ((fill-column (point-max))
+        ;; This would override `fill-column' if it's an integer.
+        (emacs-lisp-docstring-fill-column t))
+    (fill-paragraph nil region)))
 ;; 句子、段落 sentence paragraph:1 ends here
 
 ;; [[file:README.org::*Title Capitalization][Title Capitalization:1]]
@@ -1829,6 +1823,42 @@ occurence of CHAR."
 ;;  'sql-mode-hook
 ;;  (lambda () (setq imenu-generic-expression sql-imenu-generic-expression)))
 ;; imenu:1 ends here
+
+;; [[file:README.org::*narrow][narrow:1]]
+(use-package emacs
+ :ensure nil
+ :bind ("C-c n n" . my/narrow-or-widen-dwim)
+ :config
+ ;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
+ (defun my/narrow-or-widen-dwim (p)
+   "If the buffer is narrowed, it widens. Otherwise, it narrows intelligently.
+Intelligently means: region, org-src-block, org-subtree, or defun,
+whichever applies first.
+Narrowing to org-src-block actually calls `org-edit-src-code'.
+With prefix P, don't widen, just narrow even if buffer is already
+narrowed."
+   (interactive "P")
+   (declare (interactive-only))
+   (cond
+    ((and (buffer-narrowed-p) (not p))
+     (widen))
+    ((region-active-p)
+     (narrow-to-region (region-beginning) (region-end)))
+    ((derived-mode-p 'org-mode)
+     ;; `org-edit-src-code' is not a real narrowing command.
+     ;; Remove this first conditional if you don't want it.
+     (cond
+      ((ignore-errors
+         (org-edit-src-code))
+       (delete-other-windows))
+      ((org-at-block-p)
+       (org-narrow-to-block))
+      (t
+       (org-narrow-to-subtree))))
+    (t
+     (narrow-to-defun))))
+ )
+;; narrow:1 ends here
 
 ;; [[file:README.org::*Eshell][Eshell:1]]
 ;; https://www.n16f.net/blog/eshell-key-bindings-and-completion/
@@ -2466,6 +2496,13 @@ all open tasks in current Org buffer
           ))
   )
 ;; code block: org-babel org-src:2 ends here
+
+;; [[file:README.org::*code block: org-babel org-src][code block: org-babel org-src:3]]
+(use-package org-src
+  :ensure nil
+  ;; :defer t
+  )
+;; code block: org-babel org-src:3 ends here
 
 ;; [[file:README.org::*Link][Link:1]]
 (use-package org
