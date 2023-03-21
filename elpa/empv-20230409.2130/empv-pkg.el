@@ -1,0 +1,2 @@
+;;; Generated package description from empv.el  -*- no-byte-compile: t -*-
+(define-package "empv" "20230409.2130" "A multimedia player/manager, YouTube interface" '((emacs "28.1") (s "1.13.0")) :commit "af7def9dbb0156b2ec4e75c71ca29792b112768f" :authors '(("Isa Mert Gurbuz" . "isamertgurbuz@gmail.com")) :maintainer '("Isa Mert Gurbuz" . "isamertgurbuz@gmail.com") :url "https://github.com/isamert/empv.el")

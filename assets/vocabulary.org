@@ -35,3 +35,9 @@ v. 抑制；阻止；阻碍；使拘束 | 网络 禁止；约束；压制 | Syno
 
 ** substitute [ˈsʌbstɪˌtut]
 v. 取代；（以…）代替 | n. 代用品；代替物；代替者；替补（运动员） | 网络 替身；替换；替代 | Synonym n. alternative,replacement,stand-in,locum,surrogate adj. supernumerary,extra,auxiliary,additional,ancillary v. replace with,exchange,switch,fill in for,take the place of | Antonym adj. permanent
+
+** wrench [rentʃ]
+n. 扳手；扳钳；（离别的）痛苦；猛扭 | v. 猛拉；猛扭；猛拧；扭伤（脚踝、肩膀等） | 网络 板手 | Synonym n. spanner
+
+** antenna [ænˈtenə]
+n. 【生】触角；触须；常用于美式英语；〈比喻〉直觉 | 网络 天线；安缇娜；接收天线 | Synonym n. feeler,projection,probe,protuberance,whisker

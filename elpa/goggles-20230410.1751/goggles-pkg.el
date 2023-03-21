@@ -1,0 +1,2 @@
+;;; Generated package description from goggles.el  -*- no-byte-compile: t -*-
+(define-package "goggles" "20230410.1751" "Pulse modified regions" '((emacs "27.1")) :commit "1bb04b55286dd6cb066d9609f228fc62817dbf56" :authors '(("Daniel Mendler" . "mail@daniel-mendler.de")) :maintainer '("Daniel Mendler" . "mail@daniel-mendler.de") :keywords '("convenience" "wp") :url "https://github.com/minad/goggles")
