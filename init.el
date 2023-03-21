@@ -1478,14 +1478,14 @@ Version: 2018-09-07 2022-09-13"
 
 ;; [[file:README.org::*句子、段落 sentence paragraph][句子、段落 sentence paragraph:1]]
 (use-package emacs
- :ensure nil
- :bind (([remap fill-paragraph] . my/toggle-fill-unfill))
- :init
- ;; (setq sentence-end-double-space nil)
- (setq-default fill-column 80) ; M-x set-fill-column RET
- :config
- ;; sentence: 断句
- (setq sentence-end "\\([。！？]\\|……\\|[.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*"))
+  :ensure nil
+  :bind (([remap fill-paragraph] . my/toggle-fill-unfill))
+  :init
+  ;; (setq sentence-end-double-space nil)
+  (setq-default fill-column 80) ; M-x set-fill-column RET
+  :config
+  ;; sentence: 断句
+  (setq sentence-end "\\([。！？]\\|……\\|[.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*"))
 ;; paragraph: 段落
 (defun my/toggle-fill-unfill ()
   "Like `fill-paragraph', but unfill if used twice."
@@ -1713,6 +1713,15 @@ occurence of CHAR."
 ;; }}}
 ;; isearch:1 ends here
 
+;; [[file:README.org::*批量替换 batch replace and wgrep][批量替换 batch replace and wgrep:3]]
+(use-package wgrep-deadgrep
+  :ensure nil
+  :defer t
+  :hook
+  (deadgrep-finished . wgrep-deadgrep-setup)
+)
+;; 批量替换 batch replace and wgrep:3 ends here
+
 ;; [[file:README.org::*对齐缩进格式化 align indent format][对齐缩进格式化 align indent format:3]]
 (use-package simple
   :ensure nil
@@ -1826,38 +1835,38 @@ occurence of CHAR."
 
 ;; [[file:README.org::*narrow][narrow:1]]
 (use-package emacs
- :ensure nil
- :bind ("C-c n n" . my/narrow-or-widen-dwim)
- :config
- ;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
- (defun my/narrow-or-widen-dwim (p)
-   "If the buffer is narrowed, it widens. Otherwise, it narrows intelligently.
+  :ensure nil
+  :bind ("C-c n n" . my/narrow-or-widen-dwim)
+  :config
+  ;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
+  (defun my/narrow-or-widen-dwim (p)
+    "If the buffer is narrowed, it widens. Otherwise, it narrows intelligently.
 Intelligently means: region, org-src-block, org-subtree, or defun,
 whichever applies first.
 Narrowing to org-src-block actually calls `org-edit-src-code'.
 With prefix P, don't widen, just narrow even if buffer is already
 narrowed."
-   (interactive "P")
-   (declare (interactive-only))
-   (cond
-    ((and (buffer-narrowed-p) (not p))
-     (widen))
-    ((region-active-p)
-     (narrow-to-region (region-beginning) (region-end)))
-    ((derived-mode-p 'org-mode)
-     ;; `org-edit-src-code' is not a real narrowing command.
-     ;; Remove this first conditional if you don't want it.
-     (cond
-      ((ignore-errors
-         (org-edit-src-code))
-       (delete-other-windows))
-      ((org-at-block-p)
-       (org-narrow-to-block))
-      (t
-       (org-narrow-to-subtree))))
-    (t
-     (narrow-to-defun))))
- )
+    (interactive "P")
+    (declare (interactive-only))
+    (cond
+     ((and (buffer-narrowed-p) (not p))
+      (widen))
+     ((region-active-p)
+      (narrow-to-region (region-beginning) (region-end)))
+     ((derived-mode-p 'org-mode)
+      ;; `org-edit-src-code' is not a real narrowing command.
+      ;; Remove this first conditional if you don't want it.
+      (cond
+       ((ignore-errors
+          (org-edit-src-code))
+        (delete-other-windows))
+       ((org-at-block-p)
+        (org-narrow-to-block))
+       (t
+        (org-narrow-to-subtree))))
+     (t
+      (narrow-to-defun))))
+  )
 ;; narrow:1 ends here
 
 ;; [[file:README.org::*Eshell][Eshell:1]]
