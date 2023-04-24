@@ -1595,6 +1595,13 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; }}}
 ;; 书签 Bookmark:1 ends here
 
+;; [[file:../package.org::*剪贴板 kill-ring/clipboard][剪贴板 kill-ring/clipboard:1]]
+(use-package htmlize
+  :defer 2
+  :ensure nil
+  )
+;; 剪贴板 kill-ring/clipboard:1 ends here
+
 ;; [[file:../package.org::*posframe][posframe:1]]
 (use-package posframe
   :ensure nil
