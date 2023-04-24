@@ -3511,6 +3511,13 @@ binky-mode
 :ID:       D92B0D57-EB04-43B7-86F9-50339674562E
 :END:
 
+#+begin_src emacs-lisp
+(use-package htmlize
+  :defer 2
+  :ensure nil
+  )
+#+end_src
+
 #+begin_src emacs-lisp :tangle no
 (use-package browse-kill-ring
   :ensure nil
