@@ -1,5 +1,6 @@
+;;; -*- lexical-binding: t; -*-
 ;; [[file:README.org::*File header][File header:1]]
-;; -*- coding: utf-8; lexical-binding: t; no-byte-compile: t -*-
+;; -*- coding: utf-8; no-byte-compile: t -*-
 
 ;;; Commentary:
 

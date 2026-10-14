@@ -1,5 +1,6 @@
+;;; -*- lexical-binding: t; -*-
 ;; [[file:README.org::*File Header][File Header:1]]
-;; -*- coding: utf-8; lexical-binding: t; -*-
+;; -*- coding: utf-8; -*-
 ;; -*- origami-fold-style: triple-braces -*-
 ;;; init.el
 
