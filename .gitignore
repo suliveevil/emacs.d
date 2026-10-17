@@ -96,3 +96,12 @@ tmp.el
 projects
 test.org
 
+
+# --- 由 org 统一管理：生成物与本地状态不入库 ---
+# elpa/ 是包管理器产物，应由 use-package :ensure / package-selected-packages 重建
+/elpa/
+# Customize 的写入点已移到 var/（见 early-init 的 custom-file），只留本地
+/var/
+/custom.el
+# 启动时由 my/log-emacs-uptime 自动追加，属于生成物
+/assets/uptime.org
