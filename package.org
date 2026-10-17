@@ -3664,6 +3664,32 @@ Emacs 29: copy-region-blink-predicate
 ;; }}}
 #+end_src
 
+** nerd-icons（doom-modeline 的图标后端）
+
+doom-modeline 4.x 起改用 =nerd-icons=，其图标来自 Nerd Fonts 的
+Symbols Nerd Font，缺失时 modeline 上的图标会显示成方块/空白。
+字体安装：=brew install --cask font-symbols-only-nerd-font=
+
+#+begin_src emacs-lisp
+;; nerd-icons
+;; {{{
+(use-package nerd-icons
+  :ensure nil
+  ;; 用只含图标的 Symbols Nerd Font，主字体不必是 Nerd 补丁版
+  :custom
+  (nerd-icons-font-family "Symbols Nerd Font Mono")
+  :config
+  ;; macOS 上字体装在 ~/Library/Fonts，无需额外 fonts 目录设置
+  (when (and (display-graphic-p)
+             (not (find-font (font-spec :family nerd-icons-font-family))))
+    (display-warning 'files
+                     (format "图标字体 %s 未安装：brew install --cask font-symbols-only-nerd-font"
+                             nerd-icons-font-family)
+                     :warning))
+  )
+;; }}}
+#+end_src
+
 ** doom-modeline
 
 #+begin_src emacs-lisp

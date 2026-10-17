@@ -4484,10 +4484,17 @@ is initialized.  Change it to the directory of previous buffer where
 #+begin_src emacs-lisp
 ;; font and syntax
 ;; {{{
+;; 主字体：Sarasa Mono SC（brew install --cask font-sarasa-gothic）
+;; 注意：上游 Sarasa 没有 Nerd 变体，"Sarasa Mono SC Nerd" 这个族名并不存在，
+;; 图标由 nerd-icons + Symbols Nerd Font Mono 单独提供（见 doom-modeline 段）。
 (set-face-attribute 'default nil
-                    :family "Sarasa Mono SC Nerd"
+                    :family "Sarasa Mono SC"
                     :height 140 ; 更改显示字体大小
                     )
+;; 字体缺失时给出明确提示，而不是静默回退到系统默认字体
+(when (and (display-graphic-p)
+           (not (find-font (font-spec :family "Sarasa Mono SC"))))
+  (display-warning 'files "字体 Sarasa Mono SC 未安装：brew install --cask font-sarasa-gothic" :warning))
 (global-font-lock-mode t) ;; turn on syntax highlighting for all buffers
 ;; }}}
 #+end_src

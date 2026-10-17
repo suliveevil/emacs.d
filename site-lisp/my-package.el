@@ -1697,6 +1697,26 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; }}}
 ;; 括号: highlight-parentheses:1 ends here
 
+;; [[file:../package.org::*nerd-icons（doom-modeline 的图标后端）][nerd-icons（doom-modeline 的图标后端）:1]]
+;; nerd-icons
+;; {{{
+(use-package nerd-icons
+  :ensure nil
+  ;; 用只含图标的 Symbols Nerd Font，主字体不必是 Nerd 补丁版
+  :custom
+  (nerd-icons-font-family "Symbols Nerd Font Mono")
+  :config
+  ;; macOS 上字体装在 ~/Library/Fonts，无需额外 fonts 目录设置
+  (when (and (display-graphic-p)
+             (not (find-font (font-spec :family nerd-icons-font-family))))
+    (display-warning 'files
+                     (format "图标字体 %s 未安装：brew install --cask font-symbols-only-nerd-font"
+                             nerd-icons-font-family)
+                     :warning))
+  )
+;; }}}
+;; nerd-icons（doom-modeline 的图标后端）:1 ends here
+
 ;; [[file:../package.org::*doom-modeline][doom-modeline:1]]
 ;; doom-modeline
 ;; {{{
