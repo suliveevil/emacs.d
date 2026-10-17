@@ -1620,9 +1620,20 @@ re="(([\u2e80-\u9fff]+)([\n\r]{1,2})?([\s\t])?(([\u2e80-\u9fff]+)|(\w)+)([\s\t])
 :ID:       D84D227C-5554-4544-AB1B-8F8F048F4A8C
 :END:
 
-** wucuo
+** nsspell
 
 #+begin_src emacs-lisp
+;; nsspell: macOS NSSpellChecker backend for ispell.el and flyspell.el.
+;; Homebrew installs the executable and its optional Emacs integration here.
+(add-to-list 'load-path "/opt/homebrew/opt/nsspell/share/emacs/site-lisp/nsspell")
+(setq ispell-program-name "/opt/homebrew/opt/nsspell/bin/nsspell")
+(setq ispell-dictionary "en_US")
+(setq ispell-extra-args nil)
+#+end_src
+
+** Legacy wucuo (disabled)
+
+#+begin_src emacs-lisp :tangle no
 ;; ispell flyspell: aspell/hunspell
 ;; (dolist (hook '(text-mode-hook))                          ;; enable in text-mode
 ;;   (add-hook hook (lambda () (flyspell-mode 1))))
