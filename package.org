@@ -1117,7 +1117,7 @@ https://karthinks.com/software/avy-can-do-anything
 
   (defun embark--target-mode-update ()
     (setq embark--target-mode-string
-          (if-let (targets (embark--targets))
+          (if-let* ((targets (embark--targets)))
               (format "[%s%s] "
                       (propertize (symbol-name (plist-get (car targets) :type)) 'face 'bold)
                       (mapconcat (lambda (x) (format ", %s" (plist-get x :type)))
@@ -1502,7 +1502,7 @@ re="(([\u2e80-\u9fff]+)([\n\r]{1,2})?([\s\t])?(([\u2e80-\u9fff]+)|(\w)+)([\s\t])
            (node-end (treesit-node-end node)))
       ;; Node fits the region exactly. Try its parent node instead.
       (when (and (= (region-beginning) node-start) (= (region-end) node-end))
-        (when-let ((node (treesit-node-parent node)))
+        (when-let* ((node (treesit-node-parent node)))
           (setq
            node-start (treesit-node-start node)
            node-end (treesit-node-end node))))
@@ -4080,7 +4080,7 @@ INFO is a plist containing additional information passed by the protocol URL.
 It should contain the FILE key, pointing to the path of the file to open.
   Example protocol string:
 org-protocol://roam-node?node=uuid"
-  (when-let ((node (plist-get info :node)))
+  (when-let* ((node (plist-get info :node)))
     (raise-frame)
     (org-roam-node-visit (org-roam-populate
                           (org-roam-node-create :id node))
@@ -5245,6 +5245,26 @@ Doesn't work on macOS: =(void-function x-export-frames)=
 :header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
 :ID:       BE3C7815-E778-4DBA-8139-500EF6C0B379
 :END:
+
+* dsh-emacs :Git:
+:PROPERTIES:
+:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
+:ID:       5F0A7D1C-9B42-4E6F-A31D-7C8B02E5F4D9
+:END:
+
+[[https://github.com/vritser/dsh-emacs][vritser/dsh-emacs: an Emacs client for DeepSeek Harness.]]
+
+The package is checked out under =lib/dsh-emacs=.  Run =M-x dsh-emacs= to
+open the session list; it starts a local dsh server when necessary and guides
+provider setup on first use.
+
+#+begin_src emacs-lisp
+(use-package dsh-emacs
+  :ensure nil
+  :load-path (expand-file-name "lib/dsh-emacs" user-emacs-directory)
+  :commands (dsh-emacs dsh-emacs-new-session)
+  :bind ("C-c d" . dsh-emacs))
+#+end_src
 
 * 待整理
 :PROPERTIES:

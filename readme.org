@@ -2749,14 +2749,14 @@ project."
 (defun my/sort-by-history (elems)
   "Sort ELEMS by minibuffer history.
 Use `mct-sort-sort-by-alpha-length' if no history is available."
-  (if-let ((hist (and (not (eq minibuffer-history-variable t))
+  (if-let* ((hist (and (not (eq minibuffer-history-variable t))
                       (symbol-value minibuffer-history-variable))))
       (minibuffer--sort-by-position hist elems)
     (my/sort-by-alpha-length elems)))
 
 (defun my/completion-category ()
   "Return completion category."
-  (when-let ((window (active-minibuffer-window)))
+  (when-let* ((window (active-minibuffer-window)))
     (with-current-buffer (window-buffer window)
       (completion-metadata-get
        (completion-metadata (buffer-substring-no-properties

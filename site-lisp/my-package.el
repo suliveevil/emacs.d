@@ -425,7 +425,7 @@
 
   (defun embark--target-mode-update ()
     (setq embark--target-mode-string
-          (if-let (targets (embark--targets))
+          (if-let* ((targets (embark--targets)))
               (format "[%s%s] "
                       (propertize (symbol-name (plist-get (car targets) :type)) 'face 'bold)
                       (mapconcat (lambda (x) (format ", %s" (plist-get x :type)))
@@ -590,7 +590,7 @@
            (node-end (treesit-node-end node)))
       ;; Node fits the region exactly. Try its parent node instead.
       (when (and (= (region-beginning) node-start) (= (region-end) node-end))
-        (when-let ((node (treesit-node-parent node)))
+        (when-let* ((node (treesit-node-parent node)))
           (setq
            node-start (treesit-node-start node)
            node-end (treesit-node-end node))))
@@ -2364,6 +2364,14 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   (define-key nov-mode-map (kbd "o") 'nov-xwidget-view)
   (add-hook 'nov-mode-hook 'nov-xwidget-inject-all-files))
 ;; nov-xwidget:1 ends here
+
+;; [[file:../package.org::*dsh-emacs][dsh-emacs:1]]
+(use-package dsh-emacs
+  :ensure nil
+  :load-path (expand-file-name "lib/dsh-emacs" user-emacs-directory)
+  :commands (dsh-emacs dsh-emacs-new-session)
+  :bind ("C-c d" . dsh-emacs))
+;; dsh-emacs:1 ends here
 
 ;; [[file:../package.org::*File End][File End:1]]
 ;; 2023-02-09T02:34:54+0800

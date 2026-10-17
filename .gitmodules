@@ -67,3 +67,24 @@
 [submodule "lib/combobulate"]
 	path = lib/combobulate
 	url = https://github.com/mickeynp/combobulate.git
+[submodule "lib/which-key-posframe"]
+	path = lib/which-key-posframe
+	url = https://github.com/yanghaoxie/which-key-posframe.git
+[submodule "lib/vertico"]
+	path = lib/vertico
+	url = https://github.com/minad/vertico.git
+[submodule "lib/pyim"]
+	path = lib/pyim
+	url = https://github.com/tumashu/pyim.git
+[submodule "lib/orderless"]
+	path = lib/orderless
+	url = https://github.com/oantolin/orderless.git
+[submodule "lib/nerd-icons"]
+	path = lib/nerd-icons
+	url = https://github.com/rainstormstudio/nerd-icons.el.git
+[submodule "lib/xr"]
+	path = lib/xr
+	url = https://github.com/mattiase/xr.git
+[submodule "lib/dsh-emacs"]
+	path = lib/dsh-emacs
+	url = https://github.com/vritser/dsh-emacs.git
