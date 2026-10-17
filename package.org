@@ -737,9 +737,18 @@ Track Emacs commands frequency
 (use-package keyfreq
   :ensure nil
   :defer 1
+  :bind (("C-c k" . keyfreq-html-v2)) ;; 键盘热力图报告
   :config
   (keyfreq-mode 1) ;; 启动插件包
   (keyfreq-autosave-mode 1) ;; 自动保存模式
+
+  ;; 每天一个日文件（assets/keyfreq-days/YYYY-MM-DD.log），
+  ;; keyfreq-log 仍是累计汇总，可从日文件重建
+  (setq keyfreq-daily-archive t)
+  (setq-default keyfreq-daily-directory
+                (expand-file-name
+                 "assets/keyfreq-days"
+                 (concat user-emacs-directory)))
 
   (setq keyfreq-folder
         (expand-file-name
