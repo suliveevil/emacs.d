@@ -16,20 +16,25 @@
 ** Emacs
 
 #+begin_quote
-GNU Emacs 30.0.50 (build 1, aarch64-apple-darwin22.4.0, NS appkit-2299.50
- Version 13.3.1 (Build 22E261)) of 2023-04-24
+GNU Emacs 31.1 (build 1, aarch64-apple-darwin27.2.0, NS appkit-2775.20
+ Version 27.2 (Build 26B5112a)) of 2026-10-18
 #+end_quote
 
 *** 安装
 
-[[https://github.com/emacs-mirror/emacs][emacs-mirror/emacs: Mirror of GNU Emacs]]
-
-[[https://github.com/suliveevil/build-emacs-macos][suliveevil/build-emacs-macos: Build script for emacs and macos]]
+通过 [[https://github.com/d12frosted/homebrew-emacs-plus][d12frosted/homebrew-emacs-plus]] tap 安装：
 
 #+begin_src shell :tangle no
-export PATH=$PATH:/Applications/Emacs.app/Contents/MacOS
-export PATH=$PATH:/Applications/Emacs.app/Contents/MacOS/bin
+brew tap d12frosted/emacs-plus
+brew install emacs-plus@31 --with-xwidgets --with-imagemagick --with-mailutils
 #+end_src
+
+构建选项（=--with-*=' 为显式开启，其余为默认）：
+
+- =--with-xwidgets= 内嵌 WebKit 浏览器
+- =--with-imagemagick= 更多图片格式支持
+- =--with-mailutils= 邮件工具支持
+- 默认已开启：native-comp、tree-sitter、librsvg、webp、libxml2、注入 PATH
 
 *** Emacs 依赖
 
@@ -41,7 +46,7 @@ export PATH=$PATH:/Applications/Emacs.app/Contents/MacOS/bin
 
 ** OS
 
-macOS 13.2
+macOS 27.2（Apple Silicon / arm64）
 
 * 使用 Org 管理 Emacs 配置
 
