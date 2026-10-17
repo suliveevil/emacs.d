@@ -262,6 +262,15 @@ open -b org.gnu.Emacs --args -q --eval='(message "%s" (emacs-init-time))'
 ;; warning
 (setq byte-compile-warnings nil)
 (setq native-comp-async-report-warnings-errors nil)
+;; Emacs 31+：加载缺少 lexical-binding cookie 的 .el 源码会发
+;; (files missing-lexbind-cookie ...) 警告。命中的都是第三方代码
+;; （elpa 包 / lib submodule），改它们的源码既会被更新覆盖、也会改变其绑定语义，
+;; 所以按类型前缀忽略这一类警告（warning-suppress-log-types = 完全忽略）。
+;; 注意：这两个变量由 warnings.el 定义，early-init 阶段未必已加载，
+;; 而本文件设了 debug-on-error，所以必须 require + 兜住错误，避免中断启动。
+(with-demoted-errors "warning-suppress config: %S"
+  (require 'warnings)
+  (add-to-list 'warning-suppress-log-types '(files missing-lexbind-cookie)))
 ;; (add-to-list 'warning-suppress-log-types '((defvaralias))) ; FIXME
 ;; error
 ;; }}}
