@@ -5264,6 +5264,10 @@ provider setup on first use.
 (use-package dsh-emacs
   :ensure nil
   :load-path "lib/dsh-emacs"
+  :init
+  ;; DSH App 自带的 CLI 不在 PATH 上；不加载这行，dsh-emacs 会判定“未安装”
+  ;; 并提示 npm install -g @deepseek-ai/dsh。
+  (add-to-list 'exec-path "/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin")
   :commands (dsh-emacs dsh-emacs-new-session)
   :bind ("C-c d" . dsh-emacs))
 #+end_src
