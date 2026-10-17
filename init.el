@@ -1,13 +1,10 @@
-;;; -*- lexical-binding: t; -*-
-;; [[file:README.org::*File Header][File Header:1]]
-;; -*- coding: utf-8; -*-
+;;; -*- coding: utf-8; lexical-binding: t; -*-
 ;; -*- origami-fold-style: triple-braces -*-
 ;;; init.el
 
 ;; Date: 2023-02-08T23:45:08+0800
-;; File Header:1 ends here
 
-;; [[file:README.org::*describe-random-interactive-function][describe-random-interactive-function:1]]
+;; [[file:readme.org::*describe-random-interactive-function][describe-random-interactive-function:1]]
 ;; random function
 ;; {{{
 (defun my/describe-random-interactive-function ()
@@ -25,7 +22,7 @@ Consider only documented, non-obsolete functions."
 ;; }}}
 ;; describe-random-interactive-function:1 ends here
 
-;; [[file:README.org::*package initialize][package initialize:1]]
+;; [[file:readme.org::*package initialize][package initialize:1]]
 ;; package.el: mirror 插件镜像
 ;; {{{
 ;; GitHub connection: https://github.com/hedzr/mirror-list
@@ -62,11 +59,11 @@ Consider only documented, non-obsolete functions."
 ;; }}}
 ;; package initialize:1 ends here
 
-;; [[file:README.org::*package list][package list:1]]
+;; [[file:readme.org::*package list][package list:1]]
 (setq package-list-unversioned t)
 ;; package list:1 ends here
 
-;; [[file:README.org::*package dependency graph][package dependency graph:1]]
+;; [[file:readme.org::*package dependency graph][package dependency graph:1]]
 ;; package dependency graph (Graphviz)
 ;; {{{
 ;; https://emacs-china.org/t/package/22775/2?u=suliveevil
@@ -104,7 +101,7 @@ Consider only documented, non-obsolete functions."
 ;; }}}
 ;; package dependency graph:1 ends here
 
-;; [[file:README.org::*use-package][use-package:1]]
+;; [[file:readme.org::*use-package][use-package:1]]
 ;; use-package
 ;; {{{
 (require 'use-package)
@@ -128,7 +125,7 @@ Consider only documented, non-obsolete functions."
 ;; }}}
 ;; use-package:1 ends here
 
-;; [[file:README.org::*keybinding][keybinding:1]]
+;; [[file:readme.org::*keybinding][keybinding:1]]
 ;; https://emacs.stackexchange.com/a/654
 (defun key-binding-at-point (key)
   (mapcar (lambda (keymap) (when (keymapp keymap)
@@ -186,7 +183,7 @@ Consider only documented, non-obsolete functions."
     ret))
 ;; keybinding:1 ends here
 
-;; [[file:README.org::*keymap][keymap:1]]
+;; [[file:readme.org::*keymap][keymap:1]]
 (use-package emacs
   :ensure nil
   :bind
@@ -197,7 +194,7 @@ Consider only documented, non-obsolete functions."
   )
 ;; keymap:1 ends here
 
-;; [[file:README.org::*repeat-mode][repeat-mode:1]]
+;; [[file:readme.org::*repeat-mode][repeat-mode:1]]
 (use-package repeat
   :ensure nil
   :hook (after-init . repeat-mode)
@@ -209,7 +206,7 @@ Consider only documented, non-obsolete functions."
   )
 ;; repeat-mode:1 ends here
 
-;; [[file:README.org::*repeat-mode][repeat-mode:2]]
+;; [[file:readme.org::*repeat-mode][repeat-mode:2]]
 (defvar isearch-repeat-map
   (let ((map (make-sparse-keymap)))
     (keymap-set map "s" #'isearch-repeat-forward)
@@ -220,7 +217,7 @@ Consider only documented, non-obsolete functions."
   (put cmd 'repeat-map 'isearch-repeat-map))
 ;; repeat-mode:2 ends here
 
-;; [[file:README.org::*触控板和鼠标 touchpad/trackpad & mouse][触控板和鼠标 touchpad/trackpad & mouse:1]]
+;; [[file:readme.org::*触控板和鼠标 touchpad/trackpad & mouse][触控板和鼠标 touchpad/trackpad & mouse:1]]
 ;; touchpad/trackpad & mouse
 ;; {{{
 (setq mouse-wheel-tilt-scroll t) ; Make the direction sane on an apple trackpad
@@ -239,7 +236,7 @@ Consider only documented, non-obsolete functions."
 ;; }}}
 ;; 触控板和鼠标 touchpad/trackpad & mouse:1 ends here
 
-;; [[file:README.org::*触控板和鼠标 touchpad/trackpad & mouse][触控板和鼠标 touchpad/trackpad & mouse:2]]
+;; [[file:readme.org::*触控板和鼠标 touchpad/trackpad & mouse][触控板和鼠标 touchpad/trackpad & mouse:2]]
 (xterm-mouse-mode 1)
 ;; menu-bar-mode
 
@@ -250,7 +247,7 @@ Consider only documented, non-obsolete functions."
 ;;       (xterm-mouse-mode 1)))
 ;; 触控板和鼠标 touchpad/trackpad & mouse:2 ends here
 
-;; [[file:README.org::*光标和选区 cursor/region/selection][光标和选区 cursor/region/selection:2]]
+;; [[file:readme.org::*光标和选区 cursor/region/selection][光标和选区 cursor/region/selection:2]]
 ;; cursor
 ;; {{{
 ;; cursor move
@@ -265,7 +262,7 @@ Consider only documented, non-obsolete functions."
 ;; }}}
 ;; 光标和选区 cursor/region/selection:2 ends here
 
-;; [[file:README.org::*光标和选区 cursor/region/selection][光标和选区 cursor/region/selection:3]]
+;; [[file:readme.org::*光标和选区 cursor/region/selection][光标和选区 cursor/region/selection:3]]
 (put 'narrow-to-region 'disabled nil)
 ;; (put 'dired-find-alternate-file 'disabled nil)
 ;; (put 'downcase-region 'disabled nil)
@@ -273,7 +270,7 @@ Consider only documented, non-obsolete functions."
 ;; (put 'list-timers 'disabled nil)
 ;; 光标和选区 cursor/region/selection:3 ends here
 
-;; [[file:README.org::*光标和选区 cursor/region/selection][光标和选区 cursor/region/selection:4]]
+;; [[file:readme.org::*光标和选区 cursor/region/selection][光标和选区 cursor/region/selection:4]]
 (setq
  scroll-step 1
  scroll-margin 15
@@ -281,7 +278,7 @@ Consider only documented, non-obsolete functions."
  )
 ;; 光标和选区 cursor/region/selection:4 ends here
 
-;; [[file:README.org::*Emacs Lisp][Emacs Lisp:1]]
+;; [[file:readme.org::*Emacs Lisp][Emacs Lisp:1]]
 (use-package emacs
   :ensure nil
   :bind
@@ -323,11 +320,11 @@ Consider only documented, non-obsolete functions."
   )
 ;; Emacs Lisp:1 ends here
 
-;; [[file:README.org::*Emacs Lisp][Emacs Lisp:2]]
+;; [[file:readme.org::*Emacs Lisp][Emacs Lisp:2]]
 
 ;; Emacs Lisp:2 ends here
 
-;; [[file:README.org::*帮助文档 eldoc help info man-pages...][帮助文档 eldoc help info man-pages...:2]]
+;; [[file:readme.org::*帮助文档 eldoc help info man-pages...][帮助文档 eldoc help info man-pages...:2]]
 (use-package eldoc
   :ensure nil
   ;; :after flymake
@@ -335,7 +332,7 @@ Consider only documented, non-obsolete functions."
   )
 ;; 帮助文档 eldoc help info man-pages...:2 ends here
 
-;; [[file:README.org::*时间与日期 date & time][时间与日期 date & time:1]]
+;; [[file:readme.org::*时间与日期 date & time][时间与日期 date & time:1]]
 ;; time
 ;; {{{
 (use-package iso8601
@@ -370,7 +367,7 @@ Consider only documented, non-obsolete functions."
 ;; }}}
 ;; 时间与日期 date & time:1 ends here
 
-;; [[file:README.org::*剪贴板与寄存器 clipboard & register][剪贴板与寄存器 clipboard & register:2]]
+;; [[file:readme.org::*剪贴板与寄存器 clipboard & register][剪贴板与寄存器 clipboard & register:2]]
 (use-package emacs
   :ensure nil
   :defer t
@@ -380,14 +377,14 @@ Consider only documented, non-obsolete functions."
   )
 ;; 剪贴板与寄存器 clipboard & register:2 ends here
 
-;; [[file:README.org::*剪贴板与寄存器 clipboard & register][剪贴板与寄存器 clipboard & register:3]]
+;; [[file:readme.org::*剪贴板与寄存器 clipboard & register][剪贴板与寄存器 clipboard & register:3]]
 (use-package register
   :ensure nil
   :defer t
   )
 ;; 剪贴板与寄存器 clipboard & register:3 ends here
 
-;; [[file:README.org::*注释 comment][注释 comment:1]]
+;; [[file:readme.org::*注释 comment][注释 comment:1]]
 ;; comment
 ;; {{{
 (use-package emacs
@@ -412,7 +409,7 @@ Consider only documented, non-obsolete functions."
 ;; }}}
 ;; 注释 comment:1 ends here
 
-;; [[file:README.org::*命令历史][命令历史:3]]
+;; [[file:readme.org::*命令历史][命令历史:3]]
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
   :ensure nil
@@ -439,7 +436,7 @@ Consider only documented, non-obsolete functions."
   )
 ;; 命令历史:3 ends here
 
-;; [[file:README.org::*文件历史][文件历史:1]]
+;; [[file:readme.org::*文件历史][文件历史:1]]
 (use-package recentf
   :ensure nil
   :defer 1
@@ -492,7 +489,7 @@ Consider only documented, non-obsolete functions."
   )
 ;; 文件历史:1 ends here
 
-;; [[file:README.org::*光标位置历史][光标位置历史:1]]
+;; [[file:readme.org::*光标位置历史][光标位置历史:1]]
 ;; 自动记住每个文件的最后一次访问的光标位置
 (use-package saveplace
   :ensure nil
@@ -501,7 +498,7 @@ Consider only documented, non-obsolete functions."
   )
 ;; 光标位置历史:1 ends here
 
-;; [[file:README.org::*缓冲区 buffer][缓冲区 buffer:1]]
+;; [[file:readme.org::*缓冲区 buffer][缓冲区 buffer:1]]
 (use-package emacs
   :ensure nil
   :bind
@@ -522,7 +519,7 @@ Consider only documented, non-obsolete functions."
    (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil))))
 ;; 缓冲区 buffer:1 ends here
 
-;; [[file:README.org::*行 line][行 line:1]]
+;; [[file:readme.org::*行 line][行 line:1]]
 ;; line
 ;; {{{
 (use-package display-line-numbers
@@ -563,7 +560,7 @@ Consider only documented, non-obsolete functions."
 ;; }}}
 ;; 行 line:1 ends here
 
-;; [[file:README.org::*行 line][行 line:2]]
+;; [[file:readme.org::*行 line][行 line:2]]
 (use-package emacs
   :ensure nil
   ;; :bind
@@ -587,7 +584,7 @@ Consider only documented, non-obsolete functions."
 ;;   )
 ;; 行 line:2 ends here
 
-;; [[file:README.org::*列 column][列 column:1]]
+;; [[file:readme.org::*列 column][列 column:1]]
 (use-package display-fill-column-indicator
   :ensure nil
   :hook
@@ -596,7 +593,7 @@ Consider only documented, non-obsolete functions."
   )
 ;; 列 column:1 ends here
 
-;; [[file:README.org::*kill buffer][kill buffer:1]]
+;; [[file:readme.org::*kill buffer][kill buffer:1]]
 ;; kill buffer
 ;; {{{
 (use-package emacs
@@ -613,7 +610,7 @@ Consider only documented, non-obsolete functions."
 ;; }}}
 ;; kill buffer:1 ends here
 
-;; [[file:README.org::*side-buffer][side-buffer:1]]
+;; [[file:readme.org::*side-buffer][side-buffer:1]]
 ;; side buffer
 ;; {{{
 (use-package emacs
@@ -638,7 +635,7 @@ Consider only documented, non-obsolete functions."
 ;; }}}
 ;; side-buffer:1 ends here
 
-;; [[file:README.org::*ibuffer][ibuffer:1]]
+;; [[file:readme.org::*ibuffer][ibuffer:1]]
 ;; ibuffer
 ;; {{{
 (use-package ibuffer
@@ -695,7 +692,7 @@ Consider only documented, non-obsolete functions."
 ;; }}}
 ;; ibuffer:1 ends here
 
-;; [[file:README.org::*文件 file][文件 file:1]]
+;; [[file:readme.org::*文件 file][文件 file:1]]
 (use-package emacs
   :ensure nil
   :bind ("C-c C-q" . my/sudo-edit)
@@ -740,7 +737,7 @@ buffer is not visiting a file."
        (concat "/sudo:root@localhost:" file)))))
 ;; 文件 file:1 ends here
 
-;; [[file:README.org::*文件 file][文件 file:2]]
+;; [[file:readme.org::*文件 file][文件 file:2]]
 ;; 使 Emacs 自动加载外部修改过的文件
 (use-package autorevert
   :ensure nil
@@ -755,7 +752,7 @@ buffer is not visiting a file."
 (setq view-read-only t)
 ;; 文件 file:2 ends here
 
-;; [[file:README.org::*chunk][chunk:1]]
+;; [[file:readme.org::*chunk][chunk:1]]
 ;; chunk
 ;; {{{
 ;; Increase how much is read from processes in a single chunk (default is 4kb)
@@ -763,7 +760,7 @@ buffer is not visiting a file."
 ;; }}}
 ;; chunk:1 ends here
 
-;; [[file:README.org::*auto-save][auto-save:1]]
+;; [[file:readme.org::*auto-save][auto-save:1]]
 ;; auto-save: 定期预存，防止停电、系统崩溃等原因造成的数据损失
 ;; {{{
 (setq auto-save-file-name-transforms
@@ -787,7 +784,7 @@ buffer is not visiting a file."
 ;; }}}
 ;; auto-save:1 ends here
 
-;; [[file:README.org::*backup][backup:1]]
+;; [[file:readme.org::*backup][backup:1]]
 ;; backup file: 备份
 ;; {{{
 ;; https://stackoverflow.com/questions/151945/how-do-i-control-how-emacs-makes-backup-files
@@ -811,7 +808,7 @@ buffer is not visiting a file."
 ;; }}}
 ;; backup:1 ends here
 
-;; [[file:README.org::*lockfile][lockfile:1]]
+;; [[file:readme.org::*lockfile][lockfile:1]]
 ;; lockfile: 不同进程修改同一文件
 ;; {{{
 (setq create-lockfiles t)
@@ -820,7 +817,7 @@ buffer is not visiting a file."
 ;; }}}
 ;; lockfile:1 ends here
 
-;; [[file:README.org::*find file/grep file][find file/grep file:2]]
+;; [[file:readme.org::*find file/grep file][find file/grep file:2]]
 (use-package ffap
   :ensure nil
   :defer t
@@ -845,7 +842,7 @@ First attempt to open file specified by `symbol-at-point', and fallback to norma
   )
 ;; find file/grep file:2 ends here
 
-;; [[file:README.org::*file name and file extension][file name and file extension:1]]
+;; [[file:readme.org::*file name and file extension][file name and file extension:1]]
 ;; file name and file extension
 ;; {{{
 ;;
@@ -879,7 +876,7 @@ First attempt to open file specified by `symbol-at-point', and fallback to norma
 ;; }}}
 ;; file name and file extension:1 ends here
 
-;; [[file:README.org::*file path][file path:1]]
+;; [[file:readme.org::*file path][file path:1]]
 ;; file path
 ;; {{{
 (defun my/copy-file-path (&optional DirPathOnlyQ)
@@ -916,7 +913,7 @@ Version 2018-06-18 2021-09-30"
 ;; }}}
 ;; file path:1 ends here
 
-;; [[file:README.org::*rename file][rename file:1]]
+;; [[file:readme.org::*rename file][rename file:1]]
 ;; rename file
 ;; {{{
 ;; https://github.com/protesilaos/dotfiles/blob/master/emacs/.emacs.d/prot-lisp/prot-simple.el
@@ -936,7 +933,7 @@ Do not try to make a new directory or anything fancy."
 ;; }}}
 ;; rename file:1 ends here
 
-;; [[file:README.org::*delete file][delete file:1]]
+;; [[file:readme.org::*delete file][delete file:1]]
 ;; delete buffer file
 ;; {{{
 (defun my/delete-current-file ()
@@ -952,7 +949,7 @@ If no file is associated, just close buffer without prompt for save."
 ;; }}}
 ;; delete file:1 ends here
 
-;; [[file:README.org::*垃圾筒][垃圾筒:1]]
+;; [[file:readme.org::*垃圾筒][垃圾筒:1]]
 ;; move file to trash when delete
 ;; {{{
 ;;; macOS
@@ -962,7 +959,7 @@ If no file is associated, just close buffer without prompt for save."
 ;; }}}
 ;; 垃圾筒:1 ends here
 
-;; [[file:README.org::*文件夹][文件夹:1]]
+;; [[file:readme.org::*文件夹][文件夹:1]]
 (use-package emacs
   :ensure nil
   :init
@@ -976,7 +973,7 @@ If no file is associated, just close buffer without prompt for save."
   )
 ;; 文件夹:1 ends here
 
-;; [[file:README.org::*dired & wdired][dired & wdired:1]]
+;; [[file:readme.org::*dired & wdired][dired & wdired:1]]
 (use-package dired
   :ensure nil
   ;; :demand t
@@ -1063,7 +1060,7 @@ narrowed to the line."
   )
 ;; dired & wdired:1 ends here
 
-;; [[file:README.org::*project][project:1]]
+;; [[file:readme.org::*project][project:1]]
 ;; project
 ;; {{{
 (use-package project
@@ -1109,7 +1106,7 @@ project."
 ;; }}}
 ;; project:1 ends here
 
-;; [[file:README.org::*mibuffer][mibuffer:1]]
+;; [[file:readme.org::*mibuffer][mibuffer:1]]
 (use-package minibuffer
   :ensure nil
   :defer t
@@ -1137,7 +1134,7 @@ project."
 ;; https://emacs-china.org/t/emacs-28-1-fido-vertical-mode/20474/5
 ;; mibuffer:1 ends here
 
-;; [[file:README.org::*mibuffer][mibuffer:2]]
+;; [[file:readme.org::*mibuffer][mibuffer:2]]
 ;; completion window
 (add-to-list 'display-buffer-alist
              '("\\*Completions\\*"
@@ -1161,7 +1158,7 @@ project."
 ;; }}}
 ;; mibuffer:2 ends here
 
-;; [[file:README.org::*mibuffer][mibuffer:3]]
+;; [[file:readme.org::*mibuffer][mibuffer:3]]
 (defun my/sort-by-alpha-length (elems)
   "Sort ELEMS first alphabetically, then by length."
   (sort elems (lambda (c1 c2)
@@ -1199,7 +1196,7 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
 (setq completions-sort #'my/sort-multi-category)
 ;; mibuffer:3 ends here
 
-;; [[file:README.org::*ido & fido][ido & fido:1]]
+;; [[file:readme.org::*ido & fido][ido & fido:1]]
 (use-package ido
   :ensure nil
   :defer 1
@@ -1233,7 +1230,7 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
   )
 ;; ido & fido:1 ends here
 
-;; [[file:README.org::*括号自动补全][括号自动补全:1]]
+;; [[file:readme.org::*括号自动补全][括号自动补全:1]]
 ;; pair completion
 (use-package electric-pair-mode ; elec-pair
   :ensure nil
@@ -1241,7 +1238,7 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
   )
 ;; 括号自动补全:1 ends here
 
-;; [[file:README.org::*abbrev/dabbrev Completion][abbrev/dabbrev Completion:1]]
+;; [[file:readme.org::*abbrev/dabbrev Completion][abbrev/dabbrev Completion:1]]
 (use-package abbrev
   :ensure nil
   :defer 1
@@ -1250,7 +1247,7 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
   )
 ;; abbrev/dabbrev Completion:1 ends here
 
-;; [[file:README.org::*abbrev/dabbrev Completion][abbrev/dabbrev Completion:2]]
+;; [[file:readme.org::*abbrev/dabbrev Completion][abbrev/dabbrev Completion:2]]
 ;; abbrev/dabbrev: dynamic abbreviation expand
 ;; {{{
 (use-package dabbrev
@@ -1267,7 +1264,7 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
 ;; }}}
 ;; abbrev/dabbrev Completion:2 ends here
 
-;; [[file:README.org::*hippie-expand][hippie-expand:1]]
+;; [[file:readme.org::*hippie-expand][hippie-expand:1]]
 ;; hippie-expand
 ;; {{{
 (use-package hippie-exp
@@ -1291,7 +1288,7 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
 ;; }}}
 ;; hippie-expand:1 ends here
 
-;; [[file:README.org::*tree-sitter: treesit][tree-sitter: treesit:1]]
+;; [[file:readme.org::*tree-sitter: treesit][tree-sitter: treesit:1]]
 ;; tree-sitter
 ;; {{{
 ;; Use the built-in treesit and load all language grammars
@@ -1335,7 +1332,7 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
 ;; }}}
 ;; tree-sitter: treesit:1 ends here
 
-;; [[file:README.org::*基本编辑][基本编辑:1]]
+;; [[file:readme.org::*基本编辑][基本编辑:1]]
 ;; https://github.com/Eason0210/.emacs.d/
 (use-package emacs
   :ensure nil
@@ -1358,7 +1355,7 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
   )
 ;; 基本编辑:1 ends here
 
-;; [[file:README.org::*基本编辑][基本编辑:2]]
+;; [[file:readme.org::*基本编辑][基本编辑:2]]
 (use-package simple
   :ensure nil
   :hook (emacs-lisp-mode . turn-off-auto-fill)
@@ -1381,7 +1378,7 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
   )
 ;; 基本编辑:2 ends here
 
-;; [[file:README.org::*unicode][unicode:1]]
+;; [[file:readme.org::*unicode][unicode:1]]
 ;; unicode
 ;; {{{
 ;; https://www.unicode.org/Public/UCD/latest/ucd/UnicodeData.txt
@@ -1394,7 +1391,7 @@ Use `mct-sort-sort-by-alpha-length' if no history is available."
 ;; }}}
 ;; unicode:1 ends here
 
-;; [[file:README.org::*空白字符/不可见字符][空白字符/不可见字符:1]]
+;; [[file:readme.org::*空白字符/不可见字符][空白字符/不可见字符:1]]
 ;; 不可见字符: zero-width characters ->​<-
 ;; {{{
 ;; http://xahlee.info/emacs/emacs/elisp_unicode_replace_invisible_chars.html
@@ -1426,7 +1423,7 @@ Version: 2018-09-07 2022-09-13"
 ;; }}}
 ;; 空白字符/不可见字符:1 ends here
 
-;; [[file:README.org::*空白字符/不可见字符][空白字符/不可见字符:2]]
+;; [[file:readme.org::*空白字符/不可见字符][空白字符/不可见字符:2]]
 ;; see invisible chars
 ;; {{{
 ;; https://emacs-china.org/t/topic/19557
@@ -1455,7 +1452,7 @@ Version: 2018-09-07 2022-09-13"
 ;; }}}
 ;; 空白字符/不可见字符:2 ends here
 
-;; [[file:README.org::*空白字符/不可见字符][空白字符/不可见字符:3]]
+;; [[file:readme.org::*空白字符/不可见字符][空白字符/不可见字符:3]]
 (use-package emacs
   :ensure nil
   :bind
@@ -1467,7 +1464,7 @@ Version: 2018-09-07 2022-09-13"
   )
 ;; 空白字符/不可见字符:3 ends here
 
-;; [[file:README.org::*单词 Word][单词 Word:1]]
+;; [[file:readme.org::*单词 Word][单词 Word:1]]
 (use-package subword
   ;; camelCase and superword-mode
   :ensure nil
@@ -1477,7 +1474,7 @@ Version: 2018-09-07 2022-09-13"
   )
 ;; 单词 Word:1 ends here
 
-;; [[file:README.org::*句子、段落 sentence paragraph][句子、段落 sentence paragraph:1]]
+;; [[file:readme.org::*句子、段落 sentence paragraph][句子、段落 sentence paragraph:1]]
 (use-package emacs
   :ensure nil
   :bind (([remap fill-paragraph] . my/toggle-fill-unfill))
@@ -1511,7 +1508,7 @@ Version: 2018-09-07 2022-09-13"
     (fill-paragraph nil region)))
 ;; 句子、段落 sentence paragraph:1 ends here
 
-;; [[file:README.org::*Title Capitalization][Title Capitalization:1]]
+;; [[file:readme.org::*Title Capitalization][Title Capitalization:1]]
 ;; additionally to the list defined in title-capitalization:
 (defvar my/do-not-capitalize-words
   '("suliveevil")
@@ -1589,7 +1586,7 @@ Version: 2018-09-07 2022-09-13"
   )
 ;; Title Capitalization:1 ends here
 
-;; [[file:README.org::*upcase word][upcase word:1]]
+;; [[file:readme.org::*upcase word][upcase word:1]]
 ;; https://emacstalk.codeberg.page/post/023/
 ;;;###autoload
 (defun my/upcase-backwards ()
@@ -1608,7 +1605,7 @@ Version: 2018-09-07 2022-09-13"
 ;; (keymap-global-set "M-o" #'my/upcase-backwards)
 ;; upcase word:1 ends here
 
-;; [[file:README.org::*跳转][跳转:1]]
+;; [[file:readme.org::*跳转][跳转:1]]
 ;; goto-char by Oliver Scholz
 ;; {{{
 (use-package emacs
@@ -1636,7 +1633,7 @@ occurence of CHAR."
 ;; }}}
 ;; 跳转:1 ends here
 
-;; [[file:README.org::*跳转][跳转:2]]
+;; [[file:readme.org::*跳转][跳转:2]]
 (defun my/occur-mode-hook-fn ()
   "HELP customizations."
   (interactive)
@@ -1657,7 +1654,7 @@ occurence of CHAR."
 (add-hook 'occur-mode-find-occurrence-hook #'my/recenter-line-near-top-fn)
 ;; 跳转:2 ends here
 
-;; [[file:README.org::*isearch][isearch:1]]
+;; [[file:readme.org::*isearch][isearch:1]]
 ;; isearch
 ;; {{{
 ;; M-<: first match
@@ -1714,7 +1711,7 @@ occurence of CHAR."
 ;; }}}
 ;; isearch:1 ends here
 
-;; [[file:README.org::*批量替换 batch replace and wgrep][批量替换 batch replace and wgrep:3]]
+;; [[file:readme.org::*批量替换 batch replace and wgrep][批量替换 batch replace and wgrep:3]]
 (use-package wgrep-deadgrep
   :ensure nil
   :defer t
@@ -1723,7 +1720,7 @@ occurence of CHAR."
 )
 ;; 批量替换 batch replace and wgrep:3 ends here
 
-;; [[file:README.org::*对齐缩进格式化 align indent format][对齐缩进格式化 align indent format:3]]
+;; [[file:readme.org::*对齐缩进格式化 align indent format][对齐缩进格式化 align indent format:3]]
 (use-package simple
   :ensure nil
   :defer t
@@ -1780,14 +1777,14 @@ occurence of CHAR."
   )
 ;; 对齐缩进格式化 align indent format:3 ends here
 
-;; [[file:README.org::*文本对比与合并 Diff & Merge][文本对比与合并 Diff & Merge:2]]
+;; [[file:readme.org::*文本对比与合并 Diff & Merge][文本对比与合并 Diff & Merge:2]]
 (use-package diff-mode
   :ensure nil
   :defer t
   )
 ;; 文本对比与合并 Diff & Merge:2 ends here
 
-;; [[file:README.org::*大纲与折叠 outline & fold][大纲与折叠 outline & fold:2]]
+;; [[file:readme.org::*大纲与折叠 outline & fold][大纲与折叠 outline & fold:2]]
 ;; fold
 ;; {{{
 (use-package hideshow
@@ -1804,7 +1801,7 @@ occurence of CHAR."
 ;; }}}
 ;; 大纲与折叠 outline & fold:2 ends here
 
-;; [[file:README.org::*imenu][imenu:1]]
+;; [[file:readme.org::*imenu][imenu:1]]
 (use-package imenu
   :ensure nil
   :hook (font-lock-mode . my/try-to-add-imenu)
@@ -1834,7 +1831,7 @@ occurence of CHAR."
 ;;  (lambda () (setq imenu-generic-expression sql-imenu-generic-expression)))
 ;; imenu:1 ends here
 
-;; [[file:README.org::*narrow][narrow:1]]
+;; [[file:readme.org::*narrow][narrow:1]]
 (use-package emacs
   :ensure nil
   :bind ("C-c n n" . my/narrow-or-widen-dwim)
@@ -1870,7 +1867,7 @@ narrowed."
   )
 ;; narrow:1 ends here
 
-;; [[file:README.org::*Eshell][Eshell:1]]
+;; [[file:readme.org::*Eshell][Eshell:1]]
 ;; https://www.n16f.net/blog/eshell-key-bindings-and-completion/
 (use-package eshell
   :ensure nil
@@ -1889,7 +1886,7 @@ narrowed."
   )
 ;; Eshell:1 ends here
 
-;; [[file:README.org::*python][python:1]]
+;; [[file:readme.org::*python][python:1]]
 (use-package python
   :ensure nil
   :mode
@@ -1902,7 +1899,7 @@ narrowed."
   )
 ;; python:1 ends here
 
-;; [[file:README.org::*frame][frame:1]]
+;; [[file:readme.org::*frame][frame:1]]
 ;; frame
 ;; {{{
 (setq frame-size-history t)
@@ -1921,7 +1918,7 @@ narrowed."
 ;; }}}
 ;; frame:1 ends here
 
-;; [[file:README.org::*window/layout][window/layout:2]]
+;; [[file:readme.org::*window/layout][window/layout:2]]
 (use-package windmove
   :ensure nil
   :bind
@@ -1934,7 +1931,7 @@ narrowed."
   )
 ;; window/layout:2 ends here
 
-;; [[file:README.org::*toggle fullscreen][toggle fullscreen:1]]
+;; [[file:readme.org::*toggle fullscreen][toggle fullscreen:1]]
 (defun my/toggle-fullscreen ()
   (interactive)
   (set-frame-parameter
@@ -1946,7 +1943,7 @@ narrowed."
   )
 ;; toggle fullscreen:1 ends here
 
-;; [[file:README.org::*toggle one window][toggle one window:1]]
+;; [[file:readme.org::*toggle one window][toggle one window:1]]
 ;; window
 ;; {{{
 (use-package emacs
@@ -1978,7 +1975,7 @@ narrowed."
 ;; }}}
 ;; toggle one window:1 ends here
 
-;; [[file:README.org::*toggle vertical horizontal split][toggle vertical horizontal split:1]]
+;; [[file:readme.org::*toggle vertical horizontal split][toggle vertical horizontal split:1]]
 (use-package emacs
   :ensure nil
   :bind
@@ -2016,7 +2013,7 @@ i.e. change right window to bottom, or change bottom window to right."
                    (windmove-find-other-window neighbour-dir) other-buf)))))))))
 ;; toggle vertical horizontal split:1 ends here
 
-;; [[file:README.org::*字体 face/font][字体 face/font:1]]
+;; [[file:readme.org::*字体 face/font][字体 face/font:1]]
 ;; font and syntax
 ;; {{{
 (set-face-attribute 'default nil
@@ -2027,7 +2024,7 @@ i.e. change right window to bottom, or change bottom window to right."
 ;; }}}
 ;; 字体 face/font:1 ends here
 
-;; [[file:README.org::*pretty-symbols][pretty-symbols:1]]
+;; [[file:readme.org::*pretty-symbols][pretty-symbols:1]]
 ;; pretty-symbols
 ;; {{{
 (setq-default prettify-symbols-alist
@@ -2040,7 +2037,7 @@ i.e. change right window to bottom, or change bottom window to right."
 ;; }}}
 ;; pretty-symbols:1 ends here
 
-;; [[file:README.org::*mode-line][mode-line:1]]
+;; [[file:readme.org::*mode-line][mode-line:1]]
 ;; mode-line
 ;; {{{
 (use-package battery
@@ -2053,7 +2050,7 @@ i.e. change right window to bottom, or change bottom window to right."
 ;; }}}
 ;; mode-line:1 ends here
 
-;; [[file:README.org::*数据库][数据库:2]]
+;; [[file:readme.org::*数据库][数据库:2]]
 (defun pgformatter-on-region ()
   "A function to invoke pgFormatter as an external program."
   (interactive)
@@ -2069,7 +2066,7 @@ i.e. change right window to bottom, or change bottom window to right."
     (shell-command-on-region b e pgfrm (current-buffer) 1)))
 ;; 数据库:2 ends here
 
-;; [[file:README.org::*eww][eww:1]]
+;; [[file:readme.org::*eww][eww:1]]
 (use-package eww
   :ensure nil
   :defer t
@@ -2140,7 +2137,7 @@ i.e. change right window to bottom, or change bottom window to right."
   )
 ;; eww:1 ends here
 
-;; [[file:README.org::*联网工具][联网工具:1]]
+;; [[file:readme.org::*联网工具][联网工具:1]]
 (defun xwidget-webkit-search-forward (text)
   "Search forward of `text'"
   (interactive "sSearch: " xwidget-webkit-mode)
@@ -2153,7 +2150,7 @@ i.e. change right window to bottom, or change bottom window to right."
     (xwidget-webkit-browse-url (concat "file://" (expand-file-name fpath)))))
 ;; 联网工具:1 ends here
 
-;; [[file:README.org::*Open App][Open App:1]]
+;; [[file:readme.org::*Open App][Open App:1]]
 ;; open app
 ;; {{{
 (defun mac-launchpad/string-ends-with (s ending)
@@ -2194,7 +2191,7 @@ i.e. change right window to bottom, or change bottom window to right."
 ;; }}}
 ;; Open App:1 ends here
 
-;; [[file:README.org::*Open in System file manager][Open in System file manager:1]]
+;; [[file:readme.org::*Open in System file manager][Open in System file manager:1]]
 (use-package dired
   :ensure nil
   :bind
@@ -2239,7 +2236,7 @@ This command can be called when in a file buffer or in `dired'."
   )
 ;; Open in System file manager:1 ends here
 
-;; [[file:README.org::*Open in Default app][Open in Default app:1]]
+;; [[file:readme.org::*Open in Default app][Open in Default app:1]]
 ;; open in default app
 ;; {{{
 ;; https://emacs-china.org/t/pdf/14954/5
@@ -2265,7 +2262,7 @@ This command can be called when in a file buffer or in `dired'."
 ;; }}}
 ;; Open in Default app:1 ends here
 
-;; [[file:README.org::*Open in Neovide][Open in Neovide:1]]
+;; [[file:readme.org::*Open in Neovide][Open in Neovide:1]]
 ;; Neovide
 ;; {{{
 (defun my/open-in-neovide ()
@@ -2281,7 +2278,7 @@ This command can be called when in a file buffer or in `dired'."
 ;; }}}
 ;; Open in Neovide:1 ends here
 
-;; [[file:README.org::*Open in Obsidian][Open in Obsidian:1]]
+;; [[file:readme.org::*Open in Obsidian][Open in Obsidian:1]]
 ;; Obsidian
 ;; {{{
 ;; https://emacs-china.org/t/emacs-obsidian/22504/11?u=suliveevil
@@ -2292,7 +2289,7 @@ This command can be called when in a file buffer or in `dired'."
 ;; }}}
 ;; Open in Obsidian:1 ends here
 
-;; [[file:README.org::*Open in VSCode][Open in VSCode:1]]
+;; [[file:readme.org::*Open in VSCode][Open in VSCode:1]]
 ;; Visual Studio Code
 ;; {{{
 ;; https://github.com/pietroiusti/.emacs.d/blob/master/custom-functions.el
@@ -2320,7 +2317,7 @@ This command can be called when in a file buffer or in `dired'."
 ;; }}}
 ;; Open in VSCode:1 ends here
 
-;; [[file:README.org::*basic][basic:1]]
+;; [[file:readme.org::*basic][basic:1]]
 (use-package org
   :ensure nil
   :defer 1
@@ -2362,7 +2359,7 @@ all open tasks in current Org buffer
   )
 ;; basic:1 ends here
 
-;; [[file:README.org::*UI][UI:1]]
+;; [[file:readme.org::*UI][UI:1]]
 ;; (setq org-hide-leading-stars t) ; Omit headline-asterisks except the last one
 (setq org-src-fontify-natively t)  ; code block syntax highlight
 (setq org-fontify-todo-headline nil)
@@ -2382,7 +2379,7 @@ all open tasks in current Org buffer
 ;; }}}
 ;; UI:1 ends here
 
-;; [[file:README.org::*narrow][narrow:1]]
+;; [[file:readme.org::*narrow][narrow:1]]
 ;; org-mode: head/title
 ;; (org-in-src-block-p)
 ;; {{{
@@ -2432,7 +2429,7 @@ all open tasks in current Org buffer
 ;; }}}
 ;; narrow:1 ends here
 
-;; [[file:README.org::*code block: org-babel org-src][code block: org-babel org-src:1]]
+;; [[file:readme.org::*code block: org-babel org-src][code block: org-babel org-src:1]]
 (defconst my/org-special-pre "^\s*#[+]")
 (defun my/org-2every-src-block (fn)
   "Visit every Source-Block and evaluate `FN'."
@@ -2456,7 +2453,7 @@ all open tasks in current Org buffer
   (message "Done with code block"))
 ;; code block: org-babel org-src:1 ends here
 
-;; [[file:README.org::*code block: org-babel org-src][code block: org-babel org-src:2]]
+;; [[file:readme.org::*code block: org-babel org-src][code block: org-babel org-src:2]]
 (use-package ob ; org-src
   :ensure nil
   :defer t
@@ -2507,14 +2504,14 @@ all open tasks in current Org buffer
   )
 ;; code block: org-babel org-src:2 ends here
 
-;; [[file:README.org::*code block: org-babel org-src][code block: org-babel org-src:3]]
+;; [[file:readme.org::*code block: org-babel org-src][code block: org-babel org-src:3]]
 (use-package org-src
   :ensure nil
   ;; :defer t
   )
 ;; code block: org-babel org-src:3 ends here
 
-;; [[file:README.org::*Link][Link:1]]
+;; [[file:readme.org::*Link][Link:1]]
 (use-package org
   :ensure nil
   :defer t
@@ -2661,13 +2658,13 @@ all open tasks in current Org buffer
   )
 ;; Link:1 ends here
 
-;; [[file:README.org::*图像][图像:1]]
+;; [[file:readme.org::*图像][图像:1]]
 (defadvice org-toggle-inline-images (after org-open-at-point activate)
   (if smooth-scrolling-mode (smooth-scrolling-mode -1)
     (smooth-scrolling-mode 1)))
 ;; 图像:1 ends here
 
-;; [[file:README.org::*PDF][PDF:1]]
+;; [[file:readme.org::*PDF][PDF:1]]
 (use-package org
   :ensure nil
   :defer t
@@ -2680,7 +2677,7 @@ all open tasks in current Org buffer
   )
 ;; PDF:1 ends here
 
-;; [[file:README.org::*org-agenda][org-agenda:1]]
+;; [[file:readme.org::*org-agenda][org-agenda:1]]
 (use-package org-agenda
   :ensure nil
   :defer t
@@ -2688,7 +2685,7 @@ all open tasks in current Org buffer
   )
 ;; org-agenda:1 ends here
 
-;; [[file:README.org::*org-capture][org-capture:1]]
+;; [[file:readme.org::*org-capture][org-capture:1]]
 (use-package org-capture
   :ensure nil
   :defer t
@@ -2735,7 +2732,7 @@ all open tasks in current Org buffer
   )
 ;; org-capture:1 ends here
 
-;; [[file:README.org::*网络搜索][网络搜索:1]]
+;; [[file:readme.org::*网络搜索][网络搜索:1]]
 (use-package xwidget
   :ensure nil
   :bind
@@ -2754,7 +2751,7 @@ all open tasks in current Org buffer
   )
 ;; 网络搜索:1 ends here
 
-;; [[file:README.org::*OCR][OCR:1]]
+;; [[file:readme.org::*OCR][OCR:1]]
 (use-package simple
   :ensure nil
   :bind
@@ -2770,7 +2767,7 @@ all open tasks in current Org buffer
   )
 ;; OCR:1 ends here
 
-;; [[file:README.org::*Translate][Translate:1]]
+;; [[file:readme.org::*Translate][Translate:1]]
 (use-package simple
   :ensure nil
   :bind ("H-t H-t" . my/translate-language-to-zh-or-zh-to-english)
@@ -2806,7 +2803,7 @@ all open tasks in current Org buffer
     (shell-command "pbpaste")))
 ;; Translate:1 ends here
 
-;; [[file:README.org::*Alfred Search][Alfred Search:1]]
+;; [[file:readme.org::*Alfred Search][Alfred Search:1]]
 ;; Alfred
 ;; {{{
 ;; https://github.com/xuchunyang/emacs.d/blob/master/lisp/alfred.el
@@ -2830,7 +2827,7 @@ all open tasks in current Org buffer
 ;; }}}
 ;; Alfred Search:1 ends here
 
-;; [[file:README.org::*MacVim][MacVim:1]]
+;; [[file:readme.org::*MacVim][MacVim:1]]
 ;; MacVim
 ;; {{{
 (defun my/open-in-macvim ()
@@ -2848,7 +2845,7 @@ all open tasks in current Org buffer
 ;; }}}
 ;; MacVim:1 ends here
 
-;; [[file:README.org::*insert key sequence][insert key sequence:1]]
+;; [[file:readme.org::*insert key sequence][insert key sequence:1]]
 ;; https://emacs.stackexchange.com/a/12906
 (defun my/insert-key-sequence (key)
   (interactive "kKey Sequence: ")
@@ -2859,11 +2856,11 @@ all open tasks in current Org buffer
 (keymap-global-set "C-c M-k" #'my/insert-key-sequence)
 ;; insert key sequence:1 ends here
 
-;; [[file:README.org::*File End][File End:1]]
+;; [[file:readme.org::*File End][File End:1]]
 ;;; init.el ends here.
 ;; File End:1 ends here
 
-;; [[file:README.org::*Emacs 插件配置][Emacs 插件配置:1]]
+;; [[file:readme.org::*Emacs 插件配置][Emacs 插件配置:1]]
 (add-to-list 'load-path
              (concat user-emacs-directory  "site-lisp"))
 (require 'my-package)

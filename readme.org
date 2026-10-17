@@ -85,14 +85,13 @@ org-auto-tangle
 :END:
 ** File header
 
-#+begin_src emacs-lisp
-;; -*- coding: utf-8; lexical-binding: t; no-byte-compile: t -*-
+#+begin_src emacs-lisp :comments no
+;;; -*- coding: utf-8; lexical-binding: t; no-byte-compile: t -*-
 
 ;;; Commentary:
 
 ;; early-init.el --- Emacs 29+ pre-initialisation config
 ;; Code loaded before the package system and GUI is initialized.
-;; Date: <<my-time-stamps-iso8601>>
 
 ;;; Code:
 #+end_src
@@ -273,8 +272,11 @@ open -b org.gnu.Emacs --args -q --eval='(message "%s" (emacs-init-time))'
 #+begin_src emacs-lisp
 ;; custome-file
 ;; {{{
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+;; 指向 git 忽略的 var/ 目录：Customize UI 的改动只留本地，不再把
+;; 凭证类内容（如带 token 的 feed URL）写进被版本控制的文件。
+(setq custom-file (expand-file-name "var/custom.el" user-emacs-directory))
 (unless (file-exists-p custom-file)
+  (make-directory (file-name-directory custom-file) t)
   (write-region "" nil custom-file))
 (when (file-exists-p custom-file)
   (load custom-file))
@@ -766,8 +768,8 @@ There are some packages have similar feature: combobulate
 
 ** File Header
 
-#+begin_src emacs-lisp
-;; -*- coding: utf-8; lexical-binding: t; -*-
+#+begin_src emacs-lisp :comments no
+;;; -*- coding: utf-8; lexical-binding: t; -*-
 ;; -*- origami-fold-style: triple-braces -*-
 ;;; init.el
 
@@ -6258,14 +6260,14 @@ proced
 
 * Emacs 插件配置 :Package:
 :PROPERTIES:
-:header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "init.el")
+:header-args: emacs-lisp :comments link :tangle no
 :ID:       9C575875-3714-4FFE-922A-5FF8A5B0B069
 :END:
 
 [[file:package.org][package config]]
 
 ,#+begin_src emacs-lisp :tangle no
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle (concat user-emacs-directory "init.el")
 (add-to-list 'load-path
              (concat user-emacs-directory  "site-lisp"))
 (require 'my-package)

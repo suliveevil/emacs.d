@@ -1,17 +1,13 @@
-;;; -*- lexical-binding: t; -*-
-;; [[file:README.org::*File header][File header:1]]
-;; -*- coding: utf-8; no-byte-compile: t -*-
+;;; -*- coding: utf-8; lexical-binding: t; no-byte-compile: t -*-
 
 ;;; Commentary:
 
 ;; early-init.el --- Emacs 29+ pre-initialisation config
 ;; Code loaded before the package system and GUI is initialized.
-;; Date: <<my-time-stamps-iso8601>>
 
 ;;; Code:
-;; File header:1 ends here
 
-;; [[file:README.org::*Garbage Collection & file-name-handler][Garbage Collection & file-name-handler:1]]
+;; [[file:readme.org::*Garbage Collection & file-name-handler][Garbage Collection & file-name-handler:1]]
 (let (
       ;; (gc-cons-threshold most-positive-fixnum)
       (file-name-handler-alist nil)
@@ -19,7 +15,7 @@
   )
 ;; Garbage Collection & file-name-handler:1 ends here
 
-;; [[file:README.org::*Garbage Collection & file-name-handler][Garbage Collection & file-name-handler:2]]
+;; [[file:readme.org::*Garbage Collection & file-name-handler][Garbage Collection & file-name-handler:2]]
 (setq gc-cons-threshold most-positive-fixnum) ; Don't collect garbage when init
 ;; (setq gc-cons-threshold (* 500 1024 1024)) ; 500 MiB
 
@@ -31,16 +27,16 @@
                      gc-cons-threshold)))
 ;; Garbage Collection & file-name-handler:2 ends here
 
-;; [[file:README.org::*load][load:1]]
+;; [[file:readme.org::*load][load:1]]
 ;; (setq load-prefer-newer t)
 (setq load-prefer-newer noninteractive)
 ;; load:1 ends here
 
-;; [[file:README.org::*native-compilation][native-compilation:1]]
+;; [[file:readme.org::*native-compilation][native-compilation:1]]
 (setq inhibit-automatic-native-compilation t)
 ;; native-compilation:1 ends here
 
-;; [[file:README.org::*Profile][Profile:2]]
+;; [[file:readme.org::*Profile][Profile:2]]
 ;; Profile emacs startup
 (add-hook 'emacs-startup-hook
           (lambda ()
@@ -51,13 +47,13 @@
                      gcs-done)))
 ;; Profile:2 ends here
 
-;; [[file:README.org::*Confirm before quit][Confirm before quit:1]]
+;; [[file:readme.org::*Confirm before quit][Confirm before quit:1]]
 (setq use-short-answers t) ;; use y/n instead of yes/no
 (setq confirm-kill-emacs (lambda (prompt) (y-or-n-p-with-timeout "确认退出？" 10 "y")))
 ;; (setq confirm-kill-emacs 'yes-or-no-p)
 ;; Confirm before quit:1 ends here
 
-;; [[file:README.org::*Startup][Startup:1]]
+;; [[file:readme.org::*Startup][Startup:1]]
 ;; startup
 ;; {{{
 (setq initial-major-mode 'fundamental-mode)
@@ -66,11 +62,11 @@
 ;; }}}
 ;; Startup:1 ends here
 
-;; [[file:README.org::*python][python:1]]
+;; [[file:readme.org::*python][python:1]]
 (setq python-shell-interpreter "python3")
 ;; python:1 ends here
 
-;; [[file:README.org::*Backtrace & debug: warning error][Backtrace & debug: warning error:1]]
+;; [[file:readme.org::*Backtrace & debug: warning error][Backtrace & debug: warning error:1]]
 ;; debug warning and error
 ;; {{{
 ;; debug
@@ -83,18 +79,21 @@
 ;; }}}
 ;; Backtrace & debug: warning error:1 ends here
 
-;; [[file:README.org::*custom-file][custom-file:1]]
+;; [[file:readme.org::*custom-file][custom-file:1]]
 ;; custome-file
 ;; {{{
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+;; 指向 git 忽略的 var/ 目录：Customize UI 的改动只留本地，不再把
+;; 凭证类内容（如带 token 的 feed URL）写进被版本控制的文件。
+(setq custom-file (expand-file-name "var/custom.el" user-emacs-directory))
 (unless (file-exists-p custom-file)
+  (make-directory (file-name-directory custom-file) t)
   (write-region "" nil custom-file))
 (when (file-exists-p custom-file)
   (load custom-file))
 ;; }}}
 ;; custom-file:1 ends here
 
-;; [[file:README.org::*encoding and locale][encoding and locale:1]]
+;; [[file:readme.org::*encoding and locale][encoding and locale:1]]
 ;; encoding: prefer UTF-8 everywhere
 ;; {{{
 ;; [hick/emacs-chinese: Emacs 相关中文问题以及解决方案](https://github.com/hick/emacs-chinese)
@@ -138,11 +137,11 @@
 ;; }}}
 ;; encoding and locale:1 ends here
 
-;; [[file:README.org::*Version Control & symlink][Version Control & symlink:1]]
+;; [[file:readme.org::*Version Control & symlink][Version Control & symlink:1]]
 (setq vc-follow-symlinks t)
 ;; Version Control & symlink:1 ends here
 
-;; [[file:README.org::*remap Physical keys][remap Physical keys:1]]
+;; [[file:readme.org::*remap Physical keys][remap Physical keys:1]]
 ;; keymap
 ;; {{{
 ;; bind: 全局按键/快捷键 (Global key bindings)
@@ -162,7 +161,7 @@
 ;; }}}
 ;; remap Physical keys:1 ends here
 
-;; [[file:README.org::*basic keybinding][basic keybinding:1]]
+;; [[file:readme.org::*basic keybinding][basic keybinding:1]]
 ;; basic keybinding
 ;; {{{
 (keymap-global-set "s-a" #'mark-whole-buffer)
@@ -193,12 +192,12 @@
 ;; }}}
 ;; basic keybinding:1 ends here
 
-;; [[file:README.org::*universal-argument][universal-argument:1]]
+;; [[file:readme.org::*universal-argument][universal-argument:1]]
 (keymap-global-set "H-a" #'set-mark-command)
 (keymap-global-set "H-u" #'universal-argument)
 ;; universal-argument:1 ends here
 
-;; [[file:README.org::*mouse][mouse:1]]
+;; [[file:readme.org::*mouse][mouse:1]]
 (context-menu-mode 1)       ;; 鼠标右键菜单
 (setq context-menu-functions
       '(context-menu-ffap
@@ -211,7 +210,7 @@
 (setq use-dialog-box nil)   ;; 鼠标点击不触发弹窗
 ;; mouse:1 ends here
 
-;; [[file:README.org::*open file][open file:1]]
+;; [[file:readme.org::*open file][open file:1]]
 ;; 快速打开文件
 ;; {{{
 (defun my/open-init-file () ;; Emacs init
@@ -262,7 +261,7 @@
 ;; }}}
 ;; open file:1 ends here
 
-;; [[file:README.org::*frame][frame:2]]
+;; [[file:readme.org::*frame][frame:2]]
 ;; UI
 ;; {{{
 ;; (push '(fullscreen . maximized) default-frame-alist)
@@ -285,7 +284,7 @@
 ;; }}}
 ;; frame:2 ends here
 
-;; [[file:README.org::*user name & email][user name & email:1]]
+;; [[file:readme.org::*user name & email][user name & email:1]]
 ;; user name & email
 ;; {{{
 (setq user-full-name "suliveevil")
@@ -296,7 +295,7 @@
 ;; }}}
 ;; user name & email:1 ends here
 
-;; [[file:README.org::*package & package mirror][package & package mirror:1]]
+;; [[file:readme.org::*package & package mirror][package & package mirror:1]]
 ;; package: package-enable-at-startup is before init but after early-init
 ;; {{{
 (setq package-enable-at-startup nil) ;; don't enable at startup, pair with (package-initialize)
@@ -342,7 +341,7 @@
 ;; }}}
 ;; package & package mirror:1 ends here
 
-;; [[file:README.org::*package load-path][package load-path:1]]
+;; [[file:readme.org::*package load-path][package load-path:1]]
 ;; package: add other source packages to load path
 ;; {{{
 (require 'cl-lib)
@@ -380,6 +379,6 @@
 ;; }}}
 ;; package load-path:1 ends here
 
-;; [[file:README.org::*File End][File End:1]]
+;; [[file:readme.org::*File End][File End:1]]
 ;;; early-init.el ends here
 ;; File End:1 ends here
