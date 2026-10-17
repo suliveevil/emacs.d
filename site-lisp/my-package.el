@@ -96,7 +96,7 @@
 ;; exec-path-from-shell
 ;; {{{
 ;; https://emacs-china.org/t/exec-path-from-shell/2515/10
-(use-package exec-path-from-shell
+(use-package exec-path-from-shell :ensure t
   :defer 1
   ;; :if (memq window-system '(mac ns x))
   ;; :when (or (memq window-system '(mac ns x))
@@ -173,7 +173,7 @@
 ;; 代码分析:1 ends here
 
 ;; [[file:../package.org::*格式化 elisp-autofmt][格式化 elisp-autofmt:1]]
-(use-package elisp-autofmt
+(use-package elisp-autofmt :ensure t
   :commands
   (elisp-autofmt-mode elisp-autofmt-buffer)
   :hook (emacs-lisp-mode . elisp-autofmt-mode)
@@ -332,7 +332,7 @@
 ;; {{{
 ;; multiple-cursors-mode-enabled-hook
 ;; multiple-cursors-mode-disabled-hook
-(use-package multiple-cursors
+(use-package multiple-cursors :ensure t
   :bind (
          ("H-c H-a" . mc/edit-beginnings-of-lines)
          ("H-c H-e" . mc/edit-ends-of-lines)
@@ -537,7 +537,7 @@
 ;; 近义词/反义词等: parrot:1 ends here
 
 ;; [[file:../package.org::*中英文空格: pangu-spacing][中英文空格: pangu-spacing:1]]
-(use-package pangu-spacing
+(use-package pangu-spacing :ensure t
   :defer 3
   :custom
   (pangu-spacing-inhibit-mode-alist
@@ -574,7 +574,7 @@
 ;; {{{
 (keymap-global-unset "C-=")
 (keymap-global-unset "C--")
-(use-package expand-region
+(use-package expand-region :ensure t
   :bind
   (
    ("C-=" . er/expand-region)
@@ -604,7 +604,7 @@
 ;; [[file:../package.org::*symbol-overlay][symbol-overlay:1]]
 ;; symbol-overlay
 ;; {{{
-(use-package symbol-overlay
+(use-package symbol-overlay :ensure t
   :bind(
         ("M-I" . symbol-overlay-remove-all)
         ("M-i"  . symbol-overlay-put) ; 高亮或取消高亮当前 symbol
@@ -1081,7 +1081,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; [[file:../package.org::*ace-pinyin][ace-pinyin:1]]
 ;; ace-pinyin
 ;; {{{
-(use-package ace-pinyin
+(use-package ace-pinyin :ensure t
   :defer 1
   :config
   (setq ace-pinyin-use-avy t)
@@ -1206,7 +1206,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; difftastic + magit
 ;; {{{
 ;; (with-eval-after-load 'magit
-(use-package magit
+(use-package magit :ensure t
   ;; :defer 1
   :bind
   (
@@ -1458,7 +1458,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; [[file:../package.org::*括号: highlight-parentheses][括号: highlight-parentheses:1]]
 ;; highlight-parentheses
 ;; {{{
-(use-package highlight-parentheses
+(use-package highlight-parentheses :ensure t
   :defer 1
   ;; :hook (after-init . highlight-parentheses-mode)
   :config
@@ -1600,7 +1600,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; ace-window:1 ends here
 
 ;; [[file:../package.org::*org-modern][org-modern:1]]
-(use-package org-modern
+(use-package org-modern :ensure t
   :hook (org-mode . org-modern-mode)
   :config
   (setq
@@ -1645,7 +1645,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; [[file:../package.org::*basic config][basic config:1]]
 ;; org-roam: basic config
 ;; {{{
-(use-package org-roam
+(use-package org-roam :ensure t
   ;; :after (org)
   :defer 2
   :init
@@ -1874,7 +1874,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; [[file:../package.org::*UI & ORUI][UI & ORUI:1]]
 ;; org-roam-ui
 ;; {{{
-(use-package org-roam-ui
+(use-package org-roam-ui :ensure t
   :after (org-roam)
   ;; normally we'd recommend hooking orui after org-roam, but since org-roam does not have
   ;; a hookable mode anymore, you're advised to pick something yourself
@@ -2182,7 +2182,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; [[file:../package.org::*shrface][shrface:1]]
 ;; shrface eww nov
 ;; {{{
-(use-package shrface
+(use-package shrface :ensure t
   :defer t
   :hook (eww-after-render-hook . shrface-mode)
   :config
@@ -2260,7 +2260,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; [[file:../package.org::*地图 map][地图 map:1]]
 ;; osm: OpenStreetMap
 ;; {{{
-(use-package osm
+(use-package osm :ensure t
   :defer t
   ;; :after org
   :init
@@ -2314,7 +2314,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; [[file:../package.org::*mybigword][mybigword:1]]
 ;; mybigword
 ;; {{{
-(use-package mybigword
+(use-package mybigword :ensure t
   :defer t
   :config
   (setq mybigword-excluded-words
@@ -2332,8 +2332,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; mybigword:1 ends here
 
 ;; [[file:../package.org::*olivetti][olivetti:1]]
-(use-package
-  olivetti
+(use-package olivetti :ensure t
   :hook
   (
    (after-init . olivetti-mode)

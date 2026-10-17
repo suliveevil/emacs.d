@@ -106,7 +106,10 @@ Consider only documented, non-obsolete functions."
 ;; {{{
 (require 'use-package)
 (require 'use-package-ensure)
-(setq use-package-always-ensure t)
+;; 显式风格：不设 use-package-always-ensure ——
+;; 该全局开关会让**第三方文件**里的 (use-package ...) 在宏展开期就去 package-install，
+;; 例如 shrface/config.el 里的 (use-package anki ...) 会因 anki 不存在而硬报错。
+;; 需要自动安装的 stanza 一律显式写 :ensure t。
 (setq use-package-verbose t)
 (setq use-package-enable-imenu-support t)
 (setq use-package-compute-statistics t)

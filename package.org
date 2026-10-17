@@ -272,7 +272,7 @@ sibling file: [[file:README.org][Emacs config]]
 ;; exec-path-from-shell
 ;; {{{
 ;; https://emacs-china.org/t/exec-path-from-shell/2515/10
-(use-package exec-path-from-shell
+(use-package exec-path-from-shell :ensure t
   :defer 1
   ;; :if (memq window-system '(mac ns x))
   ;; :when (or (memq window-system '(mac ns x))
@@ -609,7 +609,7 @@ elisp-depmap
 ** 格式化 elisp-autofmt
 
 #+begin_src emacs-lisp
-(use-package elisp-autofmt
+(use-package elisp-autofmt :ensure t
   :commands
   (elisp-autofmt-mode elisp-autofmt-buffer)
   :hook (emacs-lisp-mode . elisp-autofmt-mode)
@@ -975,7 +975,7 @@ modifire prefix
 ;; {{{
 ;; multiple-cursors-mode-enabled-hook
 ;; multiple-cursors-mode-disabled-hook
-(use-package multiple-cursors
+(use-package multiple-cursors :ensure t
   :bind (
          ("H-c H-a" . mc/edit-beginnings-of-lines)
          ("H-c H-e" . mc/edit-ends-of-lines)
@@ -1313,7 +1313,7 @@ supports many major modes out of box.
 ** 中英文空格: pangu-spacing                                        :format:
 
 #+begin_src emacs-lisp
-(use-package pangu-spacing
+(use-package pangu-spacing :ensure t
   :defer 3
   :custom
   (pangu-spacing-inhibit-mode-alist
@@ -1486,7 +1486,7 @@ re="(([\u2e80-\u9fff]+)([\n\r]{1,2})?([\s\t])?(([\u2e80-\u9fff]+)|(\w)+)([\s\t])
 ;; {{{
 (keymap-global-unset "C-=")
 (keymap-global-unset "C--")
-(use-package expand-region
+(use-package expand-region :ensure t
   :bind
   (
    ("C-=" . er/expand-region)
@@ -1518,7 +1518,7 @@ re="(([\u2e80-\u9fff]+)([\n\r]{1,2})?([\s\t])?(([\u2e80-\u9fff]+)|(\w)+)([\s\t])
 #+begin_src emacs-lisp
 ;; symbol-overlay
 ;; {{{
-(use-package symbol-overlay
+(use-package symbol-overlay :ensure t
   :bind(
         ("M-I" . symbol-overlay-remove-all)
         ("M-i"  . symbol-overlay-put) ; 高亮或取消高亮当前 symbol
@@ -2886,7 +2886,7 @@ company-quickhelp
 #+begin_src emacs-lisp
 ;; ace-pinyin
 ;; {{{
-(use-package ace-pinyin
+(use-package ace-pinyin :ensure t
   :defer 1
   :config
   (setq ace-pinyin-use-avy t)
@@ -3322,7 +3322,7 @@ Calibre sucks !
 ;; difftastic + magit
 ;; {{{
 ;; (with-eval-after-load 'magit
-(use-package magit
+(use-package magit :ensure t
   ;; :defer 1
   :bind
   (
@@ -3656,7 +3656,7 @@ Emacs 29: copy-region-blink-predicate
 #+begin_src emacs-lisp
 ;; highlight-parentheses
 ;; {{{
-(use-package highlight-parentheses
+(use-package highlight-parentheses :ensure t
   :defer 1
   ;; :hook (after-init . highlight-parentheses-mode)
   :config
@@ -3941,7 +3941,7 @@ https://github.com/logangrado/hideshow-orgmode
 ** org-modern
 
 #+begin_src emacs-lisp
-(use-package org-modern
+(use-package org-modern :ensure t
   :hook (org-mode . org-modern-mode)
   :config
   (setq
@@ -4013,7 +4013,7 @@ https://github.com/logangrado/hideshow-orgmode
 #+begin_src emacs-lisp
 ;; org-roam: basic config
 ;; {{{
-(use-package org-roam
+(use-package org-roam :ensure t
   ;; :after (org)
   :defer 2
   :init
@@ -4398,7 +4398,7 @@ org-protocol://roam-node?node=uuid"
 #+begin_src emacs-lisp
 ;; org-roam-ui
 ;; {{{
-(use-package org-roam-ui
+(use-package org-roam-ui :ensure t
   :after (org-roam)
   ;; normally we'd recommend hooking orui after org-roam, but since org-roam does not have
   ;; a hookable mode anymore, you're advised to pick something yourself
@@ -4767,7 +4767,7 @@ https://github.com/ahyatt/ekg
 #+begin_src emacs-lisp
 ;; shrface eww nov
 ;; {{{
-(use-package shrface
+(use-package shrface :ensure t
   :defer t
   :hook (eww-after-render-hook . shrface-mode)
   :config
@@ -5093,7 +5093,7 @@ Doesn't work on macOS: =(void-function x-export-frames)=
 #+begin_src emacs-lisp
 ;; osm: OpenStreetMap
 ;; {{{
-(use-package osm
+(use-package osm :ensure t
   :defer t
   ;; :after org
   :init
@@ -5183,7 +5183,7 @@ Doesn't work on macOS: =(void-function x-export-frames)=
 #+begin_src emacs-lisp
 ;; mybigword
 ;; {{{
-(use-package mybigword
+(use-package mybigword :ensure t
   :defer t
   :config
   (setq mybigword-excluded-words
@@ -5203,8 +5203,7 @@ Doesn't work on macOS: =(void-function x-export-frames)=
 ** olivetti
 
 #+begin_src emacs-lisp
-(use-package
-  olivetti
+(use-package olivetti :ensure t
   :hook
   (
    (after-init . olivetti-mode)

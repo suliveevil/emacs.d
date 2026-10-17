@@ -263,7 +263,12 @@ open -b org.gnu.Emacs --args -q --eval='(message "%s" (emacs-init-time))'
 ;; debug warning and error
 ;; {{{
 ;; debug
-(setq debug-on-error t)
+;; 不全局开启 debug-on-error：它会把「设计上被降级」的错误也送进调试器。
+;; 典型：use-package 在字节编译期插入 (load "包名" nil t) 探测，本意由
+;; with-demoted-errors 兜成一条 message，但 (debug error) 处理器在
+;; debug-on-error 为真时仍会打断编译。需要调试时临时开：
+;;   M-x toggle-debug-on-error
+(setq debug-on-error nil)
 ;; warning
 (setq byte-compile-warnings nil)
 (setq native-comp-async-report-warnings-errors nil)
@@ -272,7 +277,7 @@ open -b org.gnu.Emacs --args -q --eval='(message "%s" (emacs-init-time))'
 ;; （elpa 包 / lib submodule），改它们的源码既会被更新覆盖、也会改变其绑定语义，
 ;; 所以按类型前缀忽略这一类警告（warning-suppress-log-types = 完全忽略）。
 ;; 注意：这两个变量由 warnings.el 定义，early-init 阶段未必已加载，
-;; 而本文件设了 debug-on-error，所以必须 require + 兜住错误，避免中断启动。
+;; 所以仍然 require + 用 with-demoted-errors 兜住，避免中断启动。
 (with-demoted-errors "warning-suppress config: %S"
   (require 'warnings)
   (add-to-list 'warning-suppress-log-types '(files missing-lexbind-cookie)))
@@ -1096,7 +1101,10 @@ Consider only documented, non-obsolete functions."
 ;; {{{
 (require 'use-package)
 (require 'use-package-ensure)
-(setq use-package-always-ensure t)
+;; 显式风格：不设 use-package-always-ensure ——
+;; 该全局开关会让**第三方文件**里的 (use-package ...) 在宏展开期就去 package-install，
+;; 例如 shrface/config.el 里的 (use-package anki ...) 会因 anki 不存在而硬报错。
+;; 需要自动安装的 stanza 一律显式写 :ensure t。
 (setq use-package-verbose t)
 (setq use-package-enable-imenu-support t)
 (setq use-package-compute-statistics t)
