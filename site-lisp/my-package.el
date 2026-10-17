@@ -990,6 +990,8 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; [[file:../package.org::*基础设置][基础设置:1]]
 ;; pyim
 ;; {{{
+;; pyim-tsinghua-dict 是 lib/ 下的 submodule，不在 elpa，需显式加入 load-path
+(add-to-list 'load-path (expand-file-name "lib/pyim-tsinghua-dict" user-emacs-directory))
 (use-package pyim
   :ensure nil
   :defer 1
@@ -1026,8 +1028,8 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   ;; (pyim-basedict-enable)   ; 拼音词库
   ;; (require 'pyim-greatdict)
   ;; (pyim-greatdict-enable)
-  (require 'pyim-tsinghua-dict)
-  (pyim-tsinghua-dict-enable)
+  (when (require 'pyim-tsinghua-dict nil t)
+    (pyim-tsinghua-dict-enable))
 
   (setq-default pyim-punctuation-translate-p '(auto)) ;; 全角半角
 
@@ -2368,7 +2370,7 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
 ;; [[file:../package.org::*dsh-emacs][dsh-emacs:1]]
 (use-package dsh-emacs
   :ensure nil
-  :load-path (expand-file-name "lib/dsh-emacs" user-emacs-directory)
+  :load-path "lib/dsh-emacs"
   :commands (dsh-emacs dsh-emacs-new-session)
   :bind ("C-c d" . dsh-emacs))
 ;; dsh-emacs:1 ends here

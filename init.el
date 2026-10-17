@@ -1681,13 +1681,12 @@ occurence of CHAR."
   (setq isearch-motion-changes-direction t)
   ;;
   ;; 自动 wrap
-  (defadvice isearch-search (after isearch-no-fail activate)
+  (defun my-isearch-no-fail (&rest _)
     (unless isearch-success
-      (ad-disable-advice 'isearch-search 'after 'isearch-no-fail)
-      (ad-activate 'isearch-search)
+      (advice-remove 'isearch-search #'my-isearch-no-fail)
       (isearch-repeat (if isearch-forward 'forward))
-      (ad-enable-advice 'isearch-search 'after 'isearch-no-fail)
-      (ad-activate 'isearch-search)))
+      (advice-add 'isearch-search :after #'my-isearch-no-fail)))
+  (advice-add 'isearch-search :after #'my-isearch-no-fail)
   ;;
   ;; 重新输入并搜索
   (defmacro isearch-quit-and-run (&rest body)
@@ -2451,13 +2450,15 @@ all open tasks in current Org buffer
     (save-buffer)))
 
 ;; https://www.wisdomandwonder.com/link/9008/a-progress-indicator-for-code-blocks-in-org-mode
-(defadvice org-babel-execute-src-block (around progress nil activate)
+(defun my-org-babel-execute-src-block-progress (orig &rest args)
   (set-face-attribute
    'org-block-background nil :background "LightSteelBlue")
   (message "Running your code block")
-  ad-do-it
-  (set-face-attribute 'org-block-background nil :background "gray")
-  (message "Done with code block"))
+  (unwind-protect
+      (apply orig args)
+    (set-face-attribute 'org-block-background nil :background "gray")
+    (message "Done with code block")))
+(advice-add 'org-babel-execute-src-block :around #'my-org-babel-execute-src-block-progress)
 ;; code block: org-babel org-src:1 ends here
 
 ;; [[file:readme.org::*code block: org-babel org-src][code block: org-babel org-src:2]]
@@ -2666,9 +2667,10 @@ all open tasks in current Org buffer
 ;; Link:1 ends here
 
 ;; [[file:readme.org::*图像][图像:1]]
-(defadvice org-toggle-inline-images (after org-open-at-point activate)
-  (if smooth-scrolling-mode (smooth-scrolling-mode -1)
-    (smooth-scrolling-mode 1)))
+(defun my-org-toggle-inline-images-smooth-scrolling (&rest _)
+  (when (fboundp 'smooth-scrolling-mode)
+    (smooth-scrolling-mode (if (bound-and-true-p smooth-scrolling-mode) -1 1))))
+(advice-add 'org-toggle-inline-images :after #'my-org-toggle-inline-images-smooth-scrolling)
 ;; 图像:1 ends here
 
 ;; [[file:readme.org::*PDF][PDF:1]]
