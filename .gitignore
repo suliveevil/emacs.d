@@ -105,3 +105,9 @@ test.org
 /custom.el
 # 启动时由 my/log-emacs-uptime 自动追加，属于生成物
 /assets/uptime.org
+
+# --- 补充：本地状态 / 临时文件 ---
+/places.eld
+/.org-src-babel
+/test.html
+*.bak*
