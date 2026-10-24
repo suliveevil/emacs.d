@@ -1,2 +1,2 @@
 ;;; -*- coding: utf-8; mode: lisp-data -*-
-nil
+(("/Users/suliveevil/Documents/GitHub/18plus/.gitignore" . 46))
