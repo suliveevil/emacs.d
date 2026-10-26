@@ -112,4 +112,6 @@ test.org
 /test.html
 *.bak*
 /.workbuddy
-/org-persist
+/org-persist/*
+
+*.eld
