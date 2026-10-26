@@ -1,0 +1,4117 @@
+{
+  "root": "/Users/suliveevil/.emacs.d",
+  "files": 188,
+  "total_lines": 0,
+  "languages": {
+    "elisp": 188
+  },
+  "functions_total": 0,
+  "meta": {
+    "elpa_count": 126,
+    "lib_count": 21,
+    "active_count": 80,
+    "edge_count": 227
+  },
+  "nodes": [
+    {
+      "name": "ace-pinyin",
+      "version": "20210827.355",
+      "dir": "elpa/ace-pinyin-20210827.355",
+      "declared": [
+        "avy",
+        "pinyinlib"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 2,
+      "kind": "active"
+    },
+    {
+      "name": "ace-window",
+      "version": "20220911.358",
+      "dir": "elpa/ace-window-20220911.358",
+      "declared": [
+        "avy"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "acm",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "acm-frame",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "advance-words-count",
+      "version": "git",
+      "dir": "lib/advance-words-count",
+      "declared": [
+        "pos-tip"
+      ],
+      "requires": [],
+      "source": "lib",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "all-the-icons",
+      "version": "20250527.927",
+      "dir": "elpa/all-the-icons-20250527.927",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 2,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "all-the-icons-completion",
+      "version": "20240128.2048",
+      "dir": "elpa/all-the-icons-completion-20240128.2048",
+      "declared": [
+        "all-the-icons",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "all-the-icons-dired",
+      "version": "20231207.1324",
+      "dir": "elpa/all-the-icons-dired-20231207.1324",
+      "declared": [
+        "all-the-icons",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "ansi-color",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "applescript-mode",
+      "version": "20210802.1715",
+      "dir": "elpa/applescript-mode-20210802.1715",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "aria2",
+      "version": "20230314.2131",
+      "dir": "elpa/aria2-20230314.2131",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "async",
+      "version": "20260729.1431",
+      "dir": "elpa/async-20260729.1431",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 2,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "auto-dark",
+      "version": "20260313.2356",
+      "dir": "elpa/auto-dark-20260313.2356",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "avy",
+      "version": "20241101.1357",
+      "dir": "elpa/avy-20241101.1357",
+      "declared": [
+        "cl-lib",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 3,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "backtrace",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "benchmark-init",
+      "version": "20260108.1447",
+      "dir": "elpa/benchmark-init-20260108.1447",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "bing-dict",
+      "version": "20200216.110",
+      "dir": "elpa/bing-dict-20200216.110",
+      "declared": [],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "browse-url",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 2,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "browser-hist",
+      "version": "git",
+      "dir": "lib/browser-hist",
+      "declared": [
+        "emacs"
+      ],
+      "requires": [
+        "browse-url",
+        "cl-lib",
+        "sqlite"
+      ],
+      "source": "lib",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [
+        "sqlite"
+      ],
+      "in_degree": 0,
+      "out_degree": 4,
+      "kind": "active"
+    },
+    {
+      "name": "button",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "calibredb",
+      "version": "20260821.518",
+      "dir": "elpa/calibredb-20260821.518",
+      "declared": [
+        "dash",
+        "emacs",
+        "esxml",
+        "org",
+        "request",
+        "s",
+        "transient"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 6,
+      "kind": "installed"
+    },
+    {
+      "name": "cl-lib",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 20,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "cl-macs",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "closql",
+      "version": "20261001.1545",
+      "dir": "elpa/closql-20261001.1545",
+      "declared": [
+        "compat",
+        "cond-let",
+        "emacs",
+        "emacsql",
+        "llama"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 1,
+      "out_degree": 4,
+      "kind": "installed"
+    },
+    {
+      "name": "color-theme-sanityinc-solarized",
+      "version": "20241126.1028",
+      "dir": "elpa/color-theme-sanityinc-solarized-20241126.1028",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "color-theme-sanityinc-tomorrow",
+      "version": "20261008.2124",
+      "dir": "elpa/color-theme-sanityinc-tomorrow-20261008.2124",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "combobulate",
+      "version": "git",
+      "dir": "lib/combobulate",
+      "declared": [
+        "emacs"
+      ],
+      "requires": [
+        "combobulate-css",
+        "combobulate-cursor",
+        "combobulate-display",
+        "combobulate-envelope",
+        "combobulate-go",
+        "combobulate-html",
+        "combobulate-js-ts",
+        "combobulate-json",
+        "combobulate-manipulation",
+        "combobulate-misc",
+        "combobulate-navigation",
+        "combobulate-ocaml",
+        "combobulate-procedure",
+        "combobulate-python",
+        "combobulate-query",
+        "combobulate-rules",
+        "combobulate-toml",
+        "combobulate-ui",
+        "combobulate-yaml"
+      ],
+      "source": "lib",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "compat",
+      "version": "31.1.0.0",
+      "dir": "elpa/compat-31.1.0.0",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 26,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "cond-let",
+      "version": "20261001.1537",
+      "dir": "elpa/cond-let-20261001.1537",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 7,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "consult",
+      "version": "20261004.957",
+      "dir": "elpa/consult-20261004.957",
+      "declared": [
+        "compat",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [
+        "org"
+      ],
+      "in_degree": 8,
+      "out_degree": 2,
+      "kind": "active"
+    },
+    {
+      "name": "consult-dir",
+      "version": "20251020.416",
+      "dir": "elpa/consult-dir-20251020.416",
+      "declared": [
+        "consult",
+        "emacs",
+        "project"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [
+        "consult",
+        "vertico"
+      ],
+      "in_degree": 0,
+      "out_degree": 4,
+      "kind": "active"
+    },
+    {
+      "name": "consult-eglot",
+      "version": "20260613.1443",
+      "dir": "elpa/consult-eglot-20260613.1443",
+      "declared": [
+        "consult",
+        "eglot",
+        "emacs",
+        "project"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 3,
+      "kind": "installed"
+    },
+    {
+      "name": "consult-org-roam",
+      "version": "20260917.441",
+      "dir": "elpa/consult-org-roam-20260917.441",
+      "declared": [
+        "consult",
+        "emacs",
+        "org-roam"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [
+        "org",
+        "consult"
+      ],
+      "in_degree": 0,
+      "out_degree": 4,
+      "kind": "active"
+    },
+    {
+      "name": "consult-yasnippet",
+      "version": "20260613.1436",
+      "dir": "elpa/consult-yasnippet-20260613.1436",
+      "declared": [
+        "consult",
+        "emacs",
+        "yasnippet"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [
+        "consult",
+        "yasnippet"
+      ],
+      "in_degree": 0,
+      "out_degree": 4,
+      "kind": "active"
+    },
+    {
+      "name": "crm",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "csv-mode",
+      "version": "1.27",
+      "dir": "elpa/csv-mode-1.27",
+      "declared": [
+        "cl-lib",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "installed"
+    },
+    {
+      "name": "d2-mode",
+      "version": "20241209.2156",
+      "dir": "elpa/d2-mode-20241209.2156",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "dash",
+      "version": "20260221.1346",
+      "dir": "elpa/dash-20260221.1346",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 9,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "deadgrep",
+      "version": "20260629.1858",
+      "dir": "elpa/deadgrep-20260629.1858",
+      "declared": [
+        "dash",
+        "emacs",
+        "s",
+        "spinner"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 3,
+      "kind": "active"
+    },
+    {
+      "name": "deno-bridge",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "diff",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "diff-hl",
+      "version": "20261001.135",
+      "dir": "elpa/diff-hl-20261001.135",
+      "declared": [
+        "cl-lib",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "diff-lisp",
+      "version": "git",
+      "dir": "lib/diff-lisp",
+      "declared": [
+        "emacs"
+      ],
+      "requires": [
+        "diff-lisp-myers",
+        "diff-lisp-sdk",
+        "files",
+        "subr-x"
+      ],
+      "source": "lib",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 2,
+      "kind": "active"
+    },
+    {
+      "name": "doom-modeline",
+      "version": "20261013.257",
+      "dir": "elpa/doom-modeline-20261013.257",
+      "declared": [
+        "compat",
+        "emacs",
+        "nerd-icons",
+        "shrink-path"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 3,
+      "kind": "active"
+    },
+    {
+      "name": "dsh-emacs",
+      "version": "git",
+      "dir": "lib/dsh-emacs",
+      "declared": [
+        "emacs"
+      ],
+      "requires": [
+        "cl-lib",
+        "crm",
+        "dsh-emacs",
+        "dsh-emacs-command",
+        "dsh-emacs-composer",
+        "dsh-emacs-events",
+        "dsh-emacs-faces",
+        "dsh-emacs-history",
+        "dsh-emacs-jobs",
+        "dsh-emacs-markdown",
+        "dsh-emacs-modeline",
+        "dsh-emacs-plan",
+        "dsh-emacs-protocol",
+        "dsh-emacs-provider",
+        "dsh-emacs-queue",
+        "dsh-emacs-reference",
+        "dsh-emacs-reload",
+        "dsh-emacs-render",
+        "dsh-emacs-server",
+        "dsh-emacs-session",
+        "dsh-emacs-shell",
+        "dsh-emacs-skill",
+        "dsh-emacs-tokens",
+        "dsh-emacs-ui",
+        "json",
+        "project",
+        "url",
+        "vc"
+      ],
+      "source": "lib",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 6,
+      "kind": "active"
+    },
+    {
+      "name": "ebib",
+      "version": "20261016.2122",
+      "dir": "elpa/ebib-20261016.2122",
+      "declared": [
+        "compat",
+        "emacs",
+        "parsebib"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 2,
+      "kind": "installed"
+    },
+    {
+      "name": "eglot",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "el-fetch",
+      "version": "20251225.1426",
+      "dir": "elpa/el-fetch-20251225.1426",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "elfeed",
+      "version": "20261010.1010",
+      "dir": "elpa/elfeed-20261010.1010",
+      "declared": [
+        "compat",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 4,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "elfeed-dashboard",
+      "version": "20210727.603",
+      "dir": "elpa/elfeed-dashboard-20210727.603",
+      "declared": [
+        "elfeed",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [
+        "elfeed"
+      ],
+      "in_degree": 0,
+      "out_degree": 2,
+      "kind": "active"
+    },
+    {
+      "name": "elfeed-org",
+      "version": "20250219.950",
+      "dir": "elpa/elfeed-org-20250219.950",
+      "declared": [
+        "elfeed",
+        "emacs",
+        "org"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [
+        "elfeed"
+      ],
+      "in_degree": 0,
+      "out_degree": 3,
+      "kind": "active"
+    },
+    {
+      "name": "elisp-autofmt",
+      "version": "20260810.2354",
+      "dir": "elpa/elisp-autofmt-20260810.2354",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "elisp-demos",
+      "version": "20260826.1326",
+      "dir": "elpa/elisp-demos-20260826.1326",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "elisp-depmap",
+      "version": "20251029.1438",
+      "dir": "elpa/elisp-depmap-20251029.1438",
+      "declared": [
+        "dash",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "elisp-refs",
+      "version": "20230920.201",
+      "dir": "elpa/elisp-refs-20230920.201",
+      "declared": [
+        "dash",
+        "s"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 1,
+      "out_degree": 2,
+      "kind": "installed"
+    },
+    {
+      "name": "emacs-everywhere",
+      "version": "20251028.1701",
+      "dir": "elpa/emacs-everywhere-20251028.1701",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "emacsql",
+      "version": "20261001.1544",
+      "dir": "elpa/emacsql-20261001.1544",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 4,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "embark",
+      "version": "20260610.302",
+      "dir": "elpa/embark-20260610.302",
+      "declared": [
+        "compat",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 1,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "embark-consult",
+      "version": "20260503.118",
+      "dir": "elpa/embark-consult-20260503.118",
+      "declared": [
+        "compat",
+        "consult",
+        "emacs",
+        "embark"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 3,
+      "kind": "active"
+    },
+    {
+      "name": "empv",
+      "version": "20261008.1643",
+      "dir": "elpa/empv-20261008.1643",
+      "declared": [
+        "compat",
+        "emacs",
+        "s"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 2,
+      "kind": "active"
+    },
+    {
+      "name": "epkg",
+      "version": "20261001.1610",
+      "dir": "elpa/epkg-20261001.1610",
+      "declared": [
+        "closql",
+        "compat",
+        "cond-let",
+        "emacs",
+        "emacsql",
+        "llama"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 5,
+      "kind": "active"
+    },
+    {
+      "name": "esup",
+      "version": "20220202.2335",
+      "dir": "elpa/esup-20220202.2335",
+      "declared": [
+        "cl-lib",
+        "emacs",
+        "s"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 2,
+      "kind": "installed"
+    },
+    {
+      "name": "esxml",
+      "version": "20260329.1617",
+      "dir": "elpa/esxml-20260329.1617",
+      "declared": [
+        "cl-lib",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 2,
+      "out_degree": 1,
+      "kind": "installed"
+    },
+    {
+      "name": "evil-core",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "exec-path-from-shell",
+      "version": "20260423.1833",
+      "dir": "elpa/exec-path-from-shell-20260423.1833",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "expand-region",
+      "version": "20241217.1840",
+      "dir": "elpa/expand-region-20241217.1840",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "explain-pause-mode",
+      "version": "git",
+      "dir": "lib/explain-pause-mode",
+      "declared": [],
+      "requires": [
+        "backtrace",
+        "cl-macs",
+        "nadvice",
+        "profiler",
+        "seq",
+        "subr-x"
+      ],
+      "source": "lib",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 6,
+      "kind": "installed"
+    },
+    {
+      "name": "f",
+      "version": "20241003.1131",
+      "dir": "elpa/f-20241003.1131",
+      "declared": [
+        "dash",
+        "emacs",
+        "s"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 4,
+      "out_degree": 2,
+      "kind": "installed"
+    },
+    {
+      "name": "files",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "free-keys",
+      "version": "20250512.1527",
+      "dir": "elpa/free-keys-20250512.1527",
+      "declared": [
+        "cl-lib"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "fringe-helper",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "git-commit",
+      "version": "20230313.1724",
+      "dir": "elpa/git-commit-20230313.1724",
+      "declared": [
+        "compat",
+        "emacs",
+        "transient",
+        "with-editor"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 3,
+      "kind": "installed"
+    },
+    {
+      "name": "goggles",
+      "version": "20260519.1038",
+      "dir": "elpa/goggles-20260519.1038",
+      "declared": [
+        "compat",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "goto-line-preview",
+      "version": "20260204.956",
+      "dir": "elpa/goto-line-preview-20260204.956",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "gptel",
+      "version": "20261013.2205",
+      "dir": "elpa/gptel-20261013.2205",
+      "declared": [
+        "compat",
+        "emacs",
+        "transient"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 1,
+      "out_degree": 2,
+      "kind": "installed"
+    },
+    {
+      "name": "graphviz-dot-mode",
+      "version": "20260904.1519",
+      "dir": "elpa/graphviz-dot-mode-20260904.1519",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "help-fns",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "helpful",
+      "version": "20250408.334",
+      "dir": "elpa/helpful-20250408.334",
+      "declared": [
+        "dash",
+        "elisp-refs",
+        "emacs",
+        "f",
+        "s"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 4,
+      "kind": "active"
+    },
+    {
+      "name": "highlight-parentheses",
+      "version": "20240408.1126",
+      "dir": "elpa/highlight-parentheses-20240408.1126",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "htmlize",
+      "version": "20250724.1703",
+      "dir": "elpa/htmlize-20250724.1703",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "image-mode",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "image-roll",
+      "version": "git",
+      "dir": "lib/image-roll",
+      "declared": [],
+      "requires": [
+        "image-mode",
+        "svg"
+      ],
+      "source": "lib",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 2,
+      "kind": "active"
+    },
+    {
+      "name": "insert-translated-name",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "itranslate-mode",
+      "version": "git",
+      "dir": "lib/itranslate-mode",
+      "declared": [],
+      "requires": [
+        "deno-bridge",
+        "insert-translated-name",
+        "json",
+        "subr-x"
+      ],
+      "source": "lib",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 4,
+      "kind": "installed"
+    },
+    {
+      "name": "json",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 4,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "keycast",
+      "version": "20261001.1617",
+      "dir": "elpa/keycast-20261001.1617",
+      "declared": [
+        "compat",
+        "cond-let",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 2,
+      "kind": "active"
+    },
+    {
+      "name": "keyfreq",
+      "version": "git",
+      "dir": "lib/keyfreq",
+      "declared": [
+        "cl-lib"
+      ],
+      "requires": [
+        "cl-lib",
+        "json",
+        "keyfreq"
+      ],
+      "source": "lib",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 3,
+      "kind": "active"
+    },
+    {
+      "name": "khoj",
+      "version": "20260326.333",
+      "dir": "elpa/khoj-20260326.333",
+      "declared": [
+        "dash",
+        "emacs",
+        "transient"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 2,
+      "kind": "installed"
+    },
+    {
+      "name": "kv",
+      "version": "20140108.1534",
+      "dir": "elpa/kv-20140108.1534",
+      "declared": [],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "language-detection",
+      "version": "20161123.1813",
+      "dir": "elpa/language-detection-20161123.1813",
+      "declared": [
+        "cl-lib",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 1,
+      "out_degree": 1,
+      "kind": "installed"
+    },
+    {
+      "name": "lisp-mnt",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "llama",
+      "version": "20261001.1538",
+      "dir": "elpa/llama-20261001.1538",
+      "declared": [
+        "compat",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 6,
+      "out_degree": 1,
+      "kind": "installed"
+    },
+    {
+      "name": "lsp-bridge",
+      "version": "git",
+      "dir": "lib/lsp-bridge",
+      "declared": [
+        "emacs",
+        "markdown-mode"
+      ],
+      "requires": [
+        "acm",
+        "acm-frame",
+        "ansi-color",
+        "cl-lib",
+        "diff",
+        "json",
+        "lsp-bridge-breadcrumb",
+        "lsp-bridge-call-hierarchy",
+        "lsp-bridge-code-action",
+        "lsp-bridge-dart",
+        "lsp-bridge-diagnostic",
+        "lsp-bridge-epc",
+        "lsp-bridge-inlay-hint",
+        "lsp-bridge-jdtls",
+        "lsp-bridge-lsp-installer",
+        "lsp-bridge-org-babel",
+        "lsp-bridge-peek",
+        "lsp-bridge-ref",
+        "lsp-bridge-rust",
+        "lsp-bridge-semantic-tokens",
+        "map",
+        "markdown-mode",
+        "pulse",
+        "seq",
+        "subr-x",
+        "tramp"
+      ],
+      "source": "lib",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 13,
+      "kind": "installed"
+    },
+    {
+      "name": "magit",
+      "version": "20261016.1052",
+      "dir": "elpa/magit-20261016.1052",
+      "declared": [
+        "compat",
+        "cond-let",
+        "emacs",
+        "llama",
+        "magit-section",
+        "seq",
+        "transient",
+        "with-editor"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 1,
+      "out_degree": 7,
+      "kind": "active"
+    },
+    {
+      "name": "magit-delta",
+      "version": "20220125.50",
+      "dir": "elpa/magit-delta-20220125.50",
+      "declared": [
+        "emacs",
+        "magit",
+        "xterm-color"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 2,
+      "kind": "installed"
+    },
+    {
+      "name": "magit-section",
+      "version": "20260926.1436",
+      "dir": "elpa/magit-section-20260926.1436",
+      "declared": [
+        "compat",
+        "cond-let",
+        "emacs",
+        "llama",
+        "seq"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 2,
+      "out_degree": 4,
+      "kind": "installed"
+    },
+    {
+      "name": "map",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "marginalia",
+      "version": "20261010.1524",
+      "dir": "elpa/marginalia-20261010.1524",
+      "declared": [
+        "compat",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "markdown-mode",
+      "version": "20261009.18",
+      "dir": "elpa/markdown-mode-20261009.18",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 2,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "mermaid-mode",
+      "version": "20260607.15",
+      "dir": "elpa/mermaid-mode-20260607.15",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "mode-minder",
+      "version": "git",
+      "dir": "lib/mode-minder",
+      "declared": [
+        "emacs"
+      ],
+      "requires": [
+        "button",
+        "cl-lib",
+        "help-fns",
+        "seq"
+      ],
+      "source": "lib",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 4,
+      "kind": "installed"
+    },
+    {
+      "name": "modeline-char",
+      "version": "git",
+      "dir": "lib/modeline-char",
+      "declared": [],
+      "requires": [
+        "second-sel"
+      ],
+      "source": "lib",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "modern-fringes",
+      "version": "20261014.848",
+      "dir": "elpa/modern-fringes-20261014.848",
+      "declared": [],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "multiple-cursors",
+      "version": "20260419.931",
+      "dir": "elpa/multiple-cursors-20260419.931",
+      "declared": [
+        "cl-lib",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "mybigword",
+      "version": "20230809.904",
+      "dir": "elpa/mybigword-20230809.904",
+      "declared": [
+        "avy",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "nadvice",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "nerd-icons",
+      "version": "20261011.1410",
+      "dir": "elpa/nerd-icons-20261011.1410",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "nov",
+      "version": "20251213.1501",
+      "dir": "elpa/nov-20251213.1501",
+      "declared": [
+        "emacs",
+        "esxml"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 2,
+      "out_degree": 1,
+      "kind": "installed"
+    },
+    {
+      "name": "nov-xwidget",
+      "version": "git",
+      "dir": "lib/nov-xwidget",
+      "declared": [
+        "emacs",
+        "nov"
+      ],
+      "requires": [
+        "browse-url",
+        "cl-lib",
+        "evil-core",
+        "nov",
+        "shr",
+        "xwidget"
+      ],
+      "source": "lib",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [
+        "nov"
+      ],
+      "in_degree": 0,
+      "out_degree": 7,
+      "kind": "active"
+    },
+    {
+      "name": "nyan-mode",
+      "version": "20220408.2334",
+      "dir": "elpa/nyan-mode-20220408.2334",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "olivetti",
+      "version": "20260524.213",
+      "dir": "elpa/olivetti-20260524.213",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "opencc",
+      "version": "20170722.816",
+      "dir": "elpa/opencc-20170722.816",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "orderless",
+      "version": "20261013.1927",
+      "dir": "elpa/orderless-20261013.1927",
+      "declared": [
+        "compat",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "org",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 12,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "org-auto-tangle",
+      "version": "20251230.1416",
+      "dir": "elpa/org-auto-tangle-20251230.1416",
+      "declared": [
+        "async",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "org-goto",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "org-mac-link",
+      "version": "git",
+      "dir": "lib/org-mac-link",
+      "declared": [
+        "emacs"
+      ],
+      "requires": [
+        "org",
+        "org-goto",
+        "org-mac-link"
+      ],
+      "source": "lib",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "org-modern",
+      "version": "20260722.1411",
+      "dir": "elpa/org-modern-20260722.1411",
+      "declared": [
+        "compat",
+        "emacs",
+        "org"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 2,
+      "kind": "active"
+    },
+    {
+      "name": "org-roam",
+      "version": "20260425.1623",
+      "dir": "elpa/org-roam-20260425.1623",
+      "declared": [
+        "compat",
+        "emacs",
+        "emacsql",
+        "magit-section",
+        "org"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": null,
+      "config_after": [
+        "org"
+      ],
+      "in_degree": 3,
+      "out_degree": 5,
+      "kind": "active"
+    },
+    {
+      "name": "org-roam-similarity",
+      "version": "git",
+      "dir": "lib/org-roam-similarity",
+      "declared": [
+        "emacs",
+        "org"
+      ],
+      "requires": [],
+      "source": "lib",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "installed"
+    },
+    {
+      "name": "org-roam-ui",
+      "version": "20221105.1040",
+      "dir": "elpa/org-roam-ui-20221105.1040",
+      "declared": [
+        "emacs",
+        "org-roam",
+        "simple-httpd",
+        "websocket"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": null,
+      "config_after": [
+        "org-roam"
+      ],
+      "in_degree": 0,
+      "out_degree": 4,
+      "kind": "active"
+    },
+    {
+      "name": "org-similarity",
+      "version": "git",
+      "dir": "lib/org-similarity",
+      "declared": [
+        "emacs",
+        "f"
+      ],
+      "requires": [
+        "f"
+      ],
+      "source": "lib",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [
+        "org"
+      ],
+      "in_degree": 0,
+      "out_degree": 3,
+      "kind": "active"
+    },
+    {
+      "name": "org-sticky-header",
+      "version": "20201223.143",
+      "dir": "elpa/org-sticky-header-20201223.143",
+      "declared": [
+        "emacs",
+        "org"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "origami",
+      "version": "20200331.1019",
+      "dir": "elpa/origami-20200331.1019",
+      "declared": [
+        "cl-lib",
+        "dash",
+        "emacs",
+        "s"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 3,
+      "kind": "installed"
+    },
+    {
+      "name": "osm",
+      "version": "20260801.757",
+      "dir": "elpa/osm-20260801.757",
+      "declared": [
+        "compat",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": null,
+      "config_after": [
+        "org"
+      ],
+      "in_degree": 0,
+      "out_degree": 2,
+      "kind": "active"
+    },
+    {
+      "name": "osx-dictionary",
+      "version": "20261009.1257",
+      "dir": "elpa/osx-dictionary-20261009.1257",
+      "declared": [
+        "cl-lib"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "pangu-spacing",
+      "version": "20260717.230",
+      "dir": "elpa/pangu-spacing-20260717.230",
+      "declared": [],
+      "source": "elpa",
+      "active": true,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "parrot",
+      "version": "20260111.2133",
+      "dir": "elpa/parrot-20260111.2133",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "parsebib",
+      "version": "20251125.1320",
+      "dir": "elpa/parsebib-20251125.1320",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "pcre2el",
+      "version": "20240629.2322",
+      "dir": "elpa/pcre2el-20240629.2322",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "pinyinlib",
+      "version": "20200911.1723",
+      "dir": "elpa/pinyinlib-20200911.1723",
+      "declared": [],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "pos-tip",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "posframe",
+      "version": "20261012.1134",
+      "dir": "elpa/posframe-20261012.1134",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 5,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "profiler",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "project",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 3,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "pulse",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "puni",
+      "version": "20260519.1527",
+      "dir": "elpa/puni-20260519.1527",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "pyim",
+      "version": "20251230.809",
+      "dir": "elpa/pyim-20251230.809",
+      "declared": [
+        "async",
+        "emacs",
+        "xr"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 1,
+      "out_degree": 2,
+      "kind": "active"
+    },
+    {
+      "name": "pyim-dict",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "pyim-greatdict",
+      "version": "git",
+      "dir": "lib/pyim-greatdict",
+      "declared": [],
+      "requires": [
+        "pyim-greatdict"
+      ],
+      "source": "lib",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "pyim-tsinghua-dict",
+      "version": "git",
+      "dir": "lib/pyim-tsinghua-dict",
+      "declared": [
+        "pyim"
+      ],
+      "requires": [
+        "pyim-dict"
+      ],
+      "source": "lib",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 2,
+      "kind": "installed"
+    },
+    {
+      "name": "rainbow-mode",
+      "version": "1.0.7",
+      "dir": "elpa/rainbow-mode-1.0.7",
+      "declared": [],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "repeat-help",
+      "version": "20230118.24",
+      "dir": "elpa/repeat-help-20230118.24",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "request",
+      "version": "20250219.2213",
+      "dir": "elpa/request-20250219.2213",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 2,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "rfc-mode",
+      "version": "20260917.1749",
+      "dir": "elpa/rfc-mode-20260917.1749",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "s",
+      "version": "20260522.135",
+      "dir": "elpa/s-20260522.135",
+      "declared": [],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 12,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "screenshot",
+      "version": "git",
+      "dir": "lib/screenshot",
+      "declared": [
+        "emacs",
+        "posframe",
+        "transient"
+      ],
+      "requires": [
+        "lisp-mnt",
+        "posframe",
+        "transient"
+      ],
+      "source": "lib",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 5,
+      "kind": "installed"
+    },
+    {
+      "name": "second-sel",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "seq",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 8,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "shr",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "shrface",
+      "version": "20260810.1312",
+      "dir": "elpa/shrface-20260810.1312",
+      "declared": [
+        "emacs",
+        "language-detection",
+        "org"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 2,
+      "kind": "active"
+    },
+    {
+      "name": "shrink-path",
+      "version": "20190208.1335",
+      "dir": "elpa/shrink-path-20190208.1335",
+      "declared": [
+        "dash",
+        "emacs",
+        "f",
+        "s"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 1,
+      "out_degree": 3,
+      "kind": "installed"
+    },
+    {
+      "name": "simple-httpd",
+      "version": "20260904.1925",
+      "dir": "elpa/simple-httpd-20260904.1925",
+      "declared": [
+        "compat",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 1,
+      "out_degree": 1,
+      "kind": "installed"
+    },
+    {
+      "name": "sis",
+      "version": "20260928.612",
+      "dir": "elpa/sis-20260928.612",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "solarized-theme",
+      "version": "20260910.602",
+      "dir": "elpa/solarized-theme-20260910.602",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "spinner",
+      "version": "1.7.4",
+      "dir": "elpa/spinner-1.7.4",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "sqlite",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 2,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "subed",
+      "version": "git",
+      "dir": "lib/subed",
+      "declared": [
+        "emacs"
+      ],
+      "requires": [],
+      "source": "lib",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "subr-x",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 5,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "svg",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "symbol-overlay",
+      "version": "20260703.1437",
+      "dir": "elpa/symbol-overlay-20260703.1437",
+      "declared": [
+        "emacs",
+        "seq"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "terminal-focus-reporting",
+      "version": "20180830.719",
+      "dir": "elpa/terminal-focus-reporting-20180830.719",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "timu-macos-theme",
+      "version": "20260720.2019",
+      "dir": "elpa/timu-macos-theme-20260720.2019",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "topsy",
+      "version": "20231214.843",
+      "dir": "elpa/topsy-20231214.843",
+      "declared": [
+        "compat",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "tramp",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "transient",
+      "version": "20261001.1359",
+      "dir": "elpa/transient-20261001.1359",
+      "declared": [
+        "compat",
+        "cond-let",
+        "emacs",
+        "llama",
+        "seq"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 7,
+      "out_degree": 4,
+      "kind": "installed"
+    },
+    {
+      "name": "tree-sitter",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 2,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "ts-fold",
+      "version": "git",
+      "dir": "lib/ts-fold",
+      "declared": [
+        "emacs",
+        "fringe-helper",
+        "s",
+        "tree-sitter"
+      ],
+      "requires": [
+        "s",
+        "seq",
+        "subr-x",
+        "tree-sitter",
+        "ts-fold-parsers",
+        "ts-fold-summary",
+        "ts-fold-util"
+      ],
+      "source": "lib",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 7,
+      "kind": "installed"
+    },
+    {
+      "name": "url",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "vc",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "vertico",
+      "version": "20260913.1525",
+      "dir": "elpa/vertico-20260913.1525",
+      "declared": [
+        "compat",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 3,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "vertico-posframe",
+      "version": "0.9.2",
+      "dir": "elpa/vertico-posframe-0.9.2",
+      "declared": [
+        "emacs",
+        "posframe",
+        "vertico"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [
+        "vertico",
+        "posframe"
+      ],
+      "in_degree": 0,
+      "out_degree": 4,
+      "kind": "active"
+    },
+    {
+      "name": "visual-regexp",
+      "version": "20210502.2019",
+      "dir": "elpa/visual-regexp-20210502.2019",
+      "declared": [
+        "cl-lib"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 1,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "visual-regexp-steroids",
+      "version": "20170222.253",
+      "dir": "elpa/visual-regexp-steroids-20170222.253",
+      "declared": [
+        "visual-regexp"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "installed"
+    },
+    {
+      "name": "vundo",
+      "version": "2.4.0",
+      "dir": "elpa/vundo-2.4.0",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "wallabag",
+      "version": "20251226.1223",
+      "dir": "elpa/wallabag-20251226.1223",
+      "declared": [
+        "emacs",
+        "emacsql",
+        "gptel",
+        "request",
+        "s"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 4,
+      "kind": "installed"
+    },
+    {
+      "name": "websocket",
+      "version": "20260301.157",
+      "dir": "elpa/websocket-20260301.157",
+      "declared": [
+        "cl-lib"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 1,
+      "out_degree": 1,
+      "kind": "installed"
+    },
+    {
+      "name": "wgrep",
+      "version": "20230203.1214",
+      "dir": "elpa/wgrep-20230203.1214",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "active"
+    },
+    {
+      "name": "wgrep-deadgrep",
+      "version": "20231215.1145",
+      "dir": "elpa/wgrep-deadgrep-20231215.1145",
+      "declared": [
+        "emacs",
+        "wgrep"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 1,
+      "kind": "installed"
+    },
+    {
+      "name": "which-key",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "which-key-posframe",
+      "version": "20230313.1841",
+      "dir": "elpa/which-key-posframe-20230313.1841",
+      "declared": [
+        "emacs",
+        "posframe",
+        "which-key"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 2,
+      "kind": "active"
+    },
+    {
+      "name": "with-editor",
+      "version": "20261009.1315",
+      "dir": "elpa/with-editor-20261009.1315",
+      "declared": [
+        "compat",
+        "cond-let",
+        "emacs",
+        "llama"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 2,
+      "out_degree": 3,
+      "kind": "installed"
+    },
+    {
+      "name": "wucuo",
+      "version": "20240929.610",
+      "dir": "elpa/wucuo-20240929.610",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "xr",
+      "version": "2.2",
+      "dir": "elpa/xr-2.2",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "xterm-color",
+      "version": "20260531.1854",
+      "dir": "elpa/xterm-color-20260531.1854",
+      "declared": [
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "installed"
+    },
+    {
+      "name": "xwidget",
+      "version": "-",
+      "dir": "",
+      "declared": [],
+      "source": "builtin",
+      "active": false,
+      "in_degree": 1,
+      "out_degree": 0,
+      "kind": "builtin"
+    },
+    {
+      "name": "yasnippet",
+      "version": "20250602.1342",
+      "dir": "elpa/yasnippet-20250602.1342",
+      "declared": [
+        "cl-lib",
+        "emacs"
+      ],
+      "source": "elpa",
+      "active": true,
+      "ensure": "nil",
+      "config_after": [],
+      "in_degree": 2,
+      "out_degree": 1,
+      "kind": "active"
+    },
+    {
+      "name": "zones",
+      "version": "2023.6.11",
+      "dir": "elpa/zones-2023.6.11",
+      "declared": [],
+      "source": "elpa",
+      "active": false,
+      "ensure": null,
+      "config_after": [],
+      "in_degree": 0,
+      "out_degree": 0,
+      "kind": "installed"
+    }
+  ],
+  "edges": [
+    {
+      "from": "ace-pinyin",
+      "to": "avy",
+      "type": "declared"
+    },
+    {
+      "from": "ace-pinyin",
+      "to": "pinyinlib",
+      "type": "declared"
+    },
+    {
+      "from": "ace-window",
+      "to": "avy",
+      "type": "declared"
+    },
+    {
+      "from": "all-the-icons-completion",
+      "to": "all-the-icons",
+      "type": "declared"
+    },
+    {
+      "from": "all-the-icons-dired",
+      "to": "all-the-icons",
+      "type": "declared"
+    },
+    {
+      "from": "avy",
+      "to": "cl-lib",
+      "type": "declared"
+    },
+    {
+      "from": "calibredb",
+      "to": "dash",
+      "type": "declared"
+    },
+    {
+      "from": "calibredb",
+      "to": "esxml",
+      "type": "declared"
+    },
+    {
+      "from": "calibredb",
+      "to": "org",
+      "type": "declared"
+    },
+    {
+      "from": "calibredb",
+      "to": "request",
+      "type": "declared"
+    },
+    {
+      "from": "calibredb",
+      "to": "s",
+      "type": "declared"
+    },
+    {
+      "from": "calibredb",
+      "to": "transient",
+      "type": "declared"
+    },
+    {
+      "from": "closql",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "closql",
+      "to": "cond-let",
+      "type": "declared"
+    },
+    {
+      "from": "closql",
+      "to": "emacsql",
+      "type": "declared"
+    },
+    {
+      "from": "closql",
+      "to": "llama",
+      "type": "declared"
+    },
+    {
+      "from": "consult",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "consult-dir",
+      "to": "consult",
+      "type": "declared"
+    },
+    {
+      "from": "consult-dir",
+      "to": "project",
+      "type": "declared"
+    },
+    {
+      "from": "consult-eglot",
+      "to": "consult",
+      "type": "declared"
+    },
+    {
+      "from": "consult-eglot",
+      "to": "eglot",
+      "type": "declared"
+    },
+    {
+      "from": "consult-eglot",
+      "to": "project",
+      "type": "declared"
+    },
+    {
+      "from": "consult-org-roam",
+      "to": "consult",
+      "type": "declared"
+    },
+    {
+      "from": "consult-org-roam",
+      "to": "org-roam",
+      "type": "declared"
+    },
+    {
+      "from": "consult-yasnippet",
+      "to": "consult",
+      "type": "declared"
+    },
+    {
+      "from": "consult-yasnippet",
+      "to": "yasnippet",
+      "type": "declared"
+    },
+    {
+      "from": "csv-mode",
+      "to": "cl-lib",
+      "type": "declared"
+    },
+    {
+      "from": "deadgrep",
+      "to": "dash",
+      "type": "declared"
+    },
+    {
+      "from": "deadgrep",
+      "to": "s",
+      "type": "declared"
+    },
+    {
+      "from": "deadgrep",
+      "to": "spinner",
+      "type": "declared"
+    },
+    {
+      "from": "diff-hl",
+      "to": "cl-lib",
+      "type": "declared"
+    },
+    {
+      "from": "doom-modeline",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "doom-modeline",
+      "to": "nerd-icons",
+      "type": "declared"
+    },
+    {
+      "from": "doom-modeline",
+      "to": "shrink-path",
+      "type": "declared"
+    },
+    {
+      "from": "ebib",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "ebib",
+      "to": "parsebib",
+      "type": "declared"
+    },
+    {
+      "from": "elfeed",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "elfeed-dashboard",
+      "to": "elfeed",
+      "type": "declared"
+    },
+    {
+      "from": "elfeed-org",
+      "to": "elfeed",
+      "type": "declared"
+    },
+    {
+      "from": "elfeed-org",
+      "to": "org",
+      "type": "declared"
+    },
+    {
+      "from": "elisp-depmap",
+      "to": "dash",
+      "type": "declared"
+    },
+    {
+      "from": "elisp-refs",
+      "to": "dash",
+      "type": "declared"
+    },
+    {
+      "from": "elisp-refs",
+      "to": "s",
+      "type": "declared"
+    },
+    {
+      "from": "embark",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "embark-consult",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "embark-consult",
+      "to": "consult",
+      "type": "declared"
+    },
+    {
+      "from": "embark-consult",
+      "to": "embark",
+      "type": "declared"
+    },
+    {
+      "from": "empv",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "empv",
+      "to": "s",
+      "type": "declared"
+    },
+    {
+      "from": "epkg",
+      "to": "closql",
+      "type": "declared"
+    },
+    {
+      "from": "epkg",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "epkg",
+      "to": "cond-let",
+      "type": "declared"
+    },
+    {
+      "from": "epkg",
+      "to": "emacsql",
+      "type": "declared"
+    },
+    {
+      "from": "epkg",
+      "to": "llama",
+      "type": "declared"
+    },
+    {
+      "from": "esup",
+      "to": "cl-lib",
+      "type": "declared"
+    },
+    {
+      "from": "esup",
+      "to": "s",
+      "type": "declared"
+    },
+    {
+      "from": "esxml",
+      "to": "cl-lib",
+      "type": "declared"
+    },
+    {
+      "from": "f",
+      "to": "dash",
+      "type": "declared"
+    },
+    {
+      "from": "f",
+      "to": "s",
+      "type": "declared"
+    },
+    {
+      "from": "free-keys",
+      "to": "cl-lib",
+      "type": "declared"
+    },
+    {
+      "from": "git-commit",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "git-commit",
+      "to": "transient",
+      "type": "declared"
+    },
+    {
+      "from": "git-commit",
+      "to": "with-editor",
+      "type": "declared"
+    },
+    {
+      "from": "goggles",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "gptel",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "gptel",
+      "to": "transient",
+      "type": "declared"
+    },
+    {
+      "from": "helpful",
+      "to": "dash",
+      "type": "declared"
+    },
+    {
+      "from": "helpful",
+      "to": "elisp-refs",
+      "type": "declared"
+    },
+    {
+      "from": "helpful",
+      "to": "f",
+      "type": "declared"
+    },
+    {
+      "from": "helpful",
+      "to": "s",
+      "type": "declared"
+    },
+    {
+      "from": "keycast",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "keycast",
+      "to": "cond-let",
+      "type": "declared"
+    },
+    {
+      "from": "khoj",
+      "to": "dash",
+      "type": "declared"
+    },
+    {
+      "from": "khoj",
+      "to": "transient",
+      "type": "declared"
+    },
+    {
+      "from": "language-detection",
+      "to": "cl-lib",
+      "type": "declared"
+    },
+    {
+      "from": "llama",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "magit",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "magit",
+      "to": "cond-let",
+      "type": "declared"
+    },
+    {
+      "from": "magit",
+      "to": "llama",
+      "type": "declared"
+    },
+    {
+      "from": "magit",
+      "to": "magit-section",
+      "type": "declared"
+    },
+    {
+      "from": "magit",
+      "to": "seq",
+      "type": "declared"
+    },
+    {
+      "from": "magit",
+      "to": "transient",
+      "type": "declared"
+    },
+    {
+      "from": "magit",
+      "to": "with-editor",
+      "type": "declared"
+    },
+    {
+      "from": "magit-delta",
+      "to": "magit",
+      "type": "declared"
+    },
+    {
+      "from": "magit-delta",
+      "to": "xterm-color",
+      "type": "declared"
+    },
+    {
+      "from": "magit-section",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "magit-section",
+      "to": "cond-let",
+      "type": "declared"
+    },
+    {
+      "from": "magit-section",
+      "to": "llama",
+      "type": "declared"
+    },
+    {
+      "from": "magit-section",
+      "to": "seq",
+      "type": "declared"
+    },
+    {
+      "from": "marginalia",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "multiple-cursors",
+      "to": "cl-lib",
+      "type": "declared"
+    },
+    {
+      "from": "mybigword",
+      "to": "avy",
+      "type": "declared"
+    },
+    {
+      "from": "nov",
+      "to": "esxml",
+      "type": "declared"
+    },
+    {
+      "from": "orderless",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "org-auto-tangle",
+      "to": "async",
+      "type": "declared"
+    },
+    {
+      "from": "org-modern",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "org-modern",
+      "to": "org",
+      "type": "declared"
+    },
+    {
+      "from": "org-roam",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "org-roam",
+      "to": "emacsql",
+      "type": "declared"
+    },
+    {
+      "from": "org-roam",
+      "to": "magit-section",
+      "type": "declared"
+    },
+    {
+      "from": "org-roam",
+      "to": "org",
+      "type": "declared"
+    },
+    {
+      "from": "org-roam-ui",
+      "to": "org-roam",
+      "type": "declared"
+    },
+    {
+      "from": "org-roam-ui",
+      "to": "simple-httpd",
+      "type": "declared"
+    },
+    {
+      "from": "org-roam-ui",
+      "to": "websocket",
+      "type": "declared"
+    },
+    {
+      "from": "org-sticky-header",
+      "to": "org",
+      "type": "declared"
+    },
+    {
+      "from": "origami",
+      "to": "cl-lib",
+      "type": "declared"
+    },
+    {
+      "from": "origami",
+      "to": "dash",
+      "type": "declared"
+    },
+    {
+      "from": "origami",
+      "to": "s",
+      "type": "declared"
+    },
+    {
+      "from": "osm",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "osx-dictionary",
+      "to": "cl-lib",
+      "type": "declared"
+    },
+    {
+      "from": "pyim",
+      "to": "async",
+      "type": "declared"
+    },
+    {
+      "from": "pyim",
+      "to": "xr",
+      "type": "declared"
+    },
+    {
+      "from": "shrface",
+      "to": "language-detection",
+      "type": "declared"
+    },
+    {
+      "from": "shrface",
+      "to": "org",
+      "type": "declared"
+    },
+    {
+      "from": "shrink-path",
+      "to": "dash",
+      "type": "declared"
+    },
+    {
+      "from": "shrink-path",
+      "to": "f",
+      "type": "declared"
+    },
+    {
+      "from": "shrink-path",
+      "to": "s",
+      "type": "declared"
+    },
+    {
+      "from": "simple-httpd",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "symbol-overlay",
+      "to": "seq",
+      "type": "declared"
+    },
+    {
+      "from": "topsy",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "transient",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "transient",
+      "to": "cond-let",
+      "type": "declared"
+    },
+    {
+      "from": "transient",
+      "to": "llama",
+      "type": "declared"
+    },
+    {
+      "from": "transient",
+      "to": "seq",
+      "type": "declared"
+    },
+    {
+      "from": "vertico",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "vertico-posframe",
+      "to": "posframe",
+      "type": "declared"
+    },
+    {
+      "from": "vertico-posframe",
+      "to": "vertico",
+      "type": "declared"
+    },
+    {
+      "from": "visual-regexp",
+      "to": "cl-lib",
+      "type": "declared"
+    },
+    {
+      "from": "visual-regexp-steroids",
+      "to": "visual-regexp",
+      "type": "declared"
+    },
+    {
+      "from": "wallabag",
+      "to": "emacsql",
+      "type": "declared"
+    },
+    {
+      "from": "wallabag",
+      "to": "gptel",
+      "type": "declared"
+    },
+    {
+      "from": "wallabag",
+      "to": "request",
+      "type": "declared"
+    },
+    {
+      "from": "wallabag",
+      "to": "s",
+      "type": "declared"
+    },
+    {
+      "from": "websocket",
+      "to": "cl-lib",
+      "type": "declared"
+    },
+    {
+      "from": "wgrep-deadgrep",
+      "to": "wgrep",
+      "type": "declared"
+    },
+    {
+      "from": "which-key-posframe",
+      "to": "posframe",
+      "type": "declared"
+    },
+    {
+      "from": "which-key-posframe",
+      "to": "which-key",
+      "type": "declared"
+    },
+    {
+      "from": "with-editor",
+      "to": "compat",
+      "type": "declared"
+    },
+    {
+      "from": "with-editor",
+      "to": "cond-let",
+      "type": "declared"
+    },
+    {
+      "from": "with-editor",
+      "to": "llama",
+      "type": "declared"
+    },
+    {
+      "from": "yasnippet",
+      "to": "cl-lib",
+      "type": "declared"
+    },
+    {
+      "from": "advance-words-count",
+      "to": "pos-tip",
+      "type": "declared"
+    },
+    {
+      "from": "browser-hist",
+      "to": "browse-url",
+      "type": "require"
+    },
+    {
+      "from": "browser-hist",
+      "to": "cl-lib",
+      "type": "require"
+    },
+    {
+      "from": "browser-hist",
+      "to": "sqlite",
+      "type": "require"
+    },
+    {
+      "from": "diff-lisp",
+      "to": "files",
+      "type": "require"
+    },
+    {
+      "from": "diff-lisp",
+      "to": "subr-x",
+      "type": "require"
+    },
+    {
+      "from": "dsh-emacs",
+      "to": "cl-lib",
+      "type": "require"
+    },
+    {
+      "from": "dsh-emacs",
+      "to": "crm",
+      "type": "require"
+    },
+    {
+      "from": "dsh-emacs",
+      "to": "json",
+      "type": "require"
+    },
+    {
+      "from": "dsh-emacs",
+      "to": "project",
+      "type": "require"
+    },
+    {
+      "from": "dsh-emacs",
+      "to": "url",
+      "type": "require"
+    },
+    {
+      "from": "dsh-emacs",
+      "to": "vc",
+      "type": "require"
+    },
+    {
+      "from": "explain-pause-mode",
+      "to": "backtrace",
+      "type": "require"
+    },
+    {
+      "from": "explain-pause-mode",
+      "to": "cl-macs",
+      "type": "require"
+    },
+    {
+      "from": "explain-pause-mode",
+      "to": "nadvice",
+      "type": "require"
+    },
+    {
+      "from": "explain-pause-mode",
+      "to": "profiler",
+      "type": "require"
+    },
+    {
+      "from": "explain-pause-mode",
+      "to": "seq",
+      "type": "require"
+    },
+    {
+      "from": "explain-pause-mode",
+      "to": "subr-x",
+      "type": "require"
+    },
+    {
+      "from": "image-roll",
+      "to": "image-mode",
+      "type": "require"
+    },
+    {
+      "from": "image-roll",
+      "to": "svg",
+      "type": "require"
+    },
+    {
+      "from": "itranslate-mode",
+      "to": "deno-bridge",
+      "type": "require"
+    },
+    {
+      "from": "itranslate-mode",
+      "to": "insert-translated-name",
+      "type": "require"
+    },
+    {
+      "from": "itranslate-mode",
+      "to": "json",
+      "type": "require"
+    },
+    {
+      "from": "itranslate-mode",
+      "to": "subr-x",
+      "type": "require"
+    },
+    {
+      "from": "keyfreq",
+      "to": "cl-lib",
+      "type": "declared"
+    },
+    {
+      "from": "keyfreq",
+      "to": "cl-lib",
+      "type": "require"
+    },
+    {
+      "from": "keyfreq",
+      "to": "json",
+      "type": "require"
+    },
+    {
+      "from": "lsp-bridge",
+      "to": "markdown-mode",
+      "type": "declared"
+    },
+    {
+      "from": "lsp-bridge",
+      "to": "acm",
+      "type": "require"
+    },
+    {
+      "from": "lsp-bridge",
+      "to": "acm-frame",
+      "type": "require"
+    },
+    {
+      "from": "lsp-bridge",
+      "to": "ansi-color",
+      "type": "require"
+    },
+    {
+      "from": "lsp-bridge",
+      "to": "cl-lib",
+      "type": "require"
+    },
+    {
+      "from": "lsp-bridge",
+      "to": "diff",
+      "type": "require"
+    },
+    {
+      "from": "lsp-bridge",
+      "to": "json",
+      "type": "require"
+    },
+    {
+      "from": "lsp-bridge",
+      "to": "map",
+      "type": "require"
+    },
+    {
+      "from": "lsp-bridge",
+      "to": "markdown-mode",
+      "type": "require"
+    },
+    {
+      "from": "lsp-bridge",
+      "to": "pulse",
+      "type": "require"
+    },
+    {
+      "from": "lsp-bridge",
+      "to": "seq",
+      "type": "require"
+    },
+    {
+      "from": "lsp-bridge",
+      "to": "subr-x",
+      "type": "require"
+    },
+    {
+      "from": "lsp-bridge",
+      "to": "tramp",
+      "type": "require"
+    },
+    {
+      "from": "mode-minder",
+      "to": "button",
+      "type": "require"
+    },
+    {
+      "from": "mode-minder",
+      "to": "cl-lib",
+      "type": "require"
+    },
+    {
+      "from": "mode-minder",
+      "to": "help-fns",
+      "type": "require"
+    },
+    {
+      "from": "mode-minder",
+      "to": "seq",
+      "type": "require"
+    },
+    {
+      "from": "modeline-char",
+      "to": "second-sel",
+      "type": "require"
+    },
+    {
+      "from": "nov-xwidget",
+      "to": "nov",
+      "type": "declared"
+    },
+    {
+      "from": "nov-xwidget",
+      "to": "browse-url",
+      "type": "require"
+    },
+    {
+      "from": "nov-xwidget",
+      "to": "cl-lib",
+      "type": "require"
+    },
+    {
+      "from": "nov-xwidget",
+      "to": "evil-core",
+      "type": "require"
+    },
+    {
+      "from": "nov-xwidget",
+      "to": "shr",
+      "type": "require"
+    },
+    {
+      "from": "nov-xwidget",
+      "to": "xwidget",
+      "type": "require"
+    },
+    {
+      "from": "org-mac-link",
+      "to": "org-goto",
+      "type": "require"
+    },
+    {
+      "from": "org-roam-similarity",
+      "to": "org",
+      "type": "declared"
+    },
+    {
+      "from": "org-similarity",
+      "to": "f",
+      "type": "declared"
+    },
+    {
+      "from": "org-similarity",
+      "to": "f",
+      "type": "require"
+    },
+    {
+      "from": "pyim-tsinghua-dict",
+      "to": "pyim",
+      "type": "declared"
+    },
+    {
+      "from": "pyim-tsinghua-dict",
+      "to": "pyim-dict",
+      "type": "require"
+    },
+    {
+      "from": "screenshot",
+      "to": "posframe",
+      "type": "declared"
+    },
+    {
+      "from": "screenshot",
+      "to": "transient",
+      "type": "declared"
+    },
+    {
+      "from": "screenshot",
+      "to": "lisp-mnt",
+      "type": "require"
+    },
+    {
+      "from": "screenshot",
+      "to": "posframe",
+      "type": "require"
+    },
+    {
+      "from": "screenshot",
+      "to": "transient",
+      "type": "require"
+    },
+    {
+      "from": "ts-fold",
+      "to": "fringe-helper",
+      "type": "declared"
+    },
+    {
+      "from": "ts-fold",
+      "to": "s",
+      "type": "declared"
+    },
+    {
+      "from": "ts-fold",
+      "to": "tree-sitter",
+      "type": "declared"
+    },
+    {
+      "from": "ts-fold",
+      "to": "s",
+      "type": "require"
+    },
+    {
+      "from": "ts-fold",
+      "to": "seq",
+      "type": "require"
+    },
+    {
+      "from": "ts-fold",
+      "to": "subr-x",
+      "type": "require"
+    },
+    {
+      "from": "ts-fold",
+      "to": "tree-sitter",
+      "type": "require"
+    },
+    {
+      "from": "browser-hist",
+      "to": "sqlite",
+      "type": "after"
+    },
+    {
+      "from": "consult",
+      "to": "org",
+      "type": "after"
+    },
+    {
+      "from": "consult-dir",
+      "to": "consult",
+      "type": "after"
+    },
+    {
+      "from": "consult-dir",
+      "to": "vertico",
+      "type": "after"
+    },
+    {
+      "from": "consult-yasnippet",
+      "to": "consult",
+      "type": "after"
+    },
+    {
+      "from": "consult-yasnippet",
+      "to": "yasnippet",
+      "type": "after"
+    },
+    {
+      "from": "vertico-posframe",
+      "to": "vertico",
+      "type": "after"
+    },
+    {
+      "from": "vertico-posframe",
+      "to": "posframe",
+      "type": "after"
+    },
+    {
+      "from": "org-roam",
+      "to": "org",
+      "type": "after"
+    },
+    {
+      "from": "org-roam-ui",
+      "to": "org-roam",
+      "type": "after"
+    },
+    {
+      "from": "consult-org-roam",
+      "to": "org",
+      "type": "after"
+    },
+    {
+      "from": "consult-org-roam",
+      "to": "consult",
+      "type": "after"
+    },
+    {
+      "from": "org-similarity",
+      "to": "org",
+      "type": "after"
+    },
+    {
+      "from": "elfeed-dashboard",
+      "to": "elfeed",
+      "type": "after"
+    },
+    {
+      "from": "elfeed-org",
+      "to": "elfeed",
+      "type": "after"
+    },
+    {
+      "from": "osm",
+      "to": "org",
+      "type": "after"
+    },
+    {
+      "from": "nov-xwidget",
+      "to": "nov",
+      "type": "after"
+    }
+  ]
+}

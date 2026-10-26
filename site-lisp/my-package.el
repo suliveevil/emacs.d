@@ -3,7 +3,7 @@
 
 ;; DATE 2023-02-09T02:38:27+0800
 
-;; [[file:../package.org::*Emacs Package Database epkg+epkgs][Emacs Package Database epkg+epkgs:1]]
+;; [[file:../package.org::*Emacs Package Database epkg][Emacs Package Database epkg:1]]
 (use-package epkg
   :ensure nil
   :defer t
@@ -22,12 +22,7 @@
                 (cadr (assq pkg package-alist)))))
      package-activated-list))
   )
-
-(use-package epkgs
-  :ensure nil
-  :defer t
-  )
-;; Emacs Package Database epkg+epkgs:1 ends here
+;; Emacs Package Database epkg:1 ends here
 
 ;; [[file:../package.org::*helpful][helpful:1]]
 ;; helpful

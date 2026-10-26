@@ -140,7 +140,7 @@ sibling file: [[file:README.org][Emacs config]]
   )
 #+end_src
 
-* Emacs Package Database epkg+epkgs
+* Emacs Package Database epkg
 :PROPERTIES:
 :header-args: emacs-lisp :comments link :tangle (concat user-emacs-directory "/site-lisp/my-package.el")
 :ID:       1898178B-9C71-436F-9593-8F16548E5522
@@ -165,12 +165,12 @@ sibling file: [[file:README.org][Emacs config]]
                 (cadr (assq pkg package-alist)))))
      package-activated-list))
   )
-
-(use-package epkgs
-  :ensure nil
-  :defer t
-  )
 #+end_src
+
+注：原先这里还有一个 =(use-package epkgs ...)= 。=epkgs= 并不是一个 Emacs 包，
+而是 [[https://github.com/emacsmirror/epkgs][epkgs]] 这个**元数据仓库**的名字，
+对应上面 =(setq epkg-repository "~/Documents/GitHub/epkgs")= 指向的本地目录。
+误写成 use-package 后这个 stanza 永远加载不到任何东西，已删除。
 
 * 通知帮助与文档
 :PROPERTIES:

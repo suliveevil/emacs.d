@@ -1,21 +1,12 @@
 [submodule "lib/keyfreq"]
 	path = lib/keyfreq
 	url = https://github.com/suliveevil/keyfreq.git
-[submodule "lib/org-auto-tangle"]
-	path = lib/org-auto-tangle
-	url = https://github.com/yilkalargaw/org-auto-tangle.git
 [submodule "lib/pyim-greatdict"]
 	path = lib/pyim-greatdict
 	url = https://github.com/tumashu/pyim-greatdict.git
 [submodule "lib/pyim-tsinghua-dict"]
 	path = lib/pyim-tsinghua-dict
 	url = https://github.com/redguardtoo/pyim-tsinghua-dict.git
-[submodule "lib/d2-mode"]
-	path = lib/d2-mode
-	url = https://github.com/andorsk/d2-mode.git
-[submodule "lib/elisp-demos"]
-	path = lib/elisp-demos
-	url = https://github.com/suliveevil/elisp-demos.git
 [submodule "lib/org-similarity"]
 	path = lib/org-similarity
 	url = https://github.com/suliveevil/org-similarity.git
@@ -67,24 +58,6 @@
 [submodule "lib/combobulate"]
 	path = lib/combobulate
 	url = https://github.com/mickeynp/combobulate.git
-[submodule "lib/which-key-posframe"]
-	path = lib/which-key-posframe
-	url = https://github.com/yanghaoxie/which-key-posframe.git
-[submodule "lib/vertico"]
-	path = lib/vertico
-	url = https://github.com/minad/vertico.git
-[submodule "lib/pyim"]
-	path = lib/pyim
-	url = https://github.com/tumashu/pyim.git
-[submodule "lib/orderless"]
-	path = lib/orderless
-	url = https://github.com/oantolin/orderless.git
-[submodule "lib/nerd-icons"]
-	path = lib/nerd-icons
-	url = https://github.com/rainstormstudio/nerd-icons.el.git
-[submodule "lib/xr"]
-	path = lib/xr
-	url = https://github.com/mattiase/xr.git
 [submodule "lib/dsh-emacs"]
 	path = lib/dsh-emacs
 	url = https://github.com/vritser/dsh-emacs.git

@@ -111,3 +111,5 @@ test.org
 /.org-src-babel
 /test.html
 *.bak*
+/.workbuddy
+/org-persist
