@@ -1,0 +1,5 @@
+(((minibuffer-mode . execute-extended-command) . 1)
+((minibuffer-mode . vertico-next) . 1)
+((fundamental-mode . iconify-frame) . 1)
+((minibuffer-mode . save-buffers-kill-emacs) . 1)
+)

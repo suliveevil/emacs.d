@@ -1,117 +1,49 @@
-**/.DS_Store
-**/._.DS_Store
-*.elc
-*.log
-*.mp3
-*.mp4
-*.ogg
-*.swp
-*.~undo-tree
-*_flymake.el
-*~
-.*.lock
+# ── macOS 系统文件 ──────────────────────────────────
 .DS_Store
-.\#*
 ._.DS_Store
-.bookmarks.el
-.cache
-.cask
-.cvsignore
-.depend
-.emacs.desktop
-.emacs.desktop.lock
-.last-package-update-day
-.lsp-session*
-.orig
-.svn
-.unpacked
-.wg-file.el
-.yas-compiled-snippets.el
+
+# ── Emacs 运行期产物 ────────────────────────────────
+*.elc
+*~
+\#*
+.#*
+.*.lock
+*_flymake.el
+/auto-save-list
 /.emacs.desktop
 /.mc-lists.el
-/.org-id-locations
 /.session
-/TODO
-/ac-comphist.dat
-/anything-c-adaptive-history
-/auto-save-list
-/newsticker
 /session.*
-/swank
-/tramp
-/url/cache
-/var
-CVS
-GPATH
-GRTAGS
-GTAGS
-TAGS
-\#*
-abbrev_defs
-amx-items
-annotations
-annotations/
-anaconda-mode/
-blink-search.db
-company-statistics-cache.el
-cookies
-custom-set-variables.el
-desktop/
-drafts/
-eln-cache/
-elpy/
-elgrep-data.el
-emms/
-eshell/
-games/
-history
-ido.last
-inactive/
-my-words/
-network-security.data
-nov-places
-org-clock-save.el
-org-roam.db
-package-quickstart.el
-places
-projectile-bookmarks.eld
-projectile.cache
-pyim/
-recentf
-request/
-semanticdb/
-srecode-map.el
-test/
-test.el
-transient/
-tutorial/
-abbrev_defs.el
-smex-items
-.achievements
-debug.txt
-test.txt
-keyfreq.py
-bookmarks
-tmp.el
-projects
-test.org
-
-
-# --- 由 org 统一管理：生成物与本地状态不入库 ---
-# elpa/ 是包管理器产物，应由 use-package :ensure / package-selected-packages 重建
-/elpa/
-# Customize 的写入点已移到 var/（见 early-init 的 custom-file），只留本地
-/var/
-/custom.el
-# 启动时由 my/log-emacs-uptime 自动追加，属于生成物
+/.org-id-locations
+/org-clock-save.el
+/org-roam.db
+/org-persist
 /assets/uptime.org
 
-# --- 补充：本地状态 / 临时文件 ---
-/places.eld
-/.org-src-babel
-/test.html
-*.bak*
-/.workbuddy
-/org-persist/*
+# ── 包管理器：可由 package-selected-packages 重建 ────
+/elpa/
+/eln-cache/
+/var/
+/custom.el
+package-quickstart.el
 
+# ── 本地状态：不入库，换机器不该带过去 ──────────────
 *.eld
+recentf
+history
+network-security.data
+/ac-comphist.dat
+/.org-src-babel
+/.workbuddy
+
+# ── 内置功能的状态目录（用到时才生成，先占位）───────
+transient/
+eshell/
+
+# ── 备份与临时文件 ──────────────────────────────────
+*.bak*
+*.log
+/test.html
+
+# keyfreq 的日/月归档：与 assets/keyfreq-log 一起纳入版本控制
+!/assets/keyfreq-days/*.log
