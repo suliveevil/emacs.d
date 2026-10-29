@@ -2327,6 +2327,12 @@ This command can be called when in a file buffer or in `dired'."
 ;; Open in VSCode:1 ends here
 
 ;; [[file:readme.org::*basic][basic:1]]
+;; 笔记库根目录：整个配置里唯一写死路径的地方。
+;; 其余一切路径（org-directory / org-roam-directory / db / capture 落点）都从它派生。
+;; 想换位置，只改这一行。
+(defvar my/notes-directory (file-truename "~/Documents/GitHub/MyNotes")
+  "笔记库根目录。")
+
 (use-package org
   :ensure nil
   :defer 1
@@ -2340,7 +2346,7 @@ This command can be called when in a file buffer or in `dired'."
    )
   :config
   (setq org-insert-heading-respect-content t) ; for C-<return>
-  (setq org-directory "~/org-roam")
+  (setq org-directory my/notes-directory) ; 派生，勿写死
   ;; (setq org-fold-core-style "overlays")
   ;; (setq org-startup-indented t)
   (setq org-image-actual-width nil)
@@ -2709,34 +2715,35 @@ all open tasks in current Org buffer
                                 t)))
          (org-capture-mode . delete-other-windows))
   :config
-  (setq org-default-notes-file "~/org-roam/notes/inbox.org")
+  (setq org-default-notes-file
+        (expand-file-name "notes/inbox.org" my/notes-directory)) ; 派生
   :custom
   (org-capture-use-agenda-date nil)
   ;; define common template
   (org-capture-templates `(
                            ("t" "Tasks" entry
-                            (file+headline "task.org" "Reminders")
+                            (file+headline "notes/task.org" "Reminders")
                             "* TODO %i%?"
                             :empty-lines-after 1
                             :prepend t)
                            ("n" "Notes" entry
-                            (file+headline "capture.org" "Notes")
+                            (file+headline "notes/capture.org" "Notes")
                             "* %? %^g\n%i\n"
                             :empty-lines-after 1)
                            ;; For EWW
                            ("b" "Bookmarks"
-                            entry (file+headline "capture.org" "Bookmarks")
+                            entry (file+headline "notes/capture.org" "Bookmarks")
                             "* %:description\n\n%a%?"
                             :empty-lines 1
                             :immediate-finish t)
                            ("d" "Diary")
                            ("dt" "Today's TODO list"
-                            entry (file+olp+datetree "diary.org")
+                            entry (file+olp+datetree "notes/diary.org")
                             "* Today's TODO list [/]\n%T\n\n* TODO %?"
                             :empty-lines 1
                             :jump-to-captured t)
                            ("do" "Other stuff"
-                            entry (file+olp+datetree "diary.org")
+                            entry (file+olp+datetree "notes/diary.org")
                             "* %?\n%T\n\n%i"
                             :empty-lines 1
                             :jump-to-captured t)

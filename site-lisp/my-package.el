@@ -1644,8 +1644,9 @@ Similar to `marginalia-annotate-symbol', but does not show symbol class."
   ;; :after (org)
   :defer 2
   :init
-  (setq org-roam-directory "~/org-roam")
-  (setq org-roam-db-location "~/org-roam/org-roam.db")
+  (setq org-roam-directory my/notes-directory) ; 唯一真相在 readme.org 的 my/notes-directory
+  (setq org-roam-db-location
+        (expand-file-name "org-roam.db" org-roam-directory))
   :bind
   (
    :map org-mode-map
