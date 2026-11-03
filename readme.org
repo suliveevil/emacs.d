@@ -16,8 +16,8 @@
 ** Emacs
 
 #+begin_quote
-GNU Emacs 31.1 (build 1, aarch64-apple-darwin27.2.0, NS appkit-2775.20
- Version 27.2 (Build 26B5112a)) of 2026-10-18
+GNU Emacs 32.0.50 (build 1, aarch64-apple-darwin27.2.0, NS appkit-2775.20
+ Version 27.2 (Build 26B123)) of 2026-11-03
 #+end_quote
 
 *** 安装
@@ -26,13 +26,13 @@ GNU Emacs 31.1 (build 1, aarch64-apple-darwin27.2.0, NS appkit-2775.20
 
 #+begin_src shell :tangle no
 brew tap d12frosted/emacs-plus
-brew install emacs-plus@31 --with-xwidgets --with-imagemagick --with-mailutils
+brew install emacs-plus@32 --with-debug --with-xwidgets --with-mailutils
 #+end_src
 
 构建选项（=--with-*=' 为显式开启，其余为默认）：
 
+- =--with-debug= 生成调试符号（dsymutil）
 - =--with-xwidgets= 内嵌 WebKit 浏览器
-- =--with-imagemagick= 更多图片格式支持
 - =--with-mailutils= 邮件工具支持
 - 默认已开启：native-comp、tree-sitter、librsvg、webp、libxml2、注入 PATH
 

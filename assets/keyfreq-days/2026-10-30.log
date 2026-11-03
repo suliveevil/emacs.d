@@ -1,0 +1,8 @@
+(((org-mode . mouse-drag-region) . 5)
+((org-mode . mouse-set-point) . 4)
+((org-mode . save-buffer) . 1)
+((org-mode . iconify-frame) . 1)
+((org-mode . ns-open-file-select-line) . 1)
+((org-mode . org-beginning-of-line) . 1)
+((org-mode . keyfreq-html-v2) . 1)
+)

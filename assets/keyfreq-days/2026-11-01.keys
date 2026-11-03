@@ -1,0 +1,4 @@
+(((fundamental-mode kill-region "s-x") . 1)
+((fundamental-mode mouse-drag-region "<down-mouse-1>") . 2)
+((fundamental-mode mouse-set-point "<mouse-1>") . 1)
+)
